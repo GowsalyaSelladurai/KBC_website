@@ -1,0 +1,2 @@
+import { route, ok } from "@/lib/api"; import { requireUser } from "@/lib/auth"; import { q } from "@/lib/db"; import { courseSchema } from "@/lib/schemas";
+export const POST = route(async (req) => { await requireUser(true); const b = courseSchema.parse(await req.json()); const [c] = await q("insert into courses(name,icon,duration_days,price) values($1,$2,$3,$4) returning id", [b.name, b.icon, b.days, b.price]); return ok(c, 201); });

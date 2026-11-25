@@ -1,0 +1,3 @@
+import { z } from "zod"; import { route, ok } from "@/lib/api"; import { requireUser } from "@/lib/auth"; import { q } from "@/lib/db";
+const S = z.object({ title: z.string().trim().min(2, "Title is required"), startsAt: z.string().min(1, "Choose a date and time").refine((v) => !isNaN(Date.parse(v)), "Invalid date"), frequency: z.string().default("Weekly"), meetingUrl: z.string().trim().url("Enter a valid meeting link").optional().or(z.literal("")) });
+export const POST = route(async (req) => { await requireUser(true); const b = S.parse(await req.json()); const [l] = await q("insert into live_classes(title,starts_at,frequency,meeting_url) values($1,$2,$3,$4) returning id", [b.title, new Date(b.startsAt), b.frequency, b.meetingUrl || null]); return ok(l, 201); });

@@ -1,0 +1,3 @@
+import { route, ok, HttpError } from "@/lib/api"; import { requireUser } from "@/lib/auth"; import { q } from "@/lib/db"; import { courseSchema } from "@/lib/schemas";
+export const PUT = route(async (req, { params }) => { await requireUser(true); const b = courseSchema.parse(await req.json()); const r = await q("update courses set name=$1,icon=$2,duration_days=$3,price=$4 where id=$5 returning id", [b.name, b.icon, b.days, b.price, Number(params.id)]); if (!r.length) throw new HttpError(404, "Course not found"); return ok({ ok: true }); });
+export const DELETE = route(async (_r, { params }) => { await requireUser(true); await q("delete from courses where id=$1", [Number(params.id)]); return ok({ ok: true }); });
