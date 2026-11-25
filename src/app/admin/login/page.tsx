@@ -71,9 +71,6 @@ export default function AdminLogin() {
         </button>
 
         <p className="mt-4 text-center text-sm text-mute">
-          Student? <Link href="/login" className="text-gold">Go to Student Login</Link>
-        </p>
-        <p className="mt-2 text-center text-sm text-mute">
           <Link href="/" className="hover:text-gold">Back to home</Link>
         </p>
       </form>

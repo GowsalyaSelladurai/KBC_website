@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import { q } from "./db";
 import { HttpError } from "./api";
 const key = () => new TextEncoder().encode(process.env.JWT_SECRET!);
+export const jwtKey = key;
 // A new login replaces session_id, so any older device's token stops matching (single-device rule).
 export async function createSession(uid: number, role: string) {
   const sid = crypto.randomUUID();
@@ -12,7 +13,7 @@ export async function createSession(uid: number, role: string) {
 }
 export async function getUser() {
   const t = cookies().get("kbc")?.value; if (!t) return null;
-  try { const { payload } = await jwtVerify(t, key()); const [u] = await q("select id,name,email,phone,role,session_id from users where id=$1", [payload.sub]); return u && u.session_id === payload.sid ? u : null; } catch { return null; }
+  try { const { payload } = await jwtVerify(t, key()); const [u] = await q("select id,name,email,phone,role,status,session_id from users where id=$1", [payload.sub]); return u && u.status === "active" && u.session_id === payload.sid ? u : null; } catch { return null; }
 }
 export async function requireUser(admin = false) {
   const u = await getUser(); if (!u) throw new HttpError(401, "Please log in again");
