@@ -1,0 +1,1128 @@
+
+"use client";
+
+import { useMemo, useState } from "react";
+import Link from "next/link";
+
+import { enrolled, getCourse, recordings } from "@/data/mock";
+
+import Countdown from "@/components/Countdown";
+import LiveList from "@/components/LiveList";
+import Sidebar from "@/components/Sidebar";
+import StudentLearningBanner from "@/components/student/StudentLearningBanner";
+
+// ============================================
+// EMBER DASHBOARD V32
+// DEEP CHARCOAL + CHAMPAGNE YELLOW
+// ============================================
+
+type CourseFilter = "all" | "active" | "completed";
+
+export default function Student() {
+  const [tab, setTab] = useState("dashboard");
+  const [courseFilter, setCourseFilter] = useState<CourseFilter>("all");
+
+  // ==========================================
+  // COURSE DATA
+  // ==========================================
+
+  const courses = useMemo(() => {
+    return enrolled
+      .map((item) => {
+        const course = getCourse(item.courseId);
+
+        if (!course) return null;
+
+        const totalLessons = course.videos.length;
+        const completedLessons = Math.min(item.done, totalLessons);
+
+        const progress =
+          totalLessons > 0
+            ? Math.round((completedLessons / totalLessons) * 100)
+            : 0;
+
+        const expired = item.msLeft <= 0;
+
+        return {
+          enrollment: item,
+          course,
+          totalLessons,
+          completedLessons,
+          progress,
+          expired,
+          completed:
+            !expired &&
+            totalLessons > 0 &&
+            completedLessons >= totalLessons,
+        };
+      })
+      .filter((item): item is CourseItem => item !== null);
+  }, []);
+
+  // ==========================================
+  // DASHBOARD STATISTICS
+  // ==========================================
+
+  const totalCourses = courses.length;
+
+  const activeCourses = courses.filter(
+    (item) => !item.expired
+  ).length;
+
+  const completedLessons = courses.reduce(
+    (total, item) => total + item.completedLessons,
+    0
+  );
+
+  const totalLessons = courses.reduce(
+    (total, item) => total + item.totalLessons,
+    0
+  );
+
+  const remainingLessons = Math.max(
+    0,
+    totalLessons - completedLessons
+  );
+
+  const overallProgress =
+    totalLessons > 0
+      ? Math.min(
+          100,
+          Math.round((completedLessons / totalLessons) * 100)
+        )
+      : 0;
+
+  const completedCourses = courses.filter(
+    (item) => item.completed
+  ).length;
+
+  const filteredCourses = courses.filter((item) => {
+    if (courseFilter === "active") {
+      return !item.expired && !item.completed;
+    }
+
+    if (courseFilter === "completed") {
+      return item.completed;
+    }
+
+    return true;
+  });
+
+  // ==========================================
+  // NAVIGATION
+  // ==========================================
+
+  const navigation = [
+    { id: "dashboard", label: "Overview", icon: "⌂" },
+    { id: "courses", label: "My Courses", icon: "▤" },
+    { id: "live", label: "Live Classes", icon: "◉" },
+    { id: "rec", label: "Recordings", icon: "▷" },
+  ];
+
+  return (
+    <main className="flex min-h-screen bg-[#121414] text-white">
+
+      {/* SIDEBAR */}
+
+      <Sidebar
+        activeItem={tab}
+        onNavigate={setTab}
+      />
+
+      {/* MAIN CONTENT */}
+
+      <section className="relative min-w-0 flex-1 overflow-hidden px-5 py-7 sm:px-8 lg:px-10">
+
+        {/* BACKGROUND AMBIENT LIGHT */}
+
+        <div className="pointer-events-none fixed right-0 top-0 -z-0 h-96 w-96 rounded-full bg-[#EFE8A8]/10 blur-[150px]" />
+
+        <div className="pointer-events-none fixed bottom-0 left-1/3 -z-0 h-80 w-80 rounded-full bg-[#EFE8A8]/[0.04] blur-[130px]" />
+
+        <div className="relative z-10 mx-auto max-w-[1500px]">
+
+          {/* HEADER */}
+
+          <header className="mb-9 flex flex-wrap items-center justify-between gap-5">
+
+            <div>
+
+              <div className="mb-3 flex items-center gap-2">
+
+                <span className="h-2 w-2 animate-pulse rounded-full bg-[#EFE8A8] shadow-[0_0_12px_#EFE8A8]" />
+
+                <p className="text-[10px] font-semibold uppercase tracking-[3px] text-[#EFE8A8]/70">
+                  Student Learning Portal
+                </p>
+
+              </div>
+
+              <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+                Welcome back,{" "}
+                <span className="bg-gradient-to-r from-[#EFE8A8] to-white bg-clip-text text-transparent">
+                  Anjali
+                </span>
+                <span className="ml-2">✦</span>
+              </h1>
+
+              <p className="mt-2 text-sm text-white/40">
+                Track your progress. Stay focused. Keep learning.
+              </p>
+
+            </div>
+
+            <div className="flex items-center gap-3">
+
+              <button
+                aria-label="Notifications"
+                className="group relative grid h-12 w-12 place-items-center rounded-2xl border border-white/10 bg-white/[0.04] text-lg text-white/60 backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:border-[#EFE8A8]/40 hover:bg-[#EFE8A8]/10 hover:text-[#EFE8A8]"
+              >
+                ♧
+
+                <span className="absolute right-3 top-3 h-2 w-2 rounded-full bg-[#EFE8A8] shadow-[0_0_10px_#EFE8A8]" />
+              </button>
+
+              <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.04] p-2 pr-4 backdrop-blur-xl transition duration-300 hover:border-[#EFE8A8]/30">
+
+                <div className="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-[#EFE8A8] to-[#B89970] font-bold text-[#121414]">
+                  A
+                </div>
+
+                <div>
+                  <p className="text-xs font-semibold">Anjali</p>
+                  <p className="mt-1 text-[10px] text-white/40">
+                    Student Account
+                  </p>
+                </div>
+
+              </div>
+
+            </div>
+
+          </header>
+
+          {/* NAVIGATION */}
+
+          <div className="mb-8 flex flex-wrap gap-2">
+
+            {navigation.map((item) => (
+
+              <button
+                key={item.id}
+                onClick={() => setTab(item.id)}
+                className={`flex items-center gap-2 rounded-xl border px-4 py-2.5 text-xs font-medium transition-all duration-300 hover:-translate-y-0.5 ${
+                  tab === item.id
+                    ? "border-[#EFE8A8]/40 bg-[#EFE8A8] text-[#121414] shadow-[0_5px_25px_rgba(239,232,168,0.15)]"
+                    : "border-white/10 bg-white/[0.03] text-white/50 hover:border-[#EFE8A8]/30 hover:bg-[#EFE8A8]/[0.06] hover:text-[#EFE8A8]"
+                }`}
+              >
+
+                <span className="text-base">
+                  {item.icon}
+                </span>
+
+                {item.label}
+
+              </button>
+
+            ))}
+
+          </div>
+
+          {/* ======================================
+              DASHBOARD OVERVIEW
+          ====================================== */}
+
+          {tab === "dashboard" && (
+
+            <div className="space-y-8">
+
+              {/* NEW BEAUTY ACADEMY BANNER */}
+
+              <StudentLearningBanner
+                progress={overallProgress}
+                onExploreCourses={() => setTab("courses")}
+              />
+
+              {/* ======================================
+                  KPI STATISTICS
+              ====================================== */}
+
+              <div>
+
+                <SectionHeading
+                  eyebrow="PERFORMANCE OVERVIEW"
+                  title="Your Learning Statistics"
+                  description="Your current learning performance at a glance."
+                />
+
+                <div className="mt-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+
+                  <StatCard
+                    icon="▤"
+                    label="Total Courses"
+                    value={totalCourses}
+                    subtitle="Courses enrolled"
+                    number="01"
+                  />
+
+                  <StatCard
+                    icon="◉"
+                    label="Active Courses"
+                    value={activeCourses}
+                    subtitle="Available to continue"
+                    number="02"
+                  />
+
+                  <StatCard
+                    icon="✓"
+                    label="Lessons Completed"
+                    value={completedLessons}
+                    subtitle="Lessons finished"
+                    number="03"
+                  />
+
+                  <StatCard
+                    icon="▷"
+                    label="Recordings"
+                    value={recordings.length}
+                    subtitle="Available recordings"
+                    number="04"
+                  />
+
+                </div>
+
+              </div>
+
+              {/* ======================================
+                  ANALYTICS GRID
+              ====================================== */}
+
+              <div className="grid gap-5 xl:grid-cols-3">
+
+                {/* COURSE COMPLETION CHART */}
+
+                <div className="rounded-[26px] border border-white/10 bg-white/[0.04] p-6 shadow-xl backdrop-blur-2xl transition duration-300 hover:border-[#EFE8A8]/30 xl:col-span-2">
+
+                  <div className="flex flex-wrap items-center justify-between gap-4">
+
+                    <div>
+                      <p className="text-[10px] font-semibold tracking-[2px] text-[#EFE8A8]/70">
+                        LEARNING ANALYTICS
+                      </p>
+
+                      <h3 className="mt-2 text-lg font-semibold">
+                        Course Completion
+                      </h3>
+                    </div>
+
+                    <span className="rounded-lg border border-[#EFE8A8]/20 bg-[#EFE8A8]/10 px-3 py-1.5 text-[10px] text-[#EFE8A8]">
+                      Overall Performance
+                    </span>
+
+                  </div>
+
+                  <div className="mt-8 flex flex-wrap items-center gap-8">
+
+                    {/* DONUT CHART */}
+
+                    <div
+                      className="grid h-44 w-44 shrink-0 place-items-center rounded-full transition-transform duration-500 hover:scale-105"
+                      style={{
+                        background: `conic-gradient(#EFE8A8 ${overallProgress}%, #3B3631 ${overallProgress}% 100%)`,
+                      }}
+                    >
+
+                      <div className="grid h-36 w-36 place-items-center rounded-full bg-[#292522]">
+
+                        <div className="text-center">
+
+                          <p className="text-3xl font-bold text-[#EFE8A8]">
+                            {overallProgress}%
+                          </p>
+
+                          <p className="mt-1 text-[9px] uppercase tracking-widest text-white/40">
+                            Completed
+                          </p>
+
+                        </div>
+
+                      </div>
+
+                    </div>
+
+                    {/* CHART LEGEND */}
+
+                    <div className="min-w-[170px] flex-1 space-y-6">
+
+                      <Legend
+                        color="#EFE8A8"
+                        label="Completed lessons"
+                        value={completedLessons}
+                      />
+
+                      <Legend
+                        color="#77716A"
+                        label="Remaining lessons"
+                        value={remainingLessons}
+                      />
+
+                      <Legend
+                        color="#FFFFFF"
+                        label="Total lessons"
+                        value={totalLessons}
+                      />
+
+                    </div>
+
+                  </div>
+
+                  <div className="mt-8 border-t border-white/10 pt-5">
+
+                    <div className="flex justify-between text-xs">
+
+                      <span className="text-white/40">
+                        Overall completion
+                      </span>
+
+                      <span className="font-semibold text-[#EFE8A8]">
+                        {completedLessons} / {totalLessons}
+                      </span>
+
+                    </div>
+
+                    <div className="mt-3 h-2 overflow-hidden rounded-full bg-white/10">
+
+                      <div
+                        className="h-full rounded-full bg-gradient-to-r from-[#B89970] to-[#EFE8A8] transition-all duration-1000"
+                        style={{
+                          width: `${overallProgress}%`,
+                        }}
+                      />
+
+                    </div>
+
+                  </div>
+
+                </div>
+
+                {/* ACHIEVEMENT PANEL */}
+
+                <div className="group relative overflow-hidden rounded-[26px] border border-[#EFE8A8]/20 bg-gradient-to-br from-[#EFE8A8]/10 to-white/[0.025] p-6 transition duration-300 hover:-translate-y-1 hover:border-[#EFE8A8]/40">
+
+                  <div className="absolute -right-12 -top-12 h-44 w-44 rounded-full bg-[#EFE8A8]/10 blur-[70px] transition duration-500 group-hover:bg-[#EFE8A8]/20" />
+
+                  <div className="relative">
+
+                    <div className="grid h-12 w-12 place-items-center rounded-2xl border border-[#EFE8A8]/20 bg-[#EFE8A8]/10 text-2xl text-[#EFE8A8]">
+                      ✦
+                    </div>
+
+                    <p className="mt-7 text-[10px] font-semibold tracking-[2px] text-[#EFE8A8]">
+                      ACHIEVEMENTS
+                    </p>
+
+                    <h3 className="mt-2 text-2xl font-semibold">
+                      Great progress!
+                    </h3>
+
+                    <p className="mt-3 text-sm leading-6 text-white/45">
+                      Your learning journey is moving forward.
+                      Keep completing lessons and courses.
+                    </p>
+
+                    <div className="mt-8 border-t border-white/10 pt-5">
+
+                      <p className="text-4xl font-bold text-[#EFE8A8]">
+                        {completedCourses}
+                      </p>
+
+                      <p className="mt-2 text-xs text-white/40">
+                        Courses completed
+                      </p>
+
+                    </div>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+              {/* ======================================
+                  COURSE PERFORMANCE CHART
+              ====================================== */}
+
+              <div className="rounded-[26px] border border-white/10 bg-white/[0.04] p-6 backdrop-blur-2xl">
+
+                <div className="flex flex-wrap items-center justify-between gap-4">
+
+                  <div>
+                    <p className="text-[10px] font-semibold tracking-[2px] text-[#EFE8A8]/70">
+                      COURSE PERFORMANCE
+                    </p>
+
+                    <h3 className="mt-2 text-lg font-semibold">
+                      Progress by Course
+                    </h3>
+                  </div>
+
+                  <button
+                    onClick={() => setTab("courses")}
+                    className="rounded-xl border border-[#EFE8A8]/20 px-4 py-2 text-xs font-semibold text-[#EFE8A8] transition hover:bg-[#EFE8A8] hover:text-[#121414]"
+                  >
+                    View All →
+                  </button>
+
+                </div>
+
+                <div className="mt-7 space-y-6">
+
+                  {courses.length === 0 && (
+                    <p className="text-sm text-white/40">
+                      No enrolled courses available.
+                    </p>
+                  )}
+
+                  {courses.slice(0, 5).map((item) => (
+
+                    <div key={item.course.id} className="group">
+
+                      <div className="mb-3 flex items-center justify-between gap-3">
+
+                        <div className="flex min-w-0 items-center gap-3">
+
+                          <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-[#EFE8A8]/10 text-lg text-[#EFE8A8]">
+                            {item.course.icon}
+                          </div>
+
+                          <div className="min-w-0">
+                            <p className="truncate text-sm font-medium">
+                              {item.course.name}
+                            </p>
+
+                            <p className="mt-1 text-[10px] text-white/35">
+                              {item.completedLessons} / {item.totalLessons} lessons
+                            </p>
+                          </div>
+
+                        </div>
+
+                        <span className="shrink-0 text-sm font-bold text-[#EFE8A8]">
+                          {item.progress}%
+                        </span>
+
+                      </div>
+
+                      <div className="h-2 overflow-hidden rounded-full bg-white/[0.07]">
+
+                        <div
+                          className="h-full rounded-full bg-gradient-to-r from-[#B89970] to-[#EFE8A8] transition-all duration-1000 group-hover:brightness-125"
+                          style={{
+                            width: `${item.progress}%`,
+                          }}
+                        />
+
+                      </div>
+
+                    </div>
+
+                  ))}
+
+                </div>
+
+              </div>
+
+              {/* ======================================
+                  COURSE MANAGEMENT
+              ====================================== */}
+
+              <div>
+
+                <SectionHeading
+                  eyebrow="YOUR LEARNING SPACE"
+                  title="My Courses"
+                  description="Manage your enrolled courses and continue learning."
+                />
+
+                <div className="mt-5 flex flex-wrap gap-2">
+
+                  {(
+                    [
+                      { id: "all", label: "All Courses" },
+                      { id: "active", label: "In Progress" },
+                      { id: "completed", label: "Completed" },
+                    ] as const
+                  ).map((filter) => (
+
+                    <button
+                      key={filter.id}
+                      onClick={() => setCourseFilter(filter.id)}
+                      className={`rounded-xl border px-4 py-2 text-xs font-medium transition duration-300 ${
+                        courseFilter === filter.id
+                          ? "border-[#EFE8A8]/40 bg-[#EFE8A8] text-[#121414]"
+                          : "border-white/10 bg-white/[0.03] text-white/50 hover:border-[#EFE8A8]/30 hover:text-[#EFE8A8]"
+                      }`}
+                    >
+                      {filter.label}
+                    </button>
+
+                  ))}
+
+                </div>
+
+                <div className="mt-5 grid gap-4 lg:grid-cols-2">
+
+                  {filteredCourses.map((item) => (
+
+                    <CourseCard
+                      key={item.course.id}
+                      item={item}
+                    />
+
+                  ))}
+
+                  {filteredCourses.length === 0 && (
+
+                    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-8 text-center text-sm text-white/40 lg:col-span-2">
+                      No courses found in this category.
+                    </div>
+
+                  )}
+
+                </div>
+
+              </div>
+
+              {/* ======================================
+                  LIVE CLASSES
+              ====================================== */}
+
+              <div className="rounded-[26px] border border-white/10 bg-white/[0.035] p-6 backdrop-blur-xl">
+
+                <SectionHeading
+                  eyebrow="LIVE LEARNING"
+                  title="Live Classes"
+                  description="Stay connected with your learning sessions."
+                />
+
+                <div className="mt-5">
+                  <LiveList />
+                </div>
+
+              </div>
+
+              {/* ======================================
+                  RECENT RECORDINGS
+              ====================================== */}
+
+              <div>
+
+                <SectionHeading
+                  eyebrow="YOUR VIDEO LIBRARY"
+                  title="Recent Recordings"
+                  description="Revisit your previous learning sessions."
+                />
+
+                <div className="mt-5 space-y-3">
+
+                  {recordings.slice(0, 4).map((recording) => (
+
+                    <RecordingCard
+                      key={recording.id}
+                      recording={recording}
+                    />
+
+                  ))}
+
+                  {recordings.length === 0 && (
+
+                    <div className="rounded-2xl border border-white/10 p-7 text-center text-sm text-white/40">
+                      No recordings available.
+                    </div>
+
+                  )}
+
+                </div>
+
+              </div>
+
+            </div>
+
+          )}
+
+          {/* ======================================
+              COURSES PAGE
+          ====================================== */}
+
+          {tab === "courses" && (
+
+            <div>
+
+              <SectionHeading
+                eyebrow="YOUR LEARNING"
+                title="My Courses"
+                description="All your enrolled courses in one place."
+              />
+
+              <div className="mt-6 flex flex-wrap gap-2">
+
+                {(
+                  [
+                    { id: "all", label: "All Courses" },
+                    { id: "active", label: "In Progress" },
+                    { id: "completed", label: "Completed" },
+                  ] as const
+                ).map((filter) => (
+
+                  <button
+                    key={filter.id}
+                    onClick={() => setCourseFilter(filter.id)}
+                    className={`rounded-xl border px-4 py-2 text-xs transition ${
+                      courseFilter === filter.id
+                        ? "border-[#EFE8A8]/40 bg-[#EFE8A8] text-[#121414]"
+                        : "border-white/10 text-white/50 hover:text-[#EFE8A8]"
+                    }`}
+                  >
+                    {filter.label}
+                  </button>
+
+                ))}
+
+              </div>
+
+              <div className="mt-5 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+
+                {filteredCourses.map((item) => (
+
+                  <CourseCard
+                    key={item.course.id}
+                    item={item}
+                  />
+
+                ))}
+
+                {filteredCourses.length === 0 && (
+
+                  <p className="text-sm text-white/40">
+                    No courses found.
+                  </p>
+
+                )}
+
+              </div>
+
+            </div>
+
+          )}
+
+          {/* ======================================
+              LIVE CLASSES PAGE
+          ====================================== */}
+
+          {tab === "live" && (
+
+            <div>
+
+              <SectionHeading
+                eyebrow="LIVE LEARNING"
+                title="Live Classes"
+                description="Join your learning sessions."
+              />
+
+              <div className="mt-6 rounded-[26px] border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl">
+                <LiveList />
+              </div>
+
+            </div>
+
+          )}
+
+          {/* ======================================
+              RECORDINGS PAGE
+          ====================================== */}
+
+          {tab === "rec" && (
+
+            <div>
+
+              <SectionHeading
+                eyebrow="YOUR LIBRARY"
+                title="Recordings"
+                description="Revisit your previous learning sessions."
+              />
+
+              <div className="mt-6 space-y-3">
+
+                {recordings.map((recording) => (
+
+                  <RecordingCard
+                    key={recording.id}
+                    recording={recording}
+                  />
+
+                ))}
+
+                {recordings.length === 0 && (
+
+                  <p className="rounded-2xl border border-white/10 p-8 text-center text-sm text-white/40">
+                    No recordings available.
+                  </p>
+
+                )}
+
+              </div>
+
+            </div>
+
+          )}
+
+        </div>
+
+      </section>
+
+    </main>
+  );
+}
+
+// ============================================
+// SECTION HEADING COMPONENT
+// ============================================
+
+function SectionHeading({
+  eyebrow,
+  title,
+  description,
+}: {
+  eyebrow: string;
+  title: string;
+  description: string;
+}) {
+  return (
+    <div>
+
+      <p className="text-[10px] font-semibold tracking-[2px] text-[#EFE8A8]/60">
+        {eyebrow}
+      </p>
+
+      <h2 className="mt-2 text-xl font-semibold tracking-tight">
+        {title}
+      </h2>
+
+      <p className="mt-1 text-xs text-white/40">
+        {description}
+      </p>
+
+    </div>
+  );
+}
+
+// ============================================
+// STATISTICS CARD
+// ============================================
+
+function StatCard({
+  icon,
+  label,
+  value,
+  subtitle,
+  number,
+}: {
+  icon: string;
+  label: string;
+  value: number;
+  subtitle: string;
+  number: string;
+}) {
+  return (
+    <div className="group relative overflow-hidden rounded-[24px] border border-white/10 bg-white/[0.045] p-5 shadow-lg backdrop-blur-2xl transition-all duration-300 hover:-translate-y-1 hover:border-[#EFE8A8]/30 hover:bg-white/[0.07] hover:shadow-[0_15px_40px_rgba(239,232,168,0.07)]">
+
+      <div className="absolute -right-8 -top-8 h-28 w-28 rounded-full bg-[#EFE8A8]/[0.05] blur-[40px] transition duration-500 group-hover:bg-[#EFE8A8]/15" />
+
+      <div className="relative flex items-center justify-between">
+
+        <div className="grid h-11 w-11 place-items-center rounded-xl border border-[#EFE8A8]/15 bg-[#EFE8A8]/[0.07] text-xl text-[#EFE8A8] transition duration-300 group-hover:scale-110">
+          {icon}
+        </div>
+
+        <span className="text-[10px] font-semibold tracking-widest text-white/20">
+          {number}
+        </span>
+
+      </div>
+
+      <div className="relative mt-6">
+
+        <p className="text-3xl font-bold tracking-tight">
+          {value}
+        </p>
+
+        <h3 className="mt-1 text-sm font-medium text-white/70">
+          {label}
+        </h3>
+
+        <p className="mt-2 text-[10px] text-white/35">
+          {subtitle}
+        </p>
+
+      </div>
+
+      <div className="absolute bottom-0 left-0 h-[2px] w-0 bg-[#EFE8A8] transition-all duration-500 group-hover:w-full" />
+
+    </div>
+  );
+}
+
+// ============================================
+// CHART LEGEND
+// ============================================
+
+function Legend({
+  color,
+  label,
+  value,
+}: {
+  color: string;
+  label: string;
+  value: number;
+}) {
+  return (
+    <div className="flex items-center justify-between gap-4">
+
+      <div className="flex items-center gap-3">
+
+        <span
+          className="h-2.5 w-2.5 shrink-0 rounded-full"
+          style={{ backgroundColor: color }}
+        />
+
+        <span className="text-xs text-white/50">
+          {label}
+        </span>
+
+      </div>
+
+      <span className="text-sm font-semibold text-white">
+        {value}
+      </span>
+
+    </div>
+  );
+}
+
+// ============================================
+// COURSE CARD
+// ============================================
+
+
+// ============================================
+// COURSE CARD
+// ============================================
+
+function CourseCard({
+  item,
+}: {
+  item: CourseItem;
+}) {
+  const {
+    enrollment,
+    course,
+    totalLessons,
+    completedLessons,
+    progress,
+    expired,
+    completed,
+  } = item;
+
+  const courseName = course.name.toLowerCase();
+
+  // COURSE IMAGES
+  const courseImage = courseName.includes("makeup")
+    ? "/courses/makeup.jpg"
+    : courseName.includes("hair")
+    ? "/courses/hair-styling.jpg"
+    : courseName.includes("nail")
+    ? "/courses/nail-art.jpg"
+    : courseName.includes("eyebrow") || courseName.includes("eyelash")
+    ? "/courses/eyebrow-eyelash.jpg"
+    : courseName.includes("skin")
+    ? "/courses/skincare.jpg"
+    : "/beauty-banner.png";
+
+  // COURSE DESCRIPTIONS
+  const description = courseName.includes("makeup")
+    ? "Master professional makeup, bridal looks, HD makeup and advanced beauty techniques."
+    : courseName.includes("hair")
+    ? "Discover beautiful hairstyles, blow-drying, curls and professional hair styling."
+    : courseName.includes("nail")
+    ? "Explore creative nail art, nail care, gel designs and professional nail techniques."
+    : courseName.includes("eyebrow") || courseName.includes("eyelash")
+    ? "Learn eyebrow mapping, shaping, threading, lash lifting and eyelash styling techniques."
+    : courseName.includes("skin")
+    ? "Learn skincare routines, facial treatments and essential professional beauty care."
+    : courseName.includes("saree")
+    ? "Master elegant saree draping, pleating and professional styling techniques."
+    : "Build your beauty skills with expert-led lessons and practical training.";
+
+  return (
+    <article className="group overflow-hidden rounded-[24px] border border-[#B89970]/10 bg-white/[0.035] shadow-[0_12px_40px_rgba(0,0,0,0.18)] backdrop-blur-2xl transition-all duration-500 hover:-translate-y-1 hover:border-[#B89970]/25 hover:shadow-[0_20px_45px_rgba(184,153,112,0.09)]">
+
+      {/* COURSE IMAGE */}
+
+     <div className="relative aspect-[16/9] overflow-hidden bg-[#292522]">
+
+        <img
+          src={courseImage}
+          alt={course.name}
+          className="h-full w-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
+        />
+
+        <div className="absolute inset-0 bg-gradient-to-t from-[#171717]/25 via-transparent to-transparent" />
+
+        <span className="absolute left-4 top-4 rounded-full border border-white/15 bg-[#171717]/65 px-3 py-1.5 text-[10px] font-semibold tracking-wide text-[#F5F0E8] backdrop-blur-xl">
+          {completed
+            ? "COMPLETED"
+            : expired
+            ? "EXPIRED"
+            : "YOUR LEARNING"}
+        </span>
+
+        <span className="absolute bottom-4 right-4 rounded-full bg-[#292522]/75 px-3 py-1.5 text-xs font-semibold text-[#D6B77A] backdrop-blur-xl">
+          {progress}% Complete
+        </span>
+
+      </div>
+
+      {/* COURSE CONTENT */}
+
+      <div className="relative space-y-4 bg-white/[0.02] p-5">
+
+        <div>
+
+          <div className="mb-2 flex items-center justify-between gap-2">
+
+            <span className="text-[9px] font-semibold uppercase tracking-[2px] text-[#B89970]">
+              PROFESSIONAL COURSE
+            </span>
+
+            <span className="text-[10px] text-white/40">
+              {totalLessons} Lessons
+            </span>
+
+          </div>
+
+         <h3 className="text-lg font-semibold leading-snug text-[#F5F0E8] transition-colors group-hover:text-[#D6B77A]">
+          
+         </h3>
+
+          <p className="mt-2 min-h-[60px] text-xs leading-5 text-white/55">
+            {description}
+          </p>
+
+        </div>
+
+        {/* LESSON PROGRESS */}
+
+        <div>
+
+          <div className="mb-2 flex justify-between text-[11px]">
+
+            <span className="text-white/50">
+              Learning progress
+            </span>
+
+            <span className="font-semibold text-[#D6B77A]">
+              {completedLessons}/{totalLessons} lessons
+            </span>
+
+          </div>
+
+          <div className="h-1.5 overflow-hidden rounded-full bg-white/[0.07]">
+
+            <div
+              className="h-full rounded-full bg-gradient-to-r from-[#B89970] to-[#D6B77A] transition-all duration-700"
+              style={{ width: `${progress}%` }}
+            />
+
+          </div>
+
+        </div>
+
+        {/* COURSE ACCESS */}
+
+        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-white/[0.05] pt-4">
+
+          <div className="text-[10px] text-white/45">
+
+            {expired ? (
+              "Access expired"
+            ) : completed ? (
+              "All lessons completed"
+            ) : (
+              <Countdown ms={enrollment.msLeft} />
+            )}
+
+          </div>
+
+          <Link
+            href={
+              expired
+                ? `/courses/${course.id}`
+                : `/watch/${course.id}?done=${enrollment.done}`
+            }
+            className="group/button inline-flex items-center justify-center gap-2 rounded-xl border border-[#D6B77A]/30 bg-gradient-to-r from-[#B89970] to-[#D6B77A] px-5 py-2.5 text-[11px] font-bold text-[#171717] shadow-[0_5px_18px_rgba(184,153,112,0.15)] transition-all duration-300 hover:-translate-y-0.5 hover:brightness-110 hover:shadow-[0_8px_25px_rgba(184,153,112,0.28)]"
+          >
+
+            {expired ? "Re-enroll" : "Explore Course"}
+
+            <span className="transition-transform duration-300 group-hover/button:translate-x-1">
+              ↗
+            </span>
+
+          </Link>
+
+        </div>
+
+      </div>
+
+    </article>
+  );
+}
+
+// ============================================
+// RECORDING CARD
+// ============================================
+
+function RecordingCard({
+  recording,
+}: {
+  recording: (typeof recordings)[number];
+}) {
+  return (
+    <div className="group flex items-center gap-4 rounded-2xl border border-white/10 bg-white/[0.035] p-4 backdrop-blur-xl transition duration-300 hover:translate-x-1 hover:border-[#EFE8A8]/30 hover:bg-white/[0.06]">
+
+      <div className="grid h-12 w-12 shrink-0 place-items-center rounded-xl border border-[#EFE8A8]/20 bg-[#EFE8A8]/10 text-xl text-[#EFE8A8] transition duration-300 group-hover:scale-110">
+        ▷
+      </div>
+
+      <div className="min-w-0 flex-1">
+
+        <h4 className="truncate text-sm font-semibold">
+          {recording.title}
+        </h4>
+
+        <p className="mt-1 text-xs text-white/40">
+          {recording.when}
+        </p>
+
+      </div>
+
+      <button
+        className="rounded-xl border border-[#EFE8A8]/20 px-4 py-2 text-xs font-semibold text-[#EFE8A8] transition duration-300 hover:bg-[#EFE8A8] hover:text-[#121414]"
+      >
+        Watch
+      </button>
+
+    </div>
+  );
+}
