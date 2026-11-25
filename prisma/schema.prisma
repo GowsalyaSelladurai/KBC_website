@@ -1,0 +1,91 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum CourseStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum VideoStatus {
+  NOT_UPLOADED
+  PROCESSING
+  READY
+  FAILED
+}
+
+model Course {
+  id             String       @id @default(cuid())
+  courseCode     String       @unique
+  title          String
+  description    String?
+  imageUrl       String?
+  duration       String?
+  price          Decimal      @db.Decimal(10, 2)
+  status         CourseStatus @default(DRAFT)
+
+  learningPoints  CourseLearningPoint[]
+  modules         Module[]
+
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@index([status])
+  @@index([title])
+}
+
+model CourseLearningPoint {
+  id        String   @id @default(cuid())
+  content   String
+  sortOrder Int      @default(0)
+
+  courseId  String
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@index([courseId])
+}
+
+model Module {
+  id        String   @id @default(cuid())
+  title     String
+  sortOrder Int      @default(0)
+
+  courseId  String
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  lessons   Lesson[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([courseId])
+}
+
+model Lesson {
+  id              String      @id @default(cuid())
+  title           String
+  description     String?
+  sortOrder       Int         @default(0)
+  durationSeconds Int?
+  isPreview        Boolean     @default(false)
+
+  bunnyVideoId    String?
+  videoStatus     VideoStatus @default(NOT_UPLOADED)
+  pendingVideoId  String?
+
+  moduleId        String
+  module          Module      @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  @@index([moduleId])
+}
