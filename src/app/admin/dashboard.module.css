@@ -1,0 +1,784 @@
+
+.dashboard {
+  color: #f5f3e8;
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  position: relative;
+  padding-bottom: 25px;
+}
+
+.dashboard * {
+  box-sizing: border-box;
+}
+
+/* =========================================
+   WELCOME BANNER TO ANIMATIONS SPACING
+========================================= */
+
+.animationSection {
+  display: block;
+  width: 100%;
+  margin-top: 16px;
+  margin-bottom: 0;
+  padding: 0;
+}
+
+/* WELCOME SECTION */
+.welcome {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 15px;
+  margin-bottom: 4px;
+}
+
+.eyebrow {
+  color: #aaa995;
+  font-size: 11px;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+}
+
+.welcome h1 {
+  color: #efe8a8;
+  font: 500 30px Georgia, serif;
+  margin: 5px 0;
+}
+
+.welcome p {
+  color: #b8b7a8;
+  margin: 0;
+}
+
+.datePill {
+  border: 1px solid #393d36;
+  padding: 9px 13px;
+  border-radius: 10px;
+  color: #aaa995;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+/* GRID */
+.grid {
+  display: grid;
+  gap: 15px;
+}
+
+/* STATISTICS CARDS */
+.stats {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-top: 0;
+  margin-bottom: 16px;
+  gap: 15px;
+}
+
+.card {
+  background: #222522;
+  border: 1px solid #2d312c;
+  border-radius: 15px;
+  padding: 18px;
+  min-width: 0;
+}
+
+/* STATISTICS CONTENT */
+.statHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #aaa995;
+  font-size: 12px;
+}
+
+.statHead span {
+  color: #efe8a8;
+  font-size: 18px;
+}
+
+.statValue {
+  font: 500 27px Georgia, serif;
+  color: #efe8a8;
+  margin: 13px 0 4px;
+}
+
+.trend {
+  font-size: 11px;
+  color: #b9d69b;
+}
+
+.trend small {
+  color: #aaa995;
+  font-size: 11px;
+}
+
+.sub {
+  font-size: 11px;
+  color: #aaa995;
+}
+
+/* REVENUE AND APPOINTMENTS */
+.twoColumns {
+  grid-template-columns: minmax(0, 1.55fr) minmax(300px, 1fr);
+  margin-bottom: 16px;
+}
+
+.cardTitle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.cardTitle h2 {
+  font: 500 18px Georgia, serif;
+  color: #efe8a8;
+  margin: 0;
+}
+
+.select {
+  background: #292d29;
+  color: #dddccf;
+  border: 1px solid #393d36;
+  border-radius: 8px;
+  padding: 7px 10px;
+  font-size: 11px;
+  outline: none;
+}
+
+.chartTotal {
+  font: 500 25px Georgia, serif;
+  color: #efe8a8;
+}
+
+.chartTotal span {
+  color: #b9d69b;
+  font: 11px system-ui, sans-serif;
+}
+
+.chart {
+  height: 205px;
+  width: 100%;
+  display: block;
+  margin-top: 8px;
+  overflow: visible;
+}
+
+.chartGrid path {
+  stroke: #41443c;
+  stroke-width: 1;
+  fill: none;
+}
+
+.chartLine {
+  fill: none;
+  stroke: #efe8a8;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.chartDot {
+  fill: #efe8a8;
+}
+
+.chartLabels {
+  display: flex;
+  justify-content: space-between;
+  color: #969789;
+  font-size: 10px;
+  padding: 0 7px;
+}
+
+.legend {
+  color: #aaa995;
+  font-size: 11px;
+  margin-top: 13px;
+}
+
+.legend i {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  background: #efe8a8;
+  border-radius: 50%;
+  margin-right: 6px;
+}
+
+/* APPOINTMENTS */
+.schedule {
+  display: grid;
+  gap: 0;
+}
+
+.event {
+  display: grid;
+  grid-template-columns: 70px minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #393d36;
+}
+
+.event:last-child {
+  border-bottom: 0;
+}
+
+.time {
+  color: #efe8a8;
+  font-size: 11px;
+}
+
+.event strong {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.event small {
+  color: #aaa995;
+  font-size: 10px;
+}
+
+.status {
+  font-size: 9px;
+  border-radius: 20px;
+  padding: 5px 8px;
+  background: #34372d;
+  color: #d6d0a0;
+  white-space: nowrap;
+}
+
+.green {
+  background: #2c3a2b;
+  color: #b9d69b;
+}
+
+.amber {
+  background: #403a25;
+  color: #e5d48a;
+}
+
+/* LOWER GRID */
+.lowerGrid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.course {
+  margin: 14px 0;
+}
+
+.courseHead {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 11px;
+  margin-bottom: 7px;
+}
+
+.courseHead b {
+  color: #f5f3e8;
+  font-weight: 600;
+}
+
+.courseHead span {
+  color: #aaa995;
+  white-space: nowrap;
+}
+
+.progressTrack {
+  height: 6px;
+  background: #41453c;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.progressTrack i {
+  display: block;
+  height: 100%;
+  background: #efe8a8;
+  border-radius: 20px;
+}
+
+.snapshotRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid #393d36;
+  font-size: 11px;
+}
+
+.snapshotRow:last-child {
+  border-bottom: 0;
+}
+
+.snapshotRow span {
+  color: #aaa995;
+}
+
+.snapshotRow b {
+  color: #efe8a8;
+}
+
+/* QUICK ACTIONS */
+.quickActions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.quickActions button,
+.primaryButton {
+  border: 0;
+  background: #efe8a8;
+  color: #171916;
+  padding: 10px 13px;
+  border-radius: 9px;
+  font-weight: 650;
+  font-size: 11px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.quickActions button:hover,
+.primaryButton:hover {
+  background: #fff4a9;
+}
+
+.secondaryButton {
+  border: 1px solid #393d36;
+  background: #292d29;
+  color: #efe8a8;
+  padding: 9px 12px;
+  border-radius: 9px;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.secondaryButton:hover {
+  background: #343a32;
+}
+
+.notice {
+  color: #aaa995;
+  font-size: 10px;
+  line-height: 1.6;
+  margin-top: 14px;
+}
+
+.bottomNote {
+  text-align: center;
+  color: #77796e;
+  font-size: 10px;
+  letter-spacing: 1px;
+  margin-top: 25px;
+}
+
+.bottomNote span {
+  color: #efe8a8;
+  padding: 0 5px;
+}
+
+/* NOTIFICATIONS */
+.notificationButton {
+  display: none;
+}
+
+.notificationPanel {
+  position: fixed;
+  right: 25px;
+  top: 80px;
+  z-index: 20;
+  width: 260px;
+  padding: 18px;
+  border: 1px solid #393d36;
+  border-radius: 12px;
+  background: #1b1e1c;
+  box-shadow: 0 12px 35px #0008;
+}
+
+.notificationPanel strong {
+  color: #efe8a8;
+}
+
+.notificationPanel p {
+  color: #aaa995;
+  font-size: 12px;
+}
+
+.notificationPanel button {
+  background: transparent;
+  border: 1px solid #393d36;
+  color: #efe8a8;
+  padding: 7px 12px;
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+/* MODAL */
+.modalBackdrop {
+  position: fixed;
+  inset: 0;
+  background: #0009;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+}
+
+.modal {
+  width: min(440px, 100%);
+  background: #1d211e;
+  border: 1px solid #4a4b39;
+  border-radius: 16px;
+  padding: 22px;
+  box-shadow: 0 20px 60px #0008;
+}
+
+.modal h2 {
+  color: #efe8a8;
+  font: 500 21px Georgia, serif;
+  margin: 0 0 16px;
+}
+
+.field {
+  display: grid;
+  gap: 6px;
+  margin: 12px 0;
+}
+
+.field span {
+  font-size: 11px;
+  color: #aaa995;
+}
+
+.field input {
+  width: 100%;
+  background: #292d29;
+  border: 1px solid #393d36;
+  border-radius: 8px;
+  padding: 10px;
+  color: #f5f3e8;
+  outline: none;
+}
+
+.field input:focus {
+  border-color: #efe8a8;
+}
+
+.formMessage {
+  color: #b9d69b;
+  font-size: 11px;
+}
+
+.modalFooter {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+/* ==========================================
+   KBC LUXE MOTION - DASHBOARD CARD ANIMATIONS
+========================================== */
+
+.dashboard .card {
+  position: relative;
+  isolation: isolate;
+  transform-style: preserve-3d;
+
+  transition:
+    transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1),
+    border-color 0.4s ease,
+    box-shadow 0.4s ease,
+    outline-color 0.4s ease;
+
+  animation: kbcCardEntrance 0.75s
+    cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+/* ==========================================
+   FLOATING 3D HOVER + PREMIUM GOLDEN GLOW
+========================================== */
+
+.dashboard .card:hover {
+  transform:
+    perspective(1000px)
+    translateY(-7px)
+    rotateX(1deg)
+    rotateY(-1deg);
+
+  border-color: #efe8a8;
+
+  outline: 1px solid rgba(239, 232, 168, 0.35);
+  outline-offset: 1px;
+
+  box-shadow:
+    0 15px 35px rgba(0, 0, 0, 0.28),
+    0 0 8px rgba(239, 232, 168, 0.75),
+    0 0 18px rgba(239, 232, 168, 0.55),
+    0 0 35px rgba(239, 232, 168, 0.35),
+    0 0 55px rgba(239, 232, 168, 0.18),
+    inset 0 0 15px rgba(239, 232, 168, 0.12);
+}
+
+/* MOVING CHAMPAGNE LIGHT */
+.dashboard .card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  border-radius: inherit;
+
+  background: linear-gradient(
+    115deg,
+    transparent 20%,
+    rgba(239, 232, 168, 0.10) 45%,
+    rgba(255, 248, 201, 0.18) 50%,
+    rgba(239, 232, 168, 0.08) 55%,
+    transparent 80%
+  );
+
+  transform: translateX(-130%);
+  opacity: 0;
+}
+
+/* SHINE ON HOVER */
+.dashboard .card:hover::after {
+  opacity: 1;
+  transform: translateX(130%);
+
+  transition:
+    transform 0.9s ease,
+    opacity 0.3s ease;
+}
+
+/* ICON INTERACTION */
+.dashboard .card:hover .statHead span {
+  display: inline-block;
+  color: #fff8c9;
+  transform: scale(1.2) rotate(8deg);
+  text-shadow: 0 0 12px rgba(239, 232, 168, 0.5);
+  transition: all 0.35s ease;
+}
+
+/* CARD ENTRANCE */
+@keyframes kbcCardEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* STAGGERED STATISTICS */
+.dashboard .stats .card:nth-child(1) {
+  animation-delay: 0.05s;
+}
+
+.dashboard .stats .card:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.dashboard .stats .card:nth-child(3) {
+  animation-delay: 0.25s;
+}
+
+.dashboard .stats .card:nth-child(4) {
+  animation-delay: 0.35s;
+}
+
+/* REVENUE AND APPOINTMENTS */
+.dashboard .twoColumns .card:nth-child(1) {
+  animation-delay: 0.40s;
+}
+
+.dashboard .twoColumns .card:nth-child(2) {
+  animation-delay: 0.50s;
+}
+
+/* LOWER DASHBOARD CARDS */
+.dashboard .lowerGrid .card:nth-child(1) {
+  animation-delay: 0.55s;
+}
+
+.dashboard .lowerGrid .card:nth-child(2) {
+  animation-delay: 0.65s;
+}
+
+.dashboard .lowerGrid .card:nth-child(3) {
+  animation-delay: 0.75s;
+}
+
+/* RESPONSIVE */
+@media (max-width: 1100px) {
+  .stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .twoColumns {
+    grid-template-columns: 1fr;
+  }
+
+  .lowerGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .welcome {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .welcome h1 {
+    font-size: 26px;
+  }
+
+  .datePill {
+    display: none;
+  }
+
+  .stats {
+    gap: 9px;
+  }
+
+  .card {
+    padding: 14px;
+  }
+
+  .statValue {
+    font-size: 23px;
+  }
+
+  .lowerGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .event {
+    grid-template-columns: 65px minmax(0, 1fr);
+  }
+
+  .event .status {
+    grid-column: 2;
+    justify-self: start;
+  }
+
+  .chart {
+    height: 170px;
+  }
+}
+
+@media (max-width: 380px) {
+  .stats {
+    grid-template-columns: 1fr;
+  }
+
+  .cardTitle {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+/* REDUCED MOTION */
+@media (prefers-reduced-motion: reduce) {
+  .dashboard .card {
+    animation: none;
+    transition: none;
+  }
+
+  .dashboard .card:hover {
+    transform: none;
+  }
+
+  .dashboard .card::after {
+    display: none;
+  }
+}
+/* ==========================================
+   KBC GRADIENT GOLD GLOW
+========================================== */
+
+.dashboard .card {
+  position: relative;
+  isolation: isolate;
+  transition:
+    transform 0.4s ease,
+    border-color 0.4s ease,
+    box-shadow 0.4s ease;
+}
+
+/* GRADIENT GOLD HOVER */
+.dashboard .card:hover {
+  transform: translateY(-7px);
+
+  border-color: #d4af37;
+
+  box-shadow:
+    0 0 8px rgba(184, 134, 11, 0.35),
+    0 0 18px rgba(218, 165, 32, 0.35),
+    0 0 35px rgba(239, 232, 168, 0.25),
+    0 0 55px rgba(184, 134, 11, 0.18),
+    inset 0 0 18px rgba(239, 232, 168, 0.08);
+}
+
+/* ANIMATED GRADIENT GOLD BORDER */
+.dashboard .card::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+
+  background: linear-gradient(
+    135deg,
+    #8b6914,
+    #d4af37,
+    #fff1a8,
+    #b8860b,
+    #f5d76e,
+    #8b6914
+  );
+
+  background-size: 300% 300%;
+
+  opacity: 0;
+  transition: opacity 0.4s ease;
+
+  pointer-events: none;
+
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+
+  z-index: 2;
+}
+
+.dashboard .card:hover::before {
+  opacity: 1;
+  animation: kbcGoldBorder 3s linear infinite;
+}
+
+@keyframes kbcGoldBorder {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}

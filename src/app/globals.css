@@ -1,0 +1,2271 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* =========================================
+   KBC BASE THEME
+========================================= */
+
+@layer base {
+  body {
+    @apply bg-ink font-sans text-[#f3f1e6];
+  }
+
+  h1,
+  h2,
+  h3 {
+    @apply font-serif;
+  }
+}
+
+/* =========================================
+   KBC REUSABLE COMPONENTS
+========================================= */
+
+@layer components {
+  .btn {
+    @apply inline-block cursor-pointer rounded-full bg-gold px-5 py-2.5 text-sm font-semibold text-ink transition hover:brightness-110;
+  }
+
+  .btn-o {
+    @apply inline-block cursor-pointer rounded-full border border-gold px-5 py-2.5 text-sm font-semibold text-gold transition hover:bg-gold/10;
+  }
+
+  .btn-d {
+    @apply inline-block cursor-pointer rounded-full border border-red-400 px-5 py-2.5 text-sm font-semibold text-red-400 hover:bg-red-400/10;
+  }
+
+  .btn-sm {
+    @apply !px-3.5 !py-1.5 !text-xs;
+  }
+
+  .card {
+    @apply rounded-2xl border border-line bg-card p-5;
+  }
+
+  .input {
+    @apply w-full rounded-xl border border-line bg-[#0f1111] px-3 py-2.5 text-sm outline-none focus:border-gold;
+  }
+
+  .label {
+    @apply mb-1 mt-3 block text-xs text-mute;
+  }
+
+  .tag {
+    @apply inline-block rounded-full bg-gold/10 px-2.5 py-0.5 text-xs text-gold;
+  }
+
+  .wrap {
+    @apply mx-auto max-w-6xl px-5;
+  }
+
+  .th {
+    @apply p-3 text-left text-xs font-medium text-mute;
+  }
+
+  .td {
+    @apply border-t border-line p-3 text-sm;
+  }
+}
+
+/* =========================================
+   KBC DASHBOARD BASE
+========================================= */
+
+.kbc-animations {
+  color: #f5f3e8;
+}
+
+.kbc-enter {
+  opacity: 0;
+  animation: kbcFadeUp 0.75s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+@keyframes kbcFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================================
+   KBC PREMIUM DASHBOARD PANELS
+========================================= */
+
+.kbc-panel {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #393d36;
+  border-radius: 18px;
+  background: #222522;
+  padding: 22px;
+
+  transition:
+    border-color 0.35s ease,
+    transform 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+.kbc-panel:hover {
+  border-color: rgba(239, 232, 168, 0.35);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.16);
+}
+
+.kbc-stat-card::before {
+  content: "";
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  background: rgba(239, 232, 168, 0.055);
+  filter: blur(30px);
+  transition: transform 0.5s ease;
+}
+
+.kbc-stat-card:hover::before {
+  transform: scale(1.8);
+}
+
+/* =========================================
+   KBC REVENUE GRAPH
+========================================= */
+
+.kbc-chart-line {
+  stroke-dasharray: 600;
+  stroke-dashoffset: 600;
+  animation: kbcDrawChart 2s ease forwards 0.3s;
+}
+
+@keyframes kbcDrawChart {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.kbc-chart-point {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: kbcPointAppear 0.4s ease forwards;
+}
+
+.kbc-chart-point:nth-of-type(1) {
+  animation-delay: 0.7s;
+}
+
+.kbc-chart-point:nth-of-type(2) {
+  animation-delay: 0.9s;
+}
+
+.kbc-chart-point:nth-of-type(3) {
+  animation-delay: 1.1s;
+}
+
+.kbc-chart-point:nth-of-type(4) {
+  animation-delay: 1.3s;
+}
+
+.kbc-chart-point:nth-of-type(5) {
+  animation-delay: 1.5s;
+}
+
+.kbc-chart-point:nth-of-type(6) {
+  animation-delay: 1.7s;
+}
+
+.kbc-chart-point:nth-of-type(7) {
+  animation-delay: 1.9s;
+}
+
+@keyframes kbcPointAppear {
+  from {
+    opacity: 0;
+    transform: scale(0);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* =========================================
+   KBC ACADEMY PULSE
+========================================= */
+
+.kbc-pulse-ring {
+  display: flex;
+  width: 190px;
+  height: 190px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+
+  background: conic-gradient(
+    #EFE8A8 0deg 309deg,
+    #393d36 309deg 360deg
+  );
+
+  animation: kbcPulseReveal 1.5s ease-out forwards;
+  box-shadow: 0 0 30px rgba(239, 232, 168, 0.08);
+}
+
+.kbc-pulse-inner {
+  display: flex;
+  width: 162px;
+  height: 162px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #222522;
+}
+
+@keyframes kbcPulseReveal {
+  from {
+    transform: rotate(-90deg) scale(0.75);
+    opacity: 0;
+  }
+
+  to {
+    transform: rotate(0deg) scale(1);
+    opacity: 1;
+  }
+}
+
+/* =========================================
+   KBC PROGRESS BARS
+========================================= */
+
+.kbc-progress-fill {
+  background: linear-gradient(90deg, #b9b17b, #EFE8A8);
+  box-shadow: 0 0 12px rgba(239, 232, 168, 0.25);
+  animation: kbcProgressGrow 1.4s ease-out forwards;
+  transform-origin: left;
+}
+
+@keyframes kbcProgressGrow {
+  from {
+    transform: scaleX(0);
+  }
+
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* =========================================
+   KBC APPOINTMENT TIMELINE
+========================================= */
+
+.kbc-timeline-item {
+  display: flex;
+  align-items: flex-start;
+  opacity: 0;
+  animation: kbcFadeUp 0.6s ease forwards;
+}
+
+/* =========================================
+   KBC LIVE STATUS
+========================================= */
+
+.kbc-live-dot {
+  animation: kbcLivePulse 1.8s infinite;
+}
+
+@keyframes kbcLivePulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(239, 232, 168, 0.4);
+  }
+
+  50% {
+    box-shadow: 0 0 0 7px rgba(239, 232, 168, 0);
+  }
+}
+
+/* =========================================
+   KBC NOTIFICATION POPOVER
+========================================= */
+
+.kbc-notification-popover {
+  transform-origin: top right;
+  animation: kbcNotificationOpen 0.25s ease-out;
+}
+
+@keyframes kbcNotificationOpen {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* =========================================
+   KBC LUXURY GOLD SIDEBAR SCROLLBAR
+========================================= */
+
+nav {
+  scrollbar-width: thin;
+  scrollbar-color: #bdb477 #171a18;
+}
+
+nav::-webkit-scrollbar {
+  width: 6px;
+}
+
+nav::-webkit-scrollbar-track {
+  background: #171a18;
+  border-radius: 20px;
+  margin-block: 8px;
+}
+
+nav::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    180deg,
+    #fff8c9 0%,
+    #d6d0a0 45%,
+    #8f8757 100%
+  );
+
+  border-radius: 20px;
+  border: 1px solid #24251d;
+  box-shadow: 0 0 8px rgba(239, 232, 168, 0.25);
+  transition: all 0.3s ease;
+}
+
+nav::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    180deg,
+    #fffbdc 0%,
+    #efe8a8 50%,
+    #c4b66f 100%
+  );
+
+  box-shadow:
+    0 0 8px rgba(239, 232, 168, 0.65),
+    0 0 16px rgba(239, 232, 168, 0.25);
+}
+
+nav::-webkit-scrollbar-button {
+  display: none;
+}
+
+/* =========================================
+   KBC CHAMPAGNE GOLD MAGNETIC HOVER
+========================================= */
+
+.kbc-magnetic {
+  --magnetic-x: 0px;
+  --magnetic-y: 0px;
+
+  position: relative;
+
+  transform: translate3d(
+    var(--magnetic-x),
+    var(--magnetic-y),
+    0
+  );
+
+  transition:
+    transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1),
+    filter 0.3s ease;
+
+  will-change: transform;
+}
+
+.kbc-magnetic-active {
+  filter: drop-shadow(
+    0 0 9px rgba(239, 232, 168, 0.16)
+  );
+}
+
+.kbc-magnetic button,
+.kbc-magnetic a {
+  transition:
+    color 0.25s ease,
+    background 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.kbc-magnetic button:hover,
+.kbc-magnetic a:hover {
+  border-color: rgba(239, 232, 168, 0.42);
+
+  box-shadow:
+    0 0 12px rgba(239, 232, 168, 0.10),
+    inset 0 0 10px rgba(239, 232, 168, 0.035);
+}
+
+/* =========================================
+   KBC GOLDEN PARTICLE CURSOR
+========================================= */
+
+.kbc-golden-particles {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* =========================================
+   KBC LUXURY DASHBOARD ENTRANCE ANIMATIONS
+========================================= */
+
+.kbc-enter-rise,
+.kbc-enter-left,
+.kbc-enter-right,
+.kbc-enter-scale,
+.kbc-timeline-from-left,
+.kbc-timeline-from-right {
+  opacity: 0;
+  animation-fill-mode: both;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.kbc-enter-rise {
+  animation-name: kbcRiseEntrance;
+  animation-duration: 1s;
+}
+
+@keyframes kbcRiseEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(55px) rotateX(9deg) scale(0.96);
+    filter: blur(5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) rotateX(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+.kbc-enter-left {
+  animation-name: kbcLeftEntrance;
+  animation-duration: 1.15s;
+}
+
+@keyframes kbcLeftEntrance {
+  from {
+    opacity: 0;
+    transform: translateX(-65px) scale(0.97);
+    filter: blur(7px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+.kbc-enter-right {
+  animation-name: kbcRightEntrance;
+  animation-duration: 1.1s;
+}
+
+@keyframes kbcRightEntrance {
+  from {
+    opacity: 0;
+    transform: translateX(65px) scale(0.95);
+    filter: blur(7px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+.kbc-enter-scale {
+  animation-name: kbcScaleEntrance;
+  animation-duration: 1.1s;
+}
+
+@keyframes kbcScaleEntrance {
+  0% {
+    opacity: 0;
+    transform: scale(0.78);
+    filter: blur(8px);
+  }
+
+  65% {
+    opacity: 1;
+    transform: scale(1.035);
+    filter: blur(0);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.kbc-timeline-from-left {
+  animation-name: kbcTimelineLeft;
+  animation-duration: 0.9s;
+}
+
+.kbc-timeline-from-right {
+  animation-name: kbcTimelineRight;
+  animation-duration: 0.9s;
+}
+
+@keyframes kbcTimelineLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-45px);
+    filter: blur(4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes kbcTimelineRight {
+  from {
+    opacity: 0;
+    transform: translateX(45px);
+    filter: blur(4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+    filter: blur(0);
+  }
+}
+
+/* =========================================
+   KBC LUXURY GLASS GLOW CARD EFFECT
+   Champagne Gold + Interactive Spotlight
+========================================= */
+
+@property --glass-border-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.kbc-glass-card {
+  --glass-border-angle: 0deg;
+
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border-radius: 18px;
+
+  background: linear-gradient(
+    145deg,
+    rgba(35, 37, 32, 0.96),
+    rgba(20, 22, 20, 0.98)
+  );
+
+  border: 1px solid rgba(239, 232, 168, 0.13);
+
+  box-shadow:
+    0 12px 35px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.035);
+
+  transition:
+    transform 450ms ease,
+    box-shadow 450ms ease,
+    border-color 450ms ease;
+}
+
+/* Animated champagne gradient border */
+
+.kbc-glass-border {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  padding: 1px;
+
+  border-radius: inherit;
+  pointer-events: none;
+
+  background: conic-gradient(
+    from var(--glass-border-angle),
+    transparent 0deg,
+    rgba(239, 232, 168, 0.12) 45deg,
+    #8f8050 100deg,
+    #fff4b5 145deg,
+    #c7ad64 190deg,
+    rgba(239, 232, 168, 0.12) 245deg,
+    transparent 300deg,
+    transparent 360deg
+  );
+
+  animation: kbcGlassBorderRotate 9s linear infinite;
+
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+
+  opacity: 0.75;
+}
+
+@keyframes kbcGlassBorderRotate {
+  to {
+    --glass-border-angle: 360deg;
+  }
+}
+
+/* Interactive mouse-following spotlight */
+
+.kbc-glass-spotlight {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+
+  pointer-events: none;
+  border-radius: inherit;
+
+  background: radial-gradient(
+    circle at var(--spotlight-x, 50%) var(--spotlight-y, 50%),
+    rgba(239, 232, 168, 0.17) 0%,
+    rgba(214, 208, 160, 0.07) 24%,
+    transparent 58%
+  );
+
+  opacity: 0.85;
+  transition: opacity 350ms ease;
+}
+
+/* Card content */
+
+.kbc-fire-content {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  border-radius: inherit;
+  overflow: hidden;
+}
+
+/* Moving glass reflection */
+
+.kbc-fire-content::before {
+  content: "";
+
+  position: absolute;
+  top: -120%;
+  left: -65%;
+
+  width: 45%;
+  height: 340%;
+
+  z-index: 5;
+  pointer-events: none;
+
+  transform: rotate(28deg);
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 248, 210, 0.045),
+    rgba(255, 248, 210, 0.12),
+    rgba(255, 248, 210, 0.035),
+    transparent
+  );
+
+  transition: left 900ms ease;
+}
+
+.kbc-glass-card:hover .kbc-fire-content::before {
+  left: 135%;
+}
+
+/* Soft intensity */
+
+.kbc-glass-soft {
+  box-shadow:
+    0 8px 25px rgba(0, 0, 0, 0.2),
+    0 0 15px rgba(239, 232, 168, 0.035);
+}
+
+.kbc-glass-soft .kbc-glass-border {
+  opacity: 0.4;
+}
+
+/* Medium intensity */
+
+.kbc-glass-medium {
+  box-shadow:
+    0 12px 32px rgba(0, 0, 0, 0.24),
+    0 0 22px rgba(239, 232, 168, 0.055);
+}
+
+.kbc-glass-medium .kbc-glass-border {
+  opacity: 0.7;
+}
+
+/* Strong intensity */
+
+.kbc-glass-strong {
+  box-shadow:
+    0 15px 38px rgba(0, 0, 0, 0.3),
+    0 0 30px rgba(239, 232, 168, 0.11);
+}
+
+.kbc-glass-strong .kbc-glass-border {
+  opacity: 1;
+}
+
+/* Hover interaction */
+
+.kbc-glass-card:hover {
+  transform: translateY(-5px);
+
+  border-color: rgba(239, 232, 168, 0.32);
+
+  box-shadow:
+    0 18px 42px rgba(0, 0, 0, 0.32),
+    0 0 28px rgba(239, 232, 168, 0.11),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.kbc-glass-card:hover .kbc-glass-spotlight {
+  opacity: 1;
+}
+
+/* =========================================
+   KBC RESPONSIVE & ACCESSIBILITY
+========================================= */
+
+@media (hover: none), (pointer: coarse) {
+  .kbc-magnetic {
+    transform: none !important;
+    filter: none !important;
+  }
+
+  .kbc-golden-particles {
+    display: none;
+  }
+
+  .kbc-glass-card:hover {
+    transform: none;
+  }
+
+  .kbc-glass-border {
+    animation-duration: 14s;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kbc-magnetic {
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .kbc-golden-particles {
+    display: none;
+  }
+
+  .kbc-glass-border {
+    animation: none !important;
+  }
+
+  .kbc-glass-card,
+  .kbc-glass-spotlight,
+  .kbc-fire-content::before {
+    transition: none !important;
+  }
+
+  .kbc-glass-card:hover {
+    transform: none;
+  }
+
+  .kbc-enter-rise,
+  .kbc-enter-left,
+  .kbc-enter-right,
+  .kbc-enter-scale,
+  .kbc-timeline-from-left,
+  .kbc-timeline-from-right {
+    animation: none !important;
+    opacity: 1 !important;
+    filter: none !important;
+    transform: none !important;
+  }
+
+  .kbc-animations *,
+  .kbc-animations *::before,
+  .kbc-animations *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* =========================================
+   KBC CINEMATIC ADMIN INTRO
+========================================= */
+
+.kbc-intro-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      ellipse at center,
+      rgba(90, 55, 15, 0.18),
+      transparent 55%
+    ),
+    #090b0a;
+  animation: kbcIntroFade 4.5s ease forwards;
+}
+
+.kbc-intro-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  animation: kbcIntroReveal 1.3s ease both;
+}
+
+.kbc-intro-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: min(260px, 65vw);
+  height: 170px;
+  animation: kbcLogoReveal 1.5s ease both;
+}
+
+.kbc-intro-logo img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  filter:
+    drop-shadow(0 0 12px rgba(239, 232, 168, 0.3))
+    drop-shadow(0 0 35px rgba(255, 130, 30, 0.16));
+}
+
+.kbc-intro-line {
+  width: 0;
+  height: 1px;
+  margin: 18px 0 24px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #EFE8A8,
+    #ff9b45,
+    #EFE8A8,
+    transparent
+  );
+  box-shadow: 0 0 15px rgba(255, 150, 50, 0.5);
+  animation: kbcIntroLine 1.4s ease 0.6s forwards;
+}
+
+.kbc-intro-content h1 {
+  color: #EFE8A8;
+  font-family: Georgia, serif;
+  font-size: clamp(22px, 4vw, 38px);
+  letter-spacing: 0.24em;
+  opacity: 0;
+  animation: kbcIntroText 1s ease 1s forwards;
+  text-shadow: 0 0 22px rgba(239, 232, 168, 0.25);
+}
+
+.kbc-intro-content p {
+  margin-top: 14px;
+  color: #aaa995;
+  font-size: 10px;
+  letter-spacing: 0.35em;
+  opacity: 0;
+  animation: kbcIntroText 1s ease 1.4s forwards;
+}
+
+.kbc-intro-skip {
+  position: absolute;
+  top: calc(100% + 65px);
+  padding: 10px 18px;
+  border: 1px solid rgba(239, 232, 168, 0.35);
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.025);
+  color: #EFE8A8;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  animation: kbcIntroText 1s ease 1.8s both;
+}
+
+.kbc-intro-skip:hover {
+  background: rgba(239, 232, 168, 0.12);
+  box-shadow: 0 0 20px rgba(239, 232, 168, 0.2);
+}
+
+.kbc-intro-skip span {
+  margin-left: 8px;
+}
+
+/* Golden light particles */
+
+.kbc-intro-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(circle, rgba(255, 195, 100, .8) 1px, transparent 2px),
+    radial-gradient(circle, rgba(239, 232, 168, .55) 1px, transparent 2px),
+    radial-gradient(circle, rgba(255, 120, 35, .65) 1px, transparent 2px);
+  background-size: 130px 130px, 190px 190px, 240px 240px;
+  background-position: 0 0, 50px 70px, 100px 30px;
+  opacity: 0;
+  animation: kbcParticles 4s ease-in-out infinite;
+}
+
+@keyframes kbcIntroReveal {
+  from {
+    opacity: 0;
+    transform: translateY(25px) scale(.94);
+    filter: blur(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes kbcLogoReveal {
+  from {
+    opacity: 0;
+    transform: scale(.8);
+    filter: brightness(.3) blur(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+    filter: brightness(1) blur(0);
+  }
+}
+
+@keyframes kbcIntroLine {
+  to {
+    width: min(330px, 75vw);
+  }
+}
+
+@keyframes kbcIntroText {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes kbcParticles {
+  0%, 100% {
+    opacity: .15;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: .65;
+    transform: translateY(-18px);
+  }
+}
+
+@keyframes kbcIntroFade {
+  0%, 76% {
+    opacity: 1;
+    visibility: visible;
+  }
+  100% {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kbc-intro-overlay,
+  .kbc-intro-content,
+  .kbc-intro-logo,
+  .kbc-intro-line,
+  .kbc-intro-content h1,
+  .kbc-intro-content p,
+  .kbc-intro-skip,
+  .kbc-intro-particles {
+    animation: none;
+  }
+
+  .kbc-intro-overlay {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .kbc-intro-content h1,
+  .kbc-intro-content p {
+    opacity: 1;
+  }
+
+  .kbc-intro-line {
+    width: min(330px, 75vw);
+  }
+}
+
+/* =========================================
+   KBC CINEMATIC FIRE PARTICLE INTRO
+========================================= */
+
+.kbc-cinematic-intro {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(
+      ellipse at 50% 48%,
+      rgba(112, 57, 17, 0.22),
+      transparent 42%
+    ),
+    radial-gradient(
+      ellipse at center,
+      #17110b 0%,
+      #090a09 48%,
+      #030404 100%
+    );
+  animation: kbcScreenEnter 1.2s ease both;
+}
+
+.kbc-assembly-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.kbc-intro-vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      ellipse at center,
+      transparent 25%,
+      rgba(0, 0, 0, 0.25) 65%,
+      rgba(0, 0, 0, 0.85) 115%
+    );
+}
+
+.kbc-intro-scanline {
+  position: absolute;
+  z-index: 4;
+  top: -20%;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 170, 70, 0.4),
+    #fff1b5,
+    rgba(255, 170, 70, 0.4),
+    transparent
+  );
+  box-shadow: 0 0 25px 5px rgba(255, 147, 45, 0.16);
+  animation: kbcScanDown 3.5s ease-in-out 0.4s both;
+}
+
+.kbc-intro-center {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 20px;
+  text-align: center;
+}
+
+.kbc-logo-aura {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: min(480px, 90vw);
+  height: 260px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse,
+    rgba(255, 157, 48, 0.16),
+    rgba(239, 232, 168, 0.06) 40%,
+    transparent 72%
+  );
+  filter: blur(30px);
+  opacity: 0;
+  animation: kbcAuraAppear 2s ease 1.6s forwards,
+    kbcAuraPulse 3s ease-in-out 3.5s infinite;
+}
+
+.kbc-assembled-logo {
+  position: relative;
+  z-index: 3;
+  display: block;
+  width: min(330px, 72vw);
+  max-height: 190px;
+  object-fit: contain;
+  opacity: 0;
+  transform: scale(0.72);
+  filter:
+    brightness(1.2)
+    drop-shadow(0 0 10px rgba(255, 211, 120, 0.75))
+    drop-shadow(0 0 35px rgba(255, 119, 32, 0.48));
+  transition:
+    opacity 1.1s ease,
+    transform 1.3s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 1.2s ease;
+}
+
+.kbc-cinematic-intro.is-assembled .kbc-assembled-logo {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.kbc-logo-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(420px, 88vw);
+  height: min(170px, 36vw);
+  border: 1px solid rgba(239, 190, 104, 0.35);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) rotate(-12deg) scale(0.65);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.kbc-logo-ring-one {
+  box-shadow:
+    0 0 15px rgba(255, 151, 49, 0.2),
+    inset 0 0 15px rgba(255, 151, 49, 0.08);
+}
+
+.kbc-logo-ring-two {
+  width: min(490px, 96vw);
+  height: min(205px, 42vw);
+  border-color: rgba(255, 119, 44, 0.18);
+  transform: translate(-50%, -50%) rotate(12deg) scale(0.65);
+}
+
+.kbc-cinematic-intro.is-assembled .kbc-logo-ring-one {
+  animation: kbcRingReveal 1.8s ease 0.1s forwards,
+    kbcRingRotate 12s linear 2s infinite;
+}
+
+.kbc-cinematic-intro.is-assembled .kbc-logo-ring-two {
+  animation: kbcRingReveal 2s ease 0.3s forwards,
+    kbcRingRotateReverse 18s linear 2.3s infinite;
+}
+
+.kbc-intro-brand {
+  position: relative;
+  z-index: 5;
+  margin-top: 38px;
+  opacity: 0;
+  transform: translateY(22px);
+  transition:
+    opacity 1s ease,
+    transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.kbc-cinematic-intro.is-assembled .kbc-intro-brand {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.65s;
+}
+
+.kbc-brand-small {
+  display: block;
+  margin-bottom: 13px;
+  color: #d2b778;
+  font-size: 9px;
+  letter-spacing: 0.55em;
+}
+
+.kbc-intro-brand h1 {
+  margin: 0;
+  color: #f3e7b5;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(22px, 4.3vw, 43px);
+  font-weight: 400;
+  letter-spacing: clamp(0.12em, 0.6vw, 0.3em);
+  text-shadow:
+    0 0 12px rgba(255, 220, 148, 0.25),
+    0 0 35px rgba(255, 139, 48, 0.2);
+}
+
+.kbc-brand-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  margin: 19px auto 13px;
+  color: #f3d58e;
+  font-size: 13px;
+}
+
+.kbc-brand-divider span {
+  display: block;
+  width: 65px;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #c69a53
+  );
+}
+
+.kbc-brand-divider span:last-child {
+  transform: rotate(180deg);
+}
+
+.kbc-intro-brand p {
+  margin: 0;
+  color: #a9a18c;
+  font-size: 9px;
+  letter-spacing: 0.42em;
+}
+
+.kbc-intro-bottom {
+  position: absolute;
+  z-index: 6;
+  right: 30px;
+  bottom: 25px;
+  left: 30px;
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  color: rgba(214, 196, 147, 0.55);
+  font-size: 8px;
+  letter-spacing: 0.2em;
+  opacity: 0;
+  animation: kbcBottomReveal 1s ease 3.4s forwards;
+}
+
+.kbc-intro-loading {
+  animation: kbcLoadingGlow 1.6s ease-in-out infinite;
+}
+
+.kbc-cinematic-skip {
+  position: absolute;
+  z-index: 10;
+  top: 28px;
+  right: 30px;
+  padding: 11px 18px;
+  border: 1px solid rgba(239, 190, 104, 0.3);
+  border-radius: 30px;
+  background: rgba(20, 17, 12, 0.65);
+  color: #e9d59e;
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  cursor: pointer;
+  backdrop-filter: blur(12px);
+  transition:
+    background 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.kbc-cinematic-skip:hover {
+  border-color: #e8c47b;
+  background: rgba(116, 70, 24, 0.35);
+  box-shadow: 0 0 25px rgba(255, 153, 55, 0.2);
+}
+
+.kbc-cinematic-skip span {
+  margin-left: 8px;
+  color: #ffb45e;
+}
+
+/* INTRO KEYFRAMES */
+
+@keyframes kbcScreenEnter {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes kbcScanDown {
+  0% {
+    top: -20%;
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 0.7;
+  }
+  100% {
+    top: 120%;
+    opacity: 0;
+  }
+}
+
+@keyframes kbcAuraAppear {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes kbcAuraPulse {
+  0%, 100% {
+    filter: blur(30px);
+    transform: translateX(-50%) scale(0.95);
+  }
+  50% {
+    filter: blur(42px);
+    transform: translateX(-50%) scale(1.12);
+  }
+}
+
+@keyframes kbcRingReveal {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(-12deg) scale(0.65);
+  }
+  100% {
+    opacity: 0.8;
+    transform: translate(-50%, -50%) rotate(-12deg) scale(1);
+  }
+}
+
+@keyframes kbcRingRotate {
+  from {
+    transform: translate(-50%, -50%) rotate(-12deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(348deg);
+  }
+}
+
+@keyframes kbcRingRotateReverse {
+  from {
+    transform: translate(-50%, -50%) rotate(12deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(-348deg);
+  }
+}
+
+@keyframes kbcBottomReveal {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes kbcLoadingGlow {
+  0%, 100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 600px) {
+  .kbc-intro-bottom {
+    right: 15px;
+    bottom: 18px;
+    left: 15px;
+    font-size: 6px;
+    letter-spacing: 0.1em;
+  }
+
+  .kbc-intro-brand {
+    margin-top: 28px;
+  }
+
+  .kbc-intro-brand p {
+    font-size: 7px;
+    letter-spacing: 0.2em;
+  }
+
+  .kbc-cinematic-skip {
+    top: 18px;
+    right: 16px;
+    padding: 9px 13px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kbc-cinematic-intro,
+  .kbc-intro-scanline,
+  .kbc-logo-aura,
+  .kbc-intro-bottom,
+  .kbc-intro-loading {
+    animation: none !important;
+  }
+
+  .kbc-cinematic-intro .kbc-assembled-logo {
+    opacity: 1;
+    transform: none;
+  }
+
+  .kbc-cinematic-intro .kbc-intro-brand {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* =========================================
+   KBC PREMIUM LIQUID GOLD BACKGROUND
+========================================= */
+
+.kbc-liquid-gold {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  isolation: isolate;
+  background: #121414;
+}
+
+.kbc-liquid-base {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      ellipse at 50% 45%,
+      rgba(105, 85, 42, 0.10),
+      transparent 65%
+    ),
+    linear-gradient(
+      135deg,
+      #121414 0%,
+      #171713 45%,
+      #101211 100%
+    );
+}
+
+.kbc-liquid-wave {
+  position: absolute;
+  width: 75vw;
+  height: 65vw;
+  min-width: 650px;
+  min-height: 650px;
+  border-radius: 42% 58% 65% 35% / 45% 38% 62% 55%;
+  filter: blur(65px);
+  opacity: 0.13;
+  mix-blend-mode: screen;
+  will-change: transform, border-radius;
+}
+
+.kbc-liquid-wave-one {
+  top: -35%;
+  left: -15%;
+
+  background:
+    radial-gradient(
+      ellipse at 35% 35%,
+      rgba(255, 231, 157, 0.85) 0%,
+      rgba(196, 157, 78, 0.45) 25%,
+      rgba(120, 91, 38, 0.18) 48%,
+      transparent 72%
+    );
+
+  animation: kbcLiquidFlowOne 24s ease-in-out infinite alternate;
+}
+
+.kbc-liquid-wave-two {
+  right: -25%;
+  bottom: -45%;
+
+  background:
+    radial-gradient(
+      ellipse at 55% 45%,
+      rgba(239, 232, 168, 0.75) 0%,
+      rgba(184, 143, 66, 0.40) 28%,
+      rgba(105, 79, 35, 0.16) 52%,
+      transparent 72%
+    );
+
+  animation: kbcLiquidFlowTwo 30s ease-in-out infinite alternate;
+}
+
+.kbc-liquid-wave-three {
+  top: 20%;
+  left: 30%;
+
+  width: 55vw;
+  height: 55vw;
+
+  background:
+    radial-gradient(
+      ellipse at center,
+      rgba(255, 219, 130, 0.55) 0%,
+      rgba(180, 136, 56, 0.28) 35%,
+      transparent 72%
+    );
+
+  opacity: 0.08;
+
+  animation: kbcLiquidFlowThree 28s ease-in-out infinite alternate;
+}
+
+.kbc-liquid-glow {
+  position: absolute;
+  width: 450px;
+  height: 450px;
+  border-radius: 50%;
+  filter: blur(100px);
+  will-change: transform, opacity;
+}
+
+.kbc-liquid-glow-one {
+  top: 8%;
+  right: 12%;
+  background: rgba(239, 205, 115, 0.12);
+
+  animation: kbcGoldGlowOne 16s ease-in-out infinite alternate;
+}
+
+.kbc-liquid-glow-two {
+  bottom: 5%;
+  left: 8%;
+  background: rgba(185, 145, 67, 0.10);
+
+  animation: kbcGoldGlowTwo 20s ease-in-out infinite alternate;
+}
+
+.kbc-liquid-shimmer {
+  position: absolute;
+  inset: -50%;
+  width: 200%;
+  height: 200%;
+
+  background: linear-gradient(
+    115deg,
+    transparent 35%,
+    rgba(255, 239, 186, 0.015) 42%,
+    rgba(239, 205, 115, 0.055) 48%,
+    rgba(255, 245, 205, 0.025) 51%,
+    transparent 58%
+  );
+
+  transform: translateX(-30%);
+  animation: kbcLiquidShimmer 18s ease-in-out infinite;
+}
+
+@keyframes kbcLiquidFlowOne {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+    border-radius: 42% 58% 65% 35% / 45% 38% 62% 55%;
+  }
+
+  50% {
+    transform: translate3d(10%, 8%, 0) rotate(35deg) scale(1.12);
+    border-radius: 58% 42% 40% 60% / 55% 62% 38% 45%;
+  }
+
+  100% {
+    transform: translate3d(4%, 15%, 0) rotate(75deg) scale(0.95);
+    border-radius: 35% 65% 55% 45% / 62% 42% 58% 38%;
+  }
+}
+
+@keyframes kbcLiquidFlowTwo {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+    border-radius: 60% 40% 45% 55% / 40% 60% 40% 60%;
+  }
+
+  50% {
+    transform: translate3d(-12%, -8%, 0) rotate(-40deg) scale(1.15);
+    border-radius: 42% 58% 60% 40% / 55% 40% 60% 45%;
+  }
+
+  100% {
+    transform: translate3d(-5%, -12%, 0) rotate(-75deg) scale(0.92);
+    border-radius: 55% 45% 35% 65% / 45% 55% 45% 55%;
+  }
+}
+
+@keyframes kbcLiquidFlowThree {
+  0% {
+    transform: translate3d(-5%, 0, 0) rotate(0deg) scale(0.9);
+  }
+
+  50% {
+    transform: translate3d(8%, 10%, 0) rotate(90deg) scale(1.15);
+  }
+
+  100% {
+    transform: translate3d(-8%, 5%, 0) rotate(180deg) scale(0.95);
+  }
+}
+
+@keyframes kbcGoldGlowOne {
+  0% {
+    transform: translate3d(0, 0, 0) scale(0.9);
+    opacity: 0.55;
+  }
+
+  100% {
+    transform: translate3d(-90px, 80px, 0) scale(1.3);
+    opacity: 1;
+  }
+}
+
+@keyframes kbcGoldGlowTwo {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.45;
+  }
+
+  100% {
+    transform: translate3d(100px, -70px, 0) scale(1.25);
+    opacity: 0.9;
+  }
+}
+
+@keyframes kbcLiquidShimmer {
+  0% {
+    transform: translate3d(-12%, -5%, 0) rotate(-8deg);
+  }
+
+  50% {
+    transform: translate3d(8%, 4%, 0) rotate(-3deg);
+  }
+
+  100% {
+    transform: translate3d(20%, 8%, 0) rotate(4deg);
+  }
+}
+
+@media (max-width: 768px) {
+  .kbc-liquid-wave {
+    filter: blur(85px);
+    opacity: 0.09;
+  }
+
+  .kbc-liquid-glow {
+    width: 280px;
+    height: 280px;
+    filter: blur(80px);
+  }
+
+  .kbc-liquid-shimmer {
+    opacity: 0.5;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kbc-liquid-wave,
+  .kbc-liquid-glow,
+  .kbc-liquid-shimmer {
+    animation: none !important;
+  }
+}
+
+/* =========================================
+   KBC PREMIUM CHAMPAGNE GOLD BACKGROUND
+========================================= */
+
+.kbc-liquid-gold {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: #121414;
+  isolation: isolate;
+}
+
+.kbc-gold-particle-canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.kbc-gold-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+
+  background:
+    radial-gradient(
+      ellipse at center,
+      transparent 30%,
+      rgba(0, 0, 0, 0.16) 75%,
+      rgba(0, 0, 0, 0.38) 100%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(18, 20, 20, 0.05),
+      rgba(18, 20, 20, 0.18)
+    );
+}
+
+@media (max-width: 768px) {
+  .kbc-gold-vignette {
+    background:
+      radial-gradient(
+        ellipse at center,
+        transparent 25%,
+        rgba(0, 0, 0, 0.3) 100%
+      );
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kbc-gold-particle-canvas {
+    animation: none;
+  }
+}
+
+/* =========================================
+   KBC CHAMPAGNE GOLD WATER BACKGROUND
+========================================= */
+
+.kbc-liquid-gold {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: #121414;
+  isolation: isolate;
+}
+
+.kbc-gold-particle-canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.kbc-gold-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      ellipse at center,
+      transparent 25%,
+      rgba(0, 0, 0, 0.16) 72%,
+      rgba(0, 0, 0, 0.4) 100%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(18, 20, 20, 0.03),
+      rgba(18, 20, 20, 0.2)
+    );
+}
+
+@media (max-width: 768px) {
+  .kbc-gold-vignette {
+    background: radial-gradient(
+      ellipse at center,
+      transparent 20%,
+      rgba(0, 0, 0, 0.3) 100%
+    );
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kbc-gold-particle-canvas {
+    animation: none;
+  }
+}
+
+/* ======================================
+   KBC CINEMATIC OWNER WELCOME ANIMATION
+====================================== */
+
+.kbc-welcome {
+  background:
+    radial-gradient(ellipse at 80% 20%, rgba(239,232,168,.10), transparent 40%),
+    linear-gradient(120deg, #252720, #1b1e1c 55%, #121414);
+  isolation: isolate;
+  animation: kbcWelcomeAppear 1s ease-out both;
+}
+
+.kbc-welcome-glow {
+  position: absolute;
+  width: 230px;
+  height: 230px;
+  border-radius: 50%;
+  background: rgba(239,232,168,.13);
+  filter: blur(75px);
+  pointer-events: none;
+  animation: kbcGlowFloat 7s ease-in-out infinite alternate;
+}
+
+.kbc-welcome-glow-one {
+  right: 8%;
+  top: -130px;
+}
+
+.kbc-welcome-glow-two {
+  right: 38%;
+  bottom: -190px;
+  animation-delay: -3s;
+}
+
+.kbc-welcome-particle {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #EFE8A8;
+  box-shadow: 0 0 9px 2px rgba(239,232,168,.5);
+  opacity: 0;
+  pointer-events: none;
+  animation: kbcParticleFloat 4s ease-in-out infinite;
+}
+
+.kbc-welcome-sweep {
+  position: absolute;
+  inset: -50% auto -50% -40%;
+  width: 25%;
+  transform: rotate(20deg);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(239,232,168,.09),
+    rgba(255,255,220,.17),
+    transparent
+  );
+  filter: blur(12px);
+  animation: kbcWelcomeSweep 7s ease-in-out 1s infinite;
+  pointer-events: none;
+}
+
+.kbc-welcome-label {
+  animation: kbcTextReveal .8s ease-out .15s both;
+}
+
+.kbc-welcome-heading {
+  animation: kbcTextReveal 1s cubic-bezier(.2,.8,.2,1) .35s both;
+}
+
+.kbc-welcome-name {
+  display: inline-block;
+  color: #EFE8A8;
+  text-shadow: 0 0 22px rgba(239,232,168,.35);
+  animation: kbcNameGlow 3s ease-in-out 1.5s infinite alternate;
+}
+
+.kbc-welcome-subtitle {
+  animation: kbcTextReveal .9s ease-out .7s both;
+}
+
+.kbc-welcome-date {
+  animation: kbcTextReveal .9s ease-out .95s both;
+}
+
+@keyframes kbcWelcomeAppear {
+  from { opacity: 0; transform: translateY(22px) scale(.985); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes kbcTextReveal {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+    filter: blur(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes kbcNameGlow {
+  from { text-shadow: 0 0 8px rgba(239,232,168,.2); }
+  to { text-shadow: 0 0 25px rgba(239,232,168,.65), 0 0 45px rgba(239,232,168,.2); }
+}
+
+@keyframes kbcGlowFloat {
+  from { transform: translate(0,0) scale(.9); }
+  to { transform: translate(-45px,35px) scale(1.2); }
+}
+
+@keyframes kbcParticleFloat {
+  0% { opacity: 0; transform: translateY(18px) scale(.5); }
+  35% { opacity: .8; }
+  75% { opacity: .5; }
+  100% { opacity: 0; transform: translateY(-35px) scale(1.3); }
+}
+
+@keyframes kbcWelcomeSweep {
+  0%, 35% { left: -40%; opacity: 0; }
+  45% { opacity: 1; }
+  75% { left: 130%; opacity: .7; }
+  100% { left: 130%; opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kbc-welcome,
+  .kbc-welcome * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* =========================================
+   KBC - 10 LUXURY CARD GLOW EFFECTS
+========================================= */
+
+.kbc-glow-card {
+  --spotlight-x: 50%;
+  --spotlight-y: 50%;
+  --tilt-x: 0deg;
+  --tilt-y: 0deg;
+
+  position: relative;
+  isolation: isolate;
+  overflow: visible;
+  border: 1px solid rgba(239, 232, 168, 0.14);
+  border-radius: 18px;
+  background: rgba(34, 37, 34, 0.9);
+
+  transform:
+    perspective(1000px)
+    rotateX(var(--tilt-x))
+    rotateY(var(--tilt-y));
+
+  transition:
+    transform 0.4s ease,
+    box-shadow 0.4s ease,
+    border-color 0.4s ease;
+}
+
+.kbc-glow-content {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+.kbc-glow-border,
+.kbc-glow-spotlight,
+.kbc-glow-particles {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.kbc-glow-border {
+  z-index: 1;
+  border: 1px solid rgba(239, 232, 168, 0.25);
+  opacity: 0.65;
+  transition: opacity 0.4s ease;
+}
+
+.kbc-glow-spotlight {
+  z-index: 1;
+  background: radial-gradient(
+    circle at var(--spotlight-x) var(--spotlight-y),
+    rgba(255, 244, 190, 0.2),
+    rgba(239, 232, 168, 0.06) 28%,
+    transparent 65%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.kbc-glow-card:hover .kbc-glow-spotlight {
+  opacity: 1;
+}
+
+.kbc-glow-card:hover .kbc-glow-border {
+  opacity: 1;
+}
+
+/* 1. Champagne Border Flow */
+
+.kbc-glow-champagne-border .kbc-glow-border {
+  border: 2px solid transparent;
+  background:
+    linear-gradient(#222522, #222522) padding-box,
+    conic-gradient(
+      from 0deg,
+      transparent,
+      #b89b58,
+      #fff3bd,
+      #d6c58b,
+      transparent
+    ) border-box;
+  animation: kbcChampagneBorder 5s linear infinite;
+}
+
+@keyframes kbcChampagneBorder {
+  to {
+    filter: hue-rotate(15deg);
+    transform: rotate(0deg);
+  }
+}
+
+/* 2. Interactive Spotlight */
+
+.kbc-glow-spotlight .kbc-glow-spotlight {
+  opacity: 0.2;
+}
+
+.kbc-glow-spotlight:hover .kbc-glow-spotlight {
+  opacity: 1;
+}
+
+/* 3. Four-Corner Golden Glow */
+
+.kbc-glow-corner-glow::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(circle at 0 0, #fff0a8, transparent 24%),
+    radial-gradient(circle at 100% 0, #c6a65c, transparent 24%),
+    radial-gradient(circle at 0 100%, #c6a65c, transparent 24%),
+    radial-gradient(circle at 100% 100%, #fff0a8, transparent 24%);
+  filter: blur(12px);
+  opacity: 0.35;
+  transition: opacity 0.4s ease;
+}
+
+.kbc-glow-corner-glow:hover::before {
+  opacity: 0.85;
+}
+
+/* 4. Cinematic Light Sweep */
+
+.kbc-glow-light-sweep::after {
+  content: "";
+  position: absolute;
+  inset: -100% -50%;
+  z-index: 3;
+  pointer-events: none;
+  background: linear-gradient(
+    115deg,
+    transparent 42%,
+    rgba(255, 248, 210, 0.16) 50%,
+    transparent 58%
+  );
+  transform: translateX(-70%);
+  transition: transform 1s ease;
+}
+
+.kbc-glow-light-sweep:hover::after {
+  transform: translateX(70%);
+}
+
+/* 5. Ambient Halo */
+
+.kbc-glow-ambient-halo::before {
+  content: "";
+  position: absolute;
+  inset: -12px;
+  z-index: -1;
+  border-radius: inherit;
+  background: radial-gradient(
+    ellipse,
+    rgba(239, 232, 168, 0.25),
+    transparent 70%
+  );
+  filter: blur(18px);
+  opacity: 0.45;
+  animation: kbcAmbientHalo 4s ease-in-out infinite;
+}
+
+@keyframes kbcAmbientHalo {
+  0%, 100% {
+    opacity: 0.25;
+    transform: scale(0.96);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.04);
+  }
+}
+
+/* 6. Floating Gold Particles */
+
+.kbc-glow-gold-particles .kbc-glow-particles {
+  z-index: 3;
+  overflow: hidden;
+  background-image:
+    radial-gradient(circle, #fff0a8 1px, transparent 2px),
+    radial-gradient(circle, #d6b96e 1px, transparent 2px),
+    radial-gradient(circle, #fff3c4 1px, transparent 2px);
+  background-size: 65px 65px, 90px 90px, 110px 110px;
+  background-position: 0 0, 25px 35px, 45px 15px;
+  opacity: 0.35;
+  animation: kbcGoldParticles 12s linear infinite;
+}
+
+@keyframes kbcGoldParticles {
+  to {
+    background-position: 0 -130px, 25px -145px, 45px -165px;
+  }
+}
+
+/* 7. Breathing Neon Glow */
+
+.kbc-glow-breathing-glow {
+  animation: kbcBreathingGlow 4s ease-in-out infinite;
+}
+
+@keyframes kbcBreathingGlow {
+  0%, 100% {
+    box-shadow: 0 0 8px rgba(239, 232, 168, 0.08);
+  }
+  50% {
+    box-shadow:
+      0 0 20px rgba(239, 232, 168, 0.22),
+      0 0 38px rgba(190, 160, 91, 0.1);
+  }
+}
+
+/* 8. Liquid Glass Reflection */
+
+.kbc-glow-liquid-glass::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(
+    130deg,
+    transparent 20%,
+    rgba(255, 248, 210, 0.1) 45%,
+    transparent 65%
+  );
+  transform: translateX(-100%);
+  transition: transform 1.2s ease;
+}
+
+.kbc-glow-liquid-glass:hover::after {
+  transform: translateX(100%);
+}
+
+/* 9. Golden Orbit */
+
+.kbc-glow-golden-orbit .kbc-glow-border {
+  border: 1px solid transparent;
+  background:
+    linear-gradient(#222522, #222522) padding-box,
+    conic-gradient(
+      transparent 65%,
+      #fff0a8,
+      #c6a65c,
+      transparent
+    ) border-box;
+  animation: kbcGoldenOrbit 6s linear infinite;
+}
+
+@keyframes kbcGoldenOrbit {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 10. 3D Magnetic Tilt */
+
+.kbc-glow-magnetic-tilt {
+  transform-style: preserve-3d;
+}
+
+.kbc-glow-magnetic-tilt:hover {
+  border-color: rgba(239, 232, 168, 0.55);
+  box-shadow:
+    0 15px 30px rgba(0, 0, 0, 0.3),
+    0 0 25px rgba(239, 232, 168, 0.15);
+}
+
+/* Intensity variations */
+
+.kbc-glass-soft .kbc-glow-border {
+  opacity: 0.3;
+}
+
+.kbc-glass-medium .kbc-glow-border {
+  opacity: 0.6;
+}
+
+.kbc-glass-strong .kbc-glow-border {
+  opacity: 0.95;
+}
+
+.kbc-glow-card:focus-within {
+  outline: 1px solid rgba(239, 232, 168, 0.6);
+  outline-offset: 3px;
+}
+
+/* Accessibility */
+
+@media (prefers-reduced-motion: reduce) {
+  .kbc-glow-card,
+  .kbc-glow-card *,
+  .kbc-glow-card::before,
+  .kbc-glow-card::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .kbc-glow-card {
+    transform: none !important;
+  }
+
+  .kbc-glow-spotlight {
+    opacity: 0.15;
+  }
+}
