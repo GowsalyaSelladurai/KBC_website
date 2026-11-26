@@ -105,7 +105,7 @@ export default function AdminSidebar() {
 
                   const active =
                     pathname === item.href ||
-                    (item.href !== "/admin" &&
+                    (item.href !== "/" &&
                       pathname.startsWith(item.href + "/"));
 
                   return (
@@ -124,7 +124,7 @@ export default function AdminSidebar() {
                           ${
                             active
                               ? "border border-[#EFE8A8]/25 bg-gradient-to-r from-[#343426] via-[#25271f] to-[#1b1e1c] font-semibold text-[#EFE8A8] shadow-[0_0_18px_rgba(239,232,168,0.09),inset_0_0_15px_rgba(239,232,168,0.04)]"
-                              : "border border-transparent #F5F1E6 hover:border-[#EFE8A8]/10 hover:bg-[#222522] hover:text-[#EFE8A8]"
+                              : "border border-transparent text-[#F5F1E6] hover:border-[#EFE8A8]/10 hover:bg-[#222522] hover:text-[#EFE8A8]"
                           }
                         `}
                       >

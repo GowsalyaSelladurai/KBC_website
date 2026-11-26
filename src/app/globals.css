@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 
 @tailwind base;
 @tailwind components;
@@ -2269,7 +2269,8 @@ nav::-webkit-scrollbar-button {
   .kbc-glow-spotlight {
     opacity: 0.15;
   }
-=======
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -2286,5 +2287,31 @@ nav::-webkit-scrollbar-button {
   .wrap { @apply mx-auto max-w-6xl px-5; }
   .th { @apply p-3 text-left text-xs font-medium text-mute; }
   .td { @apply border-t border-line p-3 text-sm; }
->>>>>>> 990cd97b5033c8e58152cb1b7f95494a00ff20ae
+}
+/* =========================================
+   KBC PUBLIC WEBSITE - SOFT CHARCOAL THEME
+   Admin Dashboard remains unchanged
+========================================= */
+
+.kbc-public-theme {
+  min-height: 100vh;
+  background-color: #242424;
+  color: #f3f1e6;
+}
+
+/* Public page section backgrounds */
+.kbc-public-theme main,
+.kbc-public-theme section {
+  background-color: transparent;
+}
+
+/* =========================================
+   KBC ADMIN INNER PAGES - SOFT CHARCOAL
+   Dashboard remains unchanged
+========================================= */
+
+.kbc-admin-pages-theme {
+  min-height: 100vh;
+  background-color: #242424;
+  color: #f3f1e6;
 }
