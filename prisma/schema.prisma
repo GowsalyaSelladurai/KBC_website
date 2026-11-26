@@ -1,0 +1,249 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Customer {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String?  @unique
+  phone     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  appointments Appointment[]
+}
+
+model Service {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  price       Decimal  @db.Decimal(10, 2)
+  duration    Int
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  appointments Appointment[]
+}
+
+model Staff {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String?  @unique
+  phone     String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  appointments Appointment[]
+}
+
+model Appointment {
+  id         Int      @id @default(autoincrement())
+  customerId Int
+  serviceId  Int
+  staffId    Int?
+  date       DateTime
+  status     String   @default("PENDING")
+  notes      String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  customer Customer @relation(fields: [customerId], references: [id])
+  service  Service  @relation(fields: [serviceId], references: [id])
+  staff    Staff?   @relation(fields: [staffId], references: [id])
+}
+
+enum LiveClassFrequency {
+  ONE_TIME
+  WEEKLY
+  MONTHLY_TWICE
+}
+
+enum LiveSessionStatus {
+  SCHEDULED
+  LIVE
+  COMPLETED
+  CANCELLED
+}
+
+enum LiveRecordingStatus {
+  PENDING
+  RECORDING
+  PROCESSING
+  READY
+  FAILED
+}
+
+enum LiveRecordingVisibility {
+  PRIVATE
+  PUBLISHED
+}
+
+enum LiveRecordingProvider {
+  LIVEKIT_EGRESS
+  OTHER
+}
+
+// ==========================================
+// COURSE
+// ==========================================
+
+model Course {
+  id          Int     @id @default(autoincrement())
+  name        String
+  slug        String  @unique
+  description String?
+  isActive    Boolean @default(true)
+
+  liveClassSeries LiveClassSeries[]
+  recordings      LiveRecording[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ==========================================
+// LIVE CLASS SERIES
+// ==========================================
+
+model LiveClassSeries {
+  id          Int     @id @default(autoincrement())
+  title       String
+  description String?
+
+  frequency LiveClassFrequency @default(ONE_TIME)
+
+  // First scheduled date
+  startsOn DateTime
+
+  // Optional end date for recurring classes
+  endsOn DateTime?
+
+  // Class start time stored as minutes after midnight
+  startTimeMinutes Int
+
+  // Class duration in minutes
+  durationMinutes Int @default(60)
+
+  // Weekly schedule: 0 = Sunday, 6 = Saturday
+  weeklyDayOfWeek Int?
+
+  // Admin-selected monthly dates (1–31)
+  monthlyFirstDay  Int?
+  monthlySecondDay Int?
+
+  timezone String @default("Asia/Kolkata")
+
+  // Optional course association
+  courseId Int?
+  course   Course? @relation(fields: [courseId], references: [id], onDelete: SetNull)
+
+  isActive Boolean @default(true)
+
+  sessions LiveSession[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([frequency, isActive])
+  @@index([courseId])
+}
+
+// ==========================================
+// INDIVIDUAL LIVE SESSIONS
+// ==========================================
+
+model LiveSession {
+  id       Int    @id @default(autoincrement())
+  publicId String @unique @default(cuid())
+
+  seriesId Int?
+  series   LiveClassSeries? @relation(fields: [seriesId], references: [id], onDelete: SetNull)
+
+  title           String
+  scheduledAt     DateTime
+  durationMinutes Int
+
+  // Unique LiveKit room
+  roomName String @unique
+
+  status LiveSessionStatus @default(SCHEDULED)
+
+  startedAt DateTime?
+  endedAt   DateTime?
+
+  recordings LiveRecording[]
+  attendance LiveAttendance[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([scheduledAt, status])
+  @@index([seriesId])
+}
+
+// ==========================================
+// LIVE RECORDINGS
+// ==========================================
+
+model LiveRecording {
+  id        Int @id @default(autoincrement())
+  sessionId Int
+
+  session LiveSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  title  String
+  status LiveRecordingStatus @default(PENDING)
+
+  visibility LiveRecordingVisibility @default(PRIVATE)
+
+  provider LiveRecordingProvider @default(LIVEKIT_EGRESS)
+
+  // LiveKit Egress reference
+  egressId String? @unique
+
+  // Cloudflare R2 object information
+  storageKey      String? @unique
+  fileSizeBytes   BigInt?
+  durationSeconds Int?
+  mimeType        String?
+
+  // Optional course assignment
+  courseId Int?
+  course   Course? @relation(fields: [courseId], references: [id], onDelete: SetNull)
+
+  publishedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([sessionId])
+  @@index([courseId, visibility])
+  @@index([status])
+}
+
+// ==========================================
+// LIVE ATTENDANCE
+// ==========================================
+
+model LiveAttendance {
+  id        Int @id @default(autoincrement())
+  sessionId Int
+
+  session LiveSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  // Connect this to your future Student model
+  studentId Int?
+
+  studentName  String?
+  studentEmail String?
+
+  joinedAt DateTime  @default(now())
+  leftAt   DateTime?
+
+  @@index([sessionId])
+  @@index([studentId])
+}
