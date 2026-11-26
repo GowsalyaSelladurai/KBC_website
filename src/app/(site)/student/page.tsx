@@ -8,13 +8,24 @@ import { enrolled, getCourse, recordings } from "@/data/mock";
 
 import Countdown from "@/components/Countdown";
 import LiveList from "@/components/LiveList";
-import Sidebar from "@/components/Sidebar";
-import StudentLearningBanner from "@/components/student/StudentLearningBanner";
+import Sidebar from "@/components/sidebar";
+import StudentLearningBanner from "@/components/Student/StudentLearningBanner";
 
 // ============================================
 // EMBER DASHBOARD V32
 // DEEP CHARCOAL + CHAMPAGNE YELLOW
 // ============================================
+
+type CourseRecord = NonNullable<ReturnType<typeof getCourse>>;
+type CourseItem = {
+  enrollment: (typeof enrolled)[number];
+  course: CourseRecord;
+  totalLessons: number;
+  completedLessons: number;
+  progress: number;
+  expired: boolean;
+  completed: boolean;
+};
 
 type CourseFilter = "all" | "active" | "completed";
 
@@ -120,7 +131,13 @@ export default function Student() {
   ];
 
   return (
-    <main className="flex min-h-screen bg-[#121414] text-white">
+    <main className="flex min-h-screen bg-[#FAF5ED] text-[#2A2118]">
+      <style jsx global>{`
+        @keyframes courseSlideIn {
+          from { opacity: 0; transform: translateX(28px) translateY(8px); }
+          to { opacity: 1; transform: translateX(0) translateY(0); }
+        }
+      `}</style>
 
       {/* SIDEBAR */}
 
@@ -135,9 +152,9 @@ export default function Student() {
 
         {/* BACKGROUND AMBIENT LIGHT */}
 
-        <div className="pointer-events-none fixed right-0 top-0 -z-0 h-96 w-96 rounded-full bg-[#EFE8A8]/10 blur-[150px]" />
+        <div className="pointer-events-none fixed right-0 top-0 -z-0 h-96 w-96 rounded-full bg-[#E8D8C5]/60 blur-[150px]" />
 
-        <div className="pointer-events-none fixed bottom-0 left-1/3 -z-0 h-80 w-80 rounded-full bg-[#EFE8A8]/[0.04] blur-[130px]" />
+        <div className="pointer-events-none fixed bottom-0 left-1/3 -z-0 h-80 w-80 rounded-full bg-[#EFE8A8]/40 blur-[130px]" />
 
         <div className="relative z-10 mx-auto max-w-[1500px]">
 
@@ -149,9 +166,9 @@ export default function Student() {
 
               <div className="mb-3 flex items-center gap-2">
 
-                <span className="h-2 w-2 animate-pulse rounded-full bg-[#EFE8A8] shadow-[0_0_12px_#EFE8A8]" />
+                <span className="h-2 w-2 animate-pulse rounded-full bg-[#C9A45C] shadow-[0_0_12px_#C9A45C]" />
 
-                <p className="text-[10px] font-semibold uppercase tracking-[3px] text-[#EFE8A8]/70">
+                <p className="text-[10px] font-semibold uppercase tracking-[3px] text-[#C9A45C]/70">
                   Student Learning Portal
                 </p>
 
@@ -159,13 +176,13 @@ export default function Student() {
 
               <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
                 Welcome back,{" "}
-                <span className="bg-gradient-to-r from-[#EFE8A8] to-white bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-[#C9A45C] to-white bg-clip-text text-transparent">
                   Anjali
                 </span>
                 <span className="ml-2">✦</span>
               </h1>
 
-              <p className="mt-2 text-sm text-white/40">
+              <p className="mt-2 text-sm text-[#806F5C]">
                 Track your progress. Stay focused. Keep learning.
               </p>
 
@@ -175,22 +192,22 @@ export default function Student() {
 
               <button
                 aria-label="Notifications"
-                className="group relative grid h-12 w-12 place-items-center rounded-2xl border border-white/10 bg-white/[0.04] text-lg text-white/60 backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:border-[#EFE8A8]/40 hover:bg-[#EFE8A8]/10 hover:text-[#EFE8A8]"
+                className="group relative grid h-12 w-12 place-items-center rounded-2xl border border-[#E8D8C5] bg-white/85 text-lg text-[#6F5D49] backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:border-[#C9A45C]/40 hover:bg-[#C9A45C]/10 hover:text-[#C9A45C]"
               >
                 ♧
 
-                <span className="absolute right-3 top-3 h-2 w-2 rounded-full bg-[#EFE8A8] shadow-[0_0_10px_#EFE8A8]" />
+                <span className="absolute right-3 top-3 h-2 w-2 rounded-full bg-[#C9A45C] shadow-[0_0_10px_#C9A45C]" />
               </button>
 
-              <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.04] p-2 pr-4 backdrop-blur-xl transition duration-300 hover:border-[#EFE8A8]/30">
+              <div className="flex items-center gap-3 rounded-2xl border border-[#E8D8C5] bg-white/85 p-2 pr-4 backdrop-blur-xl transition duration-300 hover:border-[#C9A45C]/30">
 
-                <div className="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-[#EFE8A8] to-[#B89970] font-bold text-[#121414]">
+                <div className="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-[#C9A45C] to-[#C9A45C] font-bold text-[#FAF5ED]">
                   A
                 </div>
 
                 <div>
                   <p className="text-xs font-semibold">Anjali</p>
-                  <p className="mt-1 text-[10px] text-white/40">
+                  <p className="mt-1 text-[10px] text-[#806F5C]">
                     Student Account
                   </p>
                 </div>
@@ -212,8 +229,8 @@ export default function Student() {
                 onClick={() => setTab(item.id)}
                 className={`flex items-center gap-2 rounded-xl border px-4 py-2.5 text-xs font-medium transition-all duration-300 hover:-translate-y-0.5 ${
                   tab === item.id
-                    ? "border-[#EFE8A8]/40 bg-[#EFE8A8] text-[#121414] shadow-[0_5px_25px_rgba(239,232,168,0.15)]"
-                    : "border-white/10 bg-white/[0.03] text-white/50 hover:border-[#EFE8A8]/30 hover:bg-[#EFE8A8]/[0.06] hover:text-[#EFE8A8]"
+                    ? "border-[#C9A45C]/40 bg-[#C9A45C] text-[#FAF5ED] shadow-[0_5px_25px_rgba(239,232,168,0.15)]"
+                    : "border-[#E8D8C5] bg-white/75 text-[#756451] hover:border-[#C9A45C]/30 hover:bg-[#C9A45C]/[0.06] hover:text-[#C9A45C]"
                 }`}
               >
 
@@ -283,7 +300,7 @@ export default function Student() {
                   />
 
                   <StatCard
-                    icon="▷"
+                    icon="◈"
                     label="Recordings"
                     value={recordings.length}
                     subtitle="Available recordings"
@@ -302,12 +319,12 @@ export default function Student() {
 
                 {/* COURSE COMPLETION CHART */}
 
-                <div className="rounded-[26px] border border-white/10 bg-white/[0.04] p-6 shadow-xl backdrop-blur-2xl transition duration-300 hover:border-[#EFE8A8]/30 xl:col-span-2">
+                <div className="rounded-[26px] border border-[#E8D8C5] bg-white/85 p-6 shadow-xl backdrop-blur-2xl transition duration-300 hover:border-[#C9A45C]/30 xl:col-span-2">
 
                   <div className="flex flex-wrap items-center justify-between gap-4">
 
                     <div>
-                      <p className="text-[10px] font-semibold tracking-[2px] text-[#EFE8A8]/70">
+                      <p className="text-[10px] font-semibold tracking-[2px] text-[#C9A45C]/70">
                         LEARNING ANALYTICS
                       </p>
 
@@ -316,7 +333,7 @@ export default function Student() {
                       </h3>
                     </div>
 
-                    <span className="rounded-lg border border-[#EFE8A8]/20 bg-[#EFE8A8]/10 px-3 py-1.5 text-[10px] text-[#EFE8A8]">
+                    <span className="rounded-lg border border-[#C9A45C]/20 bg-[#C9A45C]/10 px-3 py-1.5 text-[10px] text-[#C9A45C]">
                       Overall Performance
                     </span>
 
@@ -329,19 +346,19 @@ export default function Student() {
                     <div
                       className="grid h-44 w-44 shrink-0 place-items-center rounded-full transition-transform duration-500 hover:scale-105"
                       style={{
-                        background: `conic-gradient(#EFE8A8 ${overallProgress}%, #3B3631 ${overallProgress}% 100%)`,
+                        background: `conic-gradient(#C9A45C ${overallProgress}%, #E8D8C5 ${overallProgress}% 100%)`,
                       }}
                     >
 
-                      <div className="grid h-36 w-36 place-items-center rounded-full bg-[#292522]">
+                      <div className="grid h-36 w-36 place-items-center rounded-full bg-[#FFFFFF]">
 
                         <div className="text-center">
 
-                          <p className="text-3xl font-bold text-[#EFE8A8]">
+                          <p className="text-3xl font-bold text-[#C9A45C]">
                             {overallProgress}%
                           </p>
 
-                          <p className="mt-1 text-[9px] uppercase tracking-widest text-white/40">
+                          <p className="mt-1 text-[9px] uppercase tracking-widest text-[#806F5C]">
                             Completed
                           </p>
 
@@ -356,7 +373,7 @@ export default function Student() {
                     <div className="min-w-[170px] flex-1 space-y-6">
 
                       <Legend
-                        color="#EFE8A8"
+                        color="#C9A45C"
                         label="Completed lessons"
                         value={completedLessons}
                       />
@@ -377,24 +394,24 @@ export default function Student() {
 
                   </div>
 
-                  <div className="mt-8 border-t border-white/10 pt-5">
+                  <div className="mt-8 border-t border-[#E8D8C5] pt-5">
 
                     <div className="flex justify-between text-xs">
 
-                      <span className="text-white/40">
+                      <span className="text-[#806F5C]">
                         Overall completion
                       </span>
 
-                      <span className="font-semibold text-[#EFE8A8]">
+                      <span className="font-semibold text-[#C9A45C]">
                         {completedLessons} / {totalLessons}
                       </span>
 
                     </div>
 
-                    <div className="mt-3 h-2 overflow-hidden rounded-full bg-white/10">
+                    <div className="mt-3 h-2 overflow-hidden rounded-full bg-[#E8D8C5]">
 
                       <div
-                        className="h-full rounded-full bg-gradient-to-r from-[#B89970] to-[#EFE8A8] transition-all duration-1000"
+                        className="h-full rounded-full bg-gradient-to-r from-[#C9A45C] to-[#C9A45C] transition-all duration-1000"
                         style={{
                           width: `${overallProgress}%`,
                         }}
@@ -408,17 +425,17 @@ export default function Student() {
 
                 {/* ACHIEVEMENT PANEL */}
 
-                <div className="group relative overflow-hidden rounded-[26px] border border-[#EFE8A8]/20 bg-gradient-to-br from-[#EFE8A8]/10 to-white/[0.025] p-6 transition duration-300 hover:-translate-y-1 hover:border-[#EFE8A8]/40">
+                <div className="group relative overflow-hidden rounded-[26px] border border-[#C9A45C]/20 bg-gradient-to-br from-[#C9A45C]/10 to-white/[0.025] p-6 transition duration-300 hover:-translate-y-1 hover:border-[#C9A45C]/40">
 
-                  <div className="absolute -right-12 -top-12 h-44 w-44 rounded-full bg-[#EFE8A8]/10 blur-[70px] transition duration-500 group-hover:bg-[#EFE8A8]/20" />
+                  <div className="absolute -right-12 -top-12 h-44 w-44 rounded-full bg-[#C9A45C]/10 blur-[70px] transition duration-500 group-hover:bg-[#C9A45C]/20" />
 
                   <div className="relative">
 
-                    <div className="grid h-12 w-12 place-items-center rounded-2xl border border-[#EFE8A8]/20 bg-[#EFE8A8]/10 text-2xl text-[#EFE8A8]">
+                    <div className="grid h-12 w-12 place-items-center rounded-2xl border border-[#C9A45C]/20 bg-[#C9A45C]/10 text-2xl text-[#C9A45C]">
                       ✦
                     </div>
 
-                    <p className="mt-7 text-[10px] font-semibold tracking-[2px] text-[#EFE8A8]">
+                    <p className="mt-7 text-[10px] font-semibold tracking-[2px] text-[#C9A45C]">
                       ACHIEVEMENTS
                     </p>
 
@@ -426,18 +443,18 @@ export default function Student() {
                       Great progress!
                     </h3>
 
-                    <p className="mt-3 text-sm leading-6 text-white/45">
+                    <p className="mt-3 text-sm leading-6 text-[#806F5C]">
                       Your learning journey is moving forward.
                       Keep completing lessons and courses.
                     </p>
 
-                    <div className="mt-8 border-t border-white/10 pt-5">
+                    <div className="mt-8 border-t border-[#E8D8C5] pt-5">
 
-                      <p className="text-4xl font-bold text-[#EFE8A8]">
+                      <p className="text-4xl font-bold text-[#C9A45C]">
                         {completedCourses}
                       </p>
 
-                      <p className="mt-2 text-xs text-white/40">
+                      <p className="mt-2 text-xs text-[#806F5C]">
                         Courses completed
                       </p>
 
@@ -453,12 +470,12 @@ export default function Student() {
                   COURSE PERFORMANCE CHART
               ====================================== */}
 
-              <div className="rounded-[26px] border border-white/10 bg-white/[0.04] p-6 backdrop-blur-2xl">
+              <div className="rounded-[26px] border border-[#E8D8C5] bg-white/85 p-6 backdrop-blur-2xl">
 
                 <div className="flex flex-wrap items-center justify-between gap-4">
 
                   <div>
-                    <p className="text-[10px] font-semibold tracking-[2px] text-[#EFE8A8]/70">
+                    <p className="text-[10px] font-semibold tracking-[2px] text-[#C9A45C]/70">
                       COURSE PERFORMANCE
                     </p>
 
@@ -469,7 +486,7 @@ export default function Student() {
 
                   <button
                     onClick={() => setTab("courses")}
-                    className="rounded-xl border border-[#EFE8A8]/20 px-4 py-2 text-xs font-semibold text-[#EFE8A8] transition hover:bg-[#EFE8A8] hover:text-[#121414]"
+                    className="rounded-xl border border-[#C9A45C]/20 px-4 py-2 text-xs font-semibold text-[#C9A45C] transition hover:bg-[#C9A45C] hover:text-[#FAF5ED]"
                   >
                     View All →
                   </button>
@@ -479,7 +496,7 @@ export default function Student() {
                 <div className="mt-7 space-y-6">
 
                   {courses.length === 0 && (
-                    <p className="text-sm text-white/40">
+                    <p className="text-sm text-[#806F5C]">
                       No enrolled courses available.
                     </p>
                   )}
@@ -492,7 +509,7 @@ export default function Student() {
 
                         <div className="flex min-w-0 items-center gap-3">
 
-                          <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-[#EFE8A8]/10 text-lg text-[#EFE8A8]">
+                          <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-[#C9A45C]/10 text-lg text-[#C9A45C]">
                             {item.course.icon}
                           </div>
 
@@ -501,23 +518,23 @@ export default function Student() {
                               {item.course.name}
                             </p>
 
-                            <p className="mt-1 text-[10px] text-white/35">
+                            <p className="mt-1 text-[10px] text-[#927F69]">
                               {item.completedLessons} / {item.totalLessons} lessons
                             </p>
                           </div>
 
                         </div>
 
-                        <span className="shrink-0 text-sm font-bold text-[#EFE8A8]">
+                        <span className="shrink-0 text-sm font-bold text-[#C9A45C]">
                           {item.progress}%
                         </span>
 
                       </div>
 
-                      <div className="h-2 overflow-hidden rounded-full bg-white/[0.07]">
+                      <div className="h-2 overflow-hidden rounded-full bg-[#EFE8A8]/45">
 
                         <div
-                          className="h-full rounded-full bg-gradient-to-r from-[#B89970] to-[#EFE8A8] transition-all duration-1000 group-hover:brightness-125"
+                          className="h-full rounded-full bg-gradient-to-r from-[#C9A45C] to-[#C9A45C] transition-all duration-1000 group-hover:brightness-125"
                           style={{
                             width: `${item.progress}%`,
                           }}
@@ -560,8 +577,8 @@ export default function Student() {
                       onClick={() => setCourseFilter(filter.id)}
                       className={`rounded-xl border px-4 py-2 text-xs font-medium transition duration-300 ${
                         courseFilter === filter.id
-                          ? "border-[#EFE8A8]/40 bg-[#EFE8A8] text-[#121414]"
-                          : "border-white/10 bg-white/[0.03] text-white/50 hover:border-[#EFE8A8]/30 hover:text-[#EFE8A8]"
+                          ? "border-[#C9A45C]/40 bg-[#C9A45C] text-[#FAF5ED]"
+                          : "border-[#E8D8C5] bg-white/75 text-[#756451] hover:border-[#C9A45C]/30 hover:text-[#C9A45C]"
                       }`}
                     >
                       {filter.label}
@@ -571,7 +588,7 @@ export default function Student() {
 
                 </div>
 
-                <div className="mt-5 grid gap-4 lg:grid-cols-2">
+                <div className="mt-5 flex snap-x snap-mandatory gap-5 overflow-x-auto pb-5 pr-2 scroll-smooth">
 
                   {filteredCourses.map((item) => (
 
@@ -584,7 +601,7 @@ export default function Student() {
 
                   {filteredCourses.length === 0 && (
 
-                    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-8 text-center text-sm text-white/40 lg:col-span-2">
+                    <div className="rounded-2xl border border-[#E8D8C5] bg-white/75 p-8 text-center text-sm text-[#806F5C] lg:col-span-2">
                       No courses found in this category.
                     </div>
 
@@ -598,7 +615,7 @@ export default function Student() {
                   LIVE CLASSES
               ====================================== */}
 
-              <div className="rounded-[26px] border border-white/10 bg-white/[0.035] p-6 backdrop-blur-xl">
+              <div className="rounded-[26px] border border-[#E8D8C5] bg-white/80 p-6 backdrop-blur-xl">
 
                 <SectionHeading
                   eyebrow="LIVE LEARNING"
@@ -637,7 +654,7 @@ export default function Student() {
 
                   {recordings.length === 0 && (
 
-                    <div className="rounded-2xl border border-white/10 p-7 text-center text-sm text-white/40">
+                    <div className="rounded-2xl border border-[#E8D8C5] p-7 text-center text-sm text-[#806F5C]">
                       No recordings available.
                     </div>
 
@@ -680,8 +697,8 @@ export default function Student() {
                     onClick={() => setCourseFilter(filter.id)}
                     className={`rounded-xl border px-4 py-2 text-xs transition ${
                       courseFilter === filter.id
-                        ? "border-[#EFE8A8]/40 bg-[#EFE8A8] text-[#121414]"
-                        : "border-white/10 text-white/50 hover:text-[#EFE8A8]"
+                        ? "border-[#C9A45C]/40 bg-[#C9A45C] text-[#FAF5ED]"
+                        : "border-[#E8D8C5] text-[#756451] hover:text-[#C9A45C]"
                     }`}
                   >
                     {filter.label}
@@ -691,7 +708,7 @@ export default function Student() {
 
               </div>
 
-              <div className="mt-5 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+              <div className="mt-5 flex snap-x snap-mandatory gap-5 overflow-x-auto pb-5 pr-2 scroll-smooth">
 
                 {filteredCourses.map((item) => (
 
@@ -704,7 +721,7 @@ export default function Student() {
 
                 {filteredCourses.length === 0 && (
 
-                  <p className="text-sm text-white/40">
+                  <p className="text-sm text-[#806F5C]">
                     No courses found.
                   </p>
 
@@ -730,7 +747,7 @@ export default function Student() {
                 description="Join your learning sessions."
               />
 
-              <div className="mt-6 rounded-[26px] border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl">
+              <div className="mt-6 rounded-[26px] border border-[#E8D8C5] bg-white/85 p-6 backdrop-blur-xl">
                 <LiveList />
               </div>
 
@@ -765,7 +782,7 @@ export default function Student() {
 
                 {recordings.length === 0 && (
 
-                  <p className="rounded-2xl border border-white/10 p-8 text-center text-sm text-white/40">
+                  <p className="rounded-2xl border border-[#E8D8C5] p-8 text-center text-sm text-[#806F5C]">
                     No recordings available.
                   </p>
 
@@ -801,7 +818,7 @@ function SectionHeading({
   return (
     <div>
 
-      <p className="text-[10px] font-semibold tracking-[2px] text-[#EFE8A8]/60">
+      <p className="text-[10px] font-semibold tracking-[2px] text-[#C9A45C]/60">
         {eyebrow}
       </p>
 
@@ -809,7 +826,7 @@ function SectionHeading({
         {title}
       </h2>
 
-      <p className="mt-1 text-xs text-white/40">
+      <p className="mt-1 text-xs text-[#806F5C]">
         {description}
       </p>
 
@@ -835,17 +852,17 @@ function StatCard({
   number: string;
 }) {
   return (
-    <div className="group relative overflow-hidden rounded-[24px] border border-white/10 bg-white/[0.045] p-5 shadow-lg backdrop-blur-2xl transition-all duration-300 hover:-translate-y-1 hover:border-[#EFE8A8]/30 hover:bg-white/[0.07] hover:shadow-[0_15px_40px_rgba(239,232,168,0.07)]">
+    <div className="group relative overflow-hidden rounded-[24px] border border-[#E8D8C5] bg-white/90 p-5 shadow-lg backdrop-blur-2xl transition-all duration-300 hover:-translate-y-1 hover:border-[#C9A45C]/30 hover:bg-[#EFE8A8]/45 hover:shadow-[0_15px_40px_rgba(239,232,168,0.07)]">
 
-      <div className="absolute -right-8 -top-8 h-28 w-28 rounded-full bg-[#EFE8A8]/[0.05] blur-[40px] transition duration-500 group-hover:bg-[#EFE8A8]/15" />
+      <div className="absolute -right-8 -top-8 h-28 w-28 rounded-full bg-[#C9A45C]/[0.05] blur-[40px] transition duration-500 group-hover:bg-[#C9A45C]/15" />
 
       <div className="relative flex items-center justify-between">
 
-        <div className="grid h-11 w-11 place-items-center rounded-xl border border-[#EFE8A8]/15 bg-[#EFE8A8]/[0.07] text-xl text-[#EFE8A8] transition duration-300 group-hover:scale-110">
+        <div className="grid h-11 w-11 place-items-center rounded-xl border border-[#C9A45C]/15 bg-[#C9A45C]/[0.07] text-xl text-[#C9A45C] transition duration-300 group-hover:scale-110">
           {icon}
         </div>
 
-        <span className="text-[10px] font-semibold tracking-widest text-white/20">
+        <span className="text-[10px] font-semibold tracking-widest text-[#B7A58F]">
           {number}
         </span>
 
@@ -857,17 +874,17 @@ function StatCard({
           {value}
         </p>
 
-        <h3 className="mt-1 text-sm font-medium text-white/70">
+        <h3 className="mt-1 text-sm font-medium text-[#46382A]">
           {label}
         </h3>
 
-        <p className="mt-2 text-[10px] text-white/35">
+        <p className="mt-2 text-[10px] text-[#927F69]">
           {subtitle}
         </p>
 
       </div>
 
-      <div className="absolute bottom-0 left-0 h-[2px] w-0 bg-[#EFE8A8] transition-all duration-500 group-hover:w-full" />
+      <div className="absolute bottom-0 left-0 h-[2px] w-0 bg-[#C9A45C] transition-all duration-500 group-hover:w-full" />
 
     </div>
   );
@@ -896,13 +913,13 @@ function Legend({
           style={{ backgroundColor: color }}
         />
 
-        <span className="text-xs text-white/50">
+        <span className="text-xs text-[#756451]">
           {label}
         </span>
 
       </div>
 
-      <span className="text-sm font-semibold text-white">
+      <span className="text-sm font-semibold text-[#2A2118]">
         {value}
       </span>
 
@@ -965,11 +982,11 @@ function CourseCard({
     : "Build your beauty skills with expert-led lessons and practical training.";
 
   return (
-    <article className="group overflow-hidden rounded-[24px] border border-[#B89970]/10 bg-white/[0.035] shadow-[0_12px_40px_rgba(0,0,0,0.18)] backdrop-blur-2xl transition-all duration-500 hover:-translate-y-1 hover:border-[#B89970]/25 hover:shadow-[0_20px_45px_rgba(184,153,112,0.09)]">
+    <article className="group w-[290px] min-w-[290px] snap-start overflow-hidden rounded-[24px] border border-[#C9A45C]/15 bg-white/90 shadow-[0_14px_38px_rgba(73,54,31,0.08)] backdrop-blur-2xl transition-all duration-500 ease-out hover:-translate-y-2 hover:scale-[1.015] hover:border-[#C9A45C]/45 hover:shadow-[0_24px_52px_rgba(126,91,43,0.17)] sm:w-[320px] sm:min-w-[320px] animate-[courseSlideIn_650ms_ease-out_both]">
 
       {/* COURSE IMAGE */}
 
-     <div className="relative aspect-[16/9] overflow-hidden bg-[#292522]">
+     <div className="relative aspect-[16/9] overflow-hidden bg-[#FFFFFF]">
 
         <img
           src={courseImage}
@@ -979,7 +996,7 @@ function CourseCard({
 
         <div className="absolute inset-0 bg-gradient-to-t from-[#171717]/25 via-transparent to-transparent" />
 
-        <span className="absolute left-4 top-4 rounded-full border border-white/15 bg-[#171717]/65 px-3 py-1.5 text-[10px] font-semibold tracking-wide text-[#F5F0E8] backdrop-blur-xl">
+        <span className="absolute left-4 top-4 rounded-full border border-white/15 bg-[#2A2118]/70 px-3 py-1.5 text-[10px] font-semibold tracking-wide text-[#F5F0E8] backdrop-blur-xl">
           {completed
             ? "COMPLETED"
             : expired
@@ -987,7 +1004,7 @@ function CourseCard({
             : "YOUR LEARNING"}
         </span>
 
-        <span className="absolute bottom-4 right-4 rounded-full bg-[#292522]/75 px-3 py-1.5 text-xs font-semibold text-[#D6B77A] backdrop-blur-xl">
+        <span className="absolute bottom-4 right-4 rounded-full bg-[#FFFFFF]/75 px-3 py-1.5 text-xs font-semibold text-[#C9A45C] backdrop-blur-xl">
           {progress}% Complete
         </span>
 
@@ -995,27 +1012,27 @@ function CourseCard({
 
       {/* COURSE CONTENT */}
 
-      <div className="relative space-y-4 bg-white/[0.02] p-5">
+      <div className="relative space-y-4 bg-white/70 p-5">
 
         <div>
 
           <div className="mb-2 flex items-center justify-between gap-2">
 
-            <span className="text-[9px] font-semibold uppercase tracking-[2px] text-[#B89970]">
+            <span className="text-[9px] font-semibold uppercase tracking-[2px] text-[#C9A45C]">
               PROFESSIONAL COURSE
             </span>
 
-            <span className="text-[10px] text-white/40">
+            <span className="text-[10px] text-[#806F5C]">
               {totalLessons} Lessons
             </span>
 
           </div>
 
-         <h3 className="text-lg font-semibold leading-snug text-[#F5F0E8] transition-colors group-hover:text-[#D6B77A]">
-          
-         </h3>
+          <h3 className="text-lg font-semibold leading-snug text-[#2A2118] transition-colors group-hover:text-[#A87932]">
+            {course.name}
+          </h3>
 
-          <p className="mt-2 min-h-[60px] text-xs leading-5 text-white/55">
+          <p className="mt-2 min-h-[60px] text-xs leading-5 text-[#756451]">
             {description}
           </p>
 
@@ -1027,20 +1044,20 @@ function CourseCard({
 
           <div className="mb-2 flex justify-between text-[11px]">
 
-            <span className="text-white/50">
+            <span className="text-[#756451]">
               Learning progress
             </span>
 
-            <span className="font-semibold text-[#D6B77A]">
+            <span className="font-semibold text-[#C9A45C]">
               {completedLessons}/{totalLessons} lessons
             </span>
 
           </div>
 
-          <div className="h-1.5 overflow-hidden rounded-full bg-white/[0.07]">
+          <div className="h-1.5 overflow-hidden rounded-full bg-[#EFE8A8]/45">
 
             <div
-              className="h-full rounded-full bg-gradient-to-r from-[#B89970] to-[#D6B77A] transition-all duration-700"
+              className="h-full rounded-full bg-gradient-to-r from-[#C9A45C] to-[#C9A45C] transition-all duration-700"
               style={{ width: `${progress}%` }}
             />
 
@@ -1050,9 +1067,9 @@ function CourseCard({
 
         {/* COURSE ACCESS */}
 
-        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-white/[0.05] pt-4">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-[#E8D8C5] pt-4">
 
-          <div className="text-[10px] text-white/45">
+          <div className="text-[10px] text-[#806F5C]">
 
             {expired ? (
               "Access expired"
@@ -1070,7 +1087,7 @@ function CourseCard({
                 ? `/courses/${course.id}`
                 : `/watch/${course.id}?done=${enrollment.done}`
             }
-            className="group/button inline-flex items-center justify-center gap-2 rounded-xl border border-[#D6B77A]/30 bg-gradient-to-r from-[#B89970] to-[#D6B77A] px-5 py-2.5 text-[11px] font-bold text-[#171717] shadow-[0_5px_18px_rgba(184,153,112,0.15)] transition-all duration-300 hover:-translate-y-0.5 hover:brightness-110 hover:shadow-[0_8px_25px_rgba(184,153,112,0.28)]"
+            className="group/button inline-flex items-center justify-center gap-2 rounded-xl border border-[#C9A45C]/30 bg-gradient-to-r from-[#C9A45C] to-[#C9A45C] px-5 py-2.5 text-[11px] font-bold text-[#171717] shadow-[0_5px_18px_rgba(184,153,112,0.15)] transition-all duration-300 hover:-translate-y-0.5 hover:brightness-110 hover:shadow-[0_8px_25px_rgba(184,153,112,0.28)]"
           >
 
             {expired ? "Re-enroll" : "Explore Course"}
@@ -1090,7 +1107,7 @@ function CourseCard({
 }
 
 // ============================================
-// RECORDING CARD
+// PREMIUM RECORDING CARD
 // ============================================
 
 function RecordingCard({
@@ -1098,31 +1115,81 @@ function RecordingCard({
 }: {
   recording: (typeof recordings)[number];
 }) {
-  return (
-    <div className="group flex items-center gap-4 rounded-2xl border border-white/10 bg-white/[0.035] p-4 backdrop-blur-xl transition duration-300 hover:translate-x-1 hover:border-[#EFE8A8]/30 hover:bg-white/[0.06]">
+  const originalTitle = recording.title;
+  const normalizedTitle = originalTitle.toLowerCase();
 
-      <div className="grid h-12 w-12 shrink-0 place-items-center rounded-xl border border-[#EFE8A8]/20 bg-[#EFE8A8]/10 text-xl text-[#EFE8A8] transition duration-300 group-hover:scale-110">
-        ▷
+  // Friendly display names for the two featured learning sessions.
+  // Other recording titles continue to come directly from your data file.
+  const displayTitle = normalizedTitle.includes("bridal") && normalizedTitle.includes("makeup")
+    ? "Bridal Makeup Masterclass"
+    : normalizedTitle.includes("hair") && (
+        normalizedTitle.includes("q&a") ||
+        normalizedTitle.includes("question") ||
+        normalizedTitle.includes("doubt")
+      )
+    ? "Hair Styling Q&A"
+    : originalTitle;
+
+  const isBridal = displayTitle === "Bridal Makeup Masterclass";
+  const isHair = displayTitle === "Hair Styling Q&A";
+
+  return (
+    <article className="group relative flex items-center gap-4 overflow-hidden rounded-[22px] border border-[#E8D8C5] bg-white/90 p-4 shadow-[0_10px_30px_rgba(73,54,31,0.06)] backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:border-[#C9A45C]/45 hover:shadow-[0_18px_42px_rgba(126,91,43,0.13)] sm:gap-5 sm:p-5">
+
+      {/* Decorative premium session tile — no external image required */}
+      <div className={`relative grid h-[68px] w-[68px] shrink-0 place-items-center overflow-hidden rounded-2xl border ${
+        isBridal
+          ? "border-[#C9A45C]/35 bg-gradient-to-br from-[#EFE8A8] via-[#F8F0D7] to-[#E8D8C5]"
+          : isHair
+          ? "border-[#C9A45C]/30 bg-gradient-to-br from-[#E8D8C5] via-[#FAF5ED] to-[#EFE8A8]"
+          : "border-[#C9A45C]/25 bg-gradient-to-br from-[#FAF5ED] to-[#EFE8A8]/70"
+      }`}>
+        <div className="absolute inset-1 rounded-[13px] border border-white/70" />
+        <svg
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+          className="relative h-7 w-7 text-[#9B7135] transition-transform duration-300 group-hover:scale-110"
+          fill="none"
+        >
+          <circle cx="12" cy="12" r="9.25" stroke="currentColor" strokeWidth="1.35" />
+          <path d="M10 8.7L15.2 12L10 15.3V8.7Z" fill="currentColor" />
+          <path d="M7.2 4.9L8.4 3.7M16.8 4.9L15.6 3.7" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" />
+        </svg>
       </div>
 
-      <div className="min-w-0 flex-1">
-
-        <h4 className="truncate text-sm font-semibold">
-          {recording.title}
+      <div className="min-w-0 flex-1 py-1">
+        <p className="mb-1 text-[9px] font-bold uppercase tracking-[2px] text-[#A87932]">
+          {isBridal ? "Bridal Makeup Session" : isHair ? "Expert Hair Session" : "Recorded Learning"}
+        </p>
+        <h4 className={`truncate text-sm font-semibold tracking-tight transition-colors duration-300 sm:text-[15px] ${
+          isBridal
+            ? "text-[#9A6A22] group-hover:text-[#704713]"
+            : isHair
+            ? "text-[#80603B] group-hover:text-[#5C4027]"
+            : "text-[#2A2118] group-hover:text-[#A87932]"
+        }`}>
+          {displayTitle}
         </h4>
-
-        <p className="mt-1 text-xs text-white/40">
+        <p className="mt-1.5 flex items-center gap-1.5 text-[11px] text-[#806F5C]">
+          <svg viewBox="0 0 20 20" aria-hidden="true" className="h-3.5 w-3.5" fill="none">
+            <circle cx="10" cy="10" r="7.2" stroke="currentColor" strokeWidth="1.2" />
+            <path d="M10 5.8V10L12.8 11.8" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+          </svg>
           {recording.when}
         </p>
-
       </div>
 
       <button
-        className="rounded-xl border border-[#EFE8A8]/20 px-4 py-2 text-xs font-semibold text-[#EFE8A8] transition duration-300 hover:bg-[#EFE8A8] hover:text-[#121414]"
+        type="button"
+        className="inline-flex shrink-0 items-center gap-2 rounded-xl border border-[#C9A45C]/35 bg-[#FAF5ED] px-3.5 py-2.5 text-[11px] font-bold text-[#8D672F] shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-[#C9A45C] hover:bg-[#C9A45C] hover:text-white sm:px-4"
       >
-        Watch
+        <span>Watch</span>
+        <svg viewBox="0 0 16 16" aria-hidden="true" className="h-3.5 w-3.5" fill="none">
+          <path d="M5.5 3.5L10.5 8L5.5 12.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
       </button>
 
-    </div>
+      <div className="pointer-events-none absolute bottom-0 left-5 right-5 h-px origin-left scale-x-0 bg-gradient-to-r from-[#C9A45C] via-[#EFE8A8] to-transparent transition-transform duration-500 group-hover:scale-x-100" />
+    </article>
   );
 }

@@ -2,6 +2,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 type SidebarProps = {
   activeItem: string;
@@ -58,26 +59,35 @@ export default function Sidebar({
       className={`
         group/sidebar relative sticky top-4 m-4
         flex h-[calc(100vh-2rem)] shrink-0 flex-col
-        overflow-visible rounded-[28px]
-        border border-[#E8DDCE]/[0.10]
-        bg-[#292522]/90
-        shadow-[0_20px_80px_rgba(0,0,0,0.45)]
-        backdrop-blur-2xl
+        overflow-hidden rounded-[30px]
+        border border-white/[0.14]
+        bg-gradient-to-br from-[#242522]/95 via-[#121414]/90 to-[#171612]/95
+        shadow-[0_24px_80px_rgba(18,20,20,0.42),inset_0_1px_0_rgba(255,255,255,0.12)]
+        backdrop-blur-[28px] supports-[backdrop-filter]:bg-[#121414]/75
         transition-[width] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]
         ${expanded ? "w-[270px]" : "w-[82px]"}
       `}
     >
-      {/* Background glow */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-[28px]">
-        <div className="absolute -left-16 -top-16 h-48 w-48 rounded-full bg-[#B89970]/[0.10] blur-[80px]" />
-        <div className="absolute -bottom-20 -right-16 h-48 w-48 rounded-full bg-[#D6B77A]/[0.08] blur-[80px]" />
+      {/* Glassmorphism lighting and inner glass edge */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-[30px]">
+        <div className="absolute -left-20 -top-20 h-64 w-64 rounded-full bg-[#C9A45C]/[0.16] blur-[90px]" />
+        <div className="absolute -bottom-24 -right-20 h-64 w-64 rounded-full bg-[#EFE8A8]/[0.10] blur-[95px]" />
+        <div className="absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-white/35 to-transparent" />
+        <div className="absolute inset-0 rounded-[30px] ring-1 ring-inset ring-white/[0.06]" />
       </div>
 
       {/* Brand section */}
       <div className="relative flex h-[90px] shrink-0 items-center justify-between px-5">
         <div className="flex items-center gap-3">
-          <div className="relative grid h-11 w-11 shrink-0 place-items-center rounded-2xl border border-[#B89970]/40 bg-[#B89970]/15 shadow-[0_0_25px_rgba(184,153,112,0.15)]">
-            <span className="text-xl font-bold text-[#D6B77A]">A</span>
+          <div className="relative grid h-12 w-12 shrink-0 place-items-center overflow-hidden rounded-2xl border border-[#EFE8A8]/35 bg-white/[0.08] p-1.5 shadow-[0_8px_28px_rgba(201,164,92,0.18)] backdrop-blur-xl">
+            <Image
+              src="/logo.jpeg"
+              alt="Kavyas Beauty Centre logo"
+              width={48}
+              height={48}
+              priority
+              className="h-full w-full object-contain"
+            />
           </div>
 
           <div
@@ -87,10 +97,10 @@ export default function Sidebar({
                 : "w-0 -translate-x-3 opacity-0"
             }`}
           >
-            <h2 className="text-lg font-bold tracking-wide text-[#F5F0E8]">
-              Academy
+            <h2 className="text-[15px] font-bold tracking-wide text-[#FAF5ED]">
+              Kavyas Beauty Centre
             </h2>
-            <p className="mt-0.5 text-[9px] font-medium tracking-[3px] text-[#B89970]/80">
+            <p className="mt-0.5 text-[9px] font-medium tracking-[3px] text-[#C9A45C]/80">
               STUDENT PORTAL
             </p>
           </div>
@@ -103,10 +113,10 @@ export default function Sidebar({
           className={`
             absolute -right-3 top-9 z-20
             grid h-7 w-7 place-items-center
-            rounded-full border border-[#B89970]/40
-            bg-[#292522] text-xs text-[#D6B77A]
+            rounded-full border border-white/20
+            bg-[#242522]/80 text-xs text-[#EFE8A8] backdrop-blur-xl
             shadow-lg transition-all duration-300
-            hover:scale-110 hover:bg-[#B89970] hover:text-[#292522]
+            hover:scale-110 hover:bg-[#C9A45C] hover:text-[#121414]
             ${expanded ? "rotate-0" : "rotate-180"}
           `}
         >
@@ -121,15 +131,15 @@ export default function Sidebar({
         }`}
       >
         {expanded ? (
-          <div className="flex items-center gap-3 rounded-2xl border border-[#E8DDCE]/[0.10] bg-[#F5F0E8]/[0.04] px-3 py-3 transition-all duration-300 focus-within:border-[#B89970]/50 focus-within:bg-[#F5F0E8]/[0.07]">
-            <span className="text-sm text-[#E8DDCE]/50">⌕</span>
+          <div className="flex items-center gap-3 rounded-2xl border border-white/[0.12] bg-white/[0.07] px-3 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.07)] backdrop-blur-xl transition-all duration-300 focus-within:border-[#EFE8A8]/50 focus-within:bg-white/[0.11]">
+            <span className="text-sm text-[#E8D8C5]/50">⌕</span>
             <input
               value={search}
               onChange={(event) => setSearch(event.target.value)}
               placeholder="Search menu..."
-              className="w-full bg-transparent text-xs text-[#F5F0E8] outline-none placeholder:text-[#E8DDCE]/40"
+              className="w-full bg-transparent text-xs text-[#FAF5ED] outline-none placeholder:text-[#E8D8C5]/40"
             />
-            <span className="whitespace-nowrap rounded-md border border-[#E8DDCE]/15 px-1.5 py-1 text-[9px] text-[#E8DDCE]/40">
+            <span className="whitespace-nowrap rounded-md border border-[#E8D8C5]/15 px-1.5 py-1 text-[9px] text-[#E8D8C5]/40">
               ⌘ K
             </span>
           </div>
@@ -143,7 +153,7 @@ export default function Sidebar({
         {filteredGroups.map((group) => (
           <div key={group.title}>
             {expanded && (
-              <p className="mb-4 px-3 text-[9px] font-bold tracking-[2.5px] text-[#E8DDCE]/45">
+              <p className="mb-4 px-3 text-[9px] font-bold tracking-[2.5px] text-[#E8D8C5]/45">
                 {group.title}
               </p>
             )}
@@ -164,26 +174,26 @@ export default function Sidebar({
                       transition-all duration-300 ease-out
                       ${
                         isActive
-                          ? "border-[#B89970]/30 bg-[#B89970]/[0.16] text-[#D6B77A] shadow-[0_0_25px_rgba(184,153,112,0.10)]"
-                          : "border-transparent text-[#E8DDCE]/65 hover:translate-x-1 hover:border-[#E8DDCE]/[0.10] hover:bg-[#F5F0E8]/[0.06] hover:text-[#F5F0E8]"
+                          ? "border-[#EFE8A8]/35 bg-gradient-to-r from-[#C9A45C]/25 via-[#C9A45C]/[0.14] to-white/[0.06] text-[#EFE8A8] shadow-[0_10px_28px_rgba(201,164,92,0.12),inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur-xl"
+                          : "border-white/[0.06] bg-white/[0.025] text-[#E8D8C5]/70 hover:translate-x-1 hover:border-white/[0.14] hover:bg-white/[0.08] hover:text-[#FAF5ED] hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-lg"
                       }
                     `}
                   >
                     {/* Active indicator */}
                     {isActive && (
-                      <span className="absolute -left-[13px] top-1/2 h-7 w-[3px] -translate-y-1/2 rounded-r-full bg-[#D6B77A] shadow-[0_0_12px_#B89970]" />
+                      <span className="absolute -left-[13px] top-1/2 h-7 w-[3px] -translate-y-1/2 rounded-r-full bg-[#EFE8A8] shadow-[0_0_12px_#C9A45C]" />
                     )}
 
                     {/* Icon */}
                     <span
                       className={`
                         grid h-8 w-8 shrink-0 place-items-center
-                        rounded-xl text-xl
+                        rounded-xl border border-white/[0.06] text-xl
                         transition-all duration-300
                         ${
                           isActive
-                            ? "bg-[#B89970]/20 text-[#D6B77A]"
-                            : "bg-[#F5F0E8]/[0.04] text-[#E8DDCE]/60 group-hover/item:bg-[#B89970]/15 group-hover/item:text-[#D6B77A]"
+                            ? "border-[#EFE8A8]/20 bg-[#EFE8A8]/15 text-[#EFE8A8] shadow-[0_0_18px_rgba(201,164,92,0.12)]"
+                            : "bg-white/[0.04] text-[#E8D8C5]/65 group-hover/item:border-[#C9A45C]/25 group-hover/item:bg-[#C9A45C]/15 group-hover/item:text-[#EFE8A8]"
                         }
                       `}
                     >
@@ -214,8 +224,8 @@ export default function Sidebar({
                           transition-all duration-300
                           ${
                             isActive
-                              ? "bg-[#D6B77A] text-[#292522]"
-                              : "bg-[#F5F0E8]/[0.08] text-[#E8DDCE]/60 group-hover/item:text-[#F5F0E8]"
+                              ? "bg-[#EFE8A8] text-[#121414]"
+                              : "bg-[#FAF5ED]/[0.08] text-[#E8D8C5]/60 group-hover/item:text-[#FAF5ED]"
                           }
                         `}
                       >
@@ -225,7 +235,7 @@ export default function Sidebar({
 
                     {/* Collapsed tooltip */}
                     {!expanded && (
-                      <span className="pointer-events-none absolute left-[68px] z-50 translate-x-2 whitespace-nowrap rounded-xl border border-[#B89970]/20 bg-[#292522] px-3 py-2 text-xs text-[#F5F0E8] opacity-0 shadow-xl transition-all duration-200 group-hover/item:translate-x-0 group-hover/item:opacity-100">
+                      <span className="pointer-events-none absolute left-[68px] z-50 translate-x-2 whitespace-nowrap rounded-xl border border-[#C9A45C]/20 bg-[#121414] px-3 py-2 text-xs text-[#FAF5ED] opacity-0 shadow-xl transition-all duration-200 group-hover/item:translate-x-0 group-hover/item:opacity-100">
                         {item.name}
                       </span>
                     )}
@@ -237,20 +247,20 @@ export default function Sidebar({
         ))}
 
         {filteredGroups.length === 0 && expanded && (
-          <p className="px-3 py-4 text-xs text-[#E8DDCE]/50">
+          <p className="px-3 py-4 text-xs text-[#E8D8C5]/50">
             No menu items found.
           </p>
         )}
       </nav>
 
       {/* Bottom section */}
-      <div className="relative shrink-0 border-t border-[#E8DDCE]/[0.10] p-3">
+      <div className="relative shrink-0 border-t border-white/[0.12] bg-white/[0.025] p-3 backdrop-blur-xl">
         {/* Help */}
         <button
           className="
             mb-3 flex w-full items-center gap-3 rounded-xl
-            px-3 py-3 text-[#E8DDCE]/60 transition-all duration-300
-            hover:bg-[#F5F0E8]/[0.06] hover:text-[#D6B77A]
+            px-3 py-3 text-[#E8D8C5]/60 transition-all duration-300
+            hover:bg-[#FAF5ED]/[0.06] hover:text-[#EFE8A8]
           "
           title={!expanded ? "Help & Support" : undefined}
         >
@@ -266,18 +276,18 @@ export default function Sidebar({
         </button>
 
         {/* Profile */}
-        <div className="flex items-center gap-3 rounded-2xl border border-[#E8DDCE]/[0.10] bg-[#F5F0E8]/[0.05] p-2.5 transition-all duration-300 hover:border-[#B89970]/30 hover:bg-[#F5F0E8]/[0.08]">
-          <div className="relative grid h-10 w-10 shrink-0 place-items-center rounded-full border border-[#B89970]/50 bg-gradient-to-br from-[#D6B77A] to-[#B89970] text-sm font-bold text-[#292522] shadow-[0_0_15px_rgba(184,153,112,0.15)]">
+        <div className="flex items-center gap-3 rounded-2xl border border-white/[0.12] bg-white/[0.07] p-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-xl transition-all duration-300 hover:border-[#C9A45C]/35 hover:bg-white/[0.11]">
+          <div className="relative grid h-10 w-10 shrink-0 place-items-center rounded-full border border-[#C9A45C]/50 bg-gradient-to-br from-[#EFE8A8] to-[#C9A45C] text-sm font-bold text-[#121414] shadow-[0_0_15px_rgba(201,164,92,0.15)]">
             A
-            <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-[#292522] bg-green-400" />
+            <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-[#121414] bg-green-400" />
           </div>
 
           {expanded && (
             <div className="min-w-0 flex-1">
-              <p className="truncate text-xs font-semibold text-[#F5F0E8]">
+              <p className="truncate text-xs font-semibold text-[#FAF5ED]">
                 Anjali
               </p>
-              <p className="mt-1 text-[10px] text-[#E8DDCE]/55">
+              <p className="mt-1 text-[10px] text-[#E8D8C5]/55">
                 Student Account
               </p>
             </div>
@@ -286,7 +296,7 @@ export default function Sidebar({
           {expanded && (
             <button
               title="Profile options"
-              className="text-[#E8DDCE]/50 transition hover:text-[#D6B77A]"
+              className="text-[#E8D8C5]/50 transition hover:text-[#EFE8A8]"
             >
               ···
             </button>
@@ -294,7 +304,7 @@ export default function Sidebar({
         </div>
 
         {expanded && (
-          <p className="mt-4 text-center text-[9px] tracking-wider text-[#E8DDCE]/30">
+          <p className="mt-4 text-center text-[9px] tracking-wider text-[#E8D8C5]/30">
             POWERED BY ACADEMY
           </p>
         )}

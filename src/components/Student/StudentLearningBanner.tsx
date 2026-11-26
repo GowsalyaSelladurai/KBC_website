@@ -1,171 +1,300 @@
 
 "use client";
 
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import {
-  ArrowUpRight,
-  Sparkles,
   GraduationCap,
-  Award,
+  ChevronLeft,
+  ChevronRight,
   TrendingUp,
+  Sparkles,
 } from "lucide-react";
 
-type StudentLearningBannerProps = {
+type NavTab =
+  | "dashboard"
+  | "courses"
+  | "my-learning"
+  | "progress"
+  | "profile";
+
+type Props = {
   progress: number;
   onExploreCourses: () => void;
+  onNavigate?: (tab: NavTab) => void;
+  activeTab?: NavTab;
 };
+
+const slides = [
+  {
+    title: "Professional Makeup",
+    image: "/courses/makeup.jpg",
+    subtitle: "Master the art of professional beauty",
+  },
+  {
+    title: "Hair Styling",
+    image: "/courses/hair-styling.jpg",
+    subtitle: "Create beautiful hairstyles with confidence",
+  },
+  {
+    title: "Nail Art",
+    image: "/courses/nail-art.jpg",
+    subtitle: "Turn creativity into beautiful nail designs",
+  },
+  {
+    title: "Saree Pleating",
+    image: "/courses/saree-pleating.jpg",
+    subtitle: "Learn elegant draping and pleating techniques",
+  },
+];
+
+const navigation: { label: string; id: NavTab }[] = [
+  { label: "Home", id: "dashboard" },
+  { label: "Courses", id: "courses" },
+  { label: "My Learning", id: "my-learning" },
+  { label: "Progress", id: "progress" },
+  { label: "Profile", id: "profile" },
+];
 
 export default function StudentLearningBanner({
   progress,
   onExploreCourses,
-}: StudentLearningBannerProps) {
+  onNavigate,
+  activeTab = "dashboard",
+}: Props) {
+  const [activeSlide, setActiveSlide] = useState(0);
+
   const safeProgress = Math.min(100, Math.max(0, progress));
 
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveSlide((current) => (current + 1) % slides.length);
+    }, 4000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  const changeSlide = (direction: number) => {
+    setActiveSlide(
+      (current) =>
+        (current + direction + slides.length) % slides.length
+    );
+  };
+
   return (
-    <section className="group relative isolate min-h-[390px] overflow-hidden
-      rounded-[30px] border border-[#B89970]/30 bg-[#171717]
-      shadow-[0_20px_60px_rgba(0,0,0,0.25)]">
+    <section className="relative isolate min-h-[680px] w-full overflow-hidden rounded-[28px] border-2 border-[#C9A45C] bg-[#121414] shadow-[0_20px_55px_rgba(80,50,15,0.22)] md:min-h-[650px]">
 
-      {/* Background glow */}
-      <div className="pointer-events-none absolute -left-24 -top-28
-        h-72 w-72 rounded-full bg-[#B89970]/10 blur-[100px]" />
+      {/* Full Background Image Carousel */}
+      {slides.map((slide, index) => (
+        <div
+          key={slide.title}
+          className={`absolute inset-0 -z-20 transition-all duration-1000 ease-in-out ${
+            activeSlide === index
+              ? "scale-100 opacity-100"
+              : "scale-110 opacity-0"
+          }`}
+          aria-hidden={activeSlide !== index}
+        >
+          <Image
+            src={slide.image}
+            alt={slide.title}
+            fill
+            priority={index === 0}
+            sizes="100vw"
+            className="object-cover object-center"
+          />
+        </div>
+      ))}
 
-      <div className="grid min-h-[390px] md:grid-cols-[1.05fr_0.95fr]">
+      {/* Readability Overlay */}
+      <div className="absolute inset-0 -z-10 bg-gradient-to-r from-[#121414]/95 via-[#121414]/75 to-[#121414]/20" />
 
-        {/* LEFT CONTENT */}
-        <div className="relative z-10 flex flex-col justify-center
-          px-7 py-10 sm:px-10 lg:px-12">
+      <div className="absolute inset-0 -z-10 bg-gradient-to-t from-[#121414]/65 via-transparent to-[#121414]/45" />
 
-          <div className="mb-7 flex w-fit items-center gap-2 rounded-full
-            border border-[#B89970]/40 bg-[#B89970]/10 px-4 py-2">
-            <Sparkles size={14} className="text-[#D9C77A]" />
-            <span className="text-[10px] font-semibold uppercase
-              tracking-[0.28em] text-[#D9C77A]">
-              KBC Academy • Learning Studio
+      {/* Header Navigation */}
+      <header className="relative flex flex-wrap items-center justify-between gap-5 border-b border-[#EFE8A8]/20 bg-[#121414]/30 px-5 py-5 backdrop-blur-md md:px-9">
+
+        {/* Logo */}
+        <div className="flex items-center gap-3">
+
+          <div className="relative h-[65px] w-[65px] shrink-0 overflow-hidden rounded-full border-2 border-[#C9A45C] bg-black shadow-[0_0_20px_rgba(201,164,92,0.25)]">
+
+            <Image
+              src="/logo.jpeg"
+              alt="Kavyas Beauty Centre"
+              fill
+              sizes="65px"
+              className="object-contain"
+            />
+
+          </div>
+
+          <div>
+            <h2 className="font-serif text-xl font-bold tracking-wide text-[#EFE8A8] md:text-2xl">
+              KBC ACADEMY
+            </h2>
+
+            <p className="text-[10px] uppercase tracking-[0.22em] text-white/75 md:text-xs">
+              Learning New Style
+            </p>
+          </div>
+
+        </div>
+
+        {/* Navigation */}
+        <nav className="flex flex-wrap items-center gap-2 md:gap-3">
+
+          {navigation.map((item) => (
+            <button
+              key={item.id}
+              onClick={() => {
+                if (item.id === "courses") {
+                  onExploreCourses();
+                } else {
+                  onNavigate?.(item.id);
+                }
+              }}
+              className={`rounded-full px-3 py-2 text-xs font-medium transition-all duration-300 md:px-5 md:text-sm ${
+                activeTab === item.id
+                  ? "border border-[#C9A45C] bg-[#C9A45C] text-[#121414] shadow-[0_0_18px_rgba(201,164,92,0.35)]"
+                  : "text-white/90 hover:border hover:border-[#C9A45C]/70 hover:bg-white/10 hover:text-[#EFE8A8]"
+              }`}
+            >
+              {item.label}
+            </button>
+          ))}
+
+        </nav>
+
+      </header>
+
+      {/* Main Hero */}
+      <div className="relative flex min-h-[570px] items-center px-6 py-12 md:min-h-[540px] md:px-12 lg:px-16">
+
+        <div className="max-w-[650px]">
+
+          <div className="mb-6 flex items-center gap-3">
+            <Sparkles className="text-[#EFE8A8]" size={20} />
+
+            <span className="text-xs font-semibold uppercase tracking-[0.25em] text-[#EFE8A8] md:text-sm">
+              Welcome to KBC Academy
             </span>
           </div>
 
-          <p className="mb-3 text-sm font-medium tracking-wide text-[#B89970]">
-            Your Beauty Learning Journey
-          </p>
+          <h1 className="font-serif text-5xl font-bold leading-[1.12] tracking-tight text-white md:text-6xl lg:text-7xl">
 
-          <h1 className="max-w-xl text-4xl font-semibold leading-[1.12]
-            tracking-tight text-[#F5F0E8] sm:text-5xl">
-            Welcome Back!
-            <span className="mt-2 block font-serif italic
-              text-[#D9C77A]">
-              Create. Learn. Shine.
+            Your Beauty
+
+            <span className="mt-2 block bg-gradient-to-r from-[#EFE8A8] via-[#C9A45C] to-[#FFF8ED] bg-clip-text text-transparent">
+              Learning Journey
             </span>
+
           </h1>
 
-          <p className="mt-5 max-w-md text-sm leading-7 text-[#C9C1B6]">
+          <h2 className="mt-7 font-serif text-3xl italic text-[#EFE8A8] md:text-4xl">
+            Create. Learn. Shine.
+          </h2>
+
+          <div className="mt-5 h-[2px] w-32 bg-gradient-to-r from-[#C9A45C] to-transparent" />
+
+          <p className="mt-6 max-w-lg text-sm leading-7 text-white/85 md:text-base">
             Sustain your growth journey and fulfill your aspirations.
             Discover your potential and master your beauty skills.
           </p>
 
-          <div className="mt-8 flex flex-wrap items-center gap-5">
+          {/* Explore Courses */}
+          <button
+            onClick={onExploreCourses}
+            className="group mt-8 inline-flex items-center gap-4 rounded-full border border-[#EFE8A8] bg-gradient-to-r from-[#C9A45C] to-[#EFE8A8] px-8 py-4 font-semibold text-[#121414] shadow-[0_8px_30px_rgba(201,164,92,0.28)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_12px_35px_rgba(201,164,92,0.45)]"
+          >
+            <GraduationCap size={25} />
 
-            <button
-              onClick={onExploreCourses}
-              className="group/btn inline-flex items-center gap-3
-                rounded-full bg-gradient-to-r from-[#B89970]
-                via-[#E8DDCE] to-[#B89970] px-6 py-3.5
-                text-sm font-bold text-[#171717]
-                shadow-[0_8px_25px_rgba(184,153,112,0.2)]
-                transition-all duration-300
-                hover:-translate-y-1 hover:shadow-[0_12px_30px_rgba(184,153,112,0.35)]"
-            >
-              Explore Courses
-              <ArrowUpRight
-                size={18}
-                className="transition-transform group-hover/btn:translate-x-1
-                  group-hover/btn:-translate-y-1"
-              />
-            </button>
+            <span>Explore Courses</span>
 
-            <div className="flex items-center gap-2 text-xs text-[#D9CFC1]">
-              <Award size={17} className="text-[#D9C77A]" />
-              Learn from experts
-            </div>
-          </div>
+            <ChevronRight
+              size={20}
+              className="transition-transform group-hover:translate-x-2"
+            />
+          </button>
 
-          {/* Progress card */}
-          <div className="mt-9 max-w-[340px] rounded-2xl
-            border border-white/10 bg-white/[0.06] p-4
-            shadow-lg backdrop-blur-xl">
+          {/* Learning Progress Under Button */}
+          <div className="mt-6 max-w-[350px] rounded-2xl border border-[#EFE8A8]/50 bg-[#121414]/65 p-5 shadow-xl backdrop-blur-xl">
 
-            <div className="mb-3 flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <GraduationCap size={18} className="text-[#D9C77A]" />
-                <span className="text-xs font-medium text-[#F5F0E8]">
-                  Your Learning Progress
-                </span>
+            <div className="flex items-center gap-4">
+
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-[#C9A45C]/50 bg-[#C9A45C]/20">
+                <TrendingUp size={28} className="text-[#EFE8A8]" />
               </div>
 
-              <span className="text-sm font-bold text-[#D9C77A]">
-                {safeProgress}%
-              </span>
+              <div className="flex-1">
+
+                <p className="text-xs text-white/75">
+                  Your Learning Progress
+                </p>
+
+                <p className="mt-1 text-2xl font-bold text-[#EFE8A8]">
+                  {Math.round(safeProgress)}%
+                </p>
+
+              </div>
+
             </div>
 
-            <div className="h-2 overflow-hidden rounded-full bg-white/10">
+            <div className="mt-4 h-2 overflow-hidden rounded-full bg-white/20">
+
               <div
-                className="h-full rounded-full bg-gradient-to-r
-                  from-[#B89970] to-[#EFE8A8] transition-all duration-700"
+                className="h-full rounded-full bg-gradient-to-r from-[#C9A45C] to-[#EFE8A8] transition-all duration-700"
                 style={{ width: `${safeProgress}%` }}
               />
+
             </div>
 
-            <div className="mt-3 flex items-center gap-2 text-[11px]
-              text-[#BEB5A9]">
-              <TrendingUp size={13} className="text-[#D9C77A]" />
-              Every lesson brings you closer to mastery
-            </div>
-          </div>
-        </div>
-
-        {/* RIGHT IMAGE */}
-        <div className="relative min-h-[300px] overflow-hidden md:min-h-full">
-
-          <Image
-            src="/beauty-interior.jpg"
-            alt="Elegant KBC Academy beauty interior"
-            fill
-            priority
-            sizes="(max-width: 768px) 100vw, 50vw"
-            className="object-cover object-center
-              transition-transform duration-[1200ms]
-              group-hover:scale-105"
-          />
-
-          {/* Image lighting */}
-          <div className="absolute inset-0 bg-gradient-to-t
-            from-[#171717]/45 via-transparent to-[#171717]/10" />
-
-          <div className="absolute inset-0 bg-gradient-to-r
-            from-[#171717]/30 via-transparent to-transparent" />
-
-          {/* Floating glass label */}
-          <div className="absolute bottom-6 right-6
-            rounded-2xl border border-white/30
-            bg-black/30 px-5 py-4 text-white
-            shadow-2xl backdrop-blur-xl">
-
-            <p className="text-[10px] uppercase tracking-[0.25em]
-              text-[#EFE8A8]">
-              Beauty & Excellence
-            </p>
-
-            <p className="mt-1 font-serif text-xl">
-              Your journey starts here.
-            </p>
           </div>
 
-          {/* Decorative gold corner */}
-          <div className="pointer-events-none absolute right-0 top-0
-            h-28 w-28 rounded-bl-full border-b border-l
-            border-[#D9C77A]/40" />
         </div>
+
       </div>
+
+      {/* Previous / Next Slider Controls */}
+      <button
+        onClick={() => changeSlide(-1)}
+        aria-label="Previous image"
+        className="absolute right-[76px] top-1/2 z-20 hidden h-11 w-11 items-center justify-center rounded-full border border-[#EFE8A8]/60 bg-black/40 text-white backdrop-blur-md transition hover:bg-[#C9A45C] hover:text-black md:flex"
+      >
+        <ChevronLeft size={22} />
+      </button>
+
+      <button
+        onClick={() => changeSlide(1)}
+        aria-label="Next image"
+        className="absolute right-5 top-1/2 z-20 hidden h-11 w-11 items-center justify-center rounded-full border border-[#EFE8A8]/60 bg-black/40 text-white backdrop-blur-md transition hover:bg-[#C9A45C] hover:text-black md:flex"
+      >
+        <ChevronRight size={22} />
+      </button>
+
+      {/* Slide Indicators */}
+      <div className="absolute bottom-6 right-8 z-20 flex items-center gap-3">
+
+        {slides.map((slide, index) => (
+          <button
+            key={slide.title}
+            onClick={() => setActiveSlide(index)}
+            aria-label={`Show ${slide.title}`}
+            className={`h-2.5 rounded-full transition-all duration-300 ${
+              activeSlide === index
+                ? "w-9 bg-[#EFE8A8]"
+                : "w-2.5 bg-white/50 hover:bg-[#C9A45C]"
+            }`}
+          />
+        ))}
+
+      </div>
+
+      {/* Current Slide Label */}
+      <div className="absolute bottom-6 left-8 z-20 hidden text-xs font-semibold uppercase tracking-[0.2em] text-[#EFE8A8] md:block">
+        {slides[activeSlide].title}
+      </div>
+
     </section>
   );
 }
