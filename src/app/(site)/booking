@@ -1,0 +1,51 @@
+
+import Link from "next/link";
+
+export default function BookingPage() {
+  return (
+    <main className="kbc-booking-page">
+      <div className="kbc-booking-glow" />
+
+      <div className="kbc-booking-content">
+        <span className="kbc-booking-tag">
+          ✦ KBC BEAUTY ACADEMY ✦
+        </span>
+
+        <h1>
+          Begin Your
+          <br />
+          <span>Beauty Journey</span>
+        </h1>
+
+        <p>
+          Take the first step towards your beauty career.
+          Explore our professional courses and connect with
+          KBC Beauty Academy to begin your journey.
+        </p>
+
+        <div className="kbc-booking-divider" />
+
+        <h2>Ready to Book Your Course?</h2>
+
+        <p className="kbc-booking-small">
+          Discover our available courses and contact our academy
+          to enquire about enrollment.
+        </p>
+
+        <div className="kbc-booking-actions">
+          <Link href="/courses" className="kbc-booking-primary">
+            BOOK NOW <span>↗</span>
+          </Link>
+
+          <Link href="/#contact" className="kbc-booking-secondary">
+            CONTACT ACADEMY
+          </Link>
+        </div>
+
+        <Link href="/" className="kbc-booking-back">
+          ← BACK TO HOME
+        </Link>
+      </div>
+    </main>
+  );
+}

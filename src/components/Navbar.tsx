@@ -1,22 +1,156 @@
+
 "use client";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+
 import { useState } from "react";
-const pub = [["/", "Home"], ["/courses", "Courses"], ["/live", "Live Classes"], ["/login", "Student Login"]];
-const stu = [["/student", "My Learning"], ["/live", "Live Classes"]];
+
 export default function Navbar() {
-  const p = usePathname(); const [o, setO] = useState(false);
-  const inStu = p.startsWith("/student") || p.startsWith("/watch");
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const links = [
+    ["Home", "#home"],
+    ["About", "#about"],
+    ["Courses", "#courses"],
+    ["Services", "#services"],
+    ["Gallery", "#gallery"],
+    ["Contact", "#contact"],
+  ];
+
   return (
-    <nav className="sticky top-0 z-30 border-b border-line bg-ink/90 backdrop-blur">
-      <div className="wrap flex h-16 items-center justify-between">
-        <Link href="/" className="flex items-center gap-2 font-serif font-bold text-gold"><span className="grid h-9 w-9 place-items-center rounded-full border-2 border-gold">👑</span>KBC Saloon Academy</Link>
-        <button aria-label="Menu" className="rounded-lg border border-line px-3 py-1.5 md:hidden" onClick={() => setO(!o)}>☰</button>
-        <div className={`${o ? "flex" : "hidden"} absolute left-0 right-0 top-16 flex-col gap-1 border-b border-line bg-ink p-4 md:static md:flex md:flex-row md:items-center md:border-0 md:p-0`}>
-          {(inStu ? stu : pub).map(([h, l]) => (
-            <Link key={h} href={h} onClick={() => setO(false)} className={`rounded-lg px-3 py-2 text-sm ${p === h ? "text-gold" : "text-mute hover:text-gold"}`}>{l}</Link>))}
-          {inStu ? <Link href="/" className="btn-o btn-sm">Log out</Link> : <Link href="/courses" className="btn btn-sm">Enroll Now</Link>}
-        </div>
-      </div>
-    </nav>);
+    <>
+      <header className="navbar">
+        <a href="#home" className="nav-logo kbc-header-logo">
+          <span className="logo-orbit">
+            <span className="logo-orbit-inner">
+              <img
+                src="/kavyas-logo.jpeg"
+                alt="KBC Beauty Academy Logo"
+                className="header-logo-image"
+              />
+            </span>
+          </span>
+        </a>
+
+        <button
+          className="menu-toggle"
+          onClick={() => setMenuOpen(!menuOpen)}
+          aria-label="Toggle navigation"
+          aria-expanded={menuOpen}
+        >
+          {menuOpen ? "✕" : "☰"}
+        </button>
+
+        <nav className={menuOpen ? "nav-links active" : "nav-links"}>
+          {links.map(([name, link]) => (
+            <a
+              key={name}
+              href={link}
+              onClick={() => setMenuOpen(false)}
+            >
+              {name}
+            </a>
+          ))}
+
+          <a
+            href="#courses"
+            className="nav-cta"
+            onClick={() => setMenuOpen(false)}
+          >
+            Explore Courses
+          </a>
+        </nav>
+      </header>
+
+      <style jsx>{`
+        .kbc-header-logo {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          text-decoration: none;
+          flex-shrink: 0;
+          perspective: 700px;
+        }
+
+        .logo-orbit {
+          position: relative;
+          width: 76px;
+          height: 76px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 50%;
+          background: conic-gradient(
+            from 0deg,
+            transparent,
+            #d8ad55,
+            #fff0bd,
+            #d8ad55,
+            transparent
+          );
+          animation: logoOrbit 7s linear infinite;
+          box-shadow:
+            0 0 12px rgba(212, 175, 85, 0.35),
+            0 0 28px rgba(236, 160, 190, 0.18);
+        }
+
+        .logo-orbit-inner {
+          width: 68px;
+          height: 68px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 50%;
+          background: #101010;
+          overflow: hidden;
+          animation: logoFloat 3s ease-in-out infinite;
+        }
+
+        .header-logo-image {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+          border-radius: 50%;
+          padding: 4px;
+          filter: drop-shadow(0 0 7px rgba(220, 180, 95, 0.5));
+          transition:
+            transform 0.5s ease,
+            filter 0.5s ease;
+        }
+
+        .kbc-header-logo:hover .header-logo-image {
+          transform: scale(1.12) rotateY(12deg);
+          filter: drop-shadow(0 0 14px rgba(255, 210, 120, 0.9));
+        }
+
+        @keyframes logoOrbit {
+          from {
+            transform: rotate(0deg);
+          }
+          to {
+            transform: rotate(360deg);
+          }
+        }
+
+        @keyframes logoFloat {
+          0%, 100% {
+            transform: translateY(0) rotateY(0deg);
+          }
+          50% {
+            transform: translateY(-3px) rotateY(5deg);
+          }
+        }
+
+        @media (max-width: 768px) {
+          .logo-orbit {
+            width: 62px;
+            height: 62px;
+          }
+
+          .logo-orbit-inner {
+            width: 56px;
+            height: 56px;
+          }
+        }
+      `}</style>
+    </>
+  );
 }
