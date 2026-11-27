@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { HttpError } from "@/lib/api";
+import { requireUser } from "@/lib/auth";
+import { parsePositiveIntId } from "@/lib/courses/validation";
 
 type RouteContext = {
   params: {
@@ -9,31 +12,38 @@ type RouteContext = {
 };
 
 // GET: Fetch all lessons in a module.
-export async function GET(
-  request: NextRequest,
-  { params }: RouteContext
-) {
+export async function GET(request: NextRequest, { params }: RouteContext) {
   try {
-    const module = await prisma.module.findFirst({
+    await requireUser(true);
+    const courseId = parsePositiveIntId(params.id);
+    const moduleId = parsePositiveIntId(params.moduleId);
+    if (courseId === null || moduleId === null) {
+      return NextResponse.json(
+        { message: "Invalid course or module ID." },
+        { status: 400 },
+      );
+    }
+
+    const courseModule = await prisma.module.findFirst({
       where: {
-        id: params.moduleId,
-        courseId: params.id,
+        id: moduleId,
+        courseId,
       },
       select: {
         id: true,
       },
     });
 
-    if (!module) {
+    if (!courseModule) {
       return NextResponse.json(
         { message: "Module not found in this course." },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
     const lessons = await prisma.lesson.findMany({
       where: {
-        moduleId: params.moduleId,
+        moduleId,
       },
       orderBy: {
         sortOrder: "asc",
@@ -42,25 +52,37 @@ export async function GET(
 
     return NextResponse.json(lessons);
   } catch (error) {
+    if (error instanceof HttpError) {
+      return NextResponse.json(
+        { error: error.message, message: error.message },
+        { status: error.status },
+      );
+    }
     console.error("GET lessons error:", error);
 
     return NextResponse.json(
       { message: "Failed to fetch lessons." },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
 
 // POST: Create a lesson.
-export async function POST(
-  request: NextRequest,
-  { params }: RouteContext
-) {
+export async function POST(request: NextRequest, { params }: RouteContext) {
   try {
+    await requireUser(true);
+    const courseId = parsePositiveIntId(params.id);
+    const moduleId = parsePositiveIntId(params.moduleId);
+    if (courseId === null || moduleId === null) {
+      return NextResponse.json(
+        { message: "Invalid course or module ID." },
+        { status: 400 },
+      );
+    }
+
     const body = await request.json();
 
-    const title =
-      typeof body.title === "string" ? body.title.trim() : "";
+    const title = typeof body.title === "string" ? body.title.trim() : "";
 
     const description =
       typeof body.description === "string"
@@ -70,30 +92,30 @@ export async function POST(
     if (!title) {
       return NextResponse.json(
         { message: "Lesson title is required." },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
-    const module = await prisma.module.findFirst({
+    const courseModule = await prisma.module.findFirst({
       where: {
-        id: params.moduleId,
-        courseId: params.id,
+        id: moduleId,
+        courseId,
       },
       select: {
         id: true,
       },
     });
 
-    if (!module) {
+    if (!courseModule) {
       return NextResponse.json(
         { message: "Module not found in this course." },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
     const lastLesson = await prisma.lesson.findFirst({
       where: {
-        moduleId: params.moduleId,
+        moduleId,
       },
       orderBy: {
         sortOrder: "desc",
@@ -109,18 +131,24 @@ export async function POST(
       data: {
         title,
         description,
-        moduleId: params.moduleId,
+        moduleId,
         sortOrder: nextSortOrder,
       },
     });
 
     return NextResponse.json(lesson, { status: 201 });
   } catch (error) {
+    if (error instanceof HttpError) {
+      return NextResponse.json(
+        { error: error.message, message: error.message },
+        { status: error.status },
+      );
+    }
     console.error("POST lesson error:", error);
 
     return NextResponse.json(
       { message: "Failed to create lesson." },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

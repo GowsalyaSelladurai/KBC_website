@@ -2,6 +2,10 @@
 
 import { useEffect, useRef, useState } from "react";
 import * as tus from "tus-js-client";
+import {
+  detectVideoDuration,
+  formatVideoDuration,
+} from "@/lib/videoDuration";
 
 type VideoStatus = "NOT_UPLOADED" | "PROCESSING" | "READY" | "FAILED";
 
@@ -12,6 +16,10 @@ interface Props {
   initialVideoId?: string | null;
   initialStatus?: VideoStatus;
   initialDuration?: number | null;
+  courseImageUrl?: string | null;
+  thumbnailUrl?: string | null;
+  autoStartFile?: File | null;
+  autoStartDuration?: number | null;
   onStatusChange?: (
     status: VideoStatus,
     videoId: string | null,
@@ -39,6 +47,10 @@ export default function LessonVideoUploader({
   initialVideoId = null,
   initialStatus = "NOT_UPLOADED",
   initialDuration = null,
+  courseImageUrl = null,
+  thumbnailUrl = null,
+  autoStartFile = null,
+  autoStartDuration = null,
   onStatusChange,
   onClose,
 }: Props) {
@@ -50,7 +62,12 @@ export default function LessonVideoUploader({
     initialDuration,
   );
 
-  const [file, setFile] = useState<File | null>(null);
+  const [file, setFile] = useState<File | null>(autoStartFile);
+  const [detectedDuration, setDetectedDuration] = useState<number | null>(
+    autoStartDuration,
+  );
+  const [detectingDuration, setDetectingDuration] = useState(false);
+  const [localPreviewUrl, setLocalPreviewUrl] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -61,10 +78,12 @@ export default function LessonVideoUploader({
   const [isReplacing, setIsReplacing] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [isCheckingStatus, setIsCheckingStatus] = useState(false);
+  const [showEmbedPlayer, setShowEmbedPlayer] = useState(false);
 
   const tusUploadRef = useRef<tus.Upload | null>(null);
   const pollTimerRef = useRef<NodeJS.Timeout | null>(null);
   const isMountedRef = useRef(true);
+  const autoStartedRef = useRef(false);
 
   // Stop polling and safely clear any active timer
   function stopPolling() {
@@ -140,11 +159,42 @@ export default function LessonVideoUploader({
     };
   }, [courseId, moduleId, lessonId]);
 
+  // Manage local object URL for selected file preview cleanly
+  useEffect(() => {
+    if (!file) {
+      setLocalPreviewUrl(null);
+      return;
+    }
+    const url = URL.createObjectURL(file);
+    setLocalPreviewUrl(url);
+    return () => {
+      URL.revokeObjectURL(url);
+    };
+  }, [file]);
+
+  // Auto-start upload when mounted from integrated lesson creation with a preselected file
+  useEffect(() => {
+    if (autoStartFile && !autoStartedRef.current) {
+      autoStartedRef.current = true;
+      handleStartUpload(false, autoStartFile, autoStartDuration);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoStartFile, lessonId]);
+
+  async function handleFileSelected(selected: File) {
+    setFile(selected);
+    setError("");
+    setMessage("");
+    setDetectingDuration(true);
+    const secs = await detectVideoDuration(selected);
+    if (isMountedRef.current) {
+      setDetectedDuration(secs);
+      setDetectingDuration(false);
+    }
+  }
+
   function formatTime(seconds: number | null): string {
-    if (!seconds || seconds <= 0) return "--:--";
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
+    return formatVideoDuration(seconds, "Duration unavailable");
   }
 
   function formatFileSize(bytes: number): string {
@@ -173,14 +223,14 @@ export default function LessonVideoUploader({
         }
 
         if (data.videoStatus === "READY") {
-          setMessage("Video is ready and streamable!");
+          setMessage("Video is ready for playback.");
           onStatusChange?.(
             "READY",
             data.bunnyVideoId || videoId,
             data.durationSeconds !== undefined ? data.durationSeconds : durationSeconds,
           );
         } else if (data.videoStatus === "FAILED") {
-          setError("Video processing failed on Bunny Stream.");
+          setError("This video could not be prepared. Please try uploading again.");
           onStatusChange?.("FAILED", videoId, null);
         }
         return data.videoStatus;
@@ -226,7 +276,7 @@ export default function LessonVideoUploader({
       } else {
         if (isMountedRef.current) {
           setMessage(
-            "Video encoding is still underway in Bunny CDN. Check back in a few minutes.",
+            "Your video is still being prepared. Check back in a few moments.",
           );
         }
         stopPolling();
@@ -258,14 +308,22 @@ export default function LessonVideoUploader({
     }
   }
 
-  async function handleStartUpload(replace = false) {
-    if (!file) {
+  async function handleStartUpload(
+    replace = false,
+    overrideFile?: File,
+    overrideDuration?: number | null,
+  ) {
+    const targetFile = overrideFile ?? file;
+    const targetDuration =
+      overrideDuration !== undefined ? overrideDuration : detectedDuration;
+
+    if (!targetFile) {
       setError("Please select a video file first.");
       return;
     }
 
     // Check file size (e.g., max 500MB)
-    if (file.size > 500 * 1024 * 1024) {
+    if (targetFile.size > 500 * 1024 * 1024) {
       setError("File exceeds maximum allowed size (500MB).");
       return;
     }
@@ -273,12 +331,12 @@ export default function LessonVideoUploader({
     setUploading(true);
     setProgress(0);
     setUploadedBytes(0);
-    setTotalBytes(file.size);
+    setTotalBytes(targetFile.size);
     setError("");
     setMessage(
       replace
-        ? "Preparing replacement upload session..."
-        : "Preparing upload session...",
+        ? "Preparing replacement upload..."
+        : "Starting upload...",
     );
 
     try {
@@ -291,7 +349,7 @@ export default function LessonVideoUploader({
 
       if (!res.ok) {
         throw new Error(
-          (credentials as any).error || "Failed to obtain upload token",
+          (credentials as any).error || "Could not start video upload. Please try again.",
         );
       }
 
@@ -306,7 +364,7 @@ export default function LessonVideoUploader({
         );
       }
 
-      const upload = new tus.Upload(file, {
+      const upload = new tus.Upload(targetFile, {
         endpoint: credentials.endpoint,
         headers: {
           AuthorizationSignature: credentials.signature,
@@ -315,8 +373,8 @@ export default function LessonVideoUploader({
           LibraryId: credentials.libraryId,
         },
         metadata: {
-          filetype: file.type || "video/mp4",
-          title: file.name,
+          filetype: targetFile.type || "video/mp4",
+          title: targetFile.name,
         },
         retryDelays: [0, 3000, 5000, 10000, 20000],
         onProgress(uploaded, total) {
@@ -324,22 +382,22 @@ export default function LessonVideoUploader({
           setProgress(percent);
           setUploadedBytes(uploaded);
           setTotalBytes(total);
-          setMessage(`Uploading to Bunny Stream: ${percent}%`);
+          setMessage(`Uploading video: ${percent}%`);
         },
         onError(tusErr) {
           console.error("TUS upload error:", tusErr);
           if (replace) {
             setError(
-              "Replacement upload interrupted. Your existing video remains preserved. You can retry or cancel.",
+              "Replacement upload was interrupted. Your previous video is still safe. You can retry or cancel.",
             );
           } else {
-            setError("Upload interrupted. You can click Retry to resume.");
+            setError("Upload was interrupted. Please click Retry to continue.");
           }
           setUploading(false);
         },
         onSuccess: async () => {
           setProgress(100);
-          setMessage("Upload complete. Verifying video with Bunny Stream...");
+          setMessage("Upload complete. Finalizing video...");
 
           try {
             const compRes = await fetch(
@@ -354,7 +412,22 @@ export default function LessonVideoUploader({
             if (!compRes.ok) {
               const compData = await compRes.json().catch(() => ({}));
               throw new Error(
-                compData.error || "Failed to verify and register video.",
+                compData.error || "Could not finalize the uploaded video.",
+              );
+            }
+
+            // Persist browser-detected duration if available (Bunny status polling will also verify)
+            if (targetDuration && targetDuration > 0) {
+              setDurationSeconds(targetDuration);
+              fetch(
+                `/api/admin/courses/${courseId}/modules/${moduleId}/lessons/${lessonId}`,
+                {
+                  method: "PUT",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ durationSeconds: targetDuration }),
+                },
+              ).catch((durErr) =>
+                console.error("Failed to persist detected duration:", durErr),
               );
             }
 
@@ -367,9 +440,15 @@ export default function LessonVideoUploader({
             setIsReplacing(false);
             setFile(null);
             setMessage(
-              "Replacement committed successfully! Video is processing on Bunny CDN...",
+              replace
+                ? "Video updated! Preparing for playback..."
+                : "Upload complete! Video is being prepared...",
             );
-            onStatusChange?.("PROCESSING", credentials.videoId, null);
+            onStatusChange?.(
+              "PROCESSING",
+              credentials.videoId,
+              targetDuration ?? null,
+            );
 
             // Begin polling status for the new video
             startPollingStatus();
@@ -377,11 +456,11 @@ export default function LessonVideoUploader({
             console.error("Completion endpoint error:", compErr);
             if (replace) {
               setError(
-                "Replacement verification failed. Your existing video remains preserved.",
+                "Could not finalize replacement video. Your previous video is still preserved.",
               );
             } else {
               setError(
-                "Upload finished, but status sync failed. Check status below.",
+                "Upload finished, but we could not confirm video readiness. Please refresh status.",
               );
             }
           } finally {
@@ -457,14 +536,14 @@ export default function LessonVideoUploader({
             <div>
               <div className="flex items-center gap-2">
                 <p className="text-xs font-medium text-[#e8dfd1]">
-                  Lesson Video Ready
+                  Video ready
                 </p>
                 <span className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2 py-0.5 text-[10px] font-medium text-emerald-300">
-                  Video ready
+                  Ready
                 </span>
               </div>
               <p className="text-[11px] text-[#7a7469]">
-                Hosted on Bunny Stream CDN
+                Available for student playback
               </p>
             </div>
           </div>
@@ -509,18 +588,40 @@ export default function LessonVideoUploader({
         </div>
 
         {/* Video Preview Player */}
-        <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-[#26211b] bg-black">
-          {embedUrl ? (
+        <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-[#D6AD65]/25 bg-black">
+          {embedUrl && (showEmbedPlayer || !(thumbnailUrl || courseImageUrl)) ? (
             <iframe
               src={embedUrl}
               loading="lazy"
+              referrerPolicy="strict-origin-when-cross-origin"
               className="h-full w-full border-0"
               allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;"
               allowFullScreen
             />
+          ) : thumbnailUrl || courseImageUrl ? (
+            <div className="relative h-full w-full">
+              <img
+                src={(thumbnailUrl || courseImageUrl)!}
+                alt="Lesson video poster"
+                className="h-full w-full object-cover"
+              />
+              {embedUrl && (
+                <button
+                  type="button"
+                  onClick={() => setShowEmbedPlayer(true)}
+                  aria-label="Play video preview"
+                  className="absolute inset-0 flex items-center justify-center bg-black/35 transition hover:bg-black/45"
+                >
+                  <span className="flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-r from-[#D6AD65] to-[#F1D69A] pl-0.5 text-lg text-[#090807] shadow-xl">
+                    ▶
+                  </span>
+                </button>
+              )}
+            </div>
           ) : (
-            <div className="flex h-full w-full items-center justify-center text-xs text-[#7a7469]">
-              Player embed ready
+            <div className="flex h-full w-full flex-col items-center justify-center gap-1.5 text-xs text-[#BDB4A7]">
+              <span className="text-2xl text-[#D6AD65]/40">✦</span>
+              <span>Video preview ready</span>
             </div>
           )}
         </div>
@@ -540,14 +641,14 @@ export default function LessonVideoUploader({
             <div>
               <div className="flex items-center gap-2">
                 <p className="text-xs font-medium text-amber-300">
-                  Processing Lesson Video on Bunny Stream
+                  Video is being prepared
                 </p>
                 <span className="rounded-full border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 text-[10px] font-medium text-amber-300">
-                  Processing
+                  Preparing
                 </span>
               </div>
               <p className="text-[11px] text-[#8a857b]">
-                Transcoding into multiple resolutions & generating HLS stream...
+                Optimizing video quality for smooth playback...
               </p>
             </div>
           </div>
@@ -559,7 +660,7 @@ export default function LessonVideoUploader({
               onClick={() => checkVideoStatusOnce()}
               className="rounded-lg border border-amber-500/30 px-3 py-1.5 text-xs text-amber-300 transition hover:bg-amber-500/10 disabled:opacity-50"
             >
-              {isCheckingStatus ? "Checking..." : "Check Status"}
+              {isCheckingStatus ? "Refreshing..." : "Refresh status"}
             </button>
             <button
               type="button"
@@ -601,15 +702,14 @@ export default function LessonVideoUploader({
             <div>
               <div className="flex items-center gap-2">
                 <p className="text-xs font-medium text-rose-300">
-                  Lesson Video processing failed
+                  Video could not be prepared
                 </p>
                 <span className="rounded-full border border-rose-500/30 bg-rose-500/10 px-2 py-0.5 text-[10px] font-medium text-rose-300">
-                  Upload failed
+                  Needs retry
                 </span>
               </div>
               <p className="text-[11px] text-[#8a857b]">
-                Bunny Stream could not encode this video format. Please
-                re-upload.
+                Please upload an MP4, MOV, or WebM video and try again.
               </p>
             </div>
           </div>
@@ -650,33 +750,33 @@ export default function LessonVideoUploader({
 
   // --- RENDER UPLOAD / DROPZONE STATE (NOT_UPLOADED or isReplacing) ---
   return (
-    <div className="space-y-4 rounded-2xl border border-[#2b251e] bg-[#0c0c0b] p-5">
+    <div className="space-y-4 rounded-2xl border border-[#D6AD65]/25 bg-[#15120F] p-5">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div>
           <div className="flex flex-wrap items-center gap-2">
-            <h4 className="text-xs font-semibold uppercase tracking-wider text-[#c9a66a]">
-              {isReplacing ? "Replace Lesson Video" : "Upload Lesson Video"}
+            <h4 className="text-xs font-semibold uppercase tracking-wider text-[#D6AD65]">
+              {isReplacing ? "Replace Lesson Video" : "Upload Video"}
             </h4>
             {uploading ? (
-              <span className="rounded-full border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 text-[10px] font-medium text-amber-300">
+              <span className="rounded-full border border-[#D6AD65]/40 bg-[#211A12] px-2.5 py-0.5 text-[10px] font-medium text-[#F1D69A]">
                 Uploading ({progress}%)
               </span>
             ) : error ? (
-              <span className="rounded-full border border-rose-500/30 bg-rose-500/10 px-2 py-0.5 text-[10px] font-medium text-rose-300">
+              <span className="rounded-full border border-rose-500/30 bg-rose-950/60 px-2.5 py-0.5 text-[10px] font-medium text-rose-300">
                 Upload failed
               </span>
             ) : isReplacing ? (
-              <span className="rounded-full border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 text-[10px] font-medium text-amber-300">
+              <span className="rounded-full border border-[#D6AD65]/40 bg-[#211A12] px-2.5 py-0.5 text-[10px] font-medium text-[#F1D69A]">
                 Replacing video
               </span>
             ) : (
-              <span className="rounded-full border border-[#3d3224] bg-[#161412] px-2 py-0.5 text-[10px] font-medium text-[#aaa59a]">
+              <span className="rounded-full border border-[#D6AD65]/20 bg-[#1B1713] px-2.5 py-0.5 text-[10px] font-medium text-[#BDB4A7]">
                 No video uploaded
               </span>
             )}
           </div>
-          <p className="mt-0.5 text-[11px] text-[#7a7469]">
-            Supported formats: MP4, MOV, WebM · Max size: 500MB
+          <p className="mt-0.5 text-[11px] text-[#BDB4A7]">
+            Supports: MP4, MOV, WebM · Max size: 500MB
           </p>
         </div>
 
@@ -685,7 +785,7 @@ export default function LessonVideoUploader({
             <button
               type="button"
               onClick={handleCancelReplacement}
-              className="rounded-lg border border-[#3d3224] px-2.5 py-1.5 text-xs text-[#d8b16d] hover:bg-[#c9a66a]/10"
+              className="kbc-outline-btn !px-3 !py-1.5"
             >
               Cancel Replacement
             </button>
@@ -699,7 +799,7 @@ export default function LessonVideoUploader({
                 }
                 onClose();
               }}
-              className="rounded-lg border border-[#2b251e] px-2.5 py-1.5 text-xs text-[#7a7469] hover:text-[#e8dfd1]"
+              className="rounded-lg border border-[#D6AD65]/25 px-2.5 py-1.5 text-xs text-[#BDB4A7] hover:text-white"
             >
               ✕ Close
             </button>
@@ -709,9 +809,9 @@ export default function LessonVideoUploader({
 
       {/* Safety Notice during replacement */}
       {isReplacing && (
-        <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/10 p-3 text-xs text-emerald-300">
+        <div className="rounded-xl border border-emerald-500/25 bg-emerald-950/40 p-3 text-xs text-emerald-300">
           <p className="font-medium">Active Video Protected</p>
-          <p className="mt-0.5 text-[11px] text-[#8a857b]">
+          <p className="mt-0.5 text-[11px] text-[#BDB4A7]">
             Your current video remains published and live for learners until the
             replacement upload completes and is verified.
           </p>
@@ -719,7 +819,7 @@ export default function LessonVideoUploader({
       )}
 
       {error && (
-        <div className="flex items-center justify-between rounded-xl border border-rose-500/20 bg-rose-500/10 p-3 text-xs text-rose-300">
+        <div className="flex items-center justify-between rounded-xl border border-rose-500/25 bg-rose-950/40 p-3 text-xs text-rose-300">
           <span>{error}</span>
           <button
             type="button"
@@ -731,84 +831,89 @@ export default function LessonVideoUploader({
         </div>
       )}
 
-      {/* Drag & Drop Zone */}
-      {!uploading && (
-        <div
-          onDragOver={(e) => {
-            e.preventDefault();
-            setIsDragging(true);
-          }}
-          onDragLeave={() => setIsDragging(false)}
-          onDrop={(e) => {
-            e.preventDefault();
-            setIsDragging(false);
-            const droppedFile = e.dataTransfer.files?.[0];
-            if (droppedFile) {
-              setFile(droppedFile);
-              setError("");
-              setMessage("");
-            }
-          }}
-          className={`flex flex-col items-center justify-center rounded-2xl border-2 border-dashed px-4 py-8 text-center transition ${
-            isDragging
-              ? "border-[#c9a66a] bg-[#c9a66a]/5"
-              : "border-[#80623c]/30 bg-[#121110]/50 hover:border-[#80623c]/60"
-          }`}
-        >
-          <div className="mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-[#c9a66a]/10 text-xl text-[#c9a66a]">
-            ☁
+      <div className={file ? "grid grid-cols-1 gap-4 md:grid-cols-2" : ""}>
+        {/* Drag & Drop Zone */}
+        {!uploading && (
+          <div
+            onDragOver={(e) => {
+              e.preventDefault();
+              setIsDragging(true);
+            }}
+            onDragLeave={() => setIsDragging(false)}
+            onDrop={(e) => {
+              e.preventDefault();
+              setIsDragging(false);
+              const droppedFile = e.dataTransfer.files?.[0];
+              if (droppedFile) {
+                handleFileSelected(droppedFile);
+              }
+            }}
+            className={`flex flex-col items-center justify-center rounded-2xl border-2 border-dashed px-4 py-8 text-center transition ${
+              isDragging
+                ? "border-[#D6AD65] bg-[#211A12]"
+                : "border-[#D6AD65]/30 bg-[#090807] hover:border-[#D6AD65]/60"
+            }`}
+          >
+            <div className="mb-2 flex h-12 w-12 items-center justify-center rounded-full border border-[#D6AD65]/30 bg-[#1B1713] text-xl text-[#F1D69A]">
+              ☁
+            </div>
+            <p className="text-xs text-white">
+              Drag &amp; drop your video here
+            </p>
+            <p className="my-1.5 text-[11px] text-[#BDB4A7]">or</p>
+
+            <label className="kbc-gold-btn cursor-pointer">
+              <span>Choose File</span>
+              <input
+                type="file"
+                accept="video/mp4,video/quicktime,video/webm"
+                onChange={(e) => {
+                  const selected = e.target.files?.[0];
+                  if (selected) {
+                    handleFileSelected(selected);
+                  }
+                }}
+                className="hidden"
+              />
+            </label>
           </div>
-          <p className="text-xs text-[#8a857b]">
-            Drag & Drop your video file here
-          </p>
-          <p className="my-1.5 text-[11px] text-[#635d54]">or</p>
+        )}
 
-          <label className="flex cursor-pointer items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#d5a45a] to-[#f0cf91] px-4 py-2 text-xs font-semibold text-[#1a140d] transition hover:opacity-95">
-            <span>📁 Browse Videos</span>
-            <input
-              type="file"
-              accept="video/mp4,video/quicktime,video/webm"
-              onChange={(e) => {
-                const selected = e.target.files?.[0];
-                if (selected) {
-                  setFile(selected);
-                  setError("");
-                  setMessage("");
-                }
-              }}
-              className="hidden"
-            />
-          </label>
-        </div>
-      )}
+        {/* Selected File Preview & Upload Action */}
+        {file && (
+          <div className="space-y-3 rounded-2xl border border-[#D6AD65]/25 bg-[#1B1713] p-4">
+            <p className="text-xs font-medium text-[#F1D69A]">Video Preview</p>
 
-      {/* Selected File Details & Upload Action */}
-      {file && (
-        <div className="space-y-3 rounded-xl border border-[#2e2720] bg-[#121110] p-4">
-          <div className="flex items-center justify-between gap-3">
-            <div className="flex min-w-0 items-center gap-3">
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#181614] text-lg text-[#c9a66a]">
-                🎬
+            {localPreviewUrl && !uploading && (
+              <div className="overflow-hidden rounded-xl border border-[#D6AD65]/20 bg-black">
+                <video
+                  src={localPreviewUrl}
+                  poster={thumbnailUrl || courseImageUrl || undefined}
+                  controls
+                  controlsList="nodownload"
+                  disablePictureInPicture
+                  onContextMenu={(e) => e.preventDefault()}
+                  className="aspect-video w-full"
+                />
               </div>
-              <div className="min-w-0">
-                <p className="truncate text-xs font-medium text-[#e8dfd1]">
+            )}
+
+            <div className="flex items-center gap-3">
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-xs font-medium text-white">
                   {file.name}
                 </p>
-                <p className="text-[10px] text-[#7a7469]">
-                  {formatFileSize(file.size)} · Ready to upload
+                <p className="text-[11px] text-[#BDB4A7]">
+                  {formatFileSize(file.size)} ·{" "}
+                  {detectingDuration
+                    ? "Detecting duration..."
+                    : formatVideoDuration(detectedDuration)}
                 </p>
               </div>
             </div>
 
             {!uploading && (
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => handleStartUpload(isReplacing)}
-                  className="rounded-xl bg-gradient-to-r from-[#c9a66a] to-[#dfbf88] px-4 py-2 text-xs font-semibold text-[#17130d] transition hover:brightness-105"
-                >
-                  {isReplacing ? "Upload Replacement" : "Upload Video"}
-                </button>
+              <div className="flex items-center justify-end gap-2 pt-1">
                 <button
                   type="button"
                   onClick={() => {
@@ -818,34 +923,40 @@ export default function LessonVideoUploader({
                       setFile(null);
                     }
                   }}
-                  className="rounded-xl border border-[#3d3224] px-3 py-2 text-xs text-[#aaa59a] hover:bg-white/5"
+                  className="kbc-outline-btn"
                 >
                   Cancel
                 </button>
+                <button
+                  type="button"
+                  onClick={() => handleStartUpload(isReplacing)}
+                  className="kbc-gold-btn"
+                >
+                  {isReplacing ? "Upload Replacement" : "Upload Video"}
+                </button>
+              </div>
+            )}
+
+            {uploading && (
+              <div className="space-y-2 pt-1">
+                <div className="h-2 w-full overflow-hidden rounded-full bg-[#090807]">
+                  <div
+                    className="h-full rounded-full bg-gradient-to-r from-[#D6AD65] to-[#F1D69A] transition-all duration-300"
+                    style={{ width: `${progress}%` }}
+                  />
+                </div>
+                <div className="flex items-center justify-between text-[11px] text-[#BDB4A7]">
+                  <span>{message || `${progress}% uploaded`}</span>
+                  <span>
+                    {formatFileSize(uploadedBytes)} /{" "}
+                    {formatFileSize(totalBytes)}
+                  </span>
+                </div>
               </div>
             )}
           </div>
-
-          {/* Upload Progress Bar */}
-          {uploading && (
-            <div className="space-y-2 pt-2">
-              <div className="h-2 w-full overflow-hidden rounded-full bg-[#1e1b17]">
-                <div
-                  className="h-full rounded-full bg-gradient-to-r from-[#c9a66a] to-emerald-400 transition-all duration-300"
-                  style={{ width: `${progress}%` }}
-                />
-              </div>
-
-              <div className="flex items-center justify-between text-[11px] text-[#8a857b]">
-                <span>{message || `${progress}% uploaded`}</span>
-                <span>
-                  {formatFileSize(uploadedBytes)} / {formatFileSize(totalBytes)}
-                </span>
-              </div>
-            </div>
-          )}
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }

@@ -1,6 +1,9 @@
 import { createHash } from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { HttpError } from "@/lib/api";
+import { requireUser } from "@/lib/auth";
+import { parsePositiveIntId } from "@/lib/courses/validation";
 import {
   createBunnyVideo,
   deleteBunnyVideo,
@@ -19,14 +22,23 @@ export async function GET(
   { params }: { params: Params },
 ) {
   try {
-    const { id, moduleId, lessonId } = params;
+    await requireUser(true);
+    const courseId = parsePositiveIntId(params.id);
+    const moduleId = parsePositiveIntId(params.moduleId);
+    const lessonId = parsePositiveIntId(params.lessonId);
+    if (courseId === null || moduleId === null || lessonId === null) {
+      return NextResponse.json(
+        { error: "Invalid course, module, or lesson ID" },
+        { status: 400 },
+      );
+    }
 
     const lesson = await prisma.lesson.findFirst({
       where: {
         id: lessonId,
         moduleId,
         module: {
-          courseId: id,
+          courseId,
         },
       },
     });
@@ -54,6 +66,12 @@ export async function GET(
       embedUrl,
     });
   } catch (error) {
+    if (error instanceof HttpError) {
+      return NextResponse.json(
+        { error: error.message, message: error.message },
+        { status: error.status },
+      );
+    }
     console.error("Fetch lesson video error:", error);
     return NextResponse.json(
       { error: "Failed to fetch video details" },
@@ -67,14 +85,23 @@ export async function PUT(
   { params }: { params: Params },
 ) {
   try {
-    const { id, moduleId, lessonId } = params;
+    await requireUser(true);
+    const courseId = parsePositiveIntId(params.id);
+    const moduleId = parsePositiveIntId(params.moduleId);
+    const lessonId = parsePositiveIntId(params.lessonId);
+    if (courseId === null || moduleId === null || lessonId === null) {
+      return NextResponse.json(
+        { error: "Invalid course, module, or lesson ID" },
+        { status: 400 },
+      );
+    }
 
     const lesson = await prisma.lesson.findFirst({
       where: {
         id: lessonId,
         moduleId,
         module: {
-          courseId: id,
+          courseId,
         },
       },
     });
@@ -177,6 +204,12 @@ export async function PUT(
       isReplacement: isReplace,
     });
   } catch (error) {
+    if (error instanceof HttpError) {
+      return NextResponse.json(
+        { error: error.message, message: error.message },
+        { status: error.status },
+      );
+    }
     console.error("Bunny upload signature error:", error);
 
     return NextResponse.json(
@@ -191,14 +224,23 @@ export async function DELETE(
   { params }: { params: Params },
 ) {
   try {
-    const { id, moduleId, lessonId } = params;
+    await requireUser(true);
+    const courseId = parsePositiveIntId(params.id);
+    const moduleId = parsePositiveIntId(params.moduleId);
+    const lessonId = parsePositiveIntId(params.lessonId);
+    if (courseId === null || moduleId === null || lessonId === null) {
+      return NextResponse.json(
+        { error: "Invalid course, module, or lesson ID" },
+        { status: 400 },
+      );
+    }
 
     const lesson = await prisma.lesson.findFirst({
       where: {
         id: lessonId,
         moduleId,
         module: {
-          courseId: id,
+          courseId,
         },
       },
     });
@@ -299,6 +341,12 @@ export async function DELETE(
       message: "Video deleted successfully",
     });
   } catch (error) {
+    if (error instanceof HttpError) {
+      return NextResponse.json(
+        { error: error.message, message: error.message },
+        { status: error.status },
+      );
+    }
     console.error("Delete video error:", error);
     return NextResponse.json(
       { error: "Failed to delete video" },

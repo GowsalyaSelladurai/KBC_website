@@ -1,5 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { HttpError } from "@/lib/api";
+import { requireUser } from "@/lib/auth";
+import {
+  parsePositiveIntId,
+  validateMinimumCourseVideos,
+} from "@/lib/courses/validation";
 
 type Params = {
   id: string;
@@ -10,7 +16,14 @@ export async function PATCH(
   { params }: { params: Params }
 ) {
   try {
-    const { id } = params;
+    await requireUser(true);
+    const courseId = parsePositiveIntId(params.id);
+    if (courseId === null) {
+      return NextResponse.json(
+        { error: "Invalid course ID" },
+        { status: 400 }
+      );
+    }
     const body = await request.json();
 
     const allowedStatuses = ["DRAFT", "PUBLISHED", "ARCHIVED"];
@@ -23,7 +36,7 @@ export async function PATCH(
     }
 
     const course = await prisma.course.findUnique({
-      where: { id },
+      where: { id: courseId },
       include: {
         modules: {
           include: {
@@ -67,11 +80,22 @@ export async function PATCH(
           { status: 400 }
         );
       }
+
+      const videoRuleError = validateMinimumCourseVideos(
+        course.durationDays,
+        course.modules
+      );
+      if (videoRuleError) {
+        return NextResponse.json(
+          { error: videoRuleError },
+          { status: 400 }
+        );
+      }
     }
 
     // Archive or restore the course
     const updatedCourse = await prisma.course.update({
-      where: { id },
+      where: { id: courseId },
       data: {
         status: body.status,
       },
@@ -87,9 +111,21 @@ export async function PATCH(
 
     return NextResponse.json({
       message: messages[body.status],
-      course: updatedCourse,
+      course: {
+        ...updatedCourse,
+        duration:
+          updatedCourse.durationDays === 1
+            ? "1 Day"
+            : `${updatedCourse.durationDays} Days`,
+      },
     });
   } catch (error) {
+    if (error instanceof HttpError) {
+      return NextResponse.json(
+        { error: error.message, message: error.message },
+        { status: error.status }
+      );
+    }
     console.error("Course status update error:", error);
 
     return NextResponse.json(

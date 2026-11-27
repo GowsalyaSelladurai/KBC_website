@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import DeleteCourseModal from "./courses/DeleteCourseModal";
 
 type CourseStatus = "DRAFT" | "PUBLISHED" | "ARCHIVED";
 
@@ -35,31 +36,48 @@ type Course = {
   updatedAt: string;
 };
 
-// Helper for category badge based on course content
 function getCategory(course: Course): { name: string; style: string } {
   const text = `${course.title} ${course.courseCode} ${course.description || ""}`.toLowerCase();
   if (text.includes("hair")) {
-    return { name: "Hair Styling", style: "border-purple-500/30 bg-purple-500/10 text-purple-300" };
+    return {
+      name: "Hair Styling",
+      style: "border-purple-400/30 bg-purple-950/60 text-purple-200",
+    };
   }
   if (text.includes("nail")) {
-    return { name: "Nail Art", style: "border-amber-500/30 bg-amber-500/10 text-amber-300" };
+    return {
+      name: "Nail Art",
+      style: "border-[#D6AD65]/35 bg-[#211A12]/80 text-[#F1D69A]",
+    };
   }
   if (text.includes("skin") || text.includes("facial")) {
-    return { name: "Skincare", style: "border-emerald-500/30 bg-emerald-500/10 text-emerald-300" };
+    return {
+      name: "Skincare",
+      style: "border-emerald-400/30 bg-emerald-950/60 text-emerald-200",
+    };
   }
   if (text.includes("bridal") || text.includes("wedding")) {
-    return { name: "Bridal Makeup", style: "border-rose-500/30 bg-rose-500/10 text-rose-300" };
+    return {
+      name: "Bridal Makeup",
+      style: "border-rose-400/30 bg-rose-950/60 text-rose-200",
+    };
   }
   if (text.includes("saree") || text.includes("drape") || text.includes("styling")) {
-    return { name: "Styling & Draping", style: "border-blue-500/30 bg-blue-500/10 text-blue-300" };
+    return {
+      name: "Styling & Draping",
+      style: "border-sky-400/30 bg-sky-950/60 text-sky-200",
+    };
   }
-  return { name: "Makeup", style: "border-[#c9a66a]/40 bg-[#c9a66a]/10 text-[#e5be75]" };
+  return {
+    name: "Makeup",
+    style: "border-[#D6AD65]/40 bg-[#211A12]/80 text-[#F1D69A]",
+  };
 }
 
 function StatusBadge({ status }: { status: CourseStatus }) {
   if (status === "PUBLISHED") {
     return (
-      <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-950/70 px-2.5 py-1 text-[11px] font-medium text-emerald-300 backdrop-blur-md">
+      <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/35 bg-emerald-950/75 px-2.5 py-0.5 text-[11px] font-medium text-emerald-300 backdrop-blur-sm">
         <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
         Published
       </span>
@@ -67,14 +85,14 @@ function StatusBadge({ status }: { status: CourseStatus }) {
   }
   if (status === "DRAFT") {
     return (
-      <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-400/30 bg-amber-950/70 px-2.5 py-1 text-[11px] font-medium text-amber-300 backdrop-blur-md">
-        <span className="h-1.5 w-1.5 rounded-full bg-amber-400" />
+      <span className="inline-flex items-center gap-1.5 rounded-full border border-[#D6AD65]/40 bg-[#211A12]/85 px-2.5 py-0.5 text-[11px] font-medium text-[#F1D69A] backdrop-blur-sm">
+        <span className="h-1.5 w-1.5 rounded-full bg-[#D6AD65]" />
         Draft
       </span>
     );
   }
   return (
-    <span className="inline-flex items-center gap-1.5 rounded-full border border-zinc-500/30 bg-zinc-900/70 px-2.5 py-1 text-[11px] font-medium text-zinc-300 backdrop-blur-md">
+    <span className="inline-flex items-center gap-1.5 rounded-full border border-zinc-500/30 bg-zinc-900/80 px-2.5 py-0.5 text-[11px] font-medium text-zinc-300 backdrop-blur-sm">
       <span className="h-1.5 w-1.5 rounded-full bg-zinc-400" />
       Archived
     </span>
@@ -97,28 +115,35 @@ export default function CourseManager() {
   const [query, setQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("ALL");
   const [categoryFilter, setCategoryFilter] = useState("ALL");
+  const [sortBy, setSortBy] = useState("newest");
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [openMenuId, setOpenMenuId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [deleteTarget, setDeleteTarget] = useState<{
+    id: string;
+    title: string;
+  } | null>(null);
+  const [deleteMessage, setDeleteMessage] = useState("");
 
   async function fetchCourses() {
     setLoading(true);
     setError("");
 
     try {
-      // Use cache-busting timestamp to always guarantee live database state
       const response = await fetch(`/api/admin/courses?_t=${Date.now()}`, {
         cache: "no-store",
       });
 
       if (!response.ok) {
-        throw new Error("Failed to fetch courses from database.");
+        throw new Error("Unable to load courses right now.");
       }
 
       const data: Course[] = await response.json();
       setCourses(data);
     } catch (err) {
       console.error("Error loading courses:", err);
-      setError("Unable to load courses. Please check your database connection.");
+      setError("Unable to load courses right now. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -128,14 +153,22 @@ export default function CourseManager() {
     fetchCourses();
   }, []);
 
-  // Compute live statistics strictly from database courses
+  useEffect(() => {
+    if (!openMenuId) return;
+    const close = () => setOpenMenuId(null);
+    window.addEventListener("click", close);
+    return () => window.removeEventListener("click", close);
+  }, [openMenuId]);
+
   const stats = useMemo(() => {
     const activeCourses = courses.filter((c) => c.status !== "ARCHIVED");
     const published = courses.filter((c) => c.status === "PUBLISHED").length;
     const draft = courses.filter((c) => c.status === "DRAFT").length;
     const totalLessons = activeCourses.reduce(
       (sum, c) =>
-        sum + (c.modules?.reduce((mSum, m) => mSum + (m.lessons?.length || 0), 0) || 0),
+        sum +
+        (c.modules?.reduce((mSum, m) => mSum + (m.lessons?.length || 0), 0) ||
+          0),
       0,
     );
 
@@ -147,7 +180,6 @@ export default function CourseManager() {
     };
   }, [courses]);
 
-  // Client-side filtering on live data
   const filteredCourses = useMemo(() => {
     let result = [...courses];
 
@@ -168,121 +200,151 @@ export default function CourseManager() {
     }
 
     if (categoryFilter !== "ALL") {
-      result = result.filter((c) => {
-        const cat = getCategory(c).name.toLowerCase();
-        return cat.includes(categoryFilter.toLowerCase());
-      });
+      result = result.filter((c) =>
+        getCategory(c).name.toLowerCase().includes(categoryFilter.toLowerCase()),
+      );
+    }
+
+    if (sortBy === "oldest") {
+      result.sort(
+        (a, b) =>
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+      );
+    } else if (sortBy === "price-asc") {
+      result.sort((a, b) => Number(a.price) - Number(b.price));
+    } else if (sortBy === "price-desc") {
+      result.sort((a, b) => Number(b.price) - Number(a.price));
+    } else {
+      result.sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+      );
     }
 
     return result;
-  }, [courses, query, statusFilter, categoryFilter]);
+  }, [courses, query, statusFilter, categoryFilter, sortBy]);
 
   return (
-    <div className="mx-auto max-w-[1400px] space-y-7">
-      {/* Dashboard Header Banner */}
-      <div className="relative overflow-hidden rounded-2xl border border-[#3d3224]/50 bg-gradient-to-r from-[#171410] via-[#12110f] to-[#1c1813] p-6 sm:p-8">
-        <div className="pointer-events-none absolute -right-10 -top-10 h-64 w-64 rounded-full bg-[#d8b16d]/10 blur-3xl" />
-        <div className="pointer-events-none absolute bottom-0 right-1/4 h-32 w-80 bg-gradient-to-t from-[#c9a66a]/10 to-transparent blur-2xl" />
+    <div className="animate-kbc-in mx-auto max-w-[1440px] space-y-6">
+      {/* Page Heading */}
+      <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+        <div>
+          <h1 className="font-serif text-3xl font-semibold tracking-wide text-white sm:text-4xl">
+            Our Courses
+          </h1>
+          <p className="mt-1 text-xs text-[#BDB4A7] sm:text-sm">
+            Empower your skills with expert-led beauty education
+          </p>
+        </div>
 
-        <div className="relative flex flex-col justify-between gap-5 sm:flex-row sm:items-center">
+        <Link href="/admin/courses/new" className="kbc-gold-btn">
+          <span className="text-sm leading-none">+</span>
+          <span>Add Course</span>
+        </Link>
+      </div>
+
+      {/* Statistics Row */}
+      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+        <div className="kbc-gold-card flex items-center gap-4 rounded-2xl p-4">
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-[#D6AD65]/35 bg-[#211A12] text-[#F1D69A]">
+            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
+            </svg>
+          </div>
           <div>
-            <div className="mb-2 flex items-center gap-2 text-xs uppercase tracking-[.25em] text-[#c9a66a]">
-              <span className="h-px w-6 bg-[#c9a66a]" />
-              KBC Salon Academy
-            </div>
-            <h1 className="font-serif text-3xl font-medium tracking-wide text-[#f4e5c5] sm:text-4xl">
-              Courses
-            </h1>
-            <p className="mt-1.5 text-xs text-[#8a857b] sm:text-sm">
-              Manage your academy&apos;s courses, modules, and video curriculum
+            <p className="text-xs text-[#BDB4A7]">Total Courses</p>
+            <p className="mt-0.5 font-serif text-2xl font-semibold text-white">
+              {stats.total}
             </p>
           </div>
-
-          <Link
-            href="/admin/courses/new"
-            className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#d5a45a] to-[#f0cf91] px-5 py-3 text-xs font-semibold text-[#1a140d] shadow-lg shadow-[#c9a66a]/20 transition hover:brightness-110 active:scale-[0.98]"
-          >
-            <span>+</span>
-            <span>Add Course</span>
-          </Link>
         </div>
-      </div>
 
-      {/* Real Statistics Bar (computed purely from live database data) */}
-      <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-4">
-        {/* Total Courses */}
-        <div className="flex items-center gap-3.5 rounded-2xl border border-[#26211b] bg-[#121110] p-4 transition hover:border-[#3d3224]">
-          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[#d8b16d]/30 bg-[#c9a66a]/10 text-base text-[#d8b16d]">
-            📖
+        <div className="kbc-gold-card flex items-center gap-4 rounded-2xl p-4">
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-emerald-500/35 bg-emerald-950/50 text-emerald-300">
+            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
           </div>
-          <div className="min-w-0">
-            <p className="truncate text-xs text-[#8a857b]">Total Courses</p>
-            <p className="font-serif text-xl font-semibold text-[#f4e5c5]">{stats.total}</p>
+          <div>
+            <p className="text-xs text-[#BDB4A7]">Published</p>
+            <p className="mt-0.5 font-serif text-2xl font-semibold text-white">
+              {stats.published}
+            </p>
           </div>
         </div>
 
-        {/* Published */}
-        <div className="flex items-center gap-3.5 rounded-2xl border border-[#26211b] bg-[#121110] p-4 transition hover:border-[#3d3224]">
-          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-emerald-500/30 bg-emerald-500/10 text-base text-emerald-400">
-            ▶
+        <div className="kbc-gold-card flex items-center gap-4 rounded-2xl p-4">
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-[#D6AD65]/35 bg-[#211A12] text-[#D6AD65]">
+            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125" />
+            </svg>
           </div>
-          <div className="min-w-0">
-            <p className="truncate text-xs text-[#8a857b]">Published</p>
-            <p className="font-serif text-xl font-semibold text-[#f4e5c5]">{stats.published}</p>
-          </div>
-        </div>
-
-        {/* Draft */}
-        <div className="flex items-center gap-3.5 rounded-2xl border border-[#26211b] bg-[#121110] p-4 transition hover:border-[#3d3224]">
-          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-amber-500/30 bg-amber-500/10 text-base text-amber-400">
-            📄
-          </div>
-          <div className="min-w-0">
-            <p className="truncate text-xs text-[#8a857b]">Draft</p>
-            <p className="font-serif text-xl font-semibold text-[#f4e5c5]">{stats.draft}</p>
+          <div>
+            <p className="text-xs text-[#BDB4A7]">Draft</p>
+            <p className="mt-0.5 font-serif text-2xl font-semibold text-white">
+              {stats.draft}
+            </p>
           </div>
         </div>
 
-        {/* Total Lessons */}
-        <div className="flex items-center gap-3.5 rounded-2xl border border-[#26211b] bg-[#121110] p-4 transition hover:border-[#3d3224]">
-          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[#c9a66a]/30 bg-[#c9a66a]/10 text-base text-[#c9a66a]">
-            🎬
+        <div className="kbc-gold-card flex items-center gap-4 rounded-2xl p-4">
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-[#D6AD65]/35 bg-[#211A12] text-[#F1D69A]">
+            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15.91 11.672a.375.375 0 010 .656l-5.603 3.113a.375.375 0 01-.557-.328V8.887c0-.286.307-.466.557-.327l5.603 3.112z" />
+            </svg>
           </div>
-          <div className="min-w-0">
-            <p className="truncate text-xs text-[#8a857b]">Curriculum Lessons</p>
-            <p className="font-serif text-xl font-semibold text-[#f4e5c5]">{stats.lessons}</p>
+          <div>
+            <p className="text-xs text-[#BDB4A7]">Total Lessons</p>
+            <p className="mt-0.5 font-serif text-2xl font-semibold text-white">
+              {stats.lessons}
+            </p>
           </div>
         </div>
       </div>
 
-      {/* Search & Filter Controls */}
-      <div className="flex flex-col gap-3 rounded-2xl border border-[#26211b] bg-[#121110] p-3.5 sm:flex-row sm:items-center">
-        {/* Search */}
+      {/* Filter, Sort & View Toggle Bar */}
+      <div className="flex flex-col gap-3 rounded-2xl border border-[#D6AD65]/20 bg-[#15120F] p-3.5 sm:flex-row sm:items-center">
         <div className="relative flex-1">
           <svg
-            className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[#736c62]"
+            className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[#BDB4A7]/70"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
             strokeWidth={2}
           >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
+            />
           </svg>
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search by course title, code, or description..."
-            className="w-full rounded-xl border border-[#2e2720] bg-[#0c0c0b] py-2.5 pl-10 pr-4 text-xs text-[#e8dfd1] outline-none placeholder:text-[#666056] transition focus:border-[#d8b16d]/60"
+            placeholder="Search courses by name or code..."
+            className="w-full rounded-xl border border-[#D6AD65]/20 bg-[#090807] py-2 pl-10 pr-4 text-xs text-white outline-none placeholder:text-[#BDB4A7]/60 transition focus:border-[#D6AD65]"
           />
         </div>
 
-        {/* Filters */}
         <div className="flex flex-wrap items-center gap-2.5">
-          {/* Status Filter */}
+          <select
+            value={categoryFilter}
+            onChange={(e) => setCategoryFilter(e.target.value)}
+            className="rounded-xl border border-[#D6AD65]/20 bg-[#090807] px-3.5 py-2 text-xs text-white outline-none transition focus:border-[#D6AD65]"
+          >
+            <option value="ALL">All Categories</option>
+            <option value="makeup">Makeup</option>
+            <option value="hair">Hair</option>
+            <option value="nail">Nails</option>
+            <option value="skin">Skincare</option>
+            <option value="bridal">Bridal</option>
+          </select>
+
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="rounded-xl border border-[#2e2720] bg-[#0c0c0b] px-3.5 py-2.5 text-xs text-[#d8d2c6] outline-none transition focus:border-[#d8b16d]/60"
+            className="rounded-xl border border-[#D6AD65]/20 bg-[#090807] px-3.5 py-2 text-xs text-white outline-none transition focus:border-[#D6AD65]"
           >
             <option value="ALL">All Status</option>
             <option value="PUBLISHED">Published</option>
@@ -290,81 +352,111 @@ export default function CourseManager() {
             <option value="ARCHIVED">Archived</option>
           </select>
 
-          {/* Category Filter */}
           <select
-            value={categoryFilter}
-            onChange={(e) => setCategoryFilter(e.target.value)}
-            className="rounded-xl border border-[#2e2720] bg-[#0c0c0b] px-3.5 py-2.5 text-xs text-[#d8d2c6] outline-none transition focus:border-[#d8b16d]/60"
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+            className="rounded-xl border border-[#D6AD65]/20 bg-[#090807] px-3.5 py-2 text-xs text-white outline-none transition focus:border-[#D6AD65]"
           >
-            <option value="ALL">All Categories</option>
-            <option value="makeup">Makeup</option>
-            <option value="hair">Hair Styling</option>
-            <option value="nail">Nail Art</option>
-            <option value="skin">Skincare</option>
+            <option value="newest">Newest First</option>
+            <option value="oldest">Oldest First</option>
+            <option value="price-asc">Price: Low to High</option>
+            <option value="price-desc">Price: High to Low</option>
           </select>
 
-          {/* Refresh Button */}
-          <button
-            onClick={fetchCourses}
-            title="Refresh from database"
-            className="flex items-center gap-1.5 rounded-xl border border-[#2e2720] bg-[#0c0c0b] px-3.5 py-2.5 text-xs text-[#c9a66a] transition hover:bg-[#1a1713] hover:border-[#c9a66a]/40"
+          <div
+            className="flex items-center rounded-xl border border-[#D6AD65]/25 bg-[#090807] p-0.5"
+            role="group"
+            aria-label="View mode"
           >
-            <span>🔄</span>
-            <span className="hidden sm:inline">Refresh</span>
-          </button>
+            <button
+              type="button"
+              onClick={() => setViewMode("grid")}
+              aria-label="Grid view"
+              className={`rounded-lg p-1.5 transition ${
+                viewMode === "grid"
+                  ? "bg-gradient-to-r from-[#D6AD65] to-[#F1D69A] text-[#090807]"
+                  : "text-[#BDB4A7] hover:text-white"
+              }`}
+            >
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+              </svg>
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewMode("list")}
+              aria-label="List view"
+              className={`rounded-lg p-1.5 transition ${
+                viewMode === "list"
+                  ? "bg-gradient-to-r from-[#D6AD65] to-[#F1D69A] text-[#090807]"
+                  : "text-[#BDB4A7] hover:text-white"
+              }`}
+            >
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Course Cards Grid */}
+      {deleteMessage && (
+        <div className="animate-kbc-in flex items-center justify-between rounded-xl border border-emerald-500/30 bg-emerald-950/50 px-4 py-3 text-xs text-emerald-300">
+          <span>✓ {deleteMessage}</span>
+          <button
+            type="button"
+            onClick={() => setDeleteMessage("")}
+            className="text-emerald-300/80 hover:text-white"
+          >
+            ✕
+          </button>
+        </div>
+      )}
+
+      {/* Course Cards / List */}
       {loading ? (
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {[1, 2, 3].map((n) => (
             <div
               key={n}
-              className="animate-pulse overflow-hidden rounded-2xl border border-[#26211b] bg-[#121110]"
+              className="animate-pulse overflow-hidden rounded-2xl border border-[#D6AD65]/15 bg-[#1B1713]"
             >
-              <div className="h-48 w-full bg-[#1c1a17]" />
-              <div className="p-5 space-y-3">
-                <div className="h-4 w-3/4 rounded bg-[#1c1a17]" />
-                <div className="h-3 w-full rounded bg-[#181614]" />
-                <div className="h-3 w-1/2 rounded bg-[#181614]" />
-                <div className="h-8 rounded bg-[#181614] mt-4" />
+              <div className="h-44 w-full bg-[#211A12]" />
+              <div className="space-y-3 p-5">
+                <div className="h-4 w-3/4 rounded bg-[#211A12]" />
+                <div className="h-3 w-full rounded bg-[#15120F]" />
+                <div className="h-8 rounded bg-[#15120F]" />
               </div>
             </div>
           ))}
         </div>
       ) : error ? (
-        <div className="rounded-2xl border border-rose-500/20 bg-rose-500/5 p-12 text-center">
+        <div className="kbc-gold-card rounded-2xl p-12 text-center">
           <p className="text-sm font-medium text-rose-300">{error}</p>
-          <button
-            onClick={fetchCourses}
-            className="mt-4 rounded-xl border border-[#c9a66a]/40 bg-[#c9a66a]/10 px-5 py-2.5 text-xs font-medium text-[#d8b16d] transition hover:bg-[#c9a66a]/20"
-          >
+          <button onClick={fetchCourses} className="kbc-outline-btn mt-4">
             Try Again
           </button>
         </div>
       ) : filteredCourses.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-[#3d3224]/50 bg-[#121110] p-16 text-center">
-          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#c9a66a]/10 text-2xl text-[#c9a66a]">
+        <div className="rounded-2xl border border-dashed border-[#D6AD65]/30 bg-[#15120F] p-14 text-center">
+          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-[#211A12] text-xl text-[#D6AD65]">
             ✦
           </div>
-          <h3 className="font-serif text-xl font-medium text-[#f4e5c5]">
-            {courses.length === 0 ? "No Courses Created Yet" : "No Matching Courses Found"}
-          </h3>
-          <p className="mx-auto mt-2 max-w-md text-xs text-[#8a857b]">
+          <h3 className="font-serif text-xl font-medium text-white">
             {courses.length === 0
-              ? "Start building your academy by adding your first luxury beauty course."
-              : "Try clearing your search query or switching your status/category filter."}
+              ? "No Courses Created Yet"
+              : "No Matching Courses Found"}
+          </h3>
+          <p className="mx-auto mt-2 max-w-md text-xs text-[#BDB4A7]">
+            {courses.length === 0
+              ? "Create your first luxury beauty course to start building modules and video lessons."
+              : "Try clearing your search or switching your filters."}
           </p>
-
-          <div className="mt-6">
+          <div className="mt-5">
             {courses.length === 0 ? (
-              <Link
-                href="/admin/courses/new"
-                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#d5a45a] to-[#f0cf91] px-5 py-2.5 text-xs font-semibold text-[#1a140d] shadow-lg shadow-[#c9a66a]/20 transition hover:brightness-110"
-              >
+              <Link href="/admin/courses/new" className="kbc-gold-btn">
                 <span>+</span>
-                <span>Create Your First Course</span>
+                <span>Create First Course</span>
               </Link>
             ) : (
               <button
@@ -373,28 +465,121 @@ export default function CourseManager() {
                   setStatusFilter("ALL");
                   setCategoryFilter("ALL");
                 }}
-                className="rounded-xl border border-[#2e2720] bg-[#0c0c0b] px-4 py-2 text-xs text-[#d8b16d] hover:border-[#c9a66a]/40"
+                className="kbc-outline-btn"
               >
                 Reset Filters
               </button>
             )}
           </div>
         </div>
-      ) : (
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {filteredCourses.map((course) => {
+      ) : viewMode === "list" ? (
+        <div className="space-y-3">
+          {filteredCourses.map((course, idx) => {
             const cat = getCategory(course);
-            const moduleCount = course.modules?.length || 0;
             const lessonCount =
-              course.modules?.reduce((acc, m) => acc + (m.lessons?.length || 0), 0) || 0;
+              course.modules?.reduce(
+                (acc, m) => acc + (m.lessons?.length || 0),
+                0,
+              ) || 0;
 
             return (
               <div
                 key={course.id}
-                className="group relative flex flex-col overflow-hidden rounded-2xl border border-[#2e261d] bg-[#121110] transition-all duration-300 hover:border-[#c9a66a]/60 hover:shadow-[0_10px_35px_rgba(201,166,106,0.14)]"
+                style={{ animationDelay: `${Math.min(idx * 35, 250)}ms` }}
+                className="animate-kbc-in group flex flex-col justify-between gap-4 rounded-2xl border border-[#D6AD65]/20 bg-[#1B1713] p-4 transition-all duration-200 hover:border-[#D6AD65]/55 hover:bg-[#211A12] sm:flex-row sm:items-center"
               >
-                {/* Top Image Section */}
-                <div className="relative h-48 w-full overflow-hidden bg-[#0c0b0a]">
+                <div className="flex min-w-0 items-center gap-4">
+                  <div className="h-20 w-32 shrink-0 overflow-hidden rounded-xl border border-[#D6AD65]/20 bg-[#090807]">
+                    {course.imageUrl ? (
+                      <img
+                        src={course.imageUrl}
+                        alt={course.title}
+                        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center text-xl text-[#D6AD65]/40">
+                        ✦
+                      </div>
+                    )}
+                  </div>
+                  <div className="min-w-0 space-y-1.5">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <StatusBadge status={course.status} />
+                      <span
+                        className={`rounded-full border px-2 py-0.5 text-[10px] font-medium ${cat.style}`}
+                      >
+                        {cat.name}
+                      </span>
+                      <span className="font-mono text-[10px] text-[#D6AD65]">
+                        {course.courseCode}
+                      </span>
+                    </div>
+                    <Link
+                      href={`/admin/courses/${course.id}`}
+                      className="block truncate font-serif text-lg font-medium text-white transition group-hover:text-[#F1D69A]"
+                    >
+                      {course.title}
+                    </Link>
+                    <p className="text-xs text-[#BDB4A7]">
+                      {course.duration || "Self-paced"} · {lessonCount}{" "}
+                      {lessonCount === 1 ? "Lesson" : "Lessons"} ·{" "}
+                      <span className="font-semibold text-[#F1D69A]">
+                        {formatPrice(course.price)}
+                      </span>
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex shrink-0 items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => router.push(`/admin/courses/${course.id}`)}
+                    className="kbc-outline-btn !px-3 !py-1.5"
+                  >
+                    Curriculum
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      router.push(`/admin/courses/${course.id}/edit`)
+                    }
+                    className="kbc-outline-btn !px-3 !py-1.5"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setDeleteTarget({ id: course.id, title: course.title })
+                    }
+                    className="rounded-xl border border-rose-500/30 bg-[#090807] px-3 py-1.5 text-xs font-medium text-rose-300 transition hover:bg-rose-500/10"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {filteredCourses.map((course, idx) => {
+            const cat = getCategory(course);
+            const lessonCount =
+              course.modules?.reduce(
+                (acc, m) => acc + (m.lessons?.length || 0),
+                0,
+              ) || 0;
+            const menuOpen = openMenuId === course.id;
+
+            return (
+              <div
+                key={course.id}
+                style={{ animationDelay: `${Math.min(idx * 40, 280)}ms` }}
+                className="animate-kbc-in group relative flex flex-col overflow-hidden rounded-2xl border border-[#D6AD65]/25 bg-[#1B1713] shadow-[0_8px_28px_rgba(0,0,0,0.4)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#D6AD65]/60 hover:shadow-[0_14px_34px_rgba(214,173,101,0.14)]"
+              >
+                {/* Thumbnail */}
+                <div className="relative h-44 w-full overflow-hidden bg-[#090807]">
                   {course.imageUrl ? (
                     <img
                       src={course.imageUrl}
@@ -402,106 +587,130 @@ export default function CourseManager() {
                       className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                   ) : (
-                    <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#1b1712] via-[#12110f] to-[#0c0b0a]">
-                      <span className="text-4xl text-[#c9a66a]/30 transition-transform duration-500 group-hover:scale-110">
+                    <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#211A12] via-[#15120F] to-[#090807]">
+                      <span className="text-4xl text-[#D6AD65]/30 transition-transform duration-500 group-hover:scale-110">
                         ✦
                       </span>
                     </div>
                   )}
 
-                  {/* Gradient Fade Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#121110] via-transparent to-black/30" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#1B1713] via-transparent to-black/35" />
 
-                  {/* Top Badges */}
-                  <div className="absolute left-3.5 right-3.5 top-3.5 flex items-center justify-between">
-                    <span className={`rounded-full border px-2.5 py-0.5 text-[10px] font-semibold backdrop-blur-md ${cat.style}`}>
+                  <div className="absolute left-3.5 right-3.5 top-3.5 flex items-center justify-between gap-2">
+                    <span
+                      className={`rounded-full border px-2.5 py-0.5 text-[10px] font-medium backdrop-blur-md ${cat.style}`}
+                    >
                       {cat.name}
                     </span>
-
                     <StatusBadge status={course.status} />
-                  </div>
-
-                  {/* Course Code Chip at Bottom-Left of Image */}
-                  <div className="absolute bottom-2.5 left-3.5">
-                    <span className="rounded-lg border border-[#3d3224]/80 bg-[#0c0c0b]/80 px-2 py-0.5 text-[10px] font-mono tracking-wider text-[#d8b16d] backdrop-blur-sm">
-                      {course.courseCode}
-                    </span>
                   </div>
                 </div>
 
                 {/* Card Body */}
-                <div className="flex flex-1 flex-col justify-between p-5 space-y-4">
-                  <div>
-                    {/* Course Title */}
-                    <Link
-                      href={`/admin/courses/${course.id}`}
-                      className="block font-serif text-lg font-medium text-[#f4e5c5] transition group-hover:text-[#f0cf91] line-clamp-1"
-                    >
-                      {course.title}
-                    </Link>
-
-                    {/* Course Description */}
-                    <p className="mt-1.5 line-clamp-2 min-h-[32px] text-xs leading-relaxed text-[#8a857b]">
-                      {course.description || "Master professional salon and makeover techniques with KBC Academy."}
-                    </p>
-                  </div>
-
-                  {/* Course Specs Row */}
-                  <div className="space-y-2.5 border-t border-[#211d19] pt-3 text-xs">
-                    <div className="flex items-center justify-between text-[#8a857b]">
-                      <span className="flex items-center gap-1.5">
-                        <span>🕐</span>
-                        <span>{course.duration || "Self-paced"}</span>
-                      </span>
-
-                      <span className="flex items-center gap-1.5">
-                        <span>📚</span>
-                        <span>
-                          {moduleCount} {moduleCount === 1 ? "Module" : "Modules"} · {lessonCount}{" "}
-                          {lessonCount === 1 ? "Lesson" : "Lessons"}
-                        </span>
-                      </span>
+                <div className="flex flex-1 flex-col justify-between space-y-3.5 p-5">
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="min-w-0">
+                      <Link
+                        href={`/admin/courses/${course.id}`}
+                        className="line-clamp-1 block font-serif text-lg font-medium text-white transition group-hover:text-[#F1D69A]"
+                      >
+                        {course.title}
+                      </Link>
+                      <p className="mt-1 line-clamp-2 min-h-[32px] text-xs leading-relaxed text-[#BDB4A7]">
+                        {course.description ||
+                          "Master professional beauty and salon techniques with KBC Academy."}
+                      </p>
                     </div>
 
-                    {/* Price Row */}
-                    <div className="flex items-baseline justify-between pt-1">
-                      <span className="text-[11px] text-[#736c62]">Course Fee</span>
-                      <span className="font-serif text-lg font-semibold text-[#e2c18a]">
-                        {formatPrice(course.price)}
-                      </span>
+                    {/* More actions menu */}
+                    <div className="relative shrink-0">
+                      <button
+                        type="button"
+                        aria-label={`More actions for ${course.title}`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setOpenMenuId(menuOpen ? null : course.id);
+                        }}
+                        className="flex h-8 w-8 items-center justify-center rounded-lg border border-[#D6AD65]/20 bg-[#15120F] text-[#BDB4A7] transition hover:border-[#D6AD65]/50 hover:text-[#F1D69A]"
+                      >
+                        •••
+                      </button>
+
+                      {menuOpen && (
+                        <div
+                          onClick={(e) => e.stopPropagation()}
+                          className="animate-kbc-modal absolute right-0 top-9 z-20 w-44 overflow-hidden rounded-xl border border-[#D6AD65]/30 bg-[#15120F] py-1 shadow-2xl"
+                        >
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setOpenMenuId(null);
+                              router.push(`/admin/courses/${course.id}`);
+                            }}
+                            className="block w-full px-3.5 py-2 text-left text-xs text-white transition hover:bg-[#211A12] hover:text-[#F1D69A]"
+                          >
+                            Manage Curriculum
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setOpenMenuId(null);
+                              router.push(`/admin/courses/${course.id}/edit`);
+                            }}
+                            className="block w-full px-3.5 py-2 text-left text-xs text-white transition hover:bg-[#211A12] hover:text-[#F1D69A]"
+                          >
+                            Edit Course
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setOpenMenuId(null);
+                              setDeleteTarget({
+                                id: course.id,
+                                title: course.title,
+                              });
+                            }}
+                            className="block w-full px-3.5 py-2 text-left text-xs text-rose-300 transition hover:bg-rose-500/10"
+                          >
+                            Delete Course
+                          </button>
+                        </div>
+                      )}
                     </div>
                   </div>
 
-                  {/* Card Action Buttons Footer */}
-                  <div className="flex items-center gap-2 border-t border-[#211d19] pt-3.5">
-                    {/* Preview Course */}
+                  {/* Specs + Price */}
+                  <div className="flex items-center justify-between border-t border-[#D6AD65]/15 pt-3 text-xs text-[#BDB4A7]">
+                    <div className="flex items-center gap-3">
+                      <span>{course.duration || "Self-paced"}</span>
+                      <span>·</span>
+                      <span>
+                        {lessonCount}{" "}
+                        {lessonCount === 1 ? "Lesson" : "Lessons"}
+                      </span>
+                    </div>
+                    <span className="font-serif text-base font-semibold text-[#F1D69A]">
+                      {formatPrice(course.price)}
+                    </span>
+                  </div>
+
+                  {/* Quick Actions (fade in cleanly on hover / visible on touch) */}
+                  <div className="flex items-center gap-2 pt-1 transition-opacity duration-200 sm:opacity-90 sm:group-hover:opacity-100">
                     <button
                       type="button"
                       onClick={() => router.push(`/admin/courses/${course.id}`)}
-                      className="flex flex-1 items-center justify-center gap-1 rounded-xl border border-[#2e2720] bg-[#0c0c0b] py-2 text-xs font-medium text-[#c8bda9] transition hover:border-[#c9a66a]/60 hover:bg-[#1a1713] hover:text-[#f4e5c5]"
+                      className="kbc-outline-btn flex-1 !py-2"
                     >
-                      <span>👁</span>
-                      <span>Preview</span>
+                      Manage
                     </button>
-
-                    {/* Edit Course */}
                     <button
                       type="button"
-                      onClick={() => router.push(`/admin/courses/${course.id}/edit`)}
-                      className="flex flex-1 items-center justify-center gap-1 rounded-xl border border-[#2e2720] bg-[#0c0c0b] py-2 text-xs font-medium text-[#c8bda9] transition hover:border-[#c9a66a]/60 hover:bg-[#1a1713] hover:text-[#f4e5c5]"
+                      onClick={() =>
+                        router.push(`/admin/courses/${course.id}/edit`)
+                      }
+                      className="kbc-outline-btn flex-1 !py-2"
                     >
-                      <span>✏️</span>
-                      <span>Edit</span>
-                    </button>
-
-                    {/* Add/Manage Video Lesson Button */}
-                    <button
-                      type="button"
-                      title="Add video lesson"
-                      onClick={() => router.push(`/admin/courses/${course.id}/lessons/new`)}
-                      className="flex h-8 w-8 items-center justify-center rounded-xl border border-[#2e2720] bg-[#0c0c0b] text-xs text-[#c9a66a] transition hover:border-[#c9a66a] hover:bg-[#c9a66a]/15"
-                    >
-                      ▶
+                      Edit
                     </button>
                   </div>
                 </div>
@@ -509,6 +718,22 @@ export default function CourseManager() {
             );
           })}
         </div>
+      )}
+
+      {deleteTarget && (
+        <DeleteCourseModal
+          courseId={deleteTarget.id}
+          courseTitle={deleteTarget.title}
+          onClose={() => setDeleteTarget(null)}
+          onDeleted={() => {
+            const deletedTitle = deleteTarget.title;
+            const deletedId = deleteTarget.id;
+            setDeleteTarget(null);
+            setCourses((prev) => prev.filter((c) => c.id !== deletedId));
+            setDeleteMessage(`Course "${deletedTitle}" deleted successfully.`);
+            router.refresh();
+          }}
+        />
       )}
     </div>
   );

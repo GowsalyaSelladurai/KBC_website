@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { HttpError } from "@/lib/api";
+import { requireUser } from "@/lib/auth";
+import { parsePositiveIntId } from "@/lib/courses/validation";
 
 type Params = {
   id: string;
@@ -11,7 +14,16 @@ export async function PUT(
   { params }: { params: Params }
 ) {
   try {
-    const { id, moduleId } = params;
+    await requireUser(true);
+    const courseId = parsePositiveIntId(params.id);
+    const moduleId = parsePositiveIntId(params.moduleId);
+    if (courseId === null || moduleId === null) {
+      return NextResponse.json(
+        { error: "Invalid course or module ID" },
+        { status: 400 }
+      );
+    }
+
     const body = await request.json();
 
     if (!Array.isArray(body.lessonIds) || body.lessonIds.length === 0) {
@@ -21,19 +33,19 @@ export async function PUT(
       );
     }
 
-    if (
-      !body.lessonIds.every(
-        (lessonId: unknown) =>
-          typeof lessonId === "string" && lessonId.trim().length > 0
-      )
-    ) {
-      return NextResponse.json(
-        { error: "Every lesson ID must be a valid string" },
-        { status: 400 }
-      );
+    const parsedLessonIds: number[] = [];
+    for (const rawId of body.lessonIds) {
+      const parsed = parsePositiveIntId(rawId);
+      if (parsed === null) {
+        return NextResponse.json(
+          { error: "Every lesson ID must be a valid positive integer" },
+          { status: 400 }
+        );
+      }
+      parsedLessonIds.push(parsed);
     }
 
-    if (new Set(body.lessonIds).size !== body.lessonIds.length) {
+    if (new Set(parsedLessonIds).size !== parsedLessonIds.length) {
       return NextResponse.json(
         { error: "Duplicate lesson IDs are not allowed" },
         { status: 400 }
@@ -43,7 +55,7 @@ export async function PUT(
     const moduleExists = await prisma.module.findFirst({
       where: {
         id: moduleId,
-        courseId: id,
+        courseId,
       },
     });
 
@@ -59,7 +71,7 @@ export async function PUT(
       select: { id: true },
     });
 
-    if (existingLessons.length !== body.lessonIds.length) {
+    if (existingLessons.length !== parsedLessonIds.length) {
       return NextResponse.json(
         { error: "Submitted lesson IDs must include all lessons in this module" },
         { status: 400 }
@@ -68,7 +80,7 @@ export async function PUT(
 
     const existingIds = new Set(existingLessons.map((lesson) => lesson.id));
 
-    if (!body.lessonIds.every((lessonId: string) => existingIds.has(lessonId))) {
+    if (!parsedLessonIds.every((lessonId) => existingIds.has(lessonId))) {
       return NextResponse.json(
         { error: "One or more lesson IDs do not belong to this module" },
         { status: 400 }
@@ -76,7 +88,7 @@ export async function PUT(
     }
 
     await prisma.$transaction(
-      body.lessonIds.map((lessonId: string, index: number) =>
+      parsedLessonIds.map((lessonId, index) =>
         prisma.lesson.update({
           where: { id: lessonId },
           data: { sortOrder: index },
@@ -94,6 +106,12 @@ export async function PUT(
       lessons: reorderedLessons,
     });
   } catch (error) {
+    if (error instanceof HttpError) {
+      return NextResponse.json(
+        { error: error.message, message: error.message },
+        { status: error.status }
+      );
+    }
     console.error("Reorder lessons error:", error);
 
     return NextResponse.json(

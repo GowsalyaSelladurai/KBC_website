@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { HttpError } from "@/lib/api";
+import { requireUser } from "@/lib/auth";
+import { parsePositiveIntId } from "@/lib/courses/validation";
 import { getBunnyEmbedUrl } from "@/lib/bunny";
 
 type Params = {
@@ -13,14 +16,23 @@ export async function GET(
   { params }: { params: Params },
 ) {
   try {
-    const { id, moduleId, lessonId } = params;
+    await requireUser(true);
+    const courseId = parsePositiveIntId(params.id);
+    const moduleId = parsePositiveIntId(params.moduleId);
+    const lessonId = parsePositiveIntId(params.lessonId);
+    if (courseId === null || moduleId === null || lessonId === null) {
+      return NextResponse.json(
+        { error: "Invalid course, module, or lesson ID" },
+        { status: 400 },
+      );
+    }
 
     const lesson = await prisma.lesson.findFirst({
       where: {
         id: lessonId,
         moduleId,
         module: {
-          courseId: id,
+          courseId,
         },
       },
     });
@@ -57,6 +69,17 @@ export async function GET(
     );
 
     if (!bunnyResponse.ok) {
+      if (bunnyResponse.status === 404) {
+        return NextResponse.json(
+          {
+            exists: false,
+            videoStatus: "UNAVAILABLE",
+            error: "Video is unavailable or no longer exists in Bunny Stream.",
+          },
+          { status: 404 },
+        );
+      }
+
       console.error("Bunny status API error:", bunnyResponse.status);
 
       return NextResponse.json(
@@ -126,6 +149,12 @@ export async function GET(
       embedUrl: getBunnyEmbedUrl(libraryId, lesson.bunnyVideoId),
     });
   } catch (error) {
+    if (error instanceof HttpError) {
+      return NextResponse.json(
+        { error: error.message, message: error.message },
+        { status: error.status },
+      );
+    }
     console.error("Video status check error:", error);
 
     return NextResponse.json(

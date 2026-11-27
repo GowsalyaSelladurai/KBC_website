@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { mkdir, writeFile } from "fs/promises";
 import path from "path";
 import { randomUUID } from "crypto";
+import { HttpError } from "@/lib/api";
+import { requireUser } from "@/lib/auth";
 
 export const runtime = "nodejs";
 
@@ -42,6 +44,7 @@ function detectImageType(buffer: Buffer): string | null {
 
 export async function POST(request: NextRequest) {
   try {
+    await requireUser(true);
     const formData = await request.formData();
     const file = formData.get("file");
 
@@ -104,6 +107,12 @@ export async function POST(request: NextRequest) {
       { status: 201 }
     );
   } catch (error) {
+    if (error instanceof HttpError) {
+      return NextResponse.json(
+        { error: error.message, message: error.message },
+        { status: error.status }
+      );
+    }
     console.error("Course image upload error:", error);
 
     return NextResponse.json(

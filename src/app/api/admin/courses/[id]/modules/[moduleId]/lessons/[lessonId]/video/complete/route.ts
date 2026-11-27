@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { HttpError } from "@/lib/api";
+import { requireUser } from "@/lib/auth";
+import { parsePositiveIntId } from "@/lib/courses/validation";
 import { deleteBunnyVideo, getBunnyVideo } from "@/lib/bunny";
 
 type Params = {
@@ -13,7 +16,16 @@ export async function POST(
   { params }: { params: Params },
 ) {
   try {
-    const { id, moduleId, lessonId } = params;
+    await requireUser(true);
+    const courseId = parsePositiveIntId(params.id);
+    const moduleId = parsePositiveIntId(params.moduleId);
+    const lessonId = parsePositiveIntId(params.lessonId);
+    if (courseId === null || moduleId === null || lessonId === null) {
+      return NextResponse.json(
+        { error: "Invalid course, module, or lesson ID" },
+        { status: 400 },
+      );
+    }
 
     let body: { videoId?: string } = {};
     try {
@@ -27,7 +39,7 @@ export async function POST(
         id: lessonId,
         moduleId,
         module: {
-          courseId: id,
+          courseId,
         },
       },
     });
@@ -132,6 +144,12 @@ export async function POST(
       lesson: updatedLesson,
     });
   } catch (error) {
+    if (error instanceof HttpError) {
+      return NextResponse.json(
+        { error: error.message, message: error.message },
+        { status: error.status },
+      );
+    }
     console.error("Video upload completion error:", error);
 
     return NextResponse.json(

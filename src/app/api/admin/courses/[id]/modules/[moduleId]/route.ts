@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { HttpError } from "@/lib/api";
+import { requireUser } from "@/lib/auth";
+import { parsePositiveIntId } from "@/lib/courses/validation";
 
 type RouteContext = {
   params: {
@@ -14,6 +17,16 @@ export async function PUT(
   { params }: RouteContext
 ) {
   try {
+    await requireUser(true);
+    const courseId = parsePositiveIntId(params.id);
+    const moduleId = parsePositiveIntId(params.moduleId);
+    if (courseId === null || moduleId === null) {
+      return NextResponse.json(
+        { message: "Invalid course or module ID." },
+        { status: 400 }
+      );
+    }
+
     const body = await request.json();
 
     const title =
@@ -28,8 +41,8 @@ export async function PUT(
 
     const existingModule = await prisma.module.findFirst({
       where: {
-        id: params.moduleId,
-        courseId: params.id,
+        id: moduleId,
+        courseId,
       },
     });
 
@@ -42,7 +55,7 @@ export async function PUT(
 
     const updatedModule = await prisma.module.update({
       where: {
-        id: params.moduleId,
+        id: moduleId,
       },
       data: {
         title,
@@ -58,6 +71,12 @@ export async function PUT(
 
     return NextResponse.json(updatedModule);
   } catch (error) {
+    if (error instanceof HttpError) {
+      return NextResponse.json(
+        { error: error.message, message: error.message },
+        { status: error.status }
+      );
+    }
     console.error("PUT module error:", error);
 
     return NextResponse.json(
@@ -73,10 +92,20 @@ export async function DELETE(
   { params }: RouteContext
 ) {
   try {
+    await requireUser(true);
+    const courseId = parsePositiveIntId(params.id);
+    const moduleId = parsePositiveIntId(params.moduleId);
+    if (courseId === null || moduleId === null) {
+      return NextResponse.json(
+        { message: "Invalid course or module ID." },
+        { status: 400 }
+      );
+    }
+
     const existingModule = await prisma.module.findFirst({
       where: {
-        id: params.moduleId,
-        courseId: params.id,
+        id: moduleId,
+        courseId,
       },
       select: {
         id: true,
@@ -92,7 +121,7 @@ export async function DELETE(
 
     await prisma.module.delete({
       where: {
-        id: params.moduleId,
+        id: moduleId,
       },
     });
 
@@ -100,6 +129,12 @@ export async function DELETE(
       message: "Module and its lessons deleted successfully.",
     });
   } catch (error) {
+    if (error instanceof HttpError) {
+      return NextResponse.json(
+        { error: error.message, message: error.message },
+        { status: error.status }
+      );
+    }
     console.error("DELETE module error:", error);
 
     return NextResponse.json(

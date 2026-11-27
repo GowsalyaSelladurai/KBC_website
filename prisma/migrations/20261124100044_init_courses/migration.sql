@@ -1,4 +1,4 @@
-Select-String -Path .\src\components\admin\courses\CurriculumManager.tsx -Pattern "LessonVideoUploader|videoUploadLessonId|Upload Video"-- CreateEnum
+
 CREATE TYPE "CourseStatus" AS ENUM ('DRAFT', 'PUBLISHED', 'ARCHIVED');
 
 -- CreateEnum

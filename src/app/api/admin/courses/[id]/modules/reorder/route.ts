@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { HttpError } from "@/lib/api";
+import { requireUser } from "@/lib/auth";
+import { parsePositiveIntId } from "@/lib/courses/validation";
 
 type Params = {
   id: string;
@@ -10,7 +13,15 @@ export async function PUT(
   { params }: { params: Params }
 ) {
   try {
-    const { id } = params;
+    await requireUser(true);
+    const courseId = parsePositiveIntId(params.id);
+    if (courseId === null) {
+      return NextResponse.json(
+        { error: "Invalid course ID" },
+        { status: 400 }
+      );
+    }
+
     const body = await request.json();
 
     if (!Array.isArray(body.moduleIds) || body.moduleIds.length === 0) {
@@ -20,19 +31,19 @@ export async function PUT(
       );
     }
 
-    if (
-      !body.moduleIds.every(
-        (moduleId: unknown) =>
-          typeof moduleId === "string" && moduleId.trim().length > 0
-      )
-    ) {
-      return NextResponse.json(
-        { error: "Every module ID must be a valid string" },
-        { status: 400 }
-      );
+    const parsedModuleIds: number[] = [];
+    for (const rawId of body.moduleIds) {
+      const parsed = parsePositiveIntId(rawId);
+      if (parsed === null) {
+        return NextResponse.json(
+          { error: "Every module ID must be a valid positive integer" },
+          { status: 400 }
+        );
+      }
+      parsedModuleIds.push(parsed);
     }
 
-    if (new Set(body.moduleIds).size !== body.moduleIds.length) {
+    if (new Set(parsedModuleIds).size !== parsedModuleIds.length) {
       return NextResponse.json(
         { error: "Duplicate module IDs are not allowed" },
         { status: 400 }
@@ -40,7 +51,7 @@ export async function PUT(
     }
 
     const existingModules = await prisma.module.findMany({
-      where: { courseId: id },
+      where: { courseId },
       select: { id: true },
     });
 
@@ -51,7 +62,7 @@ export async function PUT(
       );
     }
 
-    if (existingModules.length !== body.moduleIds.length) {
+    if (existingModules.length !== parsedModuleIds.length) {
       return NextResponse.json(
         { error: "Submitted module IDs must include all modules in this course" },
         { status: 400 }
@@ -60,7 +71,7 @@ export async function PUT(
 
     const existingIds = new Set(existingModules.map((module) => module.id));
 
-    if (!body.moduleIds.every((moduleId: string) => existingIds.has(moduleId))) {
+    if (!parsedModuleIds.every((moduleId) => existingIds.has(moduleId))) {
       return NextResponse.json(
         { error: "One or more module IDs do not belong to this course" },
         { status: 400 }
@@ -68,7 +79,7 @@ export async function PUT(
     }
 
     await prisma.$transaction(
-      body.moduleIds.map((moduleId: string, index: number) =>
+      parsedModuleIds.map((moduleId, index) =>
         prisma.module.update({
           where: { id: moduleId },
           data: { sortOrder: index },
@@ -77,7 +88,7 @@ export async function PUT(
     );
 
     const reorderedModules = await prisma.module.findMany({
-      where: { courseId: id },
+      where: { courseId },
       orderBy: { sortOrder: "asc" },
       include: {
         lessons: {
@@ -91,6 +102,12 @@ export async function PUT(
       modules: reorderedModules,
     });
   } catch (error) {
+    if (error instanceof HttpError) {
+      return NextResponse.json(
+        { error: error.message, message: error.message },
+        { status: error.status }
+      );
+    }
     console.error("Reorder modules error:", error);
 
     return NextResponse.json(

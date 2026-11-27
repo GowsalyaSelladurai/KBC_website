@@ -1,9 +1,87 @@
-import { courses, students, liveClasses, getCourse } from "@/data/mock";
-export default function Dashboard() {
-  const kpi = [[students.length + 42, "Students"], [courses.length, "Courses"], ["₹1.2L", "Revenue"], [liveClasses.length, "Upcoming live"]];
-  return (<div><h1 className="mb-5 text-3xl font-bold">Dashboard</h1>
-    <div className="mb-5 grid grid-cols-2 gap-4 lg:grid-cols-4">{kpi.map(([v, l]) => <div key={l} className="card"><b className="font-serif text-3xl text-gold">{v}</b><p className="text-sm text-mute">{l}</p></div>)}</div>
-    <div className="card mb-5"><h3 className="mb-3">Enrolments this week</h3><div className="flex h-36 items-end gap-3">{[40, 65, 30, 80, 55, 90, 60].map((h, i) => (
-      <div key={i} className="flex flex-1 flex-col items-center gap-1"><div className="w-full rounded-t-md bg-gradient-to-b from-gold to-[#8c8750]" style={{ height: `${h}%` }} /><span className="text-xs text-mute">{"MTWTFSS"[i]}</span></div>))}</div></div>
-    <div className="card"><h3 className="mb-2">Recent enrolments</h3>{students.map((s) => <div key={s.id} className="flex items-center justify-between border-t border-line py-2.5 text-sm"><div><b>{s.name}</b><p className="text-mute">{s.courses.map((i) => getCourse(i)?.name).join(", ")}</p></div><span className="tag">Active</span></div>)}</div></div>);
+import Link from "next/link";
+import { prisma } from "@/lib/prisma";
+
+export const dynamic = "force-dynamic";
+
+export default async function Dashboard() {
+  const [totalCourses, publishedCourses, draftCourses, totalLessons, recentCourses] =
+    await Promise.all([
+      prisma.course.count({ where: { status: { not: "ARCHIVED" } } }),
+      prisma.course.count({ where: { status: "PUBLISHED" } }),
+      prisma.course.count({ where: { status: "DRAFT" } }),
+      prisma.lesson.count({
+        where: { module: { course: { status: { not: "ARCHIVED" } } } },
+      }),
+      prisma.course.findMany({
+        where: { status: { not: "ARCHIVED" } },
+        orderBy: { createdAt: "desc" },
+        take: 5,
+        select: {
+          id: true,
+          courseCode: true,
+          title: true,
+          status: true,
+          price: true,
+          _count: { select: { modules: true } },
+        },
+      }),
+    ]);
+
+  const kpi: [number, string][] = [
+    [totalCourses, "Active Courses"],
+    [publishedCourses, "Published"],
+    [draftCourses, "Drafts"],
+    [totalLessons, "Total Lessons"],
+  ];
+
+  return (
+    <div>
+      <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
+        <h1 className="text-3xl font-bold">Dashboard</h1>
+        <Link href="/admin/courses" className="btn btn-sm">
+          Manage Courses
+        </Link>
+      </div>
+
+      <div className="mb-5 grid grid-cols-2 gap-4 lg:grid-cols-4">
+        {kpi.map(([v, l]) => (
+          <div key={l} className="card">
+            <b className="font-serif text-3xl text-gold">{v}</b>
+            <p className="text-sm text-mute">{l}</p>
+          </div>
+        ))}
+      </div>
+
+      <div className="card">
+        <div className="mb-3 flex items-center justify-between">
+          <h3>Recent courses</h3>
+          <Link href="/admin/courses/new" className="text-xs text-gold hover:underline">
+            + Add Course
+          </Link>
+        </div>
+
+        {recentCourses.length === 0 ? (
+          <p className="py-6 text-center text-sm text-mute">
+            No courses created yet.
+          </p>
+        ) : (
+          recentCourses.map((c) => (
+            <Link
+              key={c.id}
+              href={`/admin/courses/${c.id}`}
+              className="flex items-center justify-between border-t border-line py-2.5 text-sm transition hover:bg-white/[0.02]"
+            >
+              <div>
+                <b>{c.title}</b>
+                <p className="text-mute">
+                  {c.courseCode} · {c._count.modules} modules
+                </p>
+              </div>
+              <span className="tag">{c.status}</span>
+            </Link>
+          ))
+        )}
+      </div>
+    </div>
+  );
 }

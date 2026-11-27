@@ -104,9 +104,9 @@ export default function PublishConfirmationPage() {
     );
   }
 
-  const totalModules = course.modules?.length ?? 3;
+  const totalModules = course.modules?.length ?? 0;
   const totalLessons =
-    course.modules?.reduce((t, m) => t + (m.lessons?.length ?? 0), 0) || 12;
+    course.modules?.reduce((t, m) => t + (m.lessons?.length ?? 0), 0) ?? 0;
 
   return (
     <div className="mx-auto max-w-4xl space-y-7 pb-10">
@@ -192,21 +192,23 @@ export default function PublishConfirmationPage() {
 
               <p className="flex items-center gap-2 text-xs text-[#8a857b]">
                 <span>🎓</span>
-                <span>Makeup · Beauty</span>
+                <span>{course.courseCode}</span>
               </p>
 
               <div className="flex flex-wrap items-center gap-4 pt-1 text-xs text-[#a9a296]">
                 <span className="flex items-center gap-1.5">
                   <span>🕐</span>
-                  <span>{course.duration || "7 Days"}</span>
+                  <span>{course.duration || "Not set"}</span>
                 </span>
                 <span className="flex items-center gap-1.5 font-medium text-[#e8dfd1]">
                   <span>₹</span>
                   <span>{formatPrice(course.price)}</span>
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <span>👥</span>
-                  <span>428 Enrolled</span>
+                  <span>📚</span>
+                  <span>
+                    {totalModules} Modules · {totalLessons} Lessons
+                  </span>
                 </span>
               </div>
             </div>
@@ -251,7 +253,7 @@ export default function PublishConfirmationPage() {
                   <span>Duration</span>
                 </span>
                 <span className="font-medium text-[#e8dfd1]">
-                  {course.duration || "7 Days"}
+                  {course.duration || "Not set"}
                 </span>
               </div>
 
