@@ -1,0 +1,391 @@
+generator client {
+  provider = "prisma-client-js"
+}
+ 
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+ 
+// =====================================================
+// ENUMS
+// =====================================================
+ 
+enum UserRole {
+  STUDENT @map("student")
+  ADMIN   @map("admin")
+ 
+  @@map("user_role")
+}
+ 
+enum UserStatus {
+  PENDING  @map("pending")
+  ACTIVE   @map("active")
+  DISABLED @map("disabled")
+ 
+  @@map("user_status")
+}
+ 
+enum CourseStatus {
+  DRAFT     @map("draft")
+  PUBLISHED @map("published")
+  ARCHIVED  @map("archived")
+ 
+  @@map("course_status")
+}
+ 
+enum VideoStatus {
+  NOT_UPLOADED @map("not_uploaded")
+  PROCESSING   @map("processing")
+  READY        @map("ready")
+  FAILED       @map("failed")
+ 
+  @@map("video_status")
+}
+ 
+enum EnrollmentSource {
+  ONLINE @map("online")
+  STAFF  @map("staff")
+ 
+  @@map("enrollment_source")
+}
+ 
+enum PaymentStatus {
+  PENDING @map("pending")
+  PAID    @map("paid")
+  FAILED  @map("failed")
+ 
+  @@map("payment_status")
+}
+ 
+enum PaymentProvider {
+  MOCK     @map("mock")
+  RAZORPAY @map("razorpay")
+  OFFLINE  @map("offline")
+ 
+  @@map("payment_provider")
+}
+ 
+enum OtpPurpose {
+  ACTIVATION     @map("activation")
+  PASSWORD_RESET @map("password_reset")
+ 
+  @@map("otp_purpose")
+}
+ 
+enum OtpChannel {
+  SMS   @map("sms")
+  EMAIL @map("email")
+ 
+  @@map("otp_channel")
+}
+ 
+// =====================================================
+// USER
+// =====================================================
+ 
+model User {
+  id           Int      @id @default(autoincrement())
+  name         String
+  email        String
+  phone        String?
+  passwordHash String?  @map("password_hash")
+  role         UserRole @default(STUDENT)
+  sessionId    String?  @map("session_id")
+  status       UserStatus @default(ACTIVE)
+ 
+  phoneVerifiedAt DateTime? @map("phone_verified_at") @db.Timestamptz
+  emailVerifiedAt DateTime? @map("email_verified_at") @db.Timestamptz
+  activatedAt     DateTime? @map("activated_at") @db.Timestamptz
+ 
+  enrollments   Enrollment[]
+  videoProgress VideoProgress[]
+  payments      Payment[]
+  otpCodes      OtpCode[]
+ 
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+ 
+  @@index([role])
+  @@index([status])
+  @@map("users")
+}
+ 
+// =====================================================
+// COURSE
+// =====================================================
+ 
+model Course {
+  id          Int      @id @default(autoincrement())
+  courseCode  String?  @unique @map("course_code")
+  title       String   @map("name")
+  description String?
+  imageUrl    String?  @map("image_url")
+  icon        String   @default("✨")
+  durationDays Int     @map("duration_days")
+  price       Decimal  @default(0) @db.Decimal(10, 2)
+  status      CourseStatus @default(DRAFT)
+  active      Boolean  @default(true)
+ 
+  learningPoints CourseLearningPoint[]
+  modules        Module[]
+  enrollments    Enrollment[]
+  liveClasses    LiveClass[]
+  recordings     Recording[]
+  payments       Payment[]
+ 
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
+ 
+  @@index([status])
+  @@index([title])
+  @@index([active])
+  @@map("courses")
+}
+ 
+// =====================================================
+// COURSE LEARNING POINTS
+// =====================================================
+ 
+model CourseLearningPoint {
+  id        Int    @id @default(autoincrement())
+  content   String
+  sortOrder Int    @default(0) @map("sort_order")
+  courseId  Int    @map("course_id")
+ 
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+ 
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+ 
+  @@index([courseId])
+  @@map("course_learning_points")
+}
+ 
+// =====================================================
+// MODULES
+// =====================================================
+ 
+model Module {
+  id        Int    @id @default(autoincrement())
+  title     String
+  sortOrder Int    @default(0) @map("sort_order")
+  courseId  Int    @map("course_id")
+ 
+  course  Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  lessons Lesson[]
+ 
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
+ 
+  @@index([courseId])
+  @@map("modules")
+}
+ 
+// =====================================================
+// LESSON / VIDEO
+// =====================================================
+ 
+model Lesson {
+  id          Int     @id @default(autoincrement())
+  title       String
+  description String?
+  sortOrder   Int     @default(1) @map("position")
+ 
+  durationSeconds Int? @map("duration_seconds")
+  durationMinutes Int? @map("duration_min")
+ 
+  isPreview     Boolean     @default(false) @map("is_preview")
+  bunnyVideoId  String?     @map("bunny_video_id")
+  videoStatus   VideoStatus @default(NOT_UPLOADED) @map("video_status")
+  pendingVideoId String?    @map("pending_video_id")
+ 
+  courseId Int? @map("course_id")
+  moduleId Int? @map("module_id")
+ 
+  module Module? @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+ 
+  videoProgress VideoProgress[]
+ 
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
+ 
+  @@index([moduleId])
+  @@index([courseId, sortOrder])
+  @@map("videos")
+}
+ 
+// =====================================================
+// ENROLLMENTS
+// =====================================================
+ 
+model Enrollment {
+  id Int @id @default(autoincrement())
+ 
+  userId Int @map("user_id")
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+ 
+  courseId Int    @map("course_id")
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+ 
+  source        EnrollmentSource @default(ONLINE)
+  paymentStatus PaymentStatus   @default(PAID) @map("payment_status")
+  paymentRef    String?         @map("payment_ref")
+ 
+  paymentId Int?     @map("payment_id")
+  payment   Payment? @relation(fields: [paymentId], references: [id], onDelete: SetNull)
+ 
+  enrolledAt DateTime @default(now()) @map("enrolled_at") @db.Timestamptz
+  expiresAt  DateTime @map("expires_at") @db.Timestamptz
+ 
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
+ 
+  @@unique([userId, courseId])
+  @@index([userId])
+  @@index([courseId])
+  @@index([paymentStatus])
+  @@index([expiresAt])
+  @@map("enrollments")
+}
+ 
+// =====================================================
+// VIDEO PROGRESS
+// =====================================================
+ 
+model VideoProgress {
+  id Int @id @default(autoincrement())
+ 
+  userId Int  @map("user_id")
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+ 
+  lessonId Int    @map("video_id")
+  lesson   Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+ 
+  completed   Boolean   @default(false)
+  completedAt DateTime? @map("completed_at") @db.Timestamptz
+ 
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
+ 
+  @@unique([userId, lessonId])
+  @@index([userId])
+  @@index([lessonId])
+  @@map("video_progress")
+}
+ 
+// =====================================================
+// LIVE CLASSES
+// =====================================================
+ 
+model LiveClass {
+  id        Int      @id @default(autoincrement())
+  title     String
+  startsAt  DateTime @map("starts_at") @db.Timestamptz
+  frequency String   @default("Weekly")
+  meetingUrl String? @map("meeting_url")
+ 
+  courseId Int?    @map("course_id")
+  course   Course? @relation(fields: [courseId], references: [id], onDelete: SetNull)
+ 
+  recordings Recording[]
+ 
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
+ 
+  @@index([startsAt])
+  @@index([courseId])
+  @@map("live_classes")
+}
+ 
+// =====================================================
+// RECORDINGS
+// =====================================================
+ 
+model Recording {
+  id Int @id @default(autoincrement())
+ 
+  liveClassId Int?       @map("live_class_id")
+  liveClass   LiveClass? @relation(fields: [liveClassId], references: [id], onDelete: SetNull)
+ 
+  title    String
+  videoUrl String? @map("video_url")
+ 
+  courseId Int?    @map("course_id")
+  course   Course? @relation(fields: [courseId], references: [id], onDelete: SetNull)
+ 
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
+ 
+  @@index([liveClassId])
+  @@index([courseId])
+  @@map("recordings")
+}
+ 
+// =====================================================
+// PAYMENTS
+// =====================================================
+ 
+model Payment {
+  id Int @id @default(autoincrement())
+ 
+  userId Int?  @map("user_id")
+  user   User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+ 
+  courseId Int?    @map("course_id")
+  course   Course? @relation(fields: [courseId], references: [id], onDelete: SetNull)
+ 
+  payerName  String @map("payer_name")
+  payerEmail String @map("payer_email")
+  payerPhone String @map("payer_phone")
+ 
+  amount   Decimal @db.Decimal(10, 2)
+  currency String  @default("INR")
+ 
+  provider          PaymentProvider
+  providerOrderId   String? @map("provider_order_id")
+  providerPaymentId String? @map("provider_payment_id")
+ 
+  status String @default("created")
+ 
+  source        EnrollmentSource @default(ONLINE)
+  reference      String?
+  failureReason  String?  @map("failure_reason")
+  accountCreated Boolean  @default(false) @map("account_created")
+ 
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  paidAt      DateTime? @map("paid_at") @db.Timestamptz
+  fulfilledAt DateTime? @map("fulfilled_at") @db.Timestamptz
+ 
+  enrollments Enrollment[]
+ 
+  @@index([userId])
+  @@index([status])
+  @@map("payments")
+}
+ 
+// =====================================================
+// OTP CODES
+// =====================================================
+ 
+model OtpCode {
+  id Int @id @default(autoincrement())
+ 
+  userId Int  @map("user_id")
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+ 
+  purpose     OtpPurpose @default(ACTIVATION)
+  channel     OtpChannel
+  destination String
+  codeHash    String     @map("code_hash")
+  expiresAt   DateTime   @map("expires_at") @db.Timestamptz
+ 
+  attempts   Int        @default(0)
+  verifiedAt DateTime?  @map("verified_at") @db.Timestamptz
+  usedAt     DateTime?  @map("used_at") @db.Timestamptz
+ 
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+ 
+  @@index([userId, purpose, createdAt])
+  @@map("otp_codes")
+}
+
