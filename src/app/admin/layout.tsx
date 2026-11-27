@@ -10,7 +10,7 @@ export default function Layout({
 }) {
   return (
     <AdminLayout>
-      <div className="kbc-admin-pages-theme min-h-screen bg-[#242424]">
+      <div className="kbc-admin-pages-theme min-h-screen bg-[#FAF5ED] text-[#242424]">
         {children}
       </div>
 

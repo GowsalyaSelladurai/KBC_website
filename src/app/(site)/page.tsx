@@ -2,6 +2,7 @@
 import Link from "next/link";
 import CourseBrowser from "@/components/CourseBrowser";
 import WelcomeBanner from "@/components/WelcomeBanner";
+import BeautyTransformation from "@/components/BeautyTransformation";
 import {
   Sparkles,
   GraduationCap,
@@ -134,7 +135,7 @@ const goldIcon =
   "grid h-14 w-14 shrink-0 place-items-center rounded-2xl border border-[#C9A45C]/60 bg-[#EFE8A8]/10 text-[#EFE8A8] transition-all duration-500 group-hover:rotate-6 group-hover:scale-110 group-hover:border-[#8C692C] group-hover:bg-[#17140D]/10 group-hover:text-[#5D4218] group-hover:shadow-[0_0_22px_rgba(100,70,20,0.2)] group-active:border-[#8C692C] group-active:bg-[#17140D]/10 group-active:text-[#5D4218]";
 
 const floatingCard =
-  "group relative rounded-2xl border border-[#C9A45C] bg-gradient-to-br from-[#252116] to-[#090908] p-4 text-[#FAF5ED] shadow-[0_0_25px_rgba(201,164,92,0.25)] transition-all duration-500 hover:-translate-y-1 hover:border-[#8C692C] hover:bg-gradient-to-br hover:from-[#FFF4CE] hover:via-[#E8D39A] hover:to-[#C9A45C] hover:text-[#17140D] hover:shadow-[0_0_25px_rgba(239,232,168,0.5)] active:border-[#8C692C] active:bg-gradient-to-br active:active:from-[#FFF4CE] active:text-[#17140D]";
+  "group relative rounded-2xl border border-[#C9A45C] bg-gradient-to-br from-[#252116] to-[#090908] p-4 text-[#FAF5ED] shadow-[0_0_25px_rgba(201,164,92,0.25)] transition-all duration-500 hover:-translate-y-1 hover:border-[#8C692C] hover:bg-gradient-to-br hover:from-[#FFF4CE] hover:via-[#E8D39A] hover:to-[#C9A45C] hover:text-[#17140D] hover:shadow-[0_0_25px_rgba(239,232,168,0.5)] active:border-[#8C692C] active:bg-gradient-to-br active:from-[#FFF4CE] active:text-[#17140D]";
 
 const lessonCard =
   "group flex items-center justify-between gap-3 rounded-xl border border-[#C9A45C]/50 bg-[#0C0B09] p-4 text-[#FAF5ED] transition-all duration-300 hover:border-[#8C692C] hover:bg-gradient-to-r hover:from-[#FFF4CE] hover:to-[#C9A45C] hover:text-[#17140D] hover:shadow-[0_0_18px_rgba(201,164,92,0.3)] active:border-[#8C692C] active:bg-gradient-to-r active:from-[#FFF4CE] active:to-[#C9A45C] active:text-[#17140D]";
@@ -283,7 +284,10 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 04. LEARNING JOURNEY */}
+      {/* 04. BEAUTY TRANSFORMATION SHOWCASE - NEW SECTION */}
+      <BeautyTransformation />
+
+      {/* 05. LEARNING JOURNEY */}
       <section className="relative overflow-hidden bg-[#090908] py-20 text-[#FAF5ED] md:py-24">
         <div className="pointer-events-none absolute -left-40 top-0 h-96 w-96 rounded-full bg-[#C9A45C]/15 blur-[100px]" />
         <div className="pointer-events-none absolute -right-40 bottom-0 h-96 w-96 rounded-full bg-[#EFE8A8]/10 blur-[100px]" />
@@ -338,7 +342,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 05. ONLINE LEARNING EXPERIENCE */}
+      {/* 06. ONLINE LEARNING EXPERIENCE */}
       <section className="relative py-20 md:py-28">
         <div className="wrap">
           <div className="grid items-center gap-14 lg:grid-cols-2">
@@ -361,25 +365,37 @@ export default function Home() {
                   </div>
                 </div>
 
-                <div className="relative overflow-hidden rounded-2xl border border-[#C9A45C]/50 bg-[#080807]">
-                  <img
-                    src="/kbc-salon-hero.png"
-                    alt="Beauty training video preview"
-                    className="h-56 w-full object-cover opacity-75 transition-transform duration-700 group-hover:scale-105"
-                  />
+                {/* STUDENT JOURNEY VIDEO */}
+                <div className="relative overflow-hidden rounded-2xl border border-[#C9A45C]/60 bg-[#080807] shadow-[0_0_25px_rgba(201,164,92,0.2)] transition-all duration-500 hover:border-[#EFE8A8] hover:shadow-[0_0_30px_rgba(239,232,168,0.35)]">
+                  <video
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    controls
+                    preload="metadata"
+                    poster="/kbc-salon-hero.png"
+                    aria-label="KBC student learning journey"
+                    className="h-56 w-full bg-black object-cover"
+                  >
+                    <source
+                      src="/videos/kbc-student-journey.mp4"
+                      type="video/mp4"
+                    />
+                    Your browser does not support HTML video.
+                  </video>
 
-                  <div className="absolute inset-0 grid place-items-center">
-                    <div className="grid h-16 w-16 place-items-center rounded-full border border-[#EFE8A8]/70 bg-black/40 text-[#EFE8A8] shadow-[0_0_25px_rgba(239,232,168,0.25)] backdrop-blur-md">
-                      <PlayCircle size={34} />
-                    </div>
+                  <div className="pointer-events-none absolute left-4 top-4 flex items-center gap-2 rounded-full border border-[#EFE8A8]/60 bg-black/60 px-3 py-2 text-[10px] font-bold uppercase tracking-widest text-[#EFE8A8] backdrop-blur-md">
+                    <span className="h-2 w-2 animate-pulse rounded-full bg-[#EFE8A8]" />
+                    Student Journey
                   </div>
 
-                  <div className="absolute bottom-4 left-4 text-white">
+                  <div className="pointer-events-none absolute bottom-4 left-4 right-4 text-white">
                     <p className="text-xs uppercase tracking-widest text-[#EFE8A8]">
-                      Online Course
+                      KBC Learning Studio
                     </p>
                     <p className="mt-1 font-serif text-xl">
-                      Professional Beauty Training
+                      From Passion to Profession
                     </p>
                   </div>
                 </div>
@@ -469,12 +485,16 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 06. LIVE MASTERCLASSES */}
+      {/* 07. LIVE MASTERCLASSES */}
       <section className="relative overflow-hidden bg-[#E8D8C5]/40 py-20 md:py-24">
-        <div className="wrap">
+        <div className="pointer-events-none absolute -left-32 top-0 h-80 w-80 rounded-full bg-[#EFE8A8]/30 blur-[100px]" />
+        <div className="pointer-events-none absolute -right-32 bottom-0 h-80 w-80 rounded-full bg-[#C9A45C]/20 blur-[100px]" />
+
+        <div className="wrap relative">
           <div className="grid items-center gap-10 lg:grid-cols-[1fr_1.1fr]">
             <div>
-              <span className="text-xs font-bold uppercase tracking-[0.3em] text-[#A7864B]">
+              <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.3em] text-[#A7864B]">
+                <Sparkles size={15} />
                 Beyond Recorded Lessons
               </span>
 
@@ -504,7 +524,7 @@ export default function Home() {
                     key={item}
                     className="flex items-center gap-3 text-sm text-[#655D52]"
                   >
-                    <CheckCircle2 size={18} className="text-[#A7864B]" />
+                    <CheckCircle2 size={18} className="shrink-0 text-[#A7864B]" />
                     {item}
                   </div>
                 ))}
@@ -512,41 +532,81 @@ export default function Home() {
 
               <Link
                 href="/courses"
-                className="mt-9 inline-flex items-center gap-2 rounded-full border border-[#C9A45C] px-7 py-4 text-sm font-bold text-[#8D6D34] transition hover:bg-[#EFE8A8]/60"
+                className="mt-9 inline-flex items-center gap-2 rounded-full border border-[#C9A45C] px-7 py-4 text-sm font-bold text-[#8D6D34] transition hover:bg-[#EFE8A8]/60 hover:shadow-[0_0_20px_rgba(201,164,92,0.2)]"
               >
-                Explore Learning Plans <ArrowRight size={17} />
+                Explore Learning Plans
+                <ArrowRight size={17} />
               </Link>
             </div>
 
-            <div className="group relative overflow-hidden rounded-[30px] border border-[#C9A45C] bg-[#090908] shadow-[0_20px_60px_rgba(0,0,0,0.3),0_0_25px_rgba(201,164,92,0.2)] transition-all duration-500 hover:-translate-y-1 hover:border-[#EFE8A8] hover:shadow-[0_0_30px_rgba(239,232,168,0.45),0_25px_65px_rgba(0,0,0,0.3)] active:border-[#EFE8A8]">
-              <img
-                src="/kbc-salon-hero.png"
-                alt="Professional beauty masterclass"
-                className="h-[420px] w-full object-cover transition duration-700 group-hover:scale-105 group-active:scale-105"
-              />
+            {/* CINEMATIC MASTERCLASS VIDEO */}
+            <div className="group relative">
+              <div className="absolute -inset-3 rounded-[36px] bg-gradient-to-br from-[#EFE8A8]/60 via-[#C9A45C]/30 to-[#8C692C]/40 opacity-70 blur-xl transition duration-700 group-hover:opacity-100" />
 
-              <div className="absolute inset-0 bg-gradient-to-t from-[#080807]/90 via-transparent to-transparent transition-all duration-500 group-hover:from-[#080807]/75" />
+              <div className="relative overflow-hidden rounded-[30px] border-[3px] border-[#C9A45C] bg-[#090908] p-2 shadow-[0_20px_60px_rgba(0,0,0,0.3),0_0_30px_rgba(201,164,92,0.3)] transition-all duration-500 group-hover:-translate-y-1 group-hover:border-[#EFE8A8] group-hover:shadow-[0_0_35px_rgba(239,232,168,0.5),0_25px_65px_rgba(0,0,0,0.3)]">
+                <div className="relative overflow-hidden rounded-[23px] bg-black">
+                  <video
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    controls
+                    preload="metadata"
+                    poster="/kbc-salon-hero.png"
+                    aria-label="KBC professional beauty masterclass"
+                    className="h-[320px] w-full bg-black object-cover sm:h-[380px] lg:h-[440px]"
+                  >
+                    <source
+                      src="/videos/kbc-beauty-masterclass.mp4"
+                      type="video/mp4"
+                    />
+                    Your browser does not support HTML video.
+                  </video>
 
-              <div className="absolute bottom-8 left-8 right-8 text-white">
-                <span className="inline-flex items-center gap-2 rounded-full border border-[#EFE8A8]/50 bg-black/50 px-4 py-2 text-xs font-semibold text-[#EFE8A8] backdrop-blur-md">
-                  <span className="h-2 w-2 animate-pulse rounded-full bg-[#EFE8A8]" />
-                  LIVE LEARNING EXPERIENCE
-                </span>
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/15" />
 
-                <h3 className="mt-5 font-serif text-3xl md:text-4xl">
-                  Discover The Art Of Beauty.
-                </h3>
-              </div>
+                  <div className="pointer-events-none absolute left-4 top-4 flex items-center gap-2 rounded-full border border-[#EFE8A8]/60 bg-black/65 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.2em] text-[#EFE8A8] shadow-lg backdrop-blur-md sm:left-6 sm:top-6">
+                    <span className="h-2 w-2 animate-pulse rounded-full bg-[#EFE8A8] shadow-[0_0_10px_#EFE8A8]" />
+                    KBC Beauty Masterclass
+                  </div>
 
-              <div className="absolute right-6 top-6 grid h-14 w-14 place-items-center rounded-2xl border border-[#EFE8A8]/60 bg-black/40 text-[#EFE8A8] backdrop-blur-md transition-all duration-500 group-hover:border-[#EFE8A8] group-hover:bg-[#EFE8A8] group-hover:text-[#17140D] group-hover:shadow-[0_0_25px_rgba(239,232,168,0.5)]">
-                <Video size={27} />
+                  <div className="pointer-events-none absolute bottom-12 left-5 right-5 sm:bottom-14 sm:left-8">
+                    <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#EFE8A8] sm:text-xs">
+                      Professional Beauty Training
+                    </span>
+
+                    <h3 className="mt-2 font-serif text-2xl leading-tight text-white sm:text-3xl md:text-4xl">
+                      The Art of Bridal Beauty.
+                    </h3>
+
+                    <p className="mt-2 max-w-md text-xs leading-6 text-white/75 sm:text-sm">
+                      Discover professional techniques, creativity
+                      and the beauty of transformation.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between gap-3 px-3 py-4 sm:px-5">
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#EFE8A8]">
+                      Learn. Practice. Create.
+                    </p>
+                    <p className="mt-1 text-[11px] text-white/50">
+                      Kavyas Beauty Centre
+                    </p>
+                  </div>
+
+                  <div className="grid h-11 w-11 shrink-0 place-items-center rounded-xl border border-[#C9A45C]/60 bg-[#EFE8A8]/10 text-[#EFE8A8] transition-all duration-300 group-hover:border-[#EFE8A8] group-hover:bg-[#EFE8A8] group-hover:text-[#17140D] group-hover:shadow-[0_0_20px_rgba(239,232,168,0.4)]">
+                    <Video size={22} />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 07. WHY CHOOSE KBC */}
+      {/* 08. WHY CHOOSE KBC */}
       <section className="bg-[#100F0C] py-20 text-[#FAF5ED] md:py-24">
         <div className="wrap">
           <div className="mx-auto mb-14 max-w-2xl text-center">
@@ -596,7 +656,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 08. FINAL CALL TO ACTION */}
+      {/* 09. FINAL CALL TO ACTION */}
       <section className="relative overflow-hidden bg-[#090908] py-24 text-center text-white md:py-32">
         <div className="pointer-events-none absolute -left-40 -top-40 h-96 w-96 rounded-full bg-[#C9A45C]/15 blur-[110px]" />
         <div className="pointer-events-none absolute -bottom-40 -right-40 h-96 w-96 rounded-full bg-[#EFE8A8]/10 blur-[110px]" />
