@@ -5,7 +5,6 @@ import { useEffect, useMemo, useState } from "react";
 import {
   ShieldCheck,
   ShieldAlert,
-  Shield,
   Lock,
   KeyRound,
   Smartphone,
@@ -16,28 +15,19 @@ import {
   Clock,
   CheckCircle2,
   AlertTriangle,
-  XCircle,
   Eye,
   EyeOff,
   Bell,
   LogOut,
-  Trash2,
   MoreVertical,
-  Plus,
   Search,
   X,
   ChevronRight,
   Fingerprint,
   Globe,
-  RefreshCw,
-  Settings,
-  Activity,
   Wifi,
   Copy,
   Check,
-  CalendarDays,
-  User,
-  History,
 } from "lucide-react";
 
 type DeviceType = "Desktop" | "Laptop" | "Mobile" | "Tablet";
@@ -158,6 +148,18 @@ const defaultSettings: SecuritySettings = {
   trustedDeviceOnly: false,
 };
 
+const cardClass =
+  "gold-ambient-card rounded-2xl border border-[#343832] bg-[#1B1F1D] p-5";
+
+const inputClass =
+  "w-full rounded-xl border border-[#3A403A] bg-[#151917] px-4 py-3 text-sm text-white outline-none transition focus:border-[#D9D19A]";
+
+const primaryButtonClass =
+  "flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#EFE8A8] to-[#C8BD79] px-4 py-3 text-sm font-semibold text-[#171914] transition hover:brightness-105";
+
+const secondaryButtonClass =
+  "flex items-center justify-center gap-2 rounded-xl border border-[#3A403A] px-4 py-3 text-sm text-[#D9D19A] transition hover:border-[#D9D19A] hover:bg-[#EFE8A8]/5";
+
 const formatDate = (value: string) =>
   new Date(value).toLocaleString("en-IN", {
     day: "2-digit",
@@ -193,6 +195,7 @@ export default function SecurityPage() {
   const [activity, setActivity] = useState<LoginActivity[]>([]);
   const [settings, setSettings] =
     useState<SecuritySettings>(defaultSettings);
+  const [loaded, setLoaded] = useState(false);
 
   const [activeTab, setActiveTab] = useState<
     "Overview" | "Devices" | "Activity" | "Settings"
@@ -211,6 +214,7 @@ export default function SecurityPage() {
   const [toast, setToast] = useState("");
   const [copiedIp, setCopiedIp] = useState(false);
 
+  // Load saved demo data before enabling persistence.
   useEffect(() => {
     try {
       const savedDevices = localStorage.getItem(DEVICE_KEY);
@@ -220,6 +224,7 @@ export default function SecurityPage() {
       setDevices(
         savedDevices ? JSON.parse(savedDevices) : initialDevices
       );
+
       setActivity(
         savedActivity ? JSON.parse(savedActivity) : initialActivity
       );
@@ -234,20 +239,25 @@ export default function SecurityPage() {
       setDevices(initialDevices);
       setActivity(initialActivity);
       setSettings(defaultSettings);
+    } finally {
+      setLoaded(true);
     }
   }, []);
 
   useEffect(() => {
+    if (!loaded) return;
     localStorage.setItem(DEVICE_KEY, JSON.stringify(devices));
-  }, [devices]);
+  }, [devices, loaded]);
 
   useEffect(() => {
+    if (!loaded) return;
     localStorage.setItem(ACTIVITY_KEY, JSON.stringify(activity));
-  }, [activity]);
+  }, [activity, loaded]);
 
   useEffect(() => {
+    if (!loaded) return;
     localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
-  }, [settings]);
+  }, [settings, loaded]);
 
   useEffect(() => {
     if (!toast) return;
@@ -257,6 +267,7 @@ export default function SecurityPage() {
 
   const activeDevices = devices.length;
   const trustedDevices = devices.filter((d) => d.trusted).length;
+
   const failedLogins = activity.filter(
     (a) => a.status === "Failed" || a.status === "Blocked"
   ).length;
@@ -401,7 +412,9 @@ export default function SecurityPage() {
     setNewPassword("");
     setConfirmPassword("");
     addActivity("Password change form completed");
-    setToast("Demo password form completed — connect authentication to change it");
+    setToast(
+      "Demo password form completed — connect authentication to change it"
+    );
   };
 
   const copyCurrentIp = async () => {
@@ -437,7 +450,8 @@ export default function SecurityPage() {
     {
       key: "twoFactor",
       title: "Two-factor authentication",
-      description: "Require an additional verification step when signing in.",
+      description:
+        "Require an additional verification step when signing in.",
       icon: Fingerprint,
     },
     {
@@ -461,26 +475,29 @@ export default function SecurityPage() {
     {
       key: "trustedDeviceOnly",
       title: "Trusted devices only",
-      description: "Restrict access to approved devices (requires backend enforcement).",
+      description:
+        "Restrict access to approved devices (requires backend enforcement).",
       icon: ShieldCheck,
     },
   ];
 
   return (
-    <main className="min-h-screen bg-[#121414] p-4 text-[#F5F2E9] sm:p-6 lg:p-8">
-      <div className="mx-auto max-w-[1500px] space-y-7">
+    <main className="min-h-screen bg-[#121414] p-4 text-white sm:p-6 lg:p-8">
+      <div className="mx-auto max-w-[1600px] space-y-7">
 
         {/* Header */}
-        <div className="flex flex-col justify-between gap-5 lg:flex-row lg:items-center">
+        <div className="gold-ambient-card flex flex-col justify-between gap-5 rounded-2xl border border-[#343832] bg-[#1B1F1D] p-5 lg:flex-row lg:items-center">
           <div>
-            <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.25em] text-[#A9A58A]">
+            <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.25em] text-[#A9ACA2]">
               <ShieldCheck size={15} />
               KBC Admin Center
             </div>
-            <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+
+            <h1 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl">
               Security & Devices
             </h1>
-            <p className="mt-2 text-sm text-[#92968E]">
+
+            <p className="mt-2 text-sm text-[#92978F]">
               Protect your academy account and manage connected devices.
             </p>
           </div>
@@ -488,7 +505,7 @@ export default function SecurityPage() {
           <div className="flex flex-wrap gap-3">
             <button
               onClick={() => setShowPasswordModal(true)}
-              className="flex items-center gap-2 rounded-xl border border-[#454A40] px-4 py-3 text-sm text-[#D9D6C9] transition hover:border-[#EFE8A8] hover:text-[#EFE8A8]"
+              className={secondaryButtonClass}
             >
               <KeyRound size={17} />
               Change password
@@ -496,7 +513,7 @@ export default function SecurityPage() {
 
             <button
               onClick={signOutOtherDevices}
-              className="flex items-center gap-2 rounded-xl bg-[#EFE8A8] px-4 py-3 text-sm font-semibold text-[#24251F] transition hover:bg-[#DED49A]"
+              className={primaryButtonClass}
             >
               <LogOut size={17} />
               Sign out other devices
@@ -506,12 +523,12 @@ export default function SecurityPage() {
 
         {/* Security score */}
         <section className="grid grid-cols-1 gap-4 xl:grid-cols-3">
-          <div className="relative overflow-hidden rounded-2xl border border-[#47493C] bg-gradient-to-br from-[#252A25] to-[#1B1F1D] p-6 sm:p-7 xl:col-span-2">
+          <div className={`${cardClass} relative overflow-hidden p-6 sm:p-7 xl:col-span-2`}>
             <div className="pointer-events-none absolute -right-10 -top-16 h-64 w-64 rounded-full bg-[#EFE8A8]/[0.06] blur-3xl" />
 
             <div className="relative flex flex-col justify-between gap-6 sm:flex-row sm:items-center">
               <div>
-                <div className="flex items-center gap-2 text-sm text-[#B9BBAE]">
+                <div className="flex items-center gap-2 text-sm text-[#A9ACA2]">
                   <ShieldCheck size={18} className="text-[#EFE8A8]" />
                   Account security score
                 </div>
@@ -520,18 +537,18 @@ export default function SecurityPage() {
                   <span className="text-5xl font-semibold tracking-tight text-[#EFE8A8]">
                     {securityScore}
                   </span>
-                  <span className="text-lg text-[#8C9287]">/ 100</span>
+                  <span className="text-lg text-[#858B82]">/ 100</span>
                 </div>
 
-                <p className="mt-3 max-w-md text-sm leading-6 text-[#92988D]">
+                <p className="mt-3 max-w-md text-sm leading-6 text-[#92978F]">
                   {securityScore >= 85
                     ? "Your demo security settings are looking strong. Continue reviewing your account regularly."
                     : "Strengthen your account by enabling additional security options."}
                 </p>
 
-                <div className="mt-5 h-2 max-w-md overflow-hidden rounded-full bg-[#42483F]">
+                <div className="mt-5 h-2 max-w-md overflow-hidden rounded-full bg-[#343832]">
                   <div
-                    className="h-full rounded-full bg-[#EFE8A8] transition-all duration-500"
+                    className="h-full rounded-full bg-gradient-to-r from-[#EFE8A8] to-[#C8BD79] transition-all duration-500"
                     style={{ width: `${securityScore}%` }}
                   />
                 </div>
@@ -549,28 +566,32 @@ export default function SecurityPage() {
           </div>
 
           <div className="grid grid-cols-2 gap-4 xl:grid-cols-1">
-            <div className="rounded-2xl border border-[#303530] bg-[#1B1F1D] p-5">
+            <div className={cardClass}>
               <div className="flex items-center justify-between">
-                <span className="text-xs text-[#9BA096]">Active devices</span>
+                <span className="text-xs text-[#A9ACA2]">
+                  Active devices
+                </span>
                 <Monitor size={19} className="text-[#EFE8A8]" />
               </div>
-              <div className="mt-3 text-3xl font-semibold">
+              <div className="mt-3 text-3xl font-semibold text-white">
                 {activeDevices}
               </div>
-              <p className="mt-1 text-xs text-[#777D74]">
+              <p className="mt-1 text-xs text-[#858B82]">
                 Listed in this browser demo
               </p>
             </div>
 
-            <div className="rounded-2xl border border-[#303530] bg-[#1B1F1D] p-5">
+            <div className={cardClass}>
               <div className="flex items-center justify-between">
-                <span className="text-xs text-[#9BA096]">Trusted devices</span>
+                <span className="text-xs text-[#A9ACA2]">
+                  Trusted devices
+                </span>
                 <CheckCircle2 size={19} className="text-[#8DCBA5]" />
               </div>
-              <div className="mt-3 text-3xl font-semibold">
+              <div className="mt-3 text-3xl font-semibold text-white">
                 {trustedDevices}
               </div>
-              <p className="mt-1 text-xs text-[#777D74]">
+              <p className="mt-1 text-xs text-[#858B82]">
                 Marked as trusted
               </p>
             </div>
@@ -579,19 +600,23 @@ export default function SecurityPage() {
 
         {/* Alert */}
         {failedLogins > 0 && (
-          <div className="flex flex-col gap-3 rounded-xl border border-[#B47C4A]/30 bg-[#E7AD75]/[0.06] p-4 sm:flex-row sm:items-center">
+          <div className="gold-ambient-card flex flex-col gap-3 rounded-2xl border border-[#B47C4A]/30 bg-[#1B1F1D] p-4 sm:flex-row sm:items-center">
             <div className="flex items-center gap-3">
-              <AlertTriangle size={20} className="shrink-0 text-[#E7AD75]" />
+              <AlertTriangle
+                size={20}
+                className="shrink-0 text-[#E7AD75]"
+              />
               <div>
                 <p className="text-sm font-semibold text-[#E7AD75]">
                   Login activity needs review
                 </p>
-                <p className="mt-1 text-xs text-[#AFA99A]">
+                <p className="mt-1 text-xs text-[#A9ACA2]">
                   {failedLogins} failed or blocked login record(s) appear in
                   the demo activity list.
                 </p>
               </div>
             </div>
+
             <button
               onClick={() => setActiveTab("Activity")}
               className="ml-auto text-xs font-semibold text-[#EFE8A8] hover:underline"
@@ -602,39 +627,41 @@ export default function SecurityPage() {
         )}
 
         {/* Tabs */}
-        <div className="flex gap-2 overflow-x-auto border-b border-[#303530] pb-3">
-          {(
-            ["Overview", "Devices", "Activity", "Settings"] as const
-          ).map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`shrink-0 rounded-xl px-5 py-3 text-sm transition ${
-                activeTab === tab
-                  ? "bg-[#EFE8A8] font-semibold text-[#24251F]"
-                  : "text-[#9CA297] hover:bg-[#242A25] hover:text-[#EFE8A8]"
-              }`}
-            >
-              {tab}
-            </button>
-          ))}
+        <div className="flex gap-2 overflow-x-auto border-b border-[#343832] pb-3">
+          {(["Overview", "Devices", "Activity", "Settings"] as const).map(
+            (tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`shrink-0 rounded-xl px-5 py-3 text-sm transition ${
+                  activeTab === tab
+                    ? "bg-gradient-to-r from-[#EFE8A8] to-[#C8BD79] font-semibold text-[#171914]"
+                    : "text-[#A9ACA2] hover:bg-[#1B1F1D] hover:text-[#EFE8A8]"
+                }`}
+              >
+                {tab}
+              </button>
+            )
+          )}
         </div>
 
         {/* Overview */}
         {activeTab === "Overview" && (
           <div className="grid grid-cols-1 gap-5 xl:grid-cols-3">
             <section className="space-y-5 xl:col-span-2">
-              <div className="rounded-2xl border border-[#303530] bg-[#1B1F1D] p-5 sm:p-6">
+              <div className={cardClass}>
                 <div className="mb-5 flex items-center justify-between">
                   <div>
-                    <h2 className="font-semibold">Recent devices</h2>
+                    <h2 className="font-semibold text-white">
+                      Recent devices
+                    </h2>
                     <p className="mt-1 text-xs text-[#858B82]">
                       Devices listed for this account demo.
                     </p>
                   </div>
                   <button
                     onClick={() => setActiveTab("Devices")}
-                    className="text-xs text-[#EFE8A8] hover:underline"
+                    className="text-xs text-[#D9D19A] hover:underline"
                   >
                     View all
                   </button>
@@ -644,7 +671,7 @@ export default function SecurityPage() {
                   {devices.slice(0, 3).map((device) => (
                     <div
                       key={device.id}
-                      className="flex items-center gap-4 rounded-xl border border-[#343A33] bg-[#151A17] p-4"
+                      className="flex items-center gap-4 rounded-xl border border-[#343832] bg-[#151917] p-4 transition hover:border-[#D9D19A]/40"
                     >
                       <div className="rounded-xl bg-[#EFE8A8]/10 p-3 text-[#EFE8A8]">
                         <DeviceIcon type={device.type} />
@@ -652,7 +679,7 @@ export default function SecurityPage() {
 
                       <div className="min-w-0 flex-1">
                         <div className="flex flex-wrap items-center gap-2">
-                          <p className="truncate text-sm font-medium">
+                          <p className="truncate text-sm font-medium text-white">
                             {device.name}
                           </p>
                           {device.current && (
@@ -661,10 +688,10 @@ export default function SecurityPage() {
                             </span>
                           )}
                         </div>
-                        <p className="mt-1 text-xs text-[#838A80]">
+                        <p className="mt-1 text-xs text-[#92978F]">
                           {device.browser} · {device.os}
                         </p>
-                        <p className="mt-1 text-xs text-[#6F786D]">
+                        <p className="mt-1 text-xs text-[#858B82]">
                           {device.location} · {timeAgo(device.lastActive)}
                         </p>
                       </div>
@@ -683,17 +710,19 @@ export default function SecurityPage() {
                 </div>
               </div>
 
-              <div className="rounded-2xl border border-[#303530] bg-[#1B1F1D] p-5 sm:p-6">
+              <div className={cardClass}>
                 <div className="mb-5 flex items-center justify-between">
                   <div>
-                    <h2 className="font-semibold">Recent login activity</h2>
+                    <h2 className="font-semibold text-white">
+                      Recent login activity
+                    </h2>
                     <p className="mt-1 text-xs text-[#858B82]">
                       Latest recorded demo events.
                     </p>
                   </div>
                   <button
                     onClick={() => setActiveTab("Activity")}
-                    className="text-xs text-[#EFE8A8] hover:underline"
+                    className="text-xs text-[#D9D19A] hover:underline"
                   >
                     View history
                   </button>
@@ -720,28 +749,38 @@ export default function SecurityPage() {
                           />
                         )}
                       </div>
+
                       <div className="min-w-0 flex-1">
                         <p className="text-sm text-[#D6D8CE]">
                           {item.description}
                         </p>
-                        <p className="mt-1 text-xs text-[#7F877C]">
+                        <p className="mt-1 text-xs text-[#858B82]">
                           {item.device} · {item.location}
                         </p>
                       </div>
-                      <span className="whitespace-nowrap text-[11px] text-[#747B72]">
+
+                      <span className="whitespace-nowrap text-[11px] text-[#858B82]">
                         {timeAgo(item.time)}
                       </span>
                     </div>
                   ))}
+
+                  {activity.length === 0 && (
+                    <p className="py-6 text-center text-sm text-[#858B82]">
+                      No login activity recorded.
+                    </p>
+                  )}
                 </div>
               </div>
             </section>
 
             <section className="space-y-5">
-              <div className="rounded-2xl border border-[#303530] bg-[#1B1F1D] p-5">
+              <div className={cardClass}>
                 <div className="flex items-center gap-2">
                   <Lock size={18} className="text-[#EFE8A8]" />
-                  <h2 className="font-semibold">Quick security</h2>
+                  <h2 className="font-semibold text-white">
+                    Quick security
+                  </h2>
                 </div>
 
                 <div className="mt-5 space-y-4">
@@ -763,7 +802,7 @@ export default function SecurityPage() {
                       key={item.label}
                       className="flex items-center justify-between gap-3"
                     >
-                      <span className="text-xs text-[#AEB3A9]">
+                      <span className="text-xs text-[#A9ACA2]">
                         {item.label}
                       </span>
                       <span
@@ -781,44 +820,48 @@ export default function SecurityPage() {
 
                 <button
                   onClick={() => setActiveTab("Settings")}
-                  className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl border border-[#474C40] py-3 text-xs text-[#EFE8A8] transition hover:bg-[#EFE8A8]/10"
+                  className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl border border-[#3A403A] py-3 text-xs text-[#D9D19A] transition hover:border-[#D9D19A] hover:bg-[#EFE8A8]/5"
                 >
                   Manage security settings
                   <ChevronRight size={15} />
                 </button>
               </div>
 
-              <div className="rounded-2xl border border-[#303530] bg-[#1B1F1D] p-5">
+              <div className={cardClass}>
                 <div className="flex items-center gap-2">
                   <Globe size={18} className="text-[#EFE8A8]" />
-                  <h2 className="font-semibold">Current session</h2>
+                  <h2 className="font-semibold text-white">
+                    Current session
+                  </h2>
                 </div>
 
                 {devices.find((d) => d.current) ? (
                   <>
-                    <p className="mt-4 text-sm font-medium">
+                    <p className="mt-4 text-sm font-medium text-white">
                       {devices.find((d) => d.current)?.name}
                     </p>
                     <p className="mt-1 text-xs text-[#858B82]">
                       {devices.find((d) => d.current)?.browser}
                     </p>
-                    <div className="mt-4 flex items-center justify-between rounded-lg bg-[#141816] p-3">
+
+                    <div className="mt-4 flex items-center justify-between rounded-lg border border-[#343832] bg-[#151917] p-3">
                       <div>
-                        <p className="text-[10px] text-[#737A70]">
+                        <p className="text-[10px] text-[#858B82]">
                           Displayed IP
                         </p>
-                        <p className="mt-1 text-xs">
+                        <p className="mt-1 text-xs text-white">
                           {devices.find((d) => d.current)?.ip}
                         </p>
                       </div>
                       <button
                         onClick={copyCurrentIp}
-                        className="rounded-lg p-2 text-[#A9A58A] hover:bg-[#303630]"
+                        className="rounded-lg p-2 text-[#D9D19A] transition hover:bg-[#EFE8A8]/10"
                       >
                         {copiedIp ? <Check size={15} /> : <Copy size={15} />}
                       </button>
                     </div>
-                    <p className="mt-3 text-[10px] leading-5 text-[#737A70]">
+
+                    <p className="mt-3 text-[10px] leading-5 text-[#858B82]">
                       The displayed device and IP details are sample data,
                       not verified browser or network information.
                     </p>
@@ -835,10 +878,12 @@ export default function SecurityPage() {
 
         {/* Devices */}
         {activeTab === "Devices" && (
-          <section className="rounded-2xl border border-[#303530] bg-[#1B1F1D]">
-            <div className="flex flex-col justify-between gap-4 border-b border-[#303530] p-5 sm:flex-row sm:items-center sm:p-6">
+          <section className={`${cardClass} !p-0`}>
+            <div className="flex flex-col justify-between gap-4 border-b border-[#343832] p-5 sm:flex-row sm:items-center sm:p-6">
               <div>
-                <h2 className="font-semibold">Connected devices</h2>
+                <h2 className="font-semibold text-white">
+                  Connected devices
+                </h2>
                 <p className="mt-1 text-xs text-[#858B82]">
                   Review and manage devices listed in this demo.
                 </p>
@@ -847,13 +892,13 @@ export default function SecurityPage() {
               <div className="relative">
                 <Search
                   size={16}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-[#777D74]"
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-[#858B82]"
                 />
                 <input
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   placeholder="Search devices..."
-                  className="w-full rounded-xl border border-[#383E38] bg-[#141816] py-3 pl-9 pr-3 text-sm outline-none focus:border-[#A9A58A] sm:w-64"
+                  className={`${inputClass} pl-9 sm:w-64`}
                 />
               </div>
             </div>
@@ -862,16 +907,17 @@ export default function SecurityPage() {
               {filteredDevices.map((device) => (
                 <div
                   key={device.id}
-                  className="relative rounded-2xl border border-[#363C35] bg-[#151A17] p-5 transition hover:border-[#77745D]"
+                  className="gold-ambient-card relative rounded-2xl border border-[#343832] bg-[#151917] p-5"
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-center gap-3">
                       <div className="rounded-xl bg-[#EFE8A8]/10 p-3 text-[#EFE8A8]">
                         <DeviceIcon type={device.type} />
                       </div>
+
                       <div>
                         <div className="flex flex-wrap items-center gap-2">
-                          <h3 className="text-sm font-semibold">
+                          <h3 className="text-sm font-semibold text-white">
                             {device.name}
                           </h3>
                           {device.current && (
@@ -892,27 +938,27 @@ export default function SecurityPage() {
                           deviceMenu === device.id ? null : device.id
                         )
                       }
-                      className="rounded-lg p-2 text-[#858B82] hover:bg-[#303630]"
+                      className="rounded-lg p-2 text-[#858B82] transition hover:bg-[#252A25] hover:text-[#EFE8A8]"
                     >
                       <MoreVertical size={18} />
                     </button>
 
                     {deviceMenu === device.id && (
-                      <div className="absolute right-5 top-14 z-20 w-48 rounded-xl border border-[#42483F] bg-[#202521] p-1 shadow-2xl">
+                      <div className="absolute right-5 top-14 z-20 w-48 rounded-xl border border-[#3A403A] bg-[#1B1F1D] p-1 shadow-2xl">
                         <button
                           onClick={() => {
                             setRenameDevice(device);
                             setRenameValue(device.name);
                             setDeviceMenu(null);
                           }}
-                          className="w-full rounded-lg px-3 py-2.5 text-left text-xs text-[#D2D4CA] hover:bg-[#303630]"
+                          className="w-full rounded-lg px-3 py-2.5 text-left text-xs text-[#D6D8CE] hover:bg-[#303630]"
                         >
                           Rename device
                         </button>
 
                         <button
                           onClick={() => toggleTrust(device.id)}
-                          className="w-full rounded-lg px-3 py-2.5 text-left text-xs text-[#D2D4CA] hover:bg-[#303630]"
+                          className="w-full rounded-lg px-3 py-2.5 text-left text-xs text-[#D6D8CE] hover:bg-[#303630]"
                         >
                           {device.trusted
                             ? "Remove trusted status"
@@ -931,12 +977,28 @@ export default function SecurityPage() {
                     )}
                   </div>
 
-                  <div className="mt-5 space-y-3 border-t border-[#303630] pt-4">
+                  <div className="mt-5 space-y-3 border-t border-[#343832] pt-4">
                     {[
-                      { icon: Globe, label: "Browser", value: device.browser },
-                      { icon: Monitor, label: "Operating system", value: device.os },
-                      { icon: MapPin, label: "Location", value: device.location },
-                      { icon: Wifi, label: "IP address", value: device.ip },
+                      {
+                        icon: Globe,
+                        label: "Browser",
+                        value: device.browser,
+                      },
+                      {
+                        icon: Monitor,
+                        label: "Operating system",
+                        value: device.os,
+                      },
+                      {
+                        icon: MapPin,
+                        label: "Location",
+                        value: device.location,
+                      },
+                      {
+                        icon: Wifi,
+                        label: "IP address",
+                        value: device.ip,
+                      },
                       {
                         icon: Clock,
                         label: "Last active",
@@ -944,12 +1006,13 @@ export default function SecurityPage() {
                       },
                     ].map((row) => {
                       const Icon = row.icon;
+
                       return (
                         <div
                           key={row.label}
                           className="flex items-center justify-between gap-3 text-xs"
                         >
-                          <span className="flex items-center gap-2 text-[#7F877C]">
+                          <span className="flex items-center gap-2 text-[#858B82]">
                             <Icon size={14} />
                             {row.label}
                           </span>
@@ -961,7 +1024,7 @@ export default function SecurityPage() {
                     })}
                   </div>
 
-                  <div className="mt-4 flex items-center justify-between border-t border-[#303630] pt-4">
+                  <div className="mt-4 flex items-center justify-between border-t border-[#343832] pt-4">
                     <span
                       className={`flex items-center gap-2 text-xs ${
                         device.trusted
@@ -972,7 +1035,7 @@ export default function SecurityPage() {
                       <span className="h-2 w-2 rounded-full bg-current" />
                       {device.trusted ? "Trusted device" : "Not trusted"}
                     </span>
-                    <span className="text-[10px] text-[#777D74]">
+                    <span className="text-[10px] text-[#858B82]">
                       {timeAgo(device.lastActive)}
                     </span>
                   </div>
@@ -990,22 +1053,25 @@ export default function SecurityPage() {
 
         {/* Activity */}
         {activeTab === "Activity" && (
-          <section className="overflow-hidden rounded-2xl border border-[#303530] bg-[#1B1F1D]">
-            <div className="flex flex-col justify-between gap-3 border-b border-[#303530] p-5 sm:flex-row sm:items-center sm:p-6">
+          <section className={`${cardClass} !overflow-hidden !p-0`}>
+            <div className="flex flex-col justify-between gap-3 border-b border-[#343832] p-5 sm:flex-row sm:items-center sm:p-6">
               <div>
-                <h2 className="font-semibold">Login activity</h2>
+                <h2 className="font-semibold text-white">
+                  Login activity
+                </h2>
                 <p className="mt-1 text-xs text-[#858B82]">
                   Review successful, failed and blocked sign-in records.
                 </p>
               </div>
-              <div className="rounded-lg bg-[#EFE8A8]/10 px-3 py-2 text-xs text-[#EFE8A8]">
+
+              <div className="rounded-lg border border-[#343832] bg-[#151917] px-3 py-2 text-xs text-[#D9D19A]">
                 {activity.length} records
               </div>
             </div>
 
             <div className="overflow-x-auto">
               <table className="w-full min-w-[800px] text-left">
-                <thead className="bg-[#151A17] text-[10px] uppercase tracking-wider text-[#858B82]">
+                <thead className="bg-[#151917] text-[10px] uppercase tracking-wider text-[#858B82]">
                   <tr>
                     <th className="px-5 py-4 font-medium">Device</th>
                     <th className="px-5 py-4 font-medium">Location</th>
@@ -1014,32 +1080,37 @@ export default function SecurityPage() {
                     <th className="px-5 py-4 font-medium">Status</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#303530]">
+
+                <tbody className="divide-y divide-[#343832]">
                   {activity.map((item) => (
                     <tr
                       key={item.id}
-                      className="transition hover:bg-[#252B26]"
+                      className="transition hover:bg-[#252A25]"
                     >
                       <td className="px-5 py-4">
                         <p className="text-sm text-[#D5D8CE]">
                           {item.device}
                         </p>
-                        <p className="mt-1 text-xs text-[#777D74]">
+                        <p className="mt-1 text-xs text-[#858B82]">
                           {item.browser}
                         </p>
-                        <p className="mt-1 text-[10px] text-[#777D74]">
+                        <p className="mt-1 text-[10px] text-[#858B82]">
                           {item.description}
                         </p>
                       </td>
-                      <td className="px-5 py-4 text-xs text-[#AEB3A9]">
+
+                      <td className="px-5 py-4 text-xs text-[#A9ACA2]">
                         {item.location}
                       </td>
-                      <td className="px-5 py-4 font-mono text-xs text-[#AEB3A9]">
+
+                      <td className="px-5 py-4 font-mono text-xs text-[#A9ACA2]">
                         {item.ip}
                       </td>
-                      <td className="px-5 py-4 text-xs text-[#AEB3A9]">
+
+                      <td className="px-5 py-4 text-xs text-[#A9ACA2]">
                         {formatDate(item.time)}
                       </td>
+
                       <td className="px-5 py-4">
                         <span
                           className={`rounded-lg px-2.5 py-1.5 text-[10px] font-semibold ${statusStyle(
@@ -1066,9 +1137,11 @@ export default function SecurityPage() {
         {/* Settings */}
         {activeTab === "Settings" && (
           <section className="grid grid-cols-1 gap-5 xl:grid-cols-3">
-            <div className="rounded-2xl border border-[#303530] bg-[#1B1F1D] p-5 sm:p-6 xl:col-span-2">
+            <div className={`${cardClass} xl:col-span-2`}>
               <div className="mb-6">
-                <h2 className="font-semibold">Security preferences</h2>
+                <h2 className="font-semibold text-white">
+                  Security preferences
+                </h2>
                 <p className="mt-1 text-xs text-[#858B82]">
                   Manage your account protection preferences.
                 </p>
@@ -1082,14 +1155,15 @@ export default function SecurityPage() {
                   return (
                     <div
                       key={row.key}
-                      className="flex flex-col justify-between gap-4 rounded-xl border border-[#343A33] bg-[#151A17] p-4 sm:flex-row sm:items-center"
+                      className="flex flex-col justify-between gap-4 rounded-xl border border-[#343832] bg-[#151917] p-4 sm:flex-row sm:items-center"
                     >
                       <div className="flex items-start gap-3">
                         <div className="rounded-lg bg-[#EFE8A8]/10 p-2.5 text-[#EFE8A8]">
                           <Icon size={18} />
                         </div>
+
                         <div>
-                          <h3 className="text-sm font-medium">
+                          <h3 className="text-sm font-medium text-white">
                             {row.title}
                           </h3>
                           <p className="mt-1 max-w-lg text-xs leading-5 text-[#858B82]">
@@ -1121,34 +1195,40 @@ export default function SecurityPage() {
             </div>
 
             <div className="space-y-5">
-              <div className="rounded-2xl border border-[#303530] bg-[#1B1F1D] p-5">
+              <div className={cardClass}>
                 <div className="flex items-center gap-2">
                   <KeyRound size={19} className="text-[#EFE8A8]" />
-                  <h2 className="font-semibold">Password</h2>
+                  <h2 className="font-semibold text-white">Password</h2>
                 </div>
+
                 <p className="mt-3 text-xs leading-6 text-[#858B82]">
                   Update your account password regularly and use a strong,
                   unique password.
                 </p>
+
                 <button
                   onClick={() => setShowPasswordModal(true)}
-                  className="mt-5 w-full rounded-xl border border-[#555746] py-3 text-xs font-semibold text-[#EFE8A8] hover:bg-[#EFE8A8]/10"
+                  className={`${secondaryButtonClass} mt-5 w-full`}
                 >
                   Change password
                 </button>
               </div>
 
-              <div className="rounded-2xl border border-[#303530] bg-[#1B1F1D] p-5">
+              <div className={cardClass}>
                 <div className="flex items-center gap-2">
                   <LogOut size={19} className="text-[#F18C8C]" />
-                  <h2 className="font-semibold">Session control</h2>
+                  <h2 className="font-semibold text-white">
+                    Session control
+                  </h2>
                 </div>
+
                 <p className="mt-3 text-xs leading-6 text-[#858B82]">
                   Remove all other devices from the local demo list.
                 </p>
+
                 <button
                   onClick={signOutOtherDevices}
-                  className="mt-5 w-full rounded-xl border border-[#A15D5D]/40 py-3 text-xs font-semibold text-[#F18C8C] hover:bg-[#F18C8C]/10"
+                  className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl border border-[#A15D5D]/40 py-3 text-xs font-semibold text-[#F18C8C] transition hover:bg-[#F18C8C]/10"
                 >
                   Sign out other devices
                 </button>
@@ -1160,37 +1240,40 @@ export default function SecurityPage() {
         {/* Rename device modal */}
         {renameDevice && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm">
-            <div className="w-full max-w-md rounded-2xl border border-[#454A40] bg-[#1B1F1D] p-6 shadow-2xl">
+            <div className="gold-ambient-card w-full max-w-md rounded-2xl border border-[#343832] bg-[#1B1F1D] p-6 shadow-2xl">
               <div className="flex items-center justify-between">
-                <h2 className="text-lg font-semibold">Rename device</h2>
+                <h2 className="text-lg font-semibold text-white">
+                  Rename device
+                </h2>
                 <button
                   onClick={() => setRenameDevice(null)}
-                  className="rounded-lg p-2 text-[#92988D] hover:bg-[#303630]"
+                  className="rounded-lg p-2 text-[#92978F] transition hover:bg-[#303630] hover:text-white"
                 >
                   <X size={18} />
                 </button>
               </div>
 
-              <label className="mt-5 block text-xs text-[#AEB3A9]">
+              <label className="mt-5 block text-xs text-[#A9ACA2]">
                 Device name
               </label>
+
               <input
                 value={renameValue}
                 onChange={(e) => setRenameValue(e.target.value)}
-                className="mt-2 w-full rounded-xl border border-[#454A40] bg-[#141816] px-4 py-3 text-sm outline-none focus:border-[#EFE8A8]"
+                className={`${inputClass} mt-2`}
                 placeholder="Enter device name"
               />
 
               <div className="mt-6 flex justify-end gap-3">
                 <button
                   onClick={() => setRenameDevice(null)}
-                  className="rounded-xl border border-[#454A40] px-4 py-3 text-xs text-[#B8BDB2]"
+                  className={secondaryButtonClass}
                 >
                   Cancel
                 </button>
                 <button
                   onClick={saveRename}
-                  className="rounded-xl bg-[#EFE8A8] px-5 py-3 text-xs font-semibold text-[#24251F]"
+                  className={primaryButtonClass}
                 >
                   Save changes
                 </button>
@@ -1204,19 +1287,22 @@ export default function SecurityPage() {
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm">
             <form
               onSubmit={changePassword}
-              className="w-full max-w-md rounded-2xl border border-[#454A40] bg-[#1B1F1D] p-6 shadow-2xl"
+              className="gold-ambient-card w-full max-w-md rounded-2xl border border-[#343832] bg-[#1B1F1D] p-6 shadow-2xl"
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <h2 className="text-lg font-semibold">Change password</h2>
+                  <h2 className="text-lg font-semibold text-white">
+                    Change password
+                  </h2>
                   <p className="mt-1 text-xs text-[#858B82]">
                     Enter your current and new password.
                   </p>
                 </div>
+
                 <button
                   type="button"
                   onClick={() => setShowPasswordModal(false)}
-                  className="rounded-lg p-2 text-[#92988D] hover:bg-[#303630]"
+                  className="rounded-lg p-2 text-[#92978F] transition hover:bg-[#303630] hover:text-white"
                 >
                   <X size={18} />
                 </button>
@@ -1224,21 +1310,23 @@ export default function SecurityPage() {
 
               <div className="mt-6 space-y-4">
                 <div>
-                  <label className="text-xs text-[#AEB3A9]">
+                  <label className="text-xs text-[#A9ACA2]">
                     Current password
                   </label>
+
                   <div className="relative mt-2">
                     <input
                       type={showPassword ? "text" : "password"}
                       value={currentPassword}
                       onChange={(e) => setCurrentPassword(e.target.value)}
-                      className="w-full rounded-xl border border-[#454A40] bg-[#141816] px-4 py-3 pr-12 text-sm outline-none focus:border-[#EFE8A8]"
+                      className={`${inputClass} pr-12`}
                       placeholder="Enter current password"
                     />
+
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[#858B82]"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[#858B82] transition hover:text-[#EFE8A8]"
                     >
                       {showPassword ? (
                         <EyeOff size={17} />
@@ -1250,23 +1338,25 @@ export default function SecurityPage() {
                 </div>
 
                 <div>
-                  <label className="text-xs text-[#AEB3A9]">
+                  <label className="text-xs text-[#A9ACA2]">
                     New password
                   </label>
+
                   <div className="relative mt-2">
                     <input
                       type={showNewPassword ? "text" : "password"}
                       value={newPassword}
                       onChange={(e) => setNewPassword(e.target.value)}
-                      className="w-full rounded-xl border border-[#454A40] bg-[#141816] px-4 py-3 pr-12 text-sm outline-none focus:border-[#EFE8A8]"
+                      className={`${inputClass} pr-12`}
                       placeholder="Minimum 8 characters"
                     />
+
                     <button
                       type="button"
                       onClick={() =>
                         setShowNewPassword(!showNewPassword)
                       }
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[#858B82]"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[#858B82] transition hover:text-[#EFE8A8]"
                     >
                       {showNewPassword ? (
                         <EyeOff size={17} />
@@ -1278,20 +1368,21 @@ export default function SecurityPage() {
                 </div>
 
                 <div>
-                  <label className="text-xs text-[#AEB3A9]">
+                  <label className="text-xs text-[#A9ACA2]">
                     Confirm new password
                   </label>
+
                   <input
                     type="password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="mt-2 w-full rounded-xl border border-[#454A40] bg-[#141816] px-4 py-3 text-sm outline-none focus:border-[#EFE8A8]"
+                    className={`${inputClass} mt-2`}
                     placeholder="Confirm new password"
                   />
                 </div>
               </div>
 
-              <div className="mt-6 rounded-xl bg-[#EFE8A8]/5 p-3 text-xs leading-5 text-[#AEB3A9]">
+              <div className="mt-6 rounded-xl border border-[#343832] bg-[#151917] p-3 text-xs leading-5 text-[#A9ACA2]">
                 This is a front-end demonstration. Connect your authentication
                 backend before using this form to change a real password.
               </div>
@@ -1300,14 +1391,12 @@ export default function SecurityPage() {
                 <button
                   type="button"
                   onClick={() => setShowPasswordModal(false)}
-                  className="rounded-xl border border-[#454A40] px-4 py-3 text-xs text-[#B8BDB2]"
+                  className={secondaryButtonClass}
                 >
                   Cancel
                 </button>
-                <button
-                  type="submit"
-                  className="rounded-xl bg-[#EFE8A8] px-5 py-3 text-xs font-semibold text-[#24251F]"
-                >
+
+                <button type="submit" className={primaryButtonClass}>
                   Save password
                 </button>
               </div>
@@ -1317,18 +1406,95 @@ export default function SecurityPage() {
 
         {/* Toast */}
         {toast && (
-          <div className="fixed bottom-6 right-6 z-[70] flex max-w-[calc(100vw-3rem)] items-center gap-3 rounded-xl border border-[#66644D] bg-[#252A25] px-5 py-4 text-sm text-[#EFE8A8] shadow-2xl">
+          <div className="gold-ambient-card fixed bottom-6 right-6 z-[70] flex max-w-[calc(100vw-3rem)] items-center gap-3 rounded-xl border border-[#66644D] bg-[#1B1F1D] px-5 py-4 text-sm text-[#EFE8A8] shadow-2xl">
             <CheckCircle2 size={18} />
             {toast}
             <button
               onClick={() => setToast("")}
-              className="ml-2 text-[#92988D] hover:text-white"
+              className="ml-2 text-[#92978F] transition hover:text-white"
             >
               <X size={15} />
             </button>
           </div>
         )}
       </div>
+
+      <style jsx global>{`
+        .gold-ambient-card {
+          position: relative;
+          isolation: isolate;
+          -webkit-tap-highlight-color: transparent;
+
+          transition:
+            transform 0.35s ease,
+            border-color 0.35s ease,
+            box-shadow 0.35s ease;
+        }
+
+        .gold-ambient-card::before {
+          content: "";
+          position: absolute;
+          inset: -3px;
+          border-radius: inherit;
+          pointer-events: none;
+          z-index: -1;
+
+          background: radial-gradient(
+            ellipse at center,
+            rgba(255, 226, 130, 0.25) 0%,
+            rgba(239, 200, 85, 0.16) 35%,
+            rgba(205, 157, 55, 0.08) 65%,
+            transparent 100%
+          );
+
+          filter: blur(24px);
+          opacity: 0;
+
+          transition: opacity 0.35s ease;
+        }
+
+        .gold-ambient-card:hover,
+        .gold-ambient-card:active,
+        .gold-ambient-card:focus-visible {
+          border-color: rgba(239, 210, 130, 0.45);
+
+          box-shadow:
+            0 0 12px rgba(239, 200, 85, 0.13),
+            0 0 28px rgba(239, 200, 85, 0.12),
+            0 0 50px rgba(239, 200, 85, 0.08),
+            inset 0 0 18px rgba(239, 200, 85, 0.025);
+        }
+
+        .gold-ambient-card:hover::before,
+        .gold-ambient-card:active::before,
+        .gold-ambient-card:focus-visible::before {
+          opacity: 1;
+        }
+
+        @media (hover: hover) and (pointer: fine) {
+          .gold-ambient-card:hover {
+            transform: translateY(-3px);
+          }
+        }
+
+        @media (hover: none) {
+          .gold-ambient-card:active {
+            transform: scale(0.99);
+          }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .gold-ambient-card,
+          .gold-ambient-card::before {
+            transition: none;
+          }
+
+          .gold-ambient-card:hover,
+          .gold-ambient-card:active {
+            transform: none;
+          }
+        }
+      `}</style>
     </main>
   );
 }

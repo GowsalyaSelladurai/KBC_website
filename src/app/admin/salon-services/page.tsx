@@ -1,4 +1,3 @@
-
 "use client";
 
 import {
@@ -93,7 +92,10 @@ export default function SalonServicesPage() {
 
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed)) setServices(parsed);
+
+        if (Array.isArray(parsed)) {
+          setServices(parsed);
+        }
       }
     } catch {
       console.error("Unable to load salon services.");
@@ -106,7 +108,10 @@ export default function SalonServicesPage() {
   useEffect(() => {
     if (loaded) {
       try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(services));
+        localStorage.setItem(
+          STORAGE_KEY,
+          JSON.stringify(services)
+        );
       } catch {
         alert(
           "Unable to save services. An uploaded image may be too large."
@@ -121,16 +126,24 @@ export default function SalonServicesPage() {
 
     window.addEventListener("click", closeMenu);
 
-    return () => window.removeEventListener("click", closeMenu);
+    return () => {
+      window.removeEventListener("click", closeMenu);
+    };
   }, []);
 
   // STATISTICS
   const stats = useMemo(
     () => ({
       total: services.length,
-      active: services.filter((s) => s.status === "Active").length,
-      inactive: services.filter((s) => s.status === "Inactive").length,
-      categories: new Set(services.map((s) => s.category)).size,
+      active: services.filter(
+        (s) => s.status === "Active"
+      ).length,
+      inactive: services.filter(
+        (s) => s.status === "Inactive"
+      ).length,
+      categories: new Set(
+        services.map((s) => s.category)
+      ).size,
     }),
     [services]
   );
@@ -158,7 +171,11 @@ export default function SalonServicesPage() {
         statusFilter === "All" ||
         service.status === statusFilter;
 
-      return matchesSearch && matchesCategory && matchesStatus;
+      return (
+        matchesSearch &&
+        matchesCategory &&
+        matchesStatus
+      );
     });
   }, [
     services,
@@ -168,6 +185,7 @@ export default function SalonServicesPage() {
     selectedCategory,
   ]);
 
+  // FORMAT PRICE
   const formatPrice = (price: number) =>
     new Intl.NumberFormat("en-IN", {
       style: "currency",
@@ -249,7 +267,9 @@ export default function SalonServicesPage() {
   };
 
   // SAVE SERVICE
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (
+    event: FormEvent<HTMLFormElement>
+  ) => {
     event.preventDefault();
 
     if (!form.name.trim()) {
@@ -305,7 +325,10 @@ export default function SalonServicesPage() {
         createdAt: new Date().toISOString(),
       };
 
-      setServices((previous) => [newService, ...previous]);
+      setServices((previous) => [
+        newService,
+        ...previous,
+      ]);
     }
 
     closeModal();
@@ -363,7 +386,7 @@ export default function SalonServicesPage() {
     <main className="min-h-screen bg-[#121414] text-[#F4F0D0] p-4 md:p-7 space-y-7">
 
       {/* EDITORIAL HEADER */}
-      <section className="relative overflow-hidden rounded-[28px] border border-[#D9D19A]/20 bg-[#1B201D]">
+      <section className="gold-ambient-card relative overflow-hidden rounded-[28px] border border-[#D9D19A]/20 bg-[#1B201D]">
         <div className="absolute inset-0 opacity-30 pointer-events-none">
           <div className="absolute -right-20 -top-32 w-96 h-96 rounded-full border border-[#D9D19A]/20" />
           <div className="absolute -right-8 -top-20 w-72 h-72 rounded-full border border-[#D9D19A]/20" />
@@ -381,13 +404,17 @@ export default function SalonServicesPage() {
 
             <div className="flex items-center gap-3 mb-3">
               <span className="w-9 h-px bg-[#D9D19A]" />
+
               <span className="text-xs uppercase tracking-[0.2em] text-[#A7A58C]">
                 The art of beauty
               </span>
             </div>
 
             <h1 className="font-serif text-4xl md:text-6xl leading-tight tracking-tight">
-              Salon <span className="italic text-[#D9D19A]">Services.</span>
+              Salon{" "}
+              <span className="italic text-[#D9D19A]">
+                Services.
+              </span>
             </h1>
 
             <p className="text-sm md:text-base text-[#A2A79D] mt-4 max-w-lg leading-7">
@@ -422,6 +449,7 @@ export default function SalonServicesPage() {
 
               <p className="text-3xl font-serif text-[#E8E0AF] mt-1">
                 {String(stats.total).padStart(2, "0")}
+
                 <span className="text-sm text-[#898F80] ml-2">
                   services
                 </span>
@@ -492,7 +520,9 @@ export default function SalonServicesPage() {
 
             <h2 className="text-xl md:text-2xl font-serif">
               Browse by{" "}
-              <span className="italic text-[#D9D19A]">category</span>
+              <span className="italic text-[#D9D19A]">
+                category
+              </span>
             </h2>
           </div>
 
@@ -534,7 +564,7 @@ export default function SalonServicesPage() {
       </section>
 
       {/* SERVICE COLLECTION WORKSPACE */}
-      <section className="rounded-[24px] border border-[#303731] bg-[#191E1B] overflow-hidden">
+      <section className="gold-ambient-card rounded-[24px] border border-[#303731] bg-[#191E1B] overflow-hidden">
         <div className="p-5 md:p-6 border-b border-[#303731]">
           <div className="flex flex-col xl:flex-row xl:items-end justify-between gap-5">
             <div>
@@ -545,7 +575,9 @@ export default function SalonServicesPage() {
 
               <h2 className="text-2xl font-serif">
                 Service{" "}
-                <span className="italic text-[#D9D19A]">directory</span>
+                <span className="italic text-[#D9D19A]">
+                  directory
+                </span>
               </h2>
 
               <p className="text-xs text-[#8D958B] mt-2">
@@ -633,7 +665,9 @@ export default function SalonServicesPage() {
                 Active filters
               </span>
 
-              {search && <FilterTag label={`Search: ${search}`} />}
+              {search && (
+                <FilterTag label={`Search: ${search}`} />
+              )}
 
               {categoryFilter !== "All" && (
                 <FilterTag label={categoryFilter} />
@@ -701,8 +735,10 @@ export default function SalonServicesPage() {
               {filteredServices.map((service, index) => (
                 <article
                   key={service.id}
-                  className="service-card group"
-                  style={{ animationDelay: `${index * 60}ms` }}
+                  className="service-card gold-ambient-card group"
+                  style={{
+                    animationDelay: `${index * 60}ms`,
+                  }}
                 >
                   {/* IMAGE */}
                   <div className="relative h-56 bg-[#252C27] overflow-hidden rounded-t-[18px]">
@@ -714,7 +750,10 @@ export default function SalonServicesPage() {
                       />
                     ) : (
                       <div className="w-full h-full flex flex-col items-center justify-center text-[#777F72] bg-gradient-to-br from-[#293029] to-[#171C19]">
-                        <Scissors size={39} strokeWidth={1} />
+                        <Scissors
+                          size={39}
+                          strokeWidth={1}
+                        />
 
                         <span className="text-[10px] tracking-[0.2em] uppercase mt-3">
                           KBC service
@@ -826,7 +865,9 @@ export default function SalonServicesPage() {
                             className="absolute bottom-12 right-0 z-30 w-48 bg-[#252B26] border border-[#424940] rounded-xl shadow-2xl p-1.5 animate-menu"
                           >
                             <button
-                              onClick={() => openEditModal(service)}
+                              onClick={() =>
+                                openEditModal(service)
+                              }
                               className="menu-item"
                             >
                               <Pencil size={14} />
@@ -834,7 +875,9 @@ export default function SalonServicesPage() {
                             </button>
 
                             <button
-                              onClick={() => toggleStatus(service.id)}
+                              onClick={() =>
+                                toggleStatus(service.id)
+                              }
                               className="menu-item"
                             >
                               <Power size={14} />
@@ -846,7 +889,9 @@ export default function SalonServicesPage() {
                             <div className="h-px bg-[#424940] my-1" />
 
                             <button
-                              onClick={() => deleteService(service.id)}
+                              onClick={() =>
+                                deleteService(service.id)
+                              }
                               className="menu-item text-red-300 hover:bg-red-400/10"
                             >
                               <Trash2 size={14} />
@@ -869,10 +914,12 @@ export default function SalonServicesPage() {
         <div
           className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-3 md:p-6"
           onMouseDown={(e) => {
-            if (e.target === e.currentTarget) closeModal();
+            if (e.target === e.currentTarget) {
+              closeModal();
+            }
           }}
         >
-          <div className="w-full max-w-3xl max-h-[94vh] overflow-y-auto bg-[#1B201D] border border-[#656047]/50 rounded-[24px] shadow-2xl animate-modal">
+          <div className="gold-ambient-card w-full max-w-3xl max-h-[94vh] overflow-y-auto bg-[#1B201D] border border-[#656047]/50 rounded-[24px] shadow-2xl animate-modal">
 
             {/* MODAL HEADER */}
             <div className="sticky top-0 z-20 flex items-center justify-between bg-[#1B201D]/95 backdrop-blur-xl border-b border-[#343A35] px-5 md:px-7 py-5">
@@ -907,7 +954,10 @@ export default function SalonServicesPage() {
             >
               {/* IMAGE */}
               <div>
-                <ModalSection title="Visual identity" number="01" />
+                <ModalSection
+                  title="Visual identity"
+                  number="01"
+                />
 
                 <label className="relative flex items-center justify-center h-48 md:h-56 mt-4 rounded-2xl border border-dashed border-[#62634B] bg-[#141916] cursor-pointer overflow-hidden hover:border-[#D9D19A]/70 transition group">
                   {imagePreview ? (
@@ -954,7 +1004,10 @@ export default function SalonServicesPage() {
 
               {/* SERVICE INFORMATION */}
               <div>
-                <ModalSection title="Service information" number="02" />
+                <ModalSection
+                  title="Service information"
+                  number="02"
+                />
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-5">
                   <FormField label="Service name *">
@@ -978,7 +1031,10 @@ export default function SalonServicesPage() {
                       className="form-input"
                     >
                       {categories.map((category) => (
-                        <option key={category} value={category}>
+                        <option
+                          key={category}
+                          value={category}
+                        >
                           {category}
                         </option>
                       ))}
@@ -1051,7 +1107,10 @@ export default function SalonServicesPage() {
                       rows={4}
                       value={form.description}
                       onChange={(e) =>
-                        updateForm("description", e.target.value)
+                        updateForm(
+                          "description",
+                          e.target.value
+                        )
                       }
                       placeholder="Describe the treatment, experience and what is included..."
                       className="form-input resize-none"
@@ -1127,7 +1186,9 @@ export default function SalonServicesPage() {
                 >
                   <CheckCircle2 size={16} />
 
-                  {editingId ? "Save changes" : "Create service"}
+                  {editingId
+                    ? "Save changes"
+                    : "Create service"}
                 </button>
               </div>
             </form>
@@ -1137,6 +1198,74 @@ export default function SalonServicesPage() {
 
       {/* PAGE STYLES */}
       <style jsx global>{`
+
+        /* =========================================
+           FLOATING GOLDEN AMBIENT CARD GLOW
+        ========================================= */
+
+        .gold-ambient-card {
+          position: relative;
+          isolation: isolate;
+          -webkit-tap-highlight-color: transparent;
+
+          transition:
+            transform 0.35s ease,
+            border-color 0.35s ease,
+            box-shadow 0.35s ease;
+        }
+
+        .gold-ambient-card::before {
+          content: "";
+          position: absolute;
+          inset: -3px;
+          border-radius: inherit;
+          pointer-events: none;
+          z-index: -1;
+
+          background: radial-gradient(
+            ellipse at center,
+            rgba(255, 226, 130, 0.25) 0%,
+            rgba(239, 200, 85, 0.16) 35%,
+            rgba(205, 157, 55, 0.08) 65%,
+            transparent 100%
+          );
+
+          filter: blur(24px);
+          opacity: 0;
+
+          transition: opacity 0.35s ease;
+        }
+
+        .gold-ambient-card:hover,
+        .gold-ambient-card:active,
+        .gold-ambient-card:focus-visible {
+          border-color: rgba(239, 210, 130, 0.45);
+
+          box-shadow:
+            0 0 12px rgba(239, 200, 85, 0.13),
+            0 0 28px rgba(239, 200, 85, 0.12),
+            0 0 50px rgba(239, 200, 85, 0.08),
+            inset 0 0 18px rgba(239, 200, 85, 0.025);
+        }
+
+        .gold-ambient-card:hover::before,
+        .gold-ambient-card:active::before,
+        .gold-ambient-card:focus-visible::before {
+          opacity: 1;
+        }
+
+        @media (hover: hover) and (pointer: fine) {
+          .gold-ambient-card:hover {
+            transform: translateY(-3px);
+          }
+        }
+
+        @media (hover: none) {
+          .gold-ambient-card:active {
+            transform: scale(0.99);
+          }
+        }
+
         /* =========================================
            SEARCH AND FILTER ALIGNMENT
         ========================================= */
@@ -1165,12 +1294,10 @@ export default function SalonServicesPage() {
             box-shadow 0.2s ease;
         }
 
-        /* Search input */
         .salon-search-input {
           padding: 0 14px 0 44px;
         }
 
-        /* Category dropdown */
         .salon-category-select {
           padding: 0 36px 0 38px;
           appearance: none;
@@ -1178,7 +1305,6 @@ export default function SalonServicesPage() {
           cursor: pointer;
         }
 
-        /* Status dropdown */
         .salon-status-select {
           padding: 0 36px 0 14px;
           appearance: none;
@@ -1251,9 +1377,14 @@ export default function SalonServicesPage() {
         }
 
         .service-card:hover {
-          transform: translateY(-5px);
+          transform: translateY(-3px);
           border-color: rgba(217, 209, 154, 0.45);
-          box-shadow: 0 18px 40px rgba(0, 0, 0, 0.22);
+
+          box-shadow:
+            0 0 15px rgba(239, 200, 85, 0.13),
+            0 0 32px rgba(239, 200, 85, 0.11),
+            0 0 55px rgba(239, 200, 85, 0.07),
+            0 18px 40px rgba(0, 0, 0, 0.22);
         }
 
         /* =========================================
@@ -1363,13 +1494,22 @@ export default function SalonServicesPage() {
         ========================================= */
 
         @media (prefers-reduced-motion: reduce) {
+          .gold-ambient-card,
+          .gold-ambient-card::before,
           .service-card,
           .animate-modal,
           .animate-menu {
             animation: none;
             transition: none;
           }
+
+          .gold-ambient-card:hover,
+          .gold-ambient-card:active,
+          .service-card:hover {
+            transform: none;
+          }
         }
+
       `}</style>
     </main>
   );
@@ -1400,7 +1540,7 @@ function OverviewCard({
       : "text-[#D9D19A] bg-[#D9D19A]/10";
 
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-[#303731] bg-[#1B201D] p-4 md:p-5 group hover:border-[#B5A96B]/40 transition duration-300">
+    <div className="gold-ambient-card relative overflow-hidden rounded-2xl border border-[#303731] bg-[#1B201D] p-4 md:p-5 group hover:border-[#B5A96B]/40 transition duration-300">
       <div className="absolute -right-7 -top-8 w-24 h-24 rounded-full bg-[#D9D19A]/[0.035] blur-2xl group-hover:bg-[#D9D19A]/10 transition" />
 
       <div className="relative flex items-center justify-between gap-2">

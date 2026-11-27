@@ -1,5 +1,3 @@
-
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -71,6 +69,27 @@
 }
 
 /* =========================================
+   KBC PUBLIC & ADMIN INNER PAGE THEMES
+========================================= */
+
+.kbc-public-theme {
+  min-height: 100vh;
+  background-color: #242424;
+  color: #f3f1e6;
+}
+
+.kbc-public-theme main,
+.kbc-public-theme section {
+  background-color: transparent;
+}
+
+.kbc-admin-pages-theme {
+  min-height: 100vh;
+  background-color: #242424;
+  color: #f3f1e6;
+}
+
+/* =========================================
    KBC DASHBOARD BASE
 ========================================= */
 
@@ -93,6 +112,167 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* =========================================
+   KBC BRIGHT CHAMPAGNE GOLDEN GLOW
+   Cards & Admin Sidebar Menubar
+========================================= */
+
+:root {
+  --kbc-gold-bright: #ffe98a;
+  --kbc-gold-champagne: #f5d76e;
+  --kbc-gold-deep: #ffc107;
+  --kbc-gold-cream: #fff0a6;
+}
+
+.kbc-gold-card,
+.gold-glow-card {
+  position: relative;
+  border-color: rgba(245, 215, 110, 0.24);
+  transition:
+    transform 340ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 360ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 320ms ease,
+    filter 320ms ease;
+  will-change: transform, box-shadow;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .kbc-gold-card:hover,
+  .gold-glow-card:hover {
+    transform: translateY(-4px);
+    filter: brightness(1.04);
+    border-color: rgba(255, 233, 138, 0.82) !important;
+    box-shadow:
+      0 0 0 1px rgba(255, 240, 166, 0.52),
+      0 0 18px rgba(255, 233, 138, 0.30),
+      0 12px 32px -6px rgba(245, 215, 110, 0.26),
+      0 22px 46px -14px rgba(255, 193, 7, 0.22),
+      inset 0 0 18px rgba(255, 240, 166, 0.14) !important;
+  }
+}
+
+.kbc-gold-card:focus-within,
+.gold-glow-card:focus-within {
+  border-color: rgba(255, 233, 138, 0.72) !important;
+  box-shadow:
+    0 0 0 1px rgba(255, 240, 166, 0.44),
+    0 0 16px rgba(255, 233, 138, 0.24),
+    inset 0 0 14px rgba(255, 240, 166, 0.11) !important;
+}
+
+.kbc-gold-card:active,
+.gold-glow-card:active {
+  filter: brightness(1.05);
+  border-color: rgba(255, 233, 138, 0.88) !important;
+  box-shadow:
+    0 0 0 1px rgba(255, 240, 166, 0.55),
+    0 0 22px rgba(255, 233, 138, 0.34),
+    0 10px 28px -6px rgba(255, 193, 7, 0.26),
+    inset 0 0 18px rgba(255, 240, 166, 0.16) !important;
+}
+
+.kbc-admin-sidebar .kbc-menu-item {
+  position: relative;
+  border: 1px solid transparent;
+  transition:
+    color 300ms ease,
+    background 320ms ease,
+    border-color 320ms ease,
+    box-shadow 340ms cubic-bezier(0.22, 1, 0.36, 1),
+    filter 300ms ease;
+}
+
+.kbc-admin-sidebar .kbc-menu-item svg {
+  transition:
+    color 300ms ease,
+    filter 300ms ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .kbc-admin-sidebar .kbc-menu-item:hover {
+    color: var(--kbc-gold-bright) !important;
+    background: linear-gradient(
+      90deg,
+      rgba(255, 233, 138, 0.18) 0%,
+      rgba(245, 215, 110, 0.09) 70%,
+      rgba(255, 193, 7, 0.05) 100%
+    ) !important;
+    border-color: rgba(255, 233, 138, 0.62) !important;
+    box-shadow:
+      0 0 0 1px rgba(255, 240, 166, 0.32),
+      0 0 18px rgba(255, 233, 138, 0.26),
+      0 6px 20px -4px rgba(255, 193, 7, 0.24),
+      inset 0 0 14px rgba(255, 240, 166, 0.13) !important;
+  }
+
+  .kbc-admin-sidebar .kbc-menu-item:hover svg {
+    color: var(--kbc-gold-bright) !important;
+    filter: drop-shadow(0 0 6px rgba(255, 233, 138, 0.6));
+  }
+}
+
+.kbc-admin-sidebar .kbc-menu-item:focus-visible {
+  outline: none;
+  color: var(--kbc-gold-bright) !important;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 233, 138, 0.18) 0%,
+    rgba(245, 215, 110, 0.09) 100%
+  ) !important;
+  border-color: rgba(255, 240, 166, 0.75) !important;
+  box-shadow:
+    0 0 0 2px rgba(255, 240, 166, 0.36),
+    0 0 18px rgba(255, 233, 138, 0.28),
+    inset 0 0 14px rgba(255, 240, 166, 0.14) !important;
+}
+
+.kbc-admin-sidebar .kbc-menu-item:focus-visible svg {
+  color: var(--kbc-gold-bright) !important;
+  filter: drop-shadow(0 0 6px rgba(255, 233, 138, 0.6));
+}
+
+.kbc-admin-sidebar .kbc-menu-item:active {
+  color: var(--kbc-gold-cream) !important;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 233, 138, 0.24) 0%,
+    rgba(245, 215, 110, 0.12) 100%
+  ) !important;
+  border-color: rgba(255, 233, 138, 0.82) !important;
+  box-shadow:
+    0 0 20px rgba(255, 233, 138, 0.32),
+    0 4px 16px -2px rgba(255, 193, 7, 0.28),
+    inset 0 0 16px rgba(255, 240, 166, 0.16) !important;
+}
+
+.kbc-admin-sidebar .kbc-menu-item:active svg {
+  color: var(--kbc-gold-cream) !important;
+  filter: drop-shadow(0 0 7px rgba(255, 240, 166, 0.68));
+}
+
+.kbc-admin-sidebar .kbc-menu-item-active,
+.kbc-admin-sidebar .kbc-menu-item[aria-current="page"] {
+  color: var(--kbc-gold-cream) !important;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 233, 138, 0.22) 0%,
+    rgba(245, 215, 110, 0.11) 65%,
+    rgba(255, 193, 7, 0.05) 100%
+  ) !important;
+  border-color: rgba(255, 233, 138, 0.72) !important;
+  box-shadow:
+    0 0 0 1px rgba(255, 240, 166, 0.35),
+    0 0 22px rgba(255, 233, 138, 0.28),
+    0 8px 22px -6px rgba(255, 193, 7, 0.25),
+    inset 0 0 16px rgba(255, 240, 166, 0.15) !important;
+}
+
+.kbc-admin-sidebar .kbc-menu-item-active svg,
+.kbc-admin-sidebar .kbc-menu-item[aria-current="page"] svg {
+  color: var(--kbc-gold-bright) !important;
+  filter: drop-shadow(0 0 6px rgba(255, 233, 138, 0.6));
 }
 
 /* =========================================
@@ -595,8 +775,6 @@ nav::-webkit-scrollbar-button {
     border-color 450ms ease;
 }
 
-/* Animated champagne gradient border */
-
 .kbc-glass-border {
   position: absolute;
   inset: 0;
@@ -636,8 +814,6 @@ nav::-webkit-scrollbar-button {
   }
 }
 
-/* Interactive mouse-following spotlight */
-
 .kbc-glass-spotlight {
   position: absolute;
   inset: 0;
@@ -657,8 +833,6 @@ nav::-webkit-scrollbar-button {
   transition: opacity 350ms ease;
 }
 
-/* Card content */
-
 .kbc-fire-content {
   position: relative;
   z-index: 1;
@@ -666,8 +840,6 @@ nav::-webkit-scrollbar-button {
   border-radius: inherit;
   overflow: hidden;
 }
-
-/* Moving glass reflection */
 
 .kbc-fire-content::before {
   content: "";
@@ -700,8 +872,6 @@ nav::-webkit-scrollbar-button {
   left: 135%;
 }
 
-/* Soft intensity */
-
 .kbc-glass-soft {
   box-shadow:
     0 8px 25px rgba(0, 0, 0, 0.2),
@@ -711,8 +881,6 @@ nav::-webkit-scrollbar-button {
 .kbc-glass-soft .kbc-glass-border {
   opacity: 0.4;
 }
-
-/* Medium intensity */
 
 .kbc-glass-medium {
   box-shadow:
@@ -724,8 +892,6 @@ nav::-webkit-scrollbar-button {
   opacity: 0.7;
 }
 
-/* Strong intensity */
-
 .kbc-glass-strong {
   box-shadow:
     0 15px 38px rgba(0, 0, 0, 0.3),
@@ -735,8 +901,6 @@ nav::-webkit-scrollbar-button {
 .kbc-glass-strong .kbc-glass-border {
   opacity: 1;
 }
-
-/* Hover interaction */
 
 .kbc-glass-card:hover {
   transform: translateY(-5px);
@@ -798,6 +962,20 @@ nav::-webkit-scrollbar-button {
 
   .kbc-glass-card:hover {
     transform: none;
+  }
+
+  .kbc-gold-card,
+  .gold-glow-card,
+  .kbc-admin-sidebar .kbc-menu-item,
+  .kbc-admin-sidebar .kbc-menu-item svg {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .kbc-gold-card:hover,
+  .gold-glow-card:hover {
+    transform: none !important;
+    filter: none !important;
   }
 
   .kbc-enter-rise,
@@ -929,8 +1107,6 @@ nav::-webkit-scrollbar-button {
 .kbc-intro-skip span {
   margin-left: 8px;
 }
-
-/* Golden light particles */
 
 .kbc-intro-particles {
   position: absolute;
@@ -1316,8 +1492,6 @@ nav::-webkit-scrollbar-button {
   color: #ffb45e;
 }
 
-/* INTRO KEYFRAMES */
-
 @keyframes kbcScreenEnter {
   from {
     opacity: 0;
@@ -1405,8 +1579,6 @@ nav::-webkit-scrollbar-button {
   }
 }
 
-/* RESPONSIVE */
-
 @media (max-width: 600px) {
   .kbc-intro-bottom {
     right: 15px;
@@ -1453,7 +1625,7 @@ nav::-webkit-scrollbar-button {
 }
 
 /* =========================================
-   KBC PREMIUM LIQUID GOLD BACKGROUND
+   KBC PREMIUM LIQUID GOLD BACKGROUND & VIGNETTE
 ========================================= */
 
 .kbc-liquid-gold {
@@ -1592,6 +1764,33 @@ nav::-webkit-scrollbar-button {
   animation: kbcLiquidShimmer 18s ease-in-out infinite;
 }
 
+.kbc-gold-particle-canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.kbc-gold-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      ellipse at center,
+      transparent 25%,
+      rgba(0, 0, 0, 0.16) 72%,
+      rgba(0, 0, 0, 0.4) 100%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(18, 20, 20, 0.03),
+      rgba(18, 20, 20, 0.2)
+    );
+}
+
 @keyframes kbcLiquidFlowOne {
   0% {
     transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
@@ -1693,117 +1892,7 @@ nav::-webkit-scrollbar-button {
   .kbc-liquid-shimmer {
     opacity: 0.5;
   }
-}
 
-@media (prefers-reduced-motion: reduce) {
-  .kbc-liquid-wave,
-  .kbc-liquid-glow,
-  .kbc-liquid-shimmer {
-    animation: none !important;
-  }
-}
-
-/* =========================================
-   KBC PREMIUM CHAMPAGNE GOLD BACKGROUND
-========================================= */
-
-.kbc-liquid-gold {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  overflow: hidden;
-  pointer-events: none;
-  background: #121414;
-  isolation: isolate;
-}
-
-.kbc-gold-particle-canvas {
-  position: absolute;
-  inset: 0;
-  display: block;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-
-.kbc-gold-vignette {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-
-  background:
-    radial-gradient(
-      ellipse at center,
-      transparent 30%,
-      rgba(0, 0, 0, 0.16) 75%,
-      rgba(0, 0, 0, 0.38) 100%
-    ),
-    linear-gradient(
-      180deg,
-      rgba(18, 20, 20, 0.05),
-      rgba(18, 20, 20, 0.18)
-    );
-}
-
-@media (max-width: 768px) {
-  .kbc-gold-vignette {
-    background:
-      radial-gradient(
-        ellipse at center,
-        transparent 25%,
-        rgba(0, 0, 0, 0.3) 100%
-      );
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .kbc-gold-particle-canvas {
-    animation: none;
-  }
-}
-
-/* =========================================
-   KBC CHAMPAGNE GOLD WATER BACKGROUND
-========================================= */
-
-.kbc-liquid-gold {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  overflow: hidden;
-  pointer-events: none;
-  background: #121414;
-  isolation: isolate;
-}
-
-.kbc-gold-particle-canvas {
-  position: absolute;
-  inset: 0;
-  display: block;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-
-.kbc-gold-vignette {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background:
-    radial-gradient(
-      ellipse at center,
-      transparent 25%,
-      rgba(0, 0, 0, 0.16) 72%,
-      rgba(0, 0, 0, 0.4) 100%
-    ),
-    linear-gradient(
-      180deg,
-      rgba(18, 20, 20, 0.03),
-      rgba(18, 20, 20, 0.2)
-    );
-}
-
-@media (max-width: 768px) {
   .kbc-gold-vignette {
     background: radial-gradient(
       ellipse at center,
@@ -1814,8 +1903,11 @@ nav::-webkit-scrollbar-button {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .kbc-liquid-wave,
+  .kbc-liquid-glow,
+  .kbc-liquid-shimmer,
   .kbc-gold-particle-canvas {
-    animation: none;
+    animation: none !important;
   }
 }
 
@@ -2027,8 +2119,6 @@ nav::-webkit-scrollbar-button {
   opacity: 1;
 }
 
-/* 1. Champagne Border Flow */
-
 .kbc-glow-champagne-border .kbc-glow-border {
   border: 2px solid transparent;
   background:
@@ -2051,18 +2141,6 @@ nav::-webkit-scrollbar-button {
   }
 }
 
-/* 2. Interactive Spotlight */
-
-.kbc-glow-spotlight .kbc-glow-spotlight {
-  opacity: 0.2;
-}
-
-.kbc-glow-spotlight:hover .kbc-glow-spotlight {
-  opacity: 1;
-}
-
-/* 3. Four-Corner Golden Glow */
-
 .kbc-glow-corner-glow::before {
   content: "";
   position: absolute;
@@ -2084,8 +2162,6 @@ nav::-webkit-scrollbar-button {
   opacity: 0.85;
 }
 
-/* 4. Cinematic Light Sweep */
-
 .kbc-glow-light-sweep::after {
   content: "";
   position: absolute;
@@ -2105,8 +2181,6 @@ nav::-webkit-scrollbar-button {
 .kbc-glow-light-sweep:hover::after {
   transform: translateX(70%);
 }
-
-/* 5. Ambient Halo */
 
 .kbc-glow-ambient-halo::before {
   content: "";
@@ -2135,8 +2209,6 @@ nav::-webkit-scrollbar-button {
   }
 }
 
-/* 6. Floating Gold Particles */
-
 .kbc-glow-gold-particles .kbc-glow-particles {
   z-index: 3;
   overflow: hidden;
@@ -2156,8 +2228,6 @@ nav::-webkit-scrollbar-button {
   }
 }
 
-/* 7. Breathing Neon Glow */
-
 .kbc-glow-breathing-glow {
   animation: kbcBreathingGlow 4s ease-in-out infinite;
 }
@@ -2172,8 +2242,6 @@ nav::-webkit-scrollbar-button {
       0 0 38px rgba(190, 160, 91, 0.1);
   }
 }
-
-/* 8. Liquid Glass Reflection */
 
 .kbc-glow-liquid-glass::after {
   content: "";
@@ -2196,8 +2264,6 @@ nav::-webkit-scrollbar-button {
   transform: translateX(100%);
 }
 
-/* 9. Golden Orbit */
-
 .kbc-glow-golden-orbit .kbc-glow-border {
   border: 1px solid transparent;
   background:
@@ -2217,8 +2283,6 @@ nav::-webkit-scrollbar-button {
   }
 }
 
-/* 10. 3D Magnetic Tilt */
-
 .kbc-glow-magnetic-tilt {
   transform-style: preserve-3d;
 }
@@ -2229,8 +2293,6 @@ nav::-webkit-scrollbar-button {
     0 15px 30px rgba(0, 0, 0, 0.3),
     0 0 25px rgba(239, 232, 168, 0.15);
 }
-
-/* Intensity variations */
 
 .kbc-glass-soft .kbc-glow-border {
   opacity: 0.3;
@@ -2248,8 +2310,6 @@ nav::-webkit-scrollbar-button {
   outline: 1px solid rgba(239, 232, 168, 0.6);
   outline-offset: 3px;
 }
-
-/* Accessibility */
 
 @media (prefers-reduced-motion: reduce) {
   .kbc-glow-card,
@@ -2269,49 +2329,4 @@ nav::-webkit-scrollbar-button {
   .kbc-glow-spotlight {
     opacity: 0.15;
   }
-}
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-@layer base { body { @apply bg-ink font-sans text-[#f3f1e6]; } h1,h2,h3 { @apply font-serif; } }
-@layer components {
-  .btn { @apply inline-block cursor-pointer rounded-full bg-gold px-5 py-2.5 text-sm font-semibold text-ink transition hover:brightness-110; }
-  .btn-o { @apply inline-block cursor-pointer rounded-full border border-gold px-5 py-2.5 text-sm font-semibold text-gold transition hover:bg-gold/10; }
-  .btn-d { @apply inline-block cursor-pointer rounded-full border border-red-400 px-5 py-2.5 text-sm font-semibold text-red-400 hover:bg-red-400/10; }
-  .btn-sm { @apply !px-3.5 !py-1.5 !text-xs; }
-  .card { @apply rounded-2xl border border-line bg-card p-5; }
-  .input { @apply w-full rounded-xl border border-line bg-[#0f1111] px-3 py-2.5 text-sm outline-none focus:border-gold; }
-  .label { @apply mb-1 mt-3 block text-xs text-mute; }
-  .tag { @apply inline-block rounded-full bg-gold/10 px-2.5 py-0.5 text-xs text-gold; }
-  .wrap { @apply mx-auto max-w-6xl px-5; }
-  .th { @apply p-3 text-left text-xs font-medium text-mute; }
-  .td { @apply border-t border-line p-3 text-sm; }
-}
-/* =========================================
-   KBC PUBLIC WEBSITE - SOFT CHARCOAL THEME
-   Admin Dashboard remains unchanged
-========================================= */
-
-.kbc-public-theme {
-  min-height: 100vh;
-  background-color: #242424;
-  color: #f3f1e6;
-}
-
-/* Public page section backgrounds */
-.kbc-public-theme main,
-.kbc-public-theme section {
-  background-color: transparent;
-}
-
-/* =========================================
-   KBC ADMIN INNER PAGES - SOFT CHARCOAL
-   Dashboard remains unchanged
-========================================= */
-
-.kbc-admin-pages-theme {
-  min-height: 100vh;
-  background-color: #242424;
-  color: #f3f1e6;
 }

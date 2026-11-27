@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
@@ -26,7 +25,6 @@ import {
   XCircle,
   Award,
   Crown,
-  Sparkles,
 } from "lucide-react";
 
 // ------------------------------------------------------
@@ -176,7 +174,7 @@ function Card({
 }) {
   return (
     <section
-      className={`report-card rounded-2xl border border-[#34372F] bg-[#1B1F1D] ${className}`}
+      className={`report-card gold-ambient-card rounded-2xl border border-[#34372F] bg-[#1B1F1D] ${className}`}
     >
       {children}
     </section>
@@ -223,7 +221,7 @@ function StatCard({
 
   return (
     <div
-      className={`report-kpi group relative isolate overflow-hidden rounded-2xl border border-[#45483A] bg-gradient-to-br ${theme.glow} via-[#20241F] to-[#151916] p-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_16px_35px_rgba(0,0,0,0.28)] ${theme.line}`}
+      className={`report-kpi gold-ambient-card group relative isolate overflow-hidden rounded-2xl border border-[#45483A] bg-gradient-to-br ${theme.glow} via-[#20241F] to-[#151916] p-5 transition-all duration-300 ${theme.line}`}
     >
       <div className="pointer-events-none absolute -right-8 -top-10 h-32 w-32 rounded-full bg-white/[0.025] blur-2xl transition group-hover:bg-[#EFE8A8]/[0.08]" />
       <div className="pointer-events-none absolute inset-x-5 top-0 h-px bg-gradient-to-r from-transparent via-[#EFE8A8]/40 to-transparent" />
@@ -332,10 +330,7 @@ function RevenueChart({
     <div className="relative">
       <div className="pointer-events-none absolute inset-0 flex flex-col justify-between pb-9">
         {[100, 75, 50, 25, 0].map((line) => (
-          <div
-            key={line}
-            className="flex items-center gap-3"
-          >
+          <div key={line} className="flex items-center gap-3">
             <span className="w-7 text-[9px] text-[#66695D]">{line}%</span>
             <div className="h-px flex-1 border-t border-dashed border-[#414438]/70" />
           </div>
@@ -343,7 +338,7 @@ function RevenueChart({
       </div>
 
       <div className="relative flex h-64 items-end gap-3 pl-9 sm:gap-5">
-        {data.map((item, index) => {
+        {data.map((item) => {
           const height =
             item.revenue > 0
               ? Math.max((item.revenue / maxRevenue) * 100, 4)
@@ -404,7 +399,6 @@ function AppointmentStatusRing({
 }) {
   const completedPercent = total ? (completed / total) * 100 : 0;
   const pendingPercent = total ? (pending / total) * 100 : 0;
-  const cancelledPercent = total ? (cancelled / total) * 100 : 0;
 
   const completedEnd = completedPercent;
   const pendingEnd = completedPercent + pendingPercent;
@@ -479,7 +473,7 @@ function RankingCard({
         : "border-[#34372F] bg-[#151916] text-[#A9A58A]";
 
   return (
-    <div className="group rounded-xl border border-[#34372F] bg-[#151916] p-4 transition duration-300 hover:-translate-y-0.5 hover:border-[#EFE8A8]/30 hover:bg-[#1D221D]">
+    <div className="gold-ambient-card group rounded-xl border border-[#34372F] bg-[#151916] p-4 transition duration-300">
       <div className="flex items-center justify-between gap-3">
         <div className="flex min-w-0 items-center gap-3">
           <div
@@ -971,6 +965,68 @@ export default function ReportsPage() {
           -webkit-backdrop-filter: blur(14px);
         }
 
+        /* ==========================================
+           SOFT GOLDEN AMBIENT HOVER GLOW
+        ========================================== */
+
+        .gold-ambient-card {
+          position: relative;
+          isolation: isolate;
+          -webkit-tap-highlight-color: transparent;
+          transition:
+            transform 0.35s ease,
+            border-color 0.35s ease,
+            box-shadow 0.35s ease;
+        }
+
+        .gold-ambient-card::before {
+          content: "";
+          position: absolute;
+          inset: -3px;
+          border-radius: inherit;
+          pointer-events: none;
+          z-index: -1;
+          background: radial-gradient(
+            ellipse at center,
+            rgba(255, 226, 130, 0.25) 0%,
+            rgba(239, 200, 85, 0.16) 35%,
+            rgba(205, 157, 55, 0.08) 65%,
+            transparent 100%
+          );
+          filter: blur(24px);
+          opacity: 0;
+          transition: opacity 0.35s ease;
+        }
+
+        .gold-ambient-card:hover,
+        .gold-ambient-card:active,
+        .gold-ambient-card:focus-visible {
+          border-color: rgba(239, 210, 130, 0.45);
+          box-shadow:
+            0 0 12px rgba(239, 200, 85, 0.13),
+            0 0 28px rgba(239, 200, 85, 0.12),
+            0 0 50px rgba(239, 200, 85, 0.08),
+            inset 0 0 18px rgba(239, 200, 85, 0.025);
+        }
+
+        .gold-ambient-card:hover::before,
+        .gold-ambient-card:active::before,
+        .gold-ambient-card:focus-visible::before {
+          opacity: 1;
+        }
+
+        @media (hover: hover) and (pointer: fine) {
+          .gold-ambient-card:hover {
+            transform: translateY(-3px);
+          }
+        }
+
+        @media (hover: none) {
+          .gold-ambient-card:active {
+            transform: scale(0.99);
+          }
+        }
+
         .report-scroll::-webkit-scrollbar {
           width: 6px;
           height: 6px;
@@ -994,6 +1050,18 @@ export default function ReportsPage() {
         .report-table tbody tr:hover {
           background: rgba(239, 232, 168, 0.045);
           box-shadow: inset 2px 0 0 #c9c18a;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .gold-ambient-card,
+          .gold-ambient-card::before {
+            transition: none;
+          }
+
+          .gold-ambient-card:hover,
+          .gold-ambient-card:active {
+            transform: none;
+          }
         }
       `}</style>
 
@@ -1129,8 +1197,6 @@ export default function ReportsPage() {
 
         {activeSection === "Overview" && (
           <div className="report-fade space-y-6">
-            {/* KPI CARDS */}
-
             <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
               <StatCard
                 title="Total Revenue"
@@ -1163,8 +1229,6 @@ export default function ReportsPage() {
                 icon={Target}
               />
             </div>
-
-            {/* REVENUE CHART + STATUS */}
 
             <div className="grid gap-5 xl:grid-cols-3">
               <Card className="p-5 xl:col-span-2">
@@ -1210,8 +1274,6 @@ export default function ReportsPage() {
                 )}
               </Card>
 
-              {/* APPOINTMENT STATUS */}
-
               <Card className="p-5">
                 <div className="flex items-center gap-2">
                   <Activity size={18} className="text-[#EFE8A8]" />
@@ -1251,8 +1313,6 @@ export default function ReportsPage() {
               </Card>
             </div>
 
-            {/* BUSINESS SNAPSHOT */}
-
             <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
               <StatCard
                 title="Staff Members"
@@ -1282,8 +1342,6 @@ export default function ReportsPage() {
                 color="green"
               />
             </div>
-
-            {/* TOP SERVICES */}
 
             <Card className="p-5">
               <SectionHeading
@@ -1365,7 +1423,7 @@ export default function ReportsPage() {
               <RevenueChart data={monthlyData} />
 
               <div className="mt-5 grid gap-3 border-t border-[#34372F] pt-4 sm:grid-cols-3">
-                <div className="rounded-xl bg-[#151916] p-3">
+                <div className="gold-ambient-card rounded-xl bg-[#151916] p-3">
                   <p className="text-[10px] uppercase tracking-wider text-[#77796E]">
                     Total revenue
                   </p>
@@ -1373,7 +1431,7 @@ export default function ReportsPage() {
                     {money(monthlyData.reduce((sum, item) => sum + item.revenue, 0))}
                   </p>
                 </div>
-                <div className="rounded-xl bg-[#151916] p-3">
+                <div className="gold-ambient-card rounded-xl bg-[#151916] p-3">
                   <p className="text-[10px] uppercase tracking-wider text-[#77796E]">
                     Completed bookings
                   </p>
@@ -1381,7 +1439,7 @@ export default function ReportsPage() {
                     {monthlyData.reduce((sum, item) => sum + item.bookings, 0)}
                   </p>
                 </div>
-                <div className="rounded-xl bg-[#151916] p-3">
+                <div className="gold-ambient-card rounded-xl bg-[#151916] p-3">
                   <p className="text-[10px] uppercase tracking-wider text-[#77796E]">
                     Monthly average
                   </p>
@@ -1634,8 +1692,6 @@ export default function ReportsPage() {
                 />
               ) : (
                 <>
-                  {/* TOP THREE */}
-
                   <div className="mb-5 grid gap-3 md:grid-cols-3">
                     {staffPerformance.slice(0, 3).map((member, index) => {
                       const rank = index + 1;
@@ -1648,7 +1704,7 @@ export default function ReportsPage() {
                       return (
                         <div
                           key={member.name}
-                          className={`relative overflow-hidden rounded-2xl border p-5 transition duration-300 hover:-translate-y-1 ${topStyles[index]}`}
+                          className={`gold-ambient-card relative overflow-hidden rounded-2xl border p-5 transition duration-300 ${topStyles[index]}`}
                         >
                           <div className="absolute -right-5 -top-5 h-24 w-24 rounded-full bg-[#EFE8A8]/[0.05] blur-2xl" />
 
@@ -1692,8 +1748,6 @@ export default function ReportsPage() {
                       );
                     })}
                   </div>
-
-                  {/* COMPLETE LEADERBOARD */}
 
                   <div className="space-y-3">
                     <p className="mb-3 text-xs font-semibold uppercase tracking-[0.15em] text-[#929487]">
@@ -1840,7 +1894,7 @@ export default function ReportsPage() {
                 ].map((item) => (
                   <div
                     key={item.title}
-                    className="rounded-xl border border-[#34372F] bg-[#151916] p-4 transition hover:border-[#EFE8A8]/20"
+                    className="gold-ambient-card rounded-xl border border-[#34372F] bg-[#151916] p-4 transition"
                   >
                     <p className="text-xs text-[#929487]">{item.title}</p>
                     <p className={`mt-2 text-2xl font-semibold ${item.color}`}>

@@ -6,7 +6,6 @@ import {
   Award,
   FileText,
   Files,
-  FileCheck,
   Clock,
   AlertTriangle,
   Search,
@@ -25,21 +24,10 @@ import {
   Users,
   Building2,
   BookOpen,
-  FileImage,
-  FileSpreadsheet,
-  FileArchive,
   MoreVertical,
-  Filter,
   ChevronDown,
-  CalendarDays,
-  User,
-  Hash,
   Sparkles,
-  Printer,
-  RefreshCw,
-  ShieldCheck,
   FolderOpen,
-  ArrowUpRight,
 } from "lucide-react";
 
 type Category =
@@ -180,6 +168,10 @@ const initialDocuments: DocumentItem[] = [
   },
 ];
 
+/* =========================================
+   CATEGORY CONFIG
+========================================= */
+
 const categoryConfig: Record<
   Category,
   { icon: typeof FileText; color: string; bg: string }
@@ -231,6 +223,26 @@ const statusConfig: Record<Status, { color: string; bg: string }> = {
   },
 };
 
+/* =========================================
+   REUSABLE STYLES
+========================================= */
+
+const cardClass =
+  "gold-ambient-card rounded-2xl border border-[#343832] bg-[#1B1F1D] p-5";
+
+const inputClass =
+  "w-full rounded-xl border border-[#3A403A] bg-[#151917] px-4 py-3 text-sm text-white outline-none transition focus:border-[#D9D19A]";
+
+const primaryButtonClass =
+  "inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#EFE8A8] to-[#C8BD79] px-4 py-2.5 text-sm font-semibold text-[#171914] transition hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-40";
+
+const secondaryButtonClass =
+  "inline-flex items-center justify-center gap-2 rounded-xl border border-[#3A403A] bg-[#151917] px-4 py-2.5 text-sm font-medium text-[#D7D9D1] transition hover:border-[#D9D19A] hover:text-[#EFE8A8] disabled:cursor-not-allowed disabled:opacity-40";
+
+/* =========================================
+   HELPERS
+========================================= */
+
 function formatDate(value: string) {
   if (!value) return "—";
 
@@ -251,8 +263,7 @@ function getFileSize(bytes: number) {
 }
 
 function getFileType(name: string) {
-  const extension = name.split(".").pop()?.toUpperCase() || "FILE";
-  return extension;
+  return name.split(".").pop()?.toUpperCase() || "FILE";
 }
 
 function isExpired(expiryDate: string) {
@@ -274,17 +285,18 @@ function isExpiringSoon(expiryDate: string) {
   return days >= 0 && days <= 30;
 }
 
-function getStatus(item: DocumentItem): Status {
-  return item.status;
-}
-
 function escapeCsv(value: string | number) {
   return `"${String(value).replace(/"/g, '""')}"`;
 }
 
+/* =========================================
+   MAIN COMPONENT
+========================================= */
+
 export default function DocumentsPage() {
   const [documents, setDocuments] = useState<DocumentItem[]>([]);
   const [loaded, setLoaded] = useState(false);
+
   const [activeTab, setActiveTab] = useState<
     "All" | "Certificates" | "Documents" | "Pending"
   >("All");
@@ -296,8 +308,10 @@ export default function DocumentsPage() {
   const [showForm, setShowForm] = useState(false);
   const [editingDocument, setEditingDocument] =
     useState<DocumentItem | null>(null);
+
   const [previewDocument, setPreviewDocument] =
     useState<DocumentItem | null>(null);
+
   const [menuId, setMenuId] = useState<string | null>(null);
   const [toast, setToast] = useState("");
 
@@ -317,6 +331,10 @@ export default function DocumentsPage() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  /* =========================================
+     LOAD STORAGE
+  ========================================= */
+
   useEffect(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
@@ -334,16 +352,34 @@ export default function DocumentsPage() {
     }
   }, []);
 
+  /* =========================================
+     SAVE STORAGE
+  ========================================= */
+
   useEffect(() => {
     if (!loaded) return;
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(documents));
+
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(documents));
+    } catch {
+      setToast("Storage limit reached. Try a smaller file.");
+    }
   }, [documents, loaded]);
+
+  /* =========================================
+     TOAST TIMER
+  ========================================= */
 
   useEffect(() => {
     if (!toast) return;
+
     const timer = window.setTimeout(() => setToast(""), 2600);
     return () => window.clearTimeout(timer);
   }, [toast]);
+
+  /* =========================================
+     COUNTS
+  ========================================= */
 
   const totalDocuments = documents.length;
 
@@ -366,9 +402,12 @@ export default function DocumentsPage() {
 
   const expiringCount = documents.filter(
     (item) =>
-      item.status === "Approved" &&
-      isExpiringSoon(item.expiryDate)
+      item.status === "Approved" && isExpiringSoon(item.expiryDate)
   ).length;
+
+  /* =========================================
+     FILTER DOCUMENTS
+  ========================================= */
 
   const filteredDocuments = useMemo(() => {
     return documents
@@ -376,25 +415,28 @@ export default function DocumentsPage() {
         if (activeTab === "Certificates") {
           return item.category === "Certificate";
         }
+
         if (activeTab === "Documents") {
           return item.category !== "Certificate";
         }
+
         if (activeTab === "Pending") {
           return item.status === "Pending";
         }
+
         return true;
       })
+      .filter(
+        (item) =>
+          categoryFilter === "All" || item.category === categoryFilter
+      )
+      .filter(
+        (item) =>
+          statusFilter === "All" || item.status === statusFilter
+      )
       .filter((item) => {
-        return (
-          categoryFilter === "All" ||
-          item.category === categoryFilter
-        );
-      })
-      .filter((item) => {
-        return statusFilter === "All" || item.status === statusFilter;
-      })
-      .filter((item) => {
-        const term = search.toLowerCase();
+        const term = search.toLowerCase().trim();
+
         return [
           item.title,
           item.owner,
@@ -414,6 +456,10 @@ export default function DocumentsPage() {
       );
   }, [documents, activeTab, categoryFilter, statusFilter, search]);
 
+  /* =========================================
+     FORM HANDLERS
+  ========================================= */
+
   const resetForm = () => {
     setForm({
       title: "",
@@ -427,9 +473,14 @@ export default function DocumentsPage() {
       certificateNumber: "",
       notes: "",
     });
+
     setSelectedFile(null);
+
     setEditingDocument(null);
-    if (fileInputRef.current) fileInputRef.current.value = "";
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
   };
 
   const openAddForm = () => {
@@ -439,6 +490,7 @@ export default function DocumentsPage() {
 
   const openEditForm = (item: DocumentItem) => {
     setEditingDocument(item);
+
     setForm({
       title: item.title,
       category: item.category,
@@ -451,12 +503,19 @@ export default function DocumentsPage() {
       certificateNumber: item.certificateNumber,
       notes: item.notes,
     });
+
     setSelectedFile(null);
     setShowForm(true);
     setMenuId(null);
   };
 
-  const saveDocument = async (e: React.FormEvent<HTMLFormElement>) => {
+  /* =========================================
+     SAVE DOCUMENT
+  ========================================= */
+
+  const saveDocument = async (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
     e.preventDefault();
 
     if (!form.title.trim() || !form.owner.trim()) {
@@ -529,6 +588,7 @@ export default function DocumentsPage() {
       setDocuments((current) =>
         current.map((doc) => (doc.id === item.id ? item : doc))
       );
+
       setToast("Document updated successfully");
     } else {
       setDocuments((current) => [item, ...current]);
@@ -539,26 +599,48 @@ export default function DocumentsPage() {
     resetForm();
   };
 
+  /* =========================================
+     DELETE DOCUMENT
+  ========================================= */
+
   const deleteDocument = (id: string) => {
     const item = documents.find((doc) => doc.id === id);
     if (!item) return;
 
-    if (!window.confirm(`Delete "${item.title}"? This cannot be undone.`)) {
+    if (
+      !window.confirm(
+        `Delete "${item.title}"? This cannot be undone.`
+      )
+    ) {
       return;
     }
 
-    setDocuments((current) => current.filter((doc) => doc.id !== id));
+    setDocuments((current) =>
+      current.filter((doc) => doc.id !== id)
+    );
+
     setMenuId(null);
     setToast("Document deleted");
   };
 
+  /* =========================================
+     UPDATE STATUS
+  ========================================= */
+
   const updateStatus = (id: string, status: Status) => {
     setDocuments((current) =>
-      current.map((doc) => (doc.id === id ? { ...doc, status } : doc))
+      current.map((doc) =>
+        doc.id === id ? { ...doc, status } : doc
+      )
     );
+
     setMenuId(null);
     setToast(`Document marked as ${status.toLowerCase()}`);
   };
+
+  /* =========================================
+     DOWNLOAD DOCUMENT
+  ========================================= */
 
   const downloadDocument = (item: DocumentItem) => {
     if (!item.fileData) {
@@ -573,6 +655,10 @@ export default function DocumentsPage() {
     link.click();
     link.remove();
   };
+
+  /* =========================================
+     EXPORT CSV
+  ========================================= */
 
   const exportCsv = () => {
     const headers = [
@@ -616,13 +702,18 @@ export default function DocumentsPage() {
 
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
+
     link.href = url;
     link.download = "kbc-documents-register.csv";
     link.click();
-    URL.revokeObjectURL(url);
 
+    URL.revokeObjectURL(url);
     setToast("Document register exported");
   };
+
+  /* =========================================
+     CREATE CERTIFICATE
+  ========================================= */
 
   const createCertificate = () => {
     setForm({
@@ -639,10 +730,15 @@ export default function DocumentsPage() {
       ).padStart(3, "0")}`,
       notes: "",
     });
+
     setEditingDocument(null);
     setSelectedFile(null);
     setShowForm(true);
   };
+
+  /* =========================================
+     CERTIFICATE PREVIEW
+  ========================================= */
 
   const previewCertificate = (item: DocumentItem) => {
     setPreviewDocument(item);
@@ -675,11 +771,17 @@ KBC SALON ACADEMY
 
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
+
     link.href = url;
     link.download = `${item.certificateNumber || item.id}.txt`;
     link.click();
+
     URL.revokeObjectURL(url);
   };
+
+  /* =========================================
+     TABS
+  ========================================= */
 
   const tabs = [
     { name: "All", count: totalDocuments },
@@ -691,115 +793,150 @@ KBC SALON ACADEMY
     { name: "Pending", count: pendingCount },
   ] as const;
 
-  return (
-    <main className="min-h-screen bg-[#121414] p-4 text-[#F5F2E9] sm:p-6 lg:p-8">
-      <div className="mx-auto max-w-[1500px] space-y-7">
+  /* =========================================
+     SUMMARY CARDS
+  ========================================= */
 
-        {/* Header */}
-        <div className="flex flex-col justify-between gap-5 lg:flex-row lg:items-center">
-          <div>
-            <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.25em] text-[#A9A58A]">
-              <Sparkles size={14} />
-              KBC Admin Center
+  const summaryCards = [
+    {
+      label: "Total Documents",
+      value: totalDocuments,
+      icon: Files,
+      color: "#EFE8A8",
+      note: "All stored records",
+    },
+    {
+      label: "Certificates Issued",
+      value: certificateCount,
+      icon: Award,
+      color: "#B9A0E8",
+      note: "Certificate records",
+    },
+    {
+      label: "Pending Approval",
+      value: pendingCount,
+      icon: Clock3,
+      color: "#E7AD75",
+      note: "Waiting for review",
+    },
+    {
+      label: "Expiring Soon",
+      value: expiringCount,
+      icon: AlertTriangle,
+      color: "#F18C8C",
+      note: `${expiredCount} expired`,
+    },
+  ];
+
+  /* =========================================
+     RENDER
+  ========================================= */
+
+  return (
+    <main className="min-h-screen bg-[#121414] px-4 py-6 text-white sm:px-6 lg:px-8">
+      <div className="mx-auto flex max-w-[1600px] flex-col gap-6">
+
+        {/* HEADER */}
+
+        <section className={cardClass}>
+          <div className="flex flex-col justify-between gap-5 lg:flex-row lg:items-center">
+            <div>
+              <div className="mb-3 flex items-center gap-2">
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#5A5438] bg-[#28291F] text-[#EFE8A8]">
+                  <Files size={19} />
+                </div>
+
+                <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#D9D19A]">
+                  KBC Admin Center
+                </span>
+              </div>
+
+              <h1 className="text-2xl font-semibold tracking-tight text-white sm:text-3xl">
+                Certificates & Documents
+              </h1>
+
+              <p className="mt-2 text-sm text-[#92978F]">
+                Organize student certificates, academy records and important documents.
+              </p>
             </div>
 
-            <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-              Certificates & Documents
-            </h1>
+            <div className="flex flex-wrap items-center gap-3">
+              <button
+                onClick={exportCsv}
+                className={secondaryButtonClass}
+              >
+                <Download size={16} />
+                Export CSV
+              </button>
 
-            <p className="mt-2 text-sm text-[#92968E]">
-              Organize student certificates, academy records and important documents.
-            </p>
+              <button
+                onClick={openAddForm}
+                className={primaryButtonClass}
+              >
+                <Plus size={17} />
+                Add document
+              </button>
+            </div>
           </div>
+        </section>
 
-          <div className="flex flex-wrap gap-3">
-            <button
-              onClick={exportCsv}
-              className="flex items-center gap-2 rounded-xl border border-[#41473E] px-4 py-3 text-sm text-[#DAD6C8] transition hover:border-[#EFE8A8] hover:text-[#EFE8A8]"
-            >
-              <Download size={17} />
-              Export CSV
-            </button>
+        {/* SUMMARY CARDS */}
 
-            <button
-              onClick={openAddForm}
-              className="flex items-center gap-2 rounded-xl bg-[#EFE8A8] px-4 py-3 text-sm font-semibold text-[#24251F] transition hover:bg-[#DED49A]"
-            >
-              <Plus size={17} />
-              Add document
-            </button>
-          </div>
-        </div>
-
-        {/* Overview cards */}
         <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          {[
-            {
-              label: "Total Documents",
-              value: totalDocuments,
-              icon: Files,
-              color: "#EFE8A8",
-              note: "All stored records",
-            },
-            {
-              label: "Certificates Issued",
-              value: certificateCount,
-              icon: Award,
-              color: "#B9A0E8",
-              note: "Certificate records",
-            },
-            {
-              label: "Pending Approval",
-              value: pendingCount,
-              icon: Clock3,
-              color: "#E7AD75",
-              note: "Waiting for review",
-            },
-            {
-              label: "Expiring Soon",
-              value: expiringCount,
-              icon: AlertTriangle,
-              color: "#F18C8C",
-              note: `${expiredCount} expired`,
-            },
-          ].map((item) => {
+          {summaryCards.map((item) => {
             const Icon = item.icon;
 
             return (
-              <div
-                key={item.label}
-                className="group rounded-2xl border border-[#303530] bg-[#1B1F1D] p-5 transition duration-300 hover:-translate-y-1 hover:border-[#77745D]"
-              >
-                <div className="flex items-center justify-between">
-                  <p className="text-sm text-[#A1A49B]">{item.label}</p>
+              <div key={item.label} className={cardClass}>
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <p className="text-sm text-[#A9ACA2]">
+                      {item.label}
+                    </p>
+
+                    <h2 className="mt-3 text-3xl font-semibold tabular-nums text-white">
+                      {item.value}
+                    </h2>
+
+                    <p className="mt-2 text-xs text-[#858B82]">
+                      {item.note}
+                    </p>
+                  </div>
+
                   <div
-                    className="rounded-xl p-3"
-                    style={{ backgroundColor: `${item.color}16` }}
+                    className="flex h-11 w-11 items-center justify-center rounded-xl border border-[#3A403A]"
+                    style={{
+                      backgroundColor: `${item.color}12`,
+                      color: item.color,
+                    }}
                   >
-                    <Icon size={19} style={{ color: item.color }} />
+                    <Icon size={20} />
                   </div>
                 </div>
-
-                <p className="mt-4 text-3xl font-semibold">{item.value}</p>
-                <p className="mt-2 text-xs text-[#777D74]">{item.note}</p>
               </div>
             );
           })}
         </section>
 
-        {/* Expiry alert */}
+        {/* EXPIRY ALERT */}
+
         {(expiringCount > 0 || expiredCount > 0) && (
-          <div className="flex flex-col gap-3 rounded-xl border border-[#A67D4B]/30 bg-[#E7AD75]/[0.06] p-4 sm:flex-row sm:items-center">
-            <AlertTriangle size={21} className="shrink-0 text-[#E7AD75]" />
+          <div className="gold-ambient-card flex flex-col gap-3 rounded-2xl border border-[#5C4933] bg-[#1B1F1D] p-4 sm:flex-row sm:items-center">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#E7AD75]/10 text-[#E7AD75]">
+              <AlertTriangle size={20} />
+            </div>
+
             <div className="flex-1">
               <p className="text-sm font-semibold text-[#E7AD75]">
                 Document expiry reminder
               </p>
-              <p className="mt-1 text-xs text-[#AFA99A]">
+
+              <p className="mt-1 text-xs text-[#A9ACA2]">
                 {expiredCount} expired document(s) and {expiringCount} document(s)
                 expiring within 30 days. Please review them.
               </p>
             </div>
+
             <button
               onClick={() => {
                 setActiveTab("Documents");
@@ -807,18 +944,20 @@ KBC SALON ACADEMY
                 setStatusFilter("All");
                 setSearch("");
               }}
-              className="text-xs font-semibold text-[#EFE8A8] hover:underline"
+              className="text-sm font-medium text-[#EFE8A8] transition hover:text-white"
             >
               Review documents →
             </button>
           </div>
         )}
 
-        {/* Category shortcuts */}
+        {/* CATEGORY SHORTCUTS */}
+
         <section className="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-6">
           {categories.map((category) => {
             const config = categoryConfig[category];
             const Icon = config.icon;
+
             const count = documents.filter(
               (item) => item.category === category
             ).length;
@@ -827,105 +966,127 @@ KBC SALON ACADEMY
               <button
                 key={category}
                 onClick={() => {
-                  setCategoryFilter(category);
+                  setCategoryFilter(
+                    categoryFilter === category ? "All" : category
+                  );
                   setActiveTab("All");
                 }}
-                className={`rounded-xl border bg-[#1B1F1D] p-4 text-left transition hover:-translate-y-1 ${
+                className={`gold-ambient-card rounded-2xl border bg-[#1B1F1D] p-4 text-left transition ${
                   categoryFilter === category
-                    ? "border-[#EFE8A8]/60"
-                    : "border-[#303530] hover:border-[#666B58]"
+                    ? "border-[#756B42]"
+                    : "border-[#343832]"
                 }`}
               >
                 <div
-                  className="mb-3 flex h-9 w-9 items-center justify-center rounded-lg"
-                  style={{ backgroundColor: config.bg }}
+                  className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl border border-[#3A403A]"
+                  style={{
+                    backgroundColor: config.bg,
+                    color: config.color,
+                  }}
                 >
-                  <Icon size={18} style={{ color: config.color }} />
+                  <Icon size={18} />
                 </div>
+
                 <p className="text-xs font-medium text-[#C8CBBF]">
                   {category}
                 </p>
-                <p className="mt-2 text-lg font-semibold">{count}</p>
+
+                <p className="mt-2 text-xl font-semibold text-white">
+                  {count}
+                </p>
               </button>
             );
           })}
         </section>
 
-        {/* Document Register */}
-        <section className="overflow-hidden rounded-2xl border border-[#303530] bg-[#1B1F1D]">
-          <div className="border-b border-[#303530] p-4 sm:p-6">
-            <div className="flex flex-col justify-between gap-4 xl:flex-row xl:items-center">
-              <div>
-                <h2 className="text-lg font-semibold">Document Register</h2>
-                <p className="mt-1 text-xs text-[#858B82]">
-                  View and manage all academy documents in one place.
-                </p>
-              </div>
+        {/* DOCUMENT REGISTER */}
 
-              <div className="flex flex-col gap-3 sm:flex-row">
-                <div className="relative">
-                  <Search
-                    size={16}
-                    className="absolute left-3 top-1/2 -translate-y-1/2 text-[#777D74]"
-                  />
-                  <input
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    placeholder="Search documents..."
-                    className="w-full rounded-xl border border-[#383E38] bg-[#141816] py-3 pl-10 pr-4 text-sm outline-none transition placeholder:text-[#747B72] focus:border-[#A9A58A] sm:w-64"
-                  />
-                </div>
+        <section className={cardClass}>
+          <div className="mb-6 flex flex-col justify-between gap-4 xl:flex-row xl:items-center">
+            <div>
+              <h2 className="text-lg font-semibold text-white">
+                Document Register
+              </h2>
 
-                <select
-                  value={categoryFilter}
-                  onChange={(e) => setCategoryFilter(e.target.value)}
-                  className="rounded-xl border border-[#383E38] bg-[#141816] px-4 py-3 text-sm text-[#D5D2C7] outline-none focus:border-[#A9A58A]"
-                >
-                  <option value="All">All categories</option>
-                  {categories.map((category) => (
-                    <option key={category} value={category}>
-                      {category}
-                    </option>
-                  ))}
-                </select>
-
-                <select
-                  value={statusFilter}
-                  onChange={(e) => setStatusFilter(e.target.value)}
-                  className="rounded-xl border border-[#383E38] bg-[#141816] px-4 py-3 text-sm text-[#D5D2C7] outline-none focus:border-[#A9A58A]"
-                >
-                  <option value="All">All statuses</option>
-                  <option value="Approved">Approved</option>
-                  <option value="Pending">Pending</option>
-                  <option value="Rejected">Rejected</option>
-                </select>
-              </div>
+              <p className="mt-1 text-sm text-[#92978F]">
+                View and manage all academy documents in one place.
+              </p>
             </div>
 
-            <div className="mt-6 flex flex-wrap gap-2">
-              {tabs.map((tab) => (
-                <button
-                  key={tab.name}
-                  onClick={() => setActiveTab(tab.name)}
-                  className={`rounded-xl px-4 py-2.5 text-sm transition ${
-                    activeTab === tab.name
-                      ? "bg-[#EFE8A8] font-semibold text-[#25261F]"
-                      : "border border-[#363C36] text-[#AEB3A9] hover:border-[#77745D] hover:text-[#EFE8A8]"
-                  }`}
-                >
-                  {tab.name}
-                  <span className="ml-2 text-xs opacity-70">
-                    {tab.count}
-                  </span>
-                </button>
-              ))}
+            <div className="flex flex-col gap-3 sm:flex-row">
+              <div className="relative flex-1">
+                <Search
+                  size={17}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-[#858B82]"
+                />
+
+                <input
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  placeholder="Search documents..."
+                  className={`${inputClass} pl-11 sm:w-64`}
+                />
+              </div>
+
+              <select
+                value={categoryFilter}
+                onChange={(e) => setCategoryFilter(e.target.value)}
+                className={`${inputClass} sm:w-48`}
+              >
+                <option value="All">All categories</option>
+                {categories.map((category) => (
+                  <option key={category} value={category}>
+                    {category}
+                  </option>
+                ))}
+              </select>
+
+              <select
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+                className={`${inputClass} sm:w-40`}
+              >
+                <option value="All">All statuses</option>
+                <option value="Approved">Approved</option>
+                <option value="Pending">Pending</option>
+                <option value="Rejected">Rejected</option>
+              </select>
             </div>
           </div>
 
-          {/* Table */}
-          <div className="overflow-x-auto">
+          {/* TABS */}
+
+          <div className="mb-5 flex flex-wrap items-center gap-2 border-b border-[#343832] pb-5">
+            {tabs.map((tab) => (
+              <button
+                key={tab.name}
+                onClick={() => setActiveTab(tab.name)}
+                className={`flex items-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-medium transition ${
+                  activeTab === tab.name
+                    ? "border-[#756B42] bg-[#302F23] text-[#EFE8A8]"
+                    : "border-[#343832] bg-[#151917] text-[#A9ACA2] hover:border-[#756B42] hover:text-[#EFE8A8]"
+                }`}
+              >
+                {tab.name}
+
+                <span
+                  className={`rounded-md px-1.5 py-0.5 text-xs ${
+                    activeTab === tab.name
+                      ? "bg-[#4A4530] text-[#EFE8A8]"
+                      : "bg-[#252A27] text-[#92978F]"
+                  }`}
+                >
+                  {tab.count}
+                </span>
+              </button>
+            ))}
+          </div>
+
+          {/* TABLE */}
+
+          <div className="overflow-x-auto rounded-xl border border-[#343832]">
             <table className="w-full min-w-[1050px] text-left">
-              <thead className="bg-[#151A17] text-[10px] uppercase tracking-wider text-[#858B82]">
+              <thead className="bg-[#151917] text-[10px] uppercase tracking-wider text-[#858B82]">
                 <tr>
                   <th className="px-5 py-4 font-medium">Document</th>
                   <th className="px-5 py-4 font-medium">Owner</th>
@@ -933,15 +1094,17 @@ KBC SALON ACADEMY
                   <th className="px-5 py-4 font-medium">Issue date</th>
                   <th className="px-5 py-4 font-medium">Expiry</th>
                   <th className="px-5 py-4 font-medium">Status</th>
-                  <th className="px-5 py-4 text-right font-medium">Actions</th>
+                  <th className="px-5 py-4 text-right font-medium">
+                    Actions
+                  </th>
                 </tr>
               </thead>
 
-              <tbody className="divide-y divide-[#303530]">
+              <tbody className="divide-y divide-[#343832]">
                 {filteredDocuments.map((item) => {
                   const category = categoryConfig[item.category];
                   const CategoryIcon = category.icon;
-                  const status = statusConfig[getStatus(item)];
+                  const status = statusConfig[item.status];
 
                   const expired = isExpired(item.expiryDate);
                   const expiring = isExpiringSoon(item.expiryDate);
@@ -949,26 +1112,29 @@ KBC SALON ACADEMY
                   return (
                     <tr
                       key={item.id}
-                      className="transition hover:bg-[#252B26]"
+                      className="transition hover:bg-[#252A27]"
                     >
                       <td className="px-5 py-4">
                         <div className="flex items-center gap-3">
                           <div
-                            className="rounded-xl p-3"
-                            style={{ backgroundColor: category.bg }}
+                            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
+                            style={{
+                              backgroundColor: category.bg,
+                              color: category.color,
+                            }}
                           >
-                            <CategoryIcon
-                              size={19}
-                              style={{ color: category.color }}
-                            />
+                            <CategoryIcon size={19} />
                           </div>
+
                           <div>
                             <p className="max-w-[250px] truncate text-sm font-medium text-[#E0E1D7]">
                               {item.title}
                             </p>
-                            <p className="mt-1 text-xs text-[#777D74]">
+
+                            <p className="mt-1 text-xs text-[#858B82]">
                               {item.fileName}
                             </p>
+
                             <p className="mt-1 text-[10px] text-[#777D74]">
                               {item.fileType} · {item.fileSize}
                             </p>
@@ -997,7 +1163,7 @@ KBC SALON ACADEMY
                         </span>
                       </td>
 
-                      <td className="px-5 py-4 text-xs text-[#AEB3A9]">
+                      <td className="px-5 py-4 text-xs text-[#A9ACA2]">
                         {formatDate(item.issueDate)}
                       </td>
 
@@ -1009,17 +1175,19 @@ KBC SALON ACADEMY
                                 expired
                                   ? "text-[#F18C8C]"
                                   : expiring
-                                  ? "text-[#E7AD75]"
-                                  : "text-[#AEB3A9]"
+                                    ? "text-[#E7AD75]"
+                                    : "text-[#A9ACA2]"
                               }`}
                             >
                               {formatDate(item.expiryDate)}
                             </p>
+
                             {expired && (
                               <span className="mt-1 block text-[10px] text-[#F18C8C]">
                                 Expired
                               </span>
                             )}
+
                             {!expired && expiring && (
                               <span className="mt-1 block text-[10px] text-[#E7AD75]">
                                 Expiring soon
@@ -1027,7 +1195,9 @@ KBC SALON ACADEMY
                             )}
                           </div>
                         ) : (
-                          <span className="text-xs text-[#6F786D]">No expiry</span>
+                          <span className="text-xs text-[#6F786D]">
+                            No expiry
+                          </span>
                         )}
                       </td>
 
@@ -1048,7 +1218,7 @@ KBC SALON ACADEMY
                           <button
                             title="Preview"
                             onClick={() => previewCertificate(item)}
-                            className="rounded-lg p-2 text-[#9EA497] transition hover:bg-[#EFE8A8]/10 hover:text-[#EFE8A8]"
+                            className="rounded-lg p-2 text-[#A9ACA2] transition hover:bg-[#EFE8A8]/10 hover:text-[#EFE8A8]"
                           >
                             <Eye size={16} />
                           </button>
@@ -1056,7 +1226,7 @@ KBC SALON ACADEMY
                           <button
                             title="Download"
                             onClick={() => downloadDocument(item)}
-                            className="rounded-lg p-2 text-[#9EA497] transition hover:bg-[#8DCBA5]/10 hover:text-[#8DCBA5]"
+                            className="rounded-lg p-2 text-[#A9ACA2] transition hover:bg-[#8DCBA5]/10 hover:text-[#8DCBA5]"
                           >
                             <Download size={16} />
                           </button>
@@ -1068,18 +1238,19 @@ KBC SALON ACADEMY
                                   menuId === item.id ? null : item.id
                                 )
                               }
-                              className="rounded-lg p-2 text-[#9EA497] hover:bg-[#303630] hover:text-white"
+                              className="rounded-lg p-2 text-[#A9ACA2] transition hover:bg-[#303630] hover:text-white"
                             >
                               <MoreVertical size={16} />
                             </button>
 
                             {menuId === item.id && (
-                              <div className="absolute right-0 top-9 z-30 w-48 rounded-xl border border-[#42483F] bg-[#202521] p-1 shadow-2xl">
+                              <div className="absolute right-0 top-9 z-30 w-48 rounded-xl border border-[#343832] bg-[#1B1F1D] p-2 shadow-2xl">
                                 <button
                                   onClick={() => openEditForm(item)}
-                                  className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-left text-xs text-[#D2D4CA] hover:bg-[#303630]"
+                                  className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-left text-sm text-[#C4C8BE] transition hover:bg-[#292D29] hover:text-[#EFE8A8]"
                                 >
-                                  <Pencil size={14} /> Edit details
+                                  <Pencil size={14} />
+                                  Edit details
                                 </button>
 
                                 {item.status !== "Approved" && (
@@ -1087,9 +1258,10 @@ KBC SALON ACADEMY
                                     onClick={() =>
                                       updateStatus(item.id, "Approved")
                                     }
-                                    className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-left text-xs text-[#8DCBA5] hover:bg-[#8DCBA5]/10"
+                                    className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-left text-sm text-[#8DCBA5] transition hover:bg-[#8DCBA5]/10"
                                   >
-                                    <Check size={14} /> Approve
+                                    <Check size={14} />
+                                    Approve
                                   </button>
                                 )}
 
@@ -1098,17 +1270,19 @@ KBC SALON ACADEMY
                                     onClick={() =>
                                       updateStatus(item.id, "Rejected")
                                     }
-                                    className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-left text-xs text-[#E7AD75] hover:bg-[#E7AD75]/10"
+                                    className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-left text-sm text-[#E7AD75] transition hover:bg-[#E7AD75]/10"
                                   >
-                                    <XCircle size={14} /> Reject
+                                    <XCircle size={14} />
+                                    Reject
                                   </button>
                                 )}
 
                                 <button
                                   onClick={() => deleteDocument(item.id)}
-                                  className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-left text-xs text-[#F18C8C] hover:bg-[#F18C8C]/10"
+                                  className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-left text-sm text-[#F18C8C] transition hover:bg-[#F18C8C]/10"
                                 >
-                                  <Trash2 size={14} /> Delete
+                                  <Trash2 size={14} />
+                                  Delete
                                 </button>
                               </div>
                             )}
@@ -1123,13 +1297,18 @@ KBC SALON ACADEMY
 
             {filteredDocuments.length === 0 && (
               <div className="flex min-h-[280px] flex-col items-center justify-center px-6 text-center">
-                <FolderOpen size={35} className="text-[#777D74]" />
-                <h3 className="mt-4 text-base font-semibold">
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-[#343832] bg-[#202522] text-[#D9D19A]">
+                  <FolderOpen size={28} />
+                </div>
+
+                <h3 className="mt-4 text-base font-semibold text-white">
                   No documents found
                 </h3>
+
                 <p className="mt-2 text-sm text-[#858B82]">
                   Try changing your filters or add a new document.
                 </p>
+
                 <button
                   onClick={() => {
                     setSearch("");
@@ -1137,7 +1316,7 @@ KBC SALON ACADEMY
                     setStatusFilter("All");
                     setActiveTab("All");
                   }}
-                  className="mt-4 text-xs text-[#EFE8A8] hover:underline"
+                  className={`${primaryButtonClass} mt-4`}
                 >
                   Reset filters
                 </button>
@@ -1145,27 +1324,44 @@ KBC SALON ACADEMY
             )}
           </div>
 
-          <div className="flex flex-col justify-between gap-2 border-t border-[#303530] px-5 py-4 text-xs text-[#777D74] sm:flex-row">
+          {/* TABLE FOOTER */}
+
+          <div className="mt-5 flex flex-col justify-between gap-2 border-t border-[#343832] pt-5 text-xs text-[#858B82] sm:flex-row">
             <span>
               Showing {filteredDocuments.length} of {documents.length} records
             </span>
-            <span>Document register · KBC Salon Academy</span>
+
+            <span className="flex items-center gap-1.5">
+              <Sparkles size={13} className="text-[#D9D19A]" />
+              Document register · KBC Salon Academy
+            </span>
           </div>
         </section>
 
-        {/* Add / Edit Modal */}
+        {/* =====================================
+            ADD / EDIT MODAL
+        ===================================== */}
+
         {showForm && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/75 p-4 backdrop-blur-sm">
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/75 p-4 backdrop-blur-sm"
+            onClick={() => {
+              setShowForm(false);
+              resetForm();
+            }}
+          >
             <form
               onSubmit={saveDocument}
-              className="my-6 w-full max-w-3xl rounded-2xl border border-[#454A40] bg-[#1B1F1D] shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+              className="gold-modal-card my-6 w-full max-w-3xl rounded-2xl border border-[#49483A] bg-[#1B1F1D] shadow-2xl"
             >
-              <div className="flex items-center justify-between border-b border-[#343A33] p-5 sm:p-6">
+              <div className="flex items-center justify-between border-b border-[#343832] p-5 sm:p-6">
                 <div>
-                  <h2 className="text-lg font-semibold">
+                  <h2 className="text-lg font-semibold text-white">
                     {editingDocument ? "Edit document" : "Add new document"}
                   </h2>
-                  <p className="mt-1 text-xs text-[#858B82]">
+
+                  <p className="mt-1 text-sm text-[#92978F]">
                     Enter the document details below.
                   </p>
                 </div>
@@ -1176,17 +1372,18 @@ KBC SALON ACADEMY
                     setShowForm(false);
                     resetForm();
                   }}
-                  className="rounded-lg p-2 text-[#92988D] hover:bg-[#303630]"
+                  className="flex h-9 w-9 items-center justify-center rounded-lg border border-[#3A403A] bg-[#151917] text-[#A9ACA2] transition hover:border-[#756B42] hover:text-[#EFE8A8]"
                 >
-                  <X size={19} />
+                  <X size={17} />
                 </button>
               </div>
 
               <div className="grid grid-cols-1 gap-4 p-5 sm:grid-cols-2 sm:p-6">
                 <div className="sm:col-span-2">
-                  <label className="text-xs text-[#B9BDB3]">
+                  <label className="mb-2 block text-xs font-medium text-[#A9ACA2]">
                     Document title *
                   </label>
+
                   <input
                     required
                     value={form.title}
@@ -1194,14 +1391,15 @@ KBC SALON ACADEMY
                       setForm({ ...form, title: e.target.value })
                     }
                     placeholder="Enter document title"
-                    className="mt-2 w-full rounded-xl border border-[#454A40] bg-[#141816] px-4 py-3 text-sm outline-none focus:border-[#EFE8A8]"
+                    className={inputClass}
                   />
                 </div>
 
                 <div>
-                  <label className="text-xs text-[#B9BDB3]">
+                  <label className="mb-2 block text-xs font-medium text-[#A9ACA2]">
                     Category *
                   </label>
+
                   <select
                     value={form.category}
                     onChange={(e) =>
@@ -1210,7 +1408,7 @@ KBC SALON ACADEMY
                         category: e.target.value as Category,
                       })
                     }
-                    className="mt-2 w-full rounded-xl border border-[#454A40] bg-[#141816] px-4 py-3 text-sm outline-none focus:border-[#EFE8A8]"
+                    className={inputClass}
                   >
                     {categories.map((category) => (
                       <option key={category} value={category}>
@@ -1221,9 +1419,10 @@ KBC SALON ACADEMY
                 </div>
 
                 <div>
-                  <label className="text-xs text-[#B9BDB3]">
+                  <label className="mb-2 block text-xs font-medium text-[#A9ACA2]">
                     Owner type *
                   </label>
+
                   <select
                     value={form.ownerType}
                     onChange={(e) =>
@@ -1232,7 +1431,7 @@ KBC SALON ACADEMY
                         ownerType: e.target.value as DocumentItem["ownerType"],
                       })
                     }
-                    className="mt-2 w-full rounded-xl border border-[#454A40] bg-[#141816] px-4 py-3 text-sm outline-none focus:border-[#EFE8A8]"
+                    className={inputClass}
                   >
                     <option value="Student">Student</option>
                     <option value="Staff">Staff</option>
@@ -1241,9 +1440,10 @@ KBC SALON ACADEMY
                 </div>
 
                 <div>
-                  <label className="text-xs text-[#B9BDB3]">
+                  <label className="mb-2 block text-xs font-medium text-[#A9ACA2]">
                     Owner name *
                   </label>
+
                   <input
                     required
                     value={form.owner}
@@ -1251,29 +1451,31 @@ KBC SALON ACADEMY
                       setForm({ ...form, owner: e.target.value })
                     }
                     placeholder="Student / Staff / Academy name"
-                    className="mt-2 w-full rounded-xl border border-[#454A40] bg-[#141816] px-4 py-3 text-sm outline-none focus:border-[#EFE8A8]"
+                    className={inputClass}
                   />
                 </div>
 
                 <div>
-                  <label className="text-xs text-[#B9BDB3]">
+                  <label className="mb-2 block text-xs font-medium text-[#A9ACA2]">
                     Course / Department
                   </label>
+
                   <input
                     value={form.course}
                     onChange={(e) =>
                       setForm({ ...form, course: e.target.value })
                     }
                     placeholder="Enter course or department"
-                    className="mt-2 w-full rounded-xl border border-[#454A40] bg-[#141816] px-4 py-3 text-sm outline-none focus:border-[#EFE8A8]"
+                    className={inputClass}
                   />
                 </div>
 
                 {form.category === "Certificate" && (
                   <div>
-                    <label className="text-xs text-[#B9BDB3]">
+                    <label className="mb-2 block text-xs font-medium text-[#A9ACA2]">
                       Certificate number *
                     </label>
+
                     <input
                       required
                       value={form.certificateNumber}
@@ -1284,15 +1486,16 @@ KBC SALON ACADEMY
                         })
                       }
                       placeholder="KBC-CERT-2026-001"
-                      className="mt-2 w-full rounded-xl border border-[#454A40] bg-[#141816] px-4 py-3 text-sm outline-none focus:border-[#EFE8A8]"
+                      className={inputClass}
                     />
                   </div>
                 )}
 
                 <div>
-                  <label className="text-xs text-[#B9BDB3]">
+                  <label className="mb-2 block text-xs font-medium text-[#A9ACA2]">
                     Status
                   </label>
+
                   <select
                     value={form.status}
                     onChange={(e) =>
@@ -1301,7 +1504,7 @@ KBC SALON ACADEMY
                         status: e.target.value as Status,
                       })
                     }
-                    className="mt-2 w-full rounded-xl border border-[#454A40] bg-[#141816] px-4 py-3 text-sm outline-none focus:border-[#EFE8A8]"
+                    className={inputClass}
                   >
                     <option value="Pending">Pending</option>
                     <option value="Approved">Approved</option>
@@ -1310,50 +1513,60 @@ KBC SALON ACADEMY
                 </div>
 
                 <div>
-                  <label className="text-xs text-[#B9BDB3]">
+                  <label className="mb-2 block text-xs font-medium text-[#A9ACA2]">
                     Issue date
                   </label>
+
                   <input
                     type="date"
                     value={form.issueDate}
                     onChange={(e) =>
                       setForm({ ...form, issueDate: e.target.value })
                     }
-                    className="mt-2 w-full rounded-xl border border-[#454A40] bg-[#141816] px-4 py-3 text-sm text-white outline-none focus:border-[#EFE8A8]"
+                    className={inputClass}
                   />
                 </div>
 
                 <div>
-                  <label className="text-xs text-[#B9BDB3]">
+                  <label className="mb-2 block text-xs font-medium text-[#A9ACA2]">
                     Expiry date (optional)
                   </label>
+
                   <input
                     type="date"
                     value={form.expiryDate}
                     onChange={(e) =>
                       setForm({ ...form, expiryDate: e.target.value })
                     }
-                    className="mt-2 w-full rounded-xl border border-[#454A40] bg-[#141816] px-4 py-3 text-sm text-white outline-none focus:border-[#EFE8A8]"
+                    className={inputClass}
                   />
                 </div>
 
+                {/* FILE UPLOAD */}
+
                 <div className="sm:col-span-2">
-                  <label className="text-xs text-[#B9BDB3]">
+                  <label className="mb-2 block text-xs font-medium text-[#A9ACA2]">
                     Upload file
                   </label>
+
                   <div
                     onClick={() => fileInputRef.current?.click()}
-                    className="mt-2 flex cursor-pointer flex-col items-center justify-center rounded-xl border border-dashed border-[#666B58] bg-[#141816] px-5 py-7 text-center transition hover:border-[#EFE8A8] hover:bg-[#EFE8A8]/5"
+                    className="gold-ambient-card flex cursor-pointer flex-col items-center justify-center rounded-xl border border-dashed border-[#5A5438] bg-[#151917] px-5 py-7 text-center transition hover:border-[#D9D19A] hover:bg-[#1D211D]"
                   >
-                    <Upload size={25} className="text-[#EFE8A8]" />
-                    <p className="mt-3 text-sm text-[#D2D4CA]">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-[#5A5438] bg-[#28291F] text-[#EFE8A8]">
+                      <Upload size={22} />
+                    </div>
+
+                    <p className="mt-3 text-sm font-medium text-[#D7D9D1]">
                       {selectedFile
                         ? selectedFile.name
                         : "Click to upload a document"}
                     </p>
-                    <p className="mt-1 text-xs text-[#777D74]">
+
+                    <p className="mt-1 text-xs text-[#858B82]">
                       PDF, DOC, DOCX, JPG, PNG · Maximum 3 MB
                     </p>
+
                     <input
                       ref={fileInputRef}
                       type="file"
@@ -1367,9 +1580,10 @@ KBC SALON ACADEMY
                 </div>
 
                 <div className="sm:col-span-2">
-                  <label className="text-xs text-[#B9BDB3]">
+                  <label className="mb-2 block text-xs font-medium text-[#A9ACA2]">
                     Notes
                   </label>
+
                   <textarea
                     rows={3}
                     value={form.notes}
@@ -1377,27 +1591,25 @@ KBC SALON ACADEMY
                       setForm({ ...form, notes: e.target.value })
                     }
                     placeholder="Additional information..."
-                    className="mt-2 w-full resize-none rounded-xl border border-[#454A40] bg-[#141816] px-4 py-3 text-sm outline-none focus:border-[#EFE8A8]"
+                    className={`${inputClass} resize-none`}
                   />
                 </div>
               </div>
 
-              <div className="flex justify-end gap-3 border-t border-[#343A33] p-5 sm:p-6">
+              <div className="flex flex-col-reverse justify-end gap-3 border-t border-[#343832] p-5 sm:flex-row sm:p-6">
                 <button
                   type="button"
                   onClick={() => {
                     setShowForm(false);
                     resetForm();
                   }}
-                  className="rounded-xl border border-[#454A40] px-5 py-3 text-xs text-[#B8BDB2]"
+                  className={secondaryButtonClass}
                 >
                   Cancel
                 </button>
-                <button
-                  type="submit"
-                  className="flex items-center gap-2 rounded-xl bg-[#EFE8A8] px-6 py-3 text-xs font-semibold text-[#24251F] transition hover:bg-[#DED49A]"
-                >
-                  <Check size={15} />
+
+                <button type="submit" className={primaryButtonClass}>
+                  <Check size={16} />
                   {editingDocument ? "Save changes" : "Add document"}
                 </button>
               </div>
@@ -1405,28 +1617,35 @@ KBC SALON ACADEMY
           </div>
         )}
 
-        {/* Preview modal */}
+        {/* =====================================
+            PREVIEW MODAL
+        ===================================== */}
+
         {previewDocument && (
           <div
             className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/75 p-4 backdrop-blur-sm"
             onClick={() => setPreviewDocument(null)}
           >
             <div
-              className="my-6 w-full max-w-2xl overflow-hidden rounded-2xl border border-[#555746] bg-[#1B1F1D] shadow-2xl"
+              className="gold-modal-card my-6 w-full max-w-2xl overflow-hidden rounded-2xl border border-[#49483A] bg-[#1B1F1D] shadow-2xl"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="flex items-center justify-between border-b border-[#343A33] p-5">
+              <div className="flex items-center justify-between border-b border-[#343832] p-5">
                 <div>
-                  <h2 className="font-semibold">Document preview</h2>
+                  <h2 className="font-semibold text-white">
+                    Document preview
+                  </h2>
+
                   <p className="mt-1 text-xs text-[#858B82]">
                     {previewDocument.fileName}
                   </p>
                 </div>
+
                 <button
                   onClick={() => setPreviewDocument(null)}
-                  className="rounded-lg p-2 text-[#92988D] hover:bg-[#303630]"
+                  className="flex h-9 w-9 items-center justify-center rounded-lg border border-[#3A403A] bg-[#151917] text-[#A9ACA2] transition hover:border-[#756B42] hover:text-[#EFE8A8]"
                 >
-                  <X size={19} />
+                  <X size={17} />
                 </button>
               </div>
 
@@ -1435,32 +1654,41 @@ KBC SALON ACADEMY
                   <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full border-2 border-[#9C8E4D]">
                     <Award size={30} className="text-[#8B783C]" />
                   </div>
+
                   <p className="mt-5 text-xs font-semibold uppercase tracking-[0.3em] text-[#7E713D]">
                     KBC Salon Academy
                   </p>
+
                   <h3 className="mt-5 font-serif text-2xl font-bold sm:text-3xl">
                     Certificate of Completion
                   </h3>
+
                   <p className="mt-6 text-sm text-[#55513D]">
                     This is proudly presented to
                   </p>
+
                   <p className="mt-3 text-2xl font-semibold text-[#5B4A20]">
                     {previewDocument.owner}
                   </p>
+
                   <p className="mt-5 text-sm text-[#55513D]">
                     for successfully completing
                   </p>
+
                   <p className="mt-2 text-lg font-semibold">
                     {previewDocument.course || previewDocument.title}
                   </p>
 
                   <div className="mt-8 grid grid-cols-2 gap-4 border-t border-[#C9BE92] pt-5 text-left text-xs">
                     <div>
-                      <p className="text-[#82764C]">Certificate number</p>
+                      <p className="text-[#82764C]">
+                        Certificate number
+                      </p>
                       <p className="mt-1 font-semibold">
                         {previewDocument.certificateNumber || "—"}
                       </p>
                     </div>
+
                     <div className="text-right">
                       <p className="text-[#82764C]">Issue date</p>
                       <p className="mt-1 font-semibold">
@@ -1468,54 +1696,58 @@ KBC SALON ACADEMY
                       </p>
                     </div>
                   </div>
+
                   <p className="mt-8 text-[10px] uppercase tracking-wider text-[#8A805C]">
                     KBC Salon Academy · Certificate preview
                   </p>
                 </div>
               ) : (
                 <div className="p-8 text-center">
-                  <FileText
-                    size={45}
-                    className="mx-auto text-[#EFE8A8]"
-                  />
-                  <h3 className="mt-4 font-semibold">
+                  <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-[#5A5438] bg-[#28291F] text-[#EFE8A8]">
+                    <FileText size={32} />
+                  </div>
+
+                  <h3 className="mt-4 font-semibold text-white">
                     {previewDocument.title}
                   </h3>
+
                   <p className="mt-2 text-sm text-[#858B82]">
                     {previewDocument.fileName}
                   </p>
+
                   <p className="mt-2 text-xs text-[#777D74]">
                     {previewDocument.fileType} · {previewDocument.fileSize}
                   </p>
 
                   {previewDocument.fileData ? (
-                    <p className="mt-4 text-xs text-[#AEB3A9]">
+                    <p className="mt-4 text-xs text-[#A9ACA2]">
                       Download the uploaded file to view its full contents.
                     </p>
                   ) : (
-                    <p className="mt-4 text-xs text-[#AEB3A9]">
+                    <p className="mt-4 text-xs text-[#A9ACA2]">
                       No uploaded file is attached to this record.
                     </p>
                   )}
                 </div>
               )}
 
-              <div className="flex flex-wrap justify-end gap-3 border-t border-[#343A33] p-5">
+              <div className="flex flex-wrap justify-end gap-3 border-t border-[#343832] p-5">
                 {previewDocument.category === "Certificate" && (
                   <button
                     onClick={() =>
                       downloadCertificatePreview(previewDocument)
                     }
-                    className="flex items-center gap-2 rounded-xl border border-[#555746] px-4 py-3 text-xs text-[#EFE8A8] hover:bg-[#EFE8A8]/10"
+                    className={secondaryButtonClass}
                   >
                     <Download size={15} />
                     Download certificate preview
                   </button>
                 )}
+
                 {previewDocument.fileData && (
                   <button
                     onClick={() => downloadDocument(previewDocument)}
-                    className="flex items-center gap-2 rounded-xl bg-[#EFE8A8] px-4 py-3 text-xs font-semibold text-[#24251F]"
+                    className={primaryButtonClass}
                   >
                     <Download size={15} />
                     Download uploaded file
@@ -1526,20 +1758,125 @@ KBC SALON ACADEMY
           </div>
         )}
 
-        {/* Toast */}
+        {/* =====================================
+            TOAST
+        ===================================== */}
+
         {toast && (
-          <div className="fixed bottom-6 right-6 z-[70] flex max-w-[calc(100vw-3rem)] items-center gap-3 rounded-xl border border-[#66644D] bg-[#252A25] px-5 py-4 text-sm text-[#EFE8A8] shadow-2xl">
-            <CheckCircle2 size={18} />
-            {toast}
+          <div className="fixed bottom-5 right-5 z-[70] flex max-w-[calc(100vw-40px)] items-center gap-3 rounded-xl border border-[#756B42] bg-[#25271F] px-4 py-3.5 text-sm text-[#EFE8A8] shadow-2xl">
+            <CheckCircle2
+              size={18}
+              className="shrink-0 text-[#D9D19A]"
+            />
+
+            <span>{toast}</span>
+
             <button
               onClick={() => setToast("")}
-              className="ml-2 text-[#92988D] hover:text-white"
+              className="ml-2 text-[#A9ACA2] transition hover:text-white"
             >
               <X size={15} />
             </button>
           </div>
         )}
       </div>
+
+      {/* =====================================
+          GLOBAL GOLDEN GLOW STYLES
+      ===================================== */}
+
+      <style jsx global>{`
+        .gold-ambient-card {
+          position: relative;
+          isolation: isolate;
+          -webkit-tap-highlight-color: transparent;
+
+          transition:
+            transform 0.35s ease,
+            border-color 0.35s ease,
+            box-shadow 0.35s ease;
+        }
+
+        .gold-ambient-card::before {
+          content: "";
+          position: absolute;
+          inset: -3px;
+          border-radius: inherit;
+          pointer-events: none;
+          z-index: -1;
+
+          background: radial-gradient(
+            ellipse at center,
+            rgba(255, 226, 130, 0.25) 0%,
+            rgba(239, 200, 85, 0.16) 35%,
+            rgba(205, 157, 55, 0.08) 65%,
+            transparent 100%
+          );
+
+          filter: blur(24px);
+          opacity: 0;
+
+          transition: opacity 0.35s ease;
+        }
+
+        .gold-ambient-card:hover,
+        .gold-ambient-card:active,
+        .gold-ambient-card:focus-visible {
+          border-color: rgba(239, 210, 130, 0.45);
+
+          box-shadow:
+            0 0 12px rgba(239, 200, 85, 0.13),
+            0 0 28px rgba(239, 200, 85, 0.12),
+            0 0 50px rgba(239, 200, 85, 0.08),
+            inset 0 0 18px rgba(239, 200, 85, 0.025);
+        }
+
+        .gold-ambient-card:hover::before,
+        .gold-ambient-card:active::before,
+        .gold-ambient-card:focus-visible::before {
+          opacity: 1;
+        }
+
+        @media (hover: hover) and (pointer: fine) {
+          .gold-ambient-card:hover {
+            transform: translateY(-3px);
+          }
+        }
+
+        @media (hover: none) {
+          .gold-ambient-card:active {
+            transform: scale(0.99);
+          }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .gold-ambient-card,
+          .gold-ambient-card::before {
+            transition: none;
+          }
+
+          .gold-ambient-card:hover,
+          .gold-ambient-card:active {
+            transform: none;
+          }
+        }
+
+        .gold-modal-card {
+          animation: modalAppear 0.25s ease-out;
+        }
+
+        @keyframes modalAppear {
+          from {
+            opacity: 0;
+            transform: translateY(12px) scale(0.98);
+          }
+
+          to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+          }
+        }
+      `}</style>
     </main>
   );
 }

@@ -129,8 +129,9 @@ const statusBadgeStyles: Record<AppointmentStatus, string> = {
     "border-red-400/20 bg-red-400/10 text-red-300",
 };
 
+// Every reusable panel gets the ambient glow.
 const panel =
-  "rounded-2xl border border-[#EFE8A8]/10 bg-[#1B1F1D]";
+  "gold-ambient-card rounded-2xl border border-[#EFE8A8]/10 bg-[#1B1F1D]";
 
 const inputClass =
   "mt-2 w-full rounded-xl border border-[#EFE8A8]/15 bg-[#121414] px-4 py-3 text-sm text-[#F5F3E8] outline-none transition placeholder:text-[#73766E] focus:border-[#EFE8A8]/60";
@@ -373,7 +374,9 @@ function StatusBadge({
     <span
       className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[11px] font-medium ${statusBadgeStyles[status]}`}
     >
-      <span className={`h-1.5 w-1.5 rounded-full ${statusStyles[status]}`} />
+      <span
+        className={`h-1.5 w-1.5 rounded-full ${statusStyles[status]}`}
+      />
       {status}
     </span>
   );
@@ -393,9 +396,9 @@ function StatCard({
   accent: string;
 }) {
   return (
-    <div className="group relative overflow-hidden rounded-2xl border border-[#EFE8A8]/10 bg-[#1B1F1D] p-5 transition duration-300 hover:-translate-y-1 hover:border-[#EFE8A8]/30 hover:shadow-xl hover:shadow-black/20">
+    <div className="gold-ambient-card group relative overflow-hidden rounded-2xl border border-[#EFE8A8]/10 bg-[#1B1F1D] p-5 transition duration-300 hover:-translate-y-1">
       <div
-        className="absolute -right-8 -top-8 h-28 w-28 rounded-full opacity-[0.06] blur-2xl transition group-hover:opacity-20"
+        className="pointer-events-none absolute -right-8 -top-8 h-28 w-28 rounded-full opacity-[0.06] blur-2xl transition group-hover:opacity-20"
         style={{ background: accent }}
       />
 
@@ -491,7 +494,7 @@ function CalendarDateCell({
 
   return (
     <div
-      className={`group relative min-h-[112px] border-b border-r border-[#EFE8A8]/10 p-2 transition sm:min-h-[130px] sm:p-3 ${
+      className={`gold-ambient-card group relative min-h-[112px] border-b border-r border-[#EFE8A8]/10 p-2 transition sm:min-h-[130px] sm:p-3 ${
         !currentMonth ? "opacity-30" : ""
       } ${
         selected
@@ -1110,11 +1113,9 @@ export default function AppointmentsPage() {
   return (
     <div className="min-h-screen space-y-6 bg-[#121414] p-4 text-[#F5F3E8] sm:p-6 lg:p-8">
 
-      {/* ================================================
-          HEADER
-      ================================================ */}
+      {/* HEADER */}
 
-      <header className="relative overflow-hidden rounded-3xl border border-[#EFE8A8]/15 bg-gradient-to-br from-[#252923] via-[#1B1F1D] to-[#151816] p-6 sm:p-8">
+      <header className="gold-ambient-card relative overflow-hidden rounded-3xl border border-[#EFE8A8]/15 bg-gradient-to-br from-[#252923] via-[#1B1F1D] to-[#151816] p-6 sm:p-8">
         <div className="pointer-events-none absolute -right-20 -top-32 h-80 w-80 rounded-full bg-[#EFE8A8]/[0.06] blur-3xl" />
 
         <div className="pointer-events-none absolute bottom-0 right-1/4 h-40 w-40 rounded-full bg-[#EFE8A8]/[0.035] blur-3xl" />
@@ -1177,9 +1178,7 @@ export default function AppointmentsPage() {
         </div>
       </header>
 
-      {/* ================================================
-          KPI STRIP
-      ================================================ */}
+      {/* KPI STRIP */}
 
       <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <StatCard
@@ -1215,9 +1214,7 @@ export default function AppointmentsPage() {
         />
       </section>
 
-      {/* ================================================
-          TODAY AT A GLANCE
-      ================================================ */}
+      {/* TODAY AT A GLANCE */}
 
       <section className={`${panel} overflow-hidden`}>
         <div className="flex flex-col justify-between gap-4 border-b border-[#EFE8A8]/10 p-5 sm:flex-row sm:items-center sm:p-6">
@@ -1287,7 +1284,7 @@ export default function AppointmentsPage() {
 
                     <button
                       onClick={() => openEditModal(item)}
-                      className="group min-w-0 flex-1 rounded-xl border border-[#EFE8A8]/10 bg-[#121414] p-4 text-left transition duration-300 hover:-translate-y-0.5 hover:border-[#EFE8A8]/35 hover:bg-[#20241F]"
+                      className="gold-ambient-card group min-w-0 flex-1 rounded-xl border border-[#EFE8A8]/10 bg-[#121414] p-4 text-left transition duration-300 hover:bg-[#20241F]"
                     >
                       <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
                         <div className="flex min-w-0 items-center gap-3">
@@ -1335,7 +1332,7 @@ export default function AppointmentsPage() {
 
           {/* TODAY SUMMARY */}
 
-          <div className="border-t border-[#EFE8A8]/10 bg-[#151916] p-5 sm:p-6 lg:border-l lg:border-t-0">
+          <div className="gold-ambient-card border-t border-[#EFE8A8]/10 bg-[#151916] p-5 sm:p-6 lg:border-l lg:border-t-0">
             <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#EFE8A8]/65">
               Daily summary
             </p>
@@ -1597,7 +1594,7 @@ export default function AppointmentsPage() {
                   return (
                     <div
                       key={key}
-                      className={`group min-h-[290px] rounded-xl border p-2 transition sm:p-3 ${
+                      className={`gold-ambient-card group min-h-[290px] rounded-xl border p-2 transition sm:p-3 ${
                         key === todayKey
                           ? "border-[#EFE8A8]/50 bg-[#EFE8A8]/[0.06]"
                           : "border-[#EFE8A8]/10 bg-[#121414]/60 hover:border-[#EFE8A8]/25"
@@ -1636,7 +1633,7 @@ export default function AppointmentsPage() {
                           <button
                             key={item.id}
                             onClick={() => openEditModal(item)}
-                            className="w-full rounded-lg border border-[#EFE8A8]/10 bg-[#222522] p-2 text-left transition hover:border-[#EFE8A8]/40 hover:bg-[#2B302B]"
+                            className="gold-ambient-card w-full rounded-lg border border-[#EFE8A8]/10 bg-[#222522] p-2 text-left transition hover:border-[#EFE8A8]/40 hover:bg-[#2B302B]"
                           >
                             <div className="flex items-center gap-1.5">
                               <span
@@ -1737,7 +1734,7 @@ export default function AppointmentsPage() {
                       <div className="z-10 mt-5 h-3 w-3 shrink-0 rounded-full border-2 border-[#EFE8A8] bg-[#1B1F1D]" />
 
                       <div className="min-w-0 flex-1">
-                        <div className="flex flex-col gap-4 rounded-xl border border-[#EFE8A8]/10 bg-[#121414] p-4 transition hover:border-[#EFE8A8]/30 sm:flex-row sm:items-center sm:justify-between">
+                        <div className="gold-ambient-card flex flex-col gap-4 rounded-xl border border-[#EFE8A8]/10 bg-[#121414] p-4 transition sm:flex-row sm:items-center sm:justify-between">
                           <div className="flex min-w-0 items-start gap-4">
                             <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#EFE8A8]/10 text-[#EFE8A8]">
                               <Scissors size={19} />
@@ -1936,7 +1933,7 @@ export default function AppointmentsPage() {
             }
           }}
         >
-          <div className="my-auto w-full max-w-2xl overflow-hidden rounded-2xl border border-[#EFE8A8]/20 bg-[#1B1F1D] shadow-2xl animate-modalIn">
+          <div className="gold-ambient-card my-auto w-full max-w-2xl overflow-hidden rounded-2xl border border-[#EFE8A8]/20 bg-[#1B1F1D] shadow-2xl animate-modalIn">
             {/* MODAL HEADER */}
 
             <div className="relative overflow-hidden border-b border-[#EFE8A8]/10 bg-gradient-to-r from-[#252923] to-[#1B1F1D] px-5 py-5 sm:px-7">
@@ -2260,10 +2257,71 @@ export default function AppointmentsPage() {
       )}
 
       {/* ================================================
-          ANIMATIONS
+          ANIMATIONS + GOLDEN AMBIENT CARD EFFECT
       ================================================ */}
 
-      <style jsx>{`
+      <style jsx global>{`
+        /* ---------------------------------------------
+           GOLDEN AMBIENT GLOW
+        --------------------------------------------- */
+
+        .gold-ambient-card {
+          position: relative;
+          isolation: isolate;
+          -webkit-tap-highlight-color: transparent;
+          transition:
+            transform 350ms ease,
+            border-color 350ms ease,
+            box-shadow 350ms ease,
+            background-color 350ms ease;
+        }
+
+        .gold-ambient-card::after {
+          content: "";
+          position: absolute;
+          inset: -18px;
+          z-index: -1;
+          border-radius: inherit;
+          pointer-events: none;
+          background: radial-gradient(
+            ellipse at center,
+            rgba(255, 225, 130, 0.24) 0%,
+            rgba(239, 200, 85, 0.16) 35%,
+            rgba(205, 157, 55, 0.07) 65%,
+            transparent 100%
+          );
+          filter: blur(22px);
+          opacity: 0;
+          transition: opacity 350ms ease;
+        }
+
+        .gold-ambient-card:hover,
+        .gold-ambient-card:active,
+        .gold-ambient-card:focus-visible {
+          border-color: rgba(239, 210, 115, 0.42) !important;
+          box-shadow:
+            0 0 15px rgba(239, 200, 85, 0.13),
+            0 0 32px rgba(239, 200, 85, 0.11),
+            0 0 55px rgba(239, 200, 85, 0.07),
+            inset 0 0 18px rgba(239, 200, 85, 0.025);
+        }
+
+        .gold-ambient-card:hover::after,
+        .gold-ambient-card:active::after,
+        .gold-ambient-card:focus-visible::after {
+          opacity: 1;
+        }
+
+        @media (hover: hover) {
+          .gold-ambient-card:hover {
+            transform: translateY(-3px);
+          }
+        }
+
+        /* ---------------------------------------------
+           PAGE ANIMATIONS
+        --------------------------------------------- */
+
         @keyframes fadeInUp {
           from {
             opacity: 0;
@@ -2309,6 +2367,15 @@ export default function AppointmentsPage() {
         }
 
         @media (prefers-reduced-motion: reduce) {
+          .gold-ambient-card,
+          .gold-ambient-card::after {
+            transition: none;
+          }
+
+          .gold-ambient-card:hover {
+            transform: none;
+          }
+
           .animate-modalIn,
           .calendar-transition {
             animation: none;

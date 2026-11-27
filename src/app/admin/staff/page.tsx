@@ -233,7 +233,7 @@ const FLOATING_CARD_STYLES = `
     will-change: transform;
   }
 
-  .kbc-floating-card::before {
+  .kbc-floating-card::after {
     content: "";
     position: absolute;
     inset: 0;
@@ -263,7 +263,7 @@ const FLOATING_CARD_STYLES = `
     }
   }
 
-  .kbc-card-instructor::before {
+  .kbc-card-instructor::after {
     background: linear-gradient(
       135deg,
       rgba(239, 232, 168, 0.48) 0%,
@@ -272,7 +272,7 @@ const FLOATING_CARD_STYLES = `
     );
   }
 
-  .kbc-card-salon::before {
+  .kbc-card-salon::after {
     background: linear-gradient(
       135deg,
       rgba(226, 232, 240, 0.40) 0%,
@@ -281,7 +281,7 @@ const FLOATING_CARD_STYLES = `
     );
   }
 
-  .kbc-card-receptionist::before {
+  .kbc-card-receptionist::after {
     background: linear-gradient(
       135deg,
       rgba(148, 163, 184, 0.38) 0%,
@@ -594,9 +594,10 @@ function FloatingStaffProfileCard({
   return (
     <div
       ref={cardRef}
+      tabIndex={0}
       onPointerMove={handlePointerMove}
       onPointerLeave={handlePointerLeave}
-      className={`kbc-floating-card ${roleTheme.cardModifier} ${
+      className={`gold-ambient-card kbc-floating-card ${roleTheme.cardModifier} ${
         canHoverTilt ? "kbc-floating-card-tilt" : ""
       } flex flex-col justify-between p-5`}
     >
@@ -1778,7 +1779,7 @@ export default function StaffPage() {
   ======================================================= */
 
   const card =
-    "rounded-2xl border border-[#343832] bg-[#1B1F1D] shadow-[0_8px_30px_rgba(0,0,0,0.12)]";
+    "gold-ambient-card rounded-2xl border border-[#343832] bg-[#1B1F1D] shadow-[0_8px_30px_rgba(0,0,0,0.12)]";
 
   const input =
     "w-full rounded-xl border border-[#3A403A] bg-[#141816] px-4 py-3 text-sm text-[#F5F1E6] outline-none transition placeholder:text-[#777B70] focus:border-[#A9A58A]";
@@ -1849,7 +1850,7 @@ export default function StaffPage() {
     icon: React.ReactNode,
     accent = "text-[#EFE8A8]"
   ) => (
-    <div className={`${card} p-5 transition hover:-translate-y-0.5 hover:border-[#716D50]`}>
+    <div tabIndex={0} className={`${card} p-5`}>
       <div className="flex items-start justify-between">
         <div>
           <p className="text-sm text-[#A6AA9D]">{title}</p>
@@ -1899,7 +1900,84 @@ export default function StaffPage() {
 
   return (
     <div className="min-h-screen bg-[#121414] px-4 py-6 text-[#F5F1E6] sm:px-6 lg:px-8">
-      <style>{FLOATING_CARD_STYLES}</style>
+      <style jsx global>{`
+        ${FLOATING_CARD_STYLES}
+
+        .gold-ambient-card {
+          position: relative;
+          isolation: isolate;
+          -webkit-tap-highlight-color: transparent;
+
+          transition:
+            transform 0.35s ease,
+            border-color 0.35s ease,
+            box-shadow 0.35s ease;
+        }
+
+        .gold-ambient-card::before {
+          content: "";
+          position: absolute;
+          inset: -3px;
+          border-radius: inherit;
+          pointer-events: none;
+          z-index: -1;
+
+          background: radial-gradient(
+            ellipse at center,
+            rgba(255, 226, 130, 0.25) 0%,
+            rgba(239, 200, 85, 0.16) 35%,
+            rgba(205, 157, 55, 0.08) 65%,
+            transparent 100%
+          );
+
+          filter: blur(24px);
+          opacity: 0;
+
+          transition: opacity 0.35s ease;
+        }
+
+        .gold-ambient-card:hover,
+        .gold-ambient-card:active,
+        .gold-ambient-card:focus-visible {
+          border-color: rgba(239, 210, 130, 0.45);
+
+          box-shadow:
+            0 0 12px rgba(239, 200, 85, 0.13),
+            0 0 28px rgba(239, 200, 85, 0.12),
+            0 0 50px rgba(239, 200, 85, 0.08),
+            inset 0 0 18px rgba(239, 200, 85, 0.025);
+        }
+
+        .gold-ambient-card:hover::before,
+        .gold-ambient-card:active::before,
+        .gold-ambient-card:focus-visible::before {
+          opacity: 1;
+        }
+
+        @media (hover: hover) and (pointer: fine) {
+          .gold-ambient-card:hover {
+            transform: translateY(-3px);
+          }
+        }
+
+        @media (hover: none) {
+          .gold-ambient-card:active {
+            transform: scale(0.99);
+          }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .gold-ambient-card,
+          .gold-ambient-card::before {
+            transition: none;
+          }
+
+          .gold-ambient-card:hover,
+          .gold-ambient-card:active {
+            transform: none;
+          }
+        }
+      `}</style>
 
       <div className="mx-auto max-w-[1600px] space-y-7">
 
@@ -1971,7 +2049,10 @@ export default function StaffPage() {
         {/* QUICK ALERTS */}
 
         <div className="grid gap-3 md:grid-cols-3">
-          <div className="flex items-center gap-3 rounded-xl border border-[#756E42]/40 bg-[#29291F] p-4">
+          <div
+            tabIndex={0}
+            className="gold-ambient-card flex items-center gap-3 rounded-xl border border-[#756E42]/40 bg-[#29291F] p-4"
+          >
             <div className="rounded-lg bg-[#EFE8A8]/10 p-2 text-[#EFE8A8]">
               <Bell size={18} />
             </div>
@@ -1992,7 +2073,10 @@ export default function StaffPage() {
             )}
           </div>
 
-          <div className="flex items-center gap-3 rounded-xl border border-[#343832] bg-[#1B1F1D] p-4">
+          <div
+            tabIndex={0}
+            className="gold-ambient-card flex items-center gap-3 rounded-xl border border-[#343832] bg-[#1B1F1D] p-4"
+          >
             <div className="rounded-lg bg-[#A9A58A]/10 p-2 text-[#C5C0A0]">
               <Gift size={18} />
             </div>
@@ -2007,7 +2091,10 @@ export default function StaffPage() {
             </div>
           </div>
 
-          <div className="flex items-center gap-3 rounded-xl border border-[#343832] bg-[#1B1F1D] p-4">
+          <div
+            tabIndex={0}
+            className="gold-ambient-card flex items-center gap-3 rounded-xl border border-[#343832] bg-[#1B1F1D] p-4"
+          >
             <div className="rounded-lg bg-emerald-400/10 p-2 text-emerald-300">
               <Clock size={18} />
             </div>
@@ -2278,7 +2365,8 @@ export default function StaffPage() {
                   return (
                     <div
                       key={member.id}
-                      className="rounded-xl border border-[#343832] bg-[#151916] p-4"
+                      tabIndex={0}
+                      className="gold-ambient-card rounded-xl border border-[#343832] bg-[#151916] p-4"
                     >
                       <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
                         <div className="flex items-center gap-3">
@@ -2661,7 +2749,8 @@ export default function StaffPage() {
                 {performance.map((member, index) => (
                   <div
                     key={member.id}
-                    className="flex flex-col justify-between gap-4 rounded-xl border border-[#343832] bg-[#151916] p-4 sm:flex-row sm:items-center"
+                    tabIndex={0}
+                    className="gold-ambient-card flex flex-col justify-between gap-4 rounded-xl border border-[#343832] bg-[#151916] p-4 sm:flex-row sm:items-center"
                   >
                     <div className="flex items-center gap-3">
                       <div
@@ -2780,7 +2869,8 @@ export default function StaffPage() {
                   {upcomingReminders.map((item, index) => (
                     <div
                       key={`${item.member.id}-${item.type}-${index}`}
-                      className="flex items-center gap-4 rounded-xl border border-[#343832] bg-[#151916] p-4"
+                      tabIndex={0}
+                      className="gold-ambient-card flex items-center gap-4 rounded-xl border border-[#343832] bg-[#151916] p-4"
                     >
                       {avatar(item.member)}
 
@@ -2897,7 +2987,8 @@ export default function StaffPage() {
                     return (
                       <div
                         key={request.id}
-                        className="flex flex-col justify-between gap-4 rounded-xl border border-[#343832] bg-[#151916] p-4 xl:flex-row xl:items-center"
+                        tabIndex={0}
+                        className="gold-ambient-card flex flex-col justify-between gap-4 rounded-xl border border-[#343832] bg-[#151916] p-4 xl:flex-row xl:items-center"
                       >
                         <div className="flex items-center gap-3">
                           {member ? (
@@ -3188,7 +3279,8 @@ export default function StaffPage() {
                   {recommendedStaff.map((item, index) => (
                     <div
                       key={item.member.id}
-                      className="rounded-xl border border-[#343832] bg-[#151916] p-4"
+                      tabIndex={0}
+                      className="gold-ambient-card rounded-xl border border-[#343832] bg-[#151916] p-4"
                     >
                       <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
                         <div className="flex items-center gap-3">
@@ -3297,7 +3389,7 @@ export default function StaffPage() {
 
         {memberModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-3 backdrop-blur-sm">
-            <div className="max-h-[92vh] w-full max-w-3xl overflow-y-auto rounded-2xl border border-[#454A40] bg-[#1B1F1D] shadow-2xl">
+            <div className="gold-ambient-card max-h-[92vh] w-full max-w-3xl overflow-y-auto rounded-2xl border border-[#454A40] bg-[#1B1F1D] shadow-2xl">
               <div className="sticky top-0 z-10 flex items-center justify-between border-b border-[#343832] bg-[#1B1F1D] px-5 py-4">
                 <div>
                   <h2 className="text-lg font-semibold text-[#F5F1E6]">
@@ -3611,7 +3703,7 @@ export default function StaffPage() {
 
         {profileMember && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-3 backdrop-blur-sm">
-            <div className="w-full max-w-xl overflow-hidden rounded-2xl border border-[#454A40] bg-[#1B1F1D] shadow-2xl">
+            <div className="gold-ambient-card w-full max-w-xl overflow-hidden rounded-2xl border border-[#454A40] bg-[#1B1F1D] shadow-2xl">
               <div className="flex items-center justify-between border-b border-[#343832] p-5">
                 <h2 className="font-semibold">Team Member Profile</h2>
 
@@ -3715,7 +3807,7 @@ export default function StaffPage() {
 
         {leaveModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-3 backdrop-blur-sm">
-            <div className="w-full max-w-lg rounded-2xl border border-[#454A40] bg-[#1B1F1D] shadow-2xl">
+            <div className="gold-ambient-card w-full max-w-lg rounded-2xl border border-[#454A40] bg-[#1B1F1D] shadow-2xl">
               <div className="flex items-center justify-between border-b border-[#343832] p-5">
                 <div>
                   <h2 className="font-semibold">New Leave Request</h2>
