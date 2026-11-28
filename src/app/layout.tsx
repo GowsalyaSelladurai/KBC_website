@@ -1,6 +1,7 @@
 
 // @ts-expect-error Next.js provides declarations for global CSS imports.
 import "./globals.css";
+
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Inter, Playfair_Display } from "next/font/google";
@@ -30,8 +31,11 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${sans.variable} ${serif.variable}`}
+      suppressHydrationWarning
     >
-      <body>{children}</body>
+      <body>
+        {children}
+      </body>
     </html>
   );
 }

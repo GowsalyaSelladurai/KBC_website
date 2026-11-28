@@ -1,4 +1,3 @@
-
 "use client";
 
 import {
@@ -188,14 +187,14 @@ function expiryDays(value: string) {
 
 function categoryColor(category: Category) {
   const colors: Record<Category, string> = {
-    "Hair Care": "bg-purple-500/10 text-purple-300 border-purple-400/20",
-    "Skin Care": "bg-blue-500/10 text-blue-300 border-blue-400/20",
-    Makeup: "bg-pink-500/10 text-pink-300 border-pink-400/20",
-    "Salon Supplies": "bg-orange-500/10 text-orange-300 border-orange-400/20",
-    Equipment: "bg-cyan-500/10 text-cyan-300 border-cyan-400/20",
+    "Hair Care": "bg-purple-500/15 text-purple-200 border-purple-400/25",
+    "Skin Care": "bg-blue-500/15 text-blue-200 border-blue-400/25",
+    Makeup: "bg-pink-500/15 text-pink-200 border-pink-400/25",
+    "Salon Supplies": "bg-orange-500/15 text-orange-200 border-orange-400/25",
+    Equipment: "bg-cyan-500/15 text-cyan-200 border-cyan-400/25",
   };
 
-  return colors[category] ?? "bg-white/5 text-gray-300 border-white/10";
+  return colors[category] ?? "bg-white/10 text-gray-200 border-white/15";
 }
 
 function csvDownload(
@@ -232,13 +231,13 @@ function csvDownload(
 // ------------------------------------------------------
 
 const inputClass =
-  "w-full rounded-xl border border-[#3A403A] bg-[#151917] px-3.5 py-3 text-sm text-white outline-none transition placeholder:text-[#858B82] focus:border-[#D9D19A] focus:ring-2 focus:ring-[#D9D19A]/10";
+  "w-full rounded-xl border border-[#E8D39A]/30 bg-[#121414] px-3.5 py-3 text-sm text-[#F5F2E9] outline-none transition placeholder:text-[#858B82] focus:border-[#FFF4CE] focus:ring-2 focus:ring-[#E8D39A]/15";
 
 const primaryButton =
-  "inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#EFE8A8] to-[#C8BD79] px-5 py-3 text-sm font-semibold text-[#171914] shadow-lg shadow-[#EFE8A8]/10 transition hover:-translate-y-0.5 hover:shadow-[#EFE8A8]/20";
+  "inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#FFF4CE] via-[#E8D39A] to-[#C9A45C] px-5 py-3 text-sm font-semibold text-[#17140D] shadow-md shadow-[#C9A45C]/25 transition hover:-translate-y-0.5 hover:brightness-105";
 
 const secondaryButton =
-  "inline-flex items-center justify-center gap-2 rounded-xl border border-[#45483A] px-4 py-3 text-sm text-[#D5D2BD] transition hover:border-[#D9D19A]/50 hover:bg-[#D9D19A]/5";
+  "inline-flex items-center justify-center gap-2 rounded-xl border border-[#E8D39A]/40 bg-[#121414] px-4 py-3 text-sm font-medium text-[#FFF4CE] shadow-sm transition hover:bg-gradient-to-r hover:from-[#FFF4CE] hover:via-[#E8D39A] hover:to-[#C9A45C] hover:text-[#17140D]";
 
 // ------------------------------------------------------
 // FOLDED CORNER CARD
@@ -276,24 +275,24 @@ function StatCard({
   accent?: "gold" | "red" | "green" | "blue";
 }) {
   const accentStyles = {
-    gold: "bg-[#EFE8A8]/10 text-[#EFE8A8]",
-    red: "bg-red-500/10 text-red-400",
-    green: "bg-emerald-500/10 text-emerald-400",
-    blue: "bg-blue-500/10 text-blue-400",
+    gold: "bg-[#E8D39A]/15 text-[#FFF4CE]",
+    red: "bg-red-500/15 text-red-300",
+    green: "bg-emerald-500/15 text-emerald-300",
+    blue: "bg-blue-500/15 text-blue-300",
   };
 
   return (
     <FoldedCard className="p-5">
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <p className="text-sm text-[#A9ACA2]">{title}</p>
-          <h3 className="mt-3 break-words text-2xl font-semibold tracking-tight text-[#F5F2E9]">
+          <p className="gold-card-muted text-sm text-[#A9ACA2]">{title}</p>
+          <h3 className="gold-card-title mt-3 break-words text-2xl font-semibold tracking-tight text-[#F5F2E9]">
             {value}
           </h3>
-          <p className="mt-2 text-xs text-[#858B82]">{subtitle}</p>
+          <p className="gold-card-muted mt-2 text-xs text-[#858B82]">{subtitle}</p>
         </div>
 
-        <div className={`rounded-xl p-3 ${accentStyles[accent]}`}>
+        <div className={`gold-card-icon rounded-xl p-3 ${accentStyles[accent]}`}>
           <Icon size={21} />
         </div>
       </div>
@@ -309,14 +308,16 @@ function StatusBadge({
   type?: "success" | "warning" | "danger" | "neutral";
 }) {
   const styles = {
-    success: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
-    warning: "bg-amber-500/10 text-amber-300 border-amber-500/20",
-    danger: "bg-red-500/10 text-red-400 border-red-500/20",
-    neutral: "bg-white/5 text-gray-300 border-white/10",
+    success: "bg-emerald-500/15 text-emerald-300 border-emerald-400/25",
+    warning: "bg-amber-500/15 text-amber-200 border-amber-400/25",
+    danger: "bg-red-500/15 text-red-300 border-red-400/25",
+    neutral: "bg-white/10 text-gray-200 border-white/15",
   };
 
   return (
-    <span className={`inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-medium ${styles[type]}`}>
+    <span
+      className={`gold-card-pill inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-medium ${styles[type]}`}
+    >
       {children}
     </span>
   );
@@ -361,10 +362,12 @@ function Modal({
         if (event.target === event.currentTarget) onClose();
       }}
     >
-      <div className={`my-auto w-full ${width} animate-[modalIn_.2s_ease-out] rounded-2xl border border-[#45483A] bg-[#1B1F1D] shadow-2xl`}>
-        <div className="flex items-start justify-between border-b border-[#343832] p-5 sm:p-6">
+      <div
+        className={`my-auto w-full ${width} animate-[modalIn_.2s_ease-out] rounded-2xl border border-[#E8D39A]/50 bg-[#121414] text-[#F5F2E9] shadow-[0_0_40px_rgba(232,211,154,0.22)]`}
+      >
+        <div className="flex items-start justify-between border-b border-[#E8D39A]/20 p-5 sm:p-6">
           <div>
-            <h2 className="text-lg font-semibold text-[#EFE8A8]">
+            <h2 className="text-lg font-semibold text-[#FFF4CE]">
               {title}
             </h2>
             {description && (
@@ -377,7 +380,7 @@ function Modal({
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg p-2 text-[#A9ACA2] transition hover:bg-white/10 hover:text-white"
+            className="rounded-lg p-2 text-[#A9ACA2] transition hover:bg-[#FFF4CE] hover:text-[#17140D]"
             aria-label="Close"
           >
             <X size={19} />
@@ -969,7 +972,7 @@ export default function InventoryPage() {
 
   function expiryStatus(product: Product) {
     if (!product.expiryDate) {
-      return <span className="text-xs text-[#858B82]">Not tracked</span>;
+      return <span className="gold-card-muted text-xs text-[#858B82]">Not tracked</span>;
     }
 
     const days = expiryDays(product.expiryDate);
@@ -1004,7 +1007,7 @@ export default function InventoryPage() {
   // ------------------------------------------------------
 
   return (
-    <main className="min-h-screen bg-[#121414] px-4 py-6 text-[#F5F2E9] sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-[#FAF5ED] px-4 py-6 text-[#F5F2E9] sm:px-6 lg:px-8">
       <style jsx global>{`
         @keyframes modalIn {
           from {
@@ -1038,26 +1041,31 @@ export default function InventoryPage() {
         }
 
         .inventory-scroll::-webkit-scrollbar-thumb {
-          background: #555744;
+          background: #c9a45c;
           border-radius: 20px;
         }
 
         /* ------------------------------------------
-           FOLDED CORNER CARD
+           FOLDED CORNER CARD (DEEP CHARCOAL DEFAULT)
         ------------------------------------------ */
 
         .folded-card {
           position: relative;
           isolation: isolate;
-          border: 1px solid rgba(239, 232, 168, .16);
+          background-color: #121414;
+          color: #f5f2e9;
+          border: 1px solid rgba(232, 211, 154, 0.52);
           border-radius: 17px;
-          background:
-            linear-gradient(145deg, rgba(239, 232, 168, .035), transparent 38%),
-            #1B1F1D;
+          box-shadow:
+            0 0 14px rgba(232, 211, 154, 0.18),
+            0 0 30px rgba(201, 164, 92, 0.12),
+            0 10px 24px rgba(18, 20, 20, 0.14);
           transition:
-            transform .35s ease,
-            border-color .35s ease,
-            box-shadow .35s ease;
+            transform .32s cubic-bezier(0.22, 1, 0.36, 1),
+            border-color .32s ease,
+            box-shadow .32s ease,
+            background .32s ease,
+            color .32s ease;
         }
 
         .folded-card::before {
@@ -1069,12 +1077,12 @@ export default function InventoryPage() {
           height: 43px;
           background: linear-gradient(
             135deg,
-            #77734f 0%,
-            #EFE8A8 45%,
-            #b4aa70 100%
+            #9c8549 0%,
+            #FFF4CE 48%,
+            #C9A45C 100%
           );
           clip-path: polygon(0 0, 100% 0, 100% 100%);
-          opacity: .9;
+          opacity: .95;
           z-index: 2;
           transition: width .3s ease, height .3s ease;
         }
@@ -1115,15 +1123,20 @@ export default function InventoryPage() {
         .product-fold {
           position: relative;
           isolation: isolate;
-          border: 1px solid rgba(239, 232, 168, .17);
+          background-color: #121414;
+          color: #f5f2e9;
+          border: 1px solid rgba(232, 211, 154, 0.55);
           border-radius: 17px;
-          background:
-            linear-gradient(145deg, rgba(239, 232, 168, .045), transparent 42%),
-            #1B1F1D;
+          box-shadow:
+            0 0 14px rgba(232, 211, 154, 0.18),
+            0 0 30px rgba(201, 164, 92, 0.12),
+            0 10px 24px rgba(18, 20, 20, 0.14);
           transition:
-            transform .35s ease,
-            border-color .35s ease,
-            box-shadow .35s ease;
+            transform .32s cubic-bezier(0.22, 1, 0.36, 1),
+            border-color .32s ease,
+            box-shadow .32s ease,
+            background .32s ease,
+            color .32s ease;
         }
 
         .product-fold::before {
@@ -1133,7 +1146,7 @@ export default function InventoryPage() {
           right: 0;
           width: 48px;
           height: 48px;
-          background: linear-gradient(135deg, #8f885d, #EFE8A8 55%, #bcb27a);
+          background: linear-gradient(135deg, #9c8549, #FFF4CE 55%, #C9A45C);
           clip-path: polygon(0 0, 100% 0, 100% 100%);
           z-index: 2;
           transition: width .3s ease, height .3s ease;
@@ -1160,53 +1173,115 @@ export default function InventoryPage() {
         .product-fold-content {
           position: relative;
           z-index: 3;
+          height: 100%;
         }
 
         /* ------------------------------------------
-           PREMIUM SOFT GOLDEN HOVER GLOW
-           No extra pseudo-element is used here.
-           This preserves the folded-corner effects.
+           CHAMPAGNE HOVER, OUTER GLOW & TOUCH EFFECT
+           Preserves folded-corner pseudo-elements on
+           FoldedCard and ProductFold while applying
+           full champagne gradient & outer glow.
         ------------------------------------------ */
 
         .gold-ambient-card {
           position: relative;
           isolation: isolate;
+          background-color: #121414;
+          color: #f5f2e9;
+          border: 1px solid rgba(232, 211, 154, 0.52);
+          box-shadow:
+            0 0 14px rgba(232, 211, 154, 0.18),
+            0 0 30px rgba(201, 164, 92, 0.12),
+            0 10px 24px rgba(18, 20, 20, 0.14);
           -webkit-tap-highlight-color: transparent;
-
+          touch-action: manipulation;
           transition:
-            transform .35s ease,
-            border-color .35s ease,
-            box-shadow .35s ease;
+            transform .32s cubic-bezier(0.22, 1, 0.36, 1),
+            border-color .32s ease,
+            box-shadow .32s ease,
+            background .32s ease,
+            color .32s ease;
         }
 
         .gold-ambient-card:hover,
         .gold-ambient-card:active,
-        .gold-ambient-card:focus-visible,
-        .gold-ambient-card:focus-within {
-          border-color: rgba(239, 210, 130, .45);
-
+        .gold-ambient-card:focus-visible {
+          background: linear-gradient(
+            135deg,
+            #fff4ce 0%,
+            #e8d39a 52%,
+            #c9a45c 100%
+          ) !important;
+          color: #17140d !important;
+          border-color: #fff4ce !important;
           box-shadow:
-            0 0 12px rgba(239, 200, 85, .13),
-            0 0 28px rgba(239, 200, 85, .12),
-            0 0 50px rgba(239, 200, 85, .08),
-            inset 0 0 18px rgba(239, 200, 85, .025);
+            0 0 18px rgba(255, 244, 206, 0.68),
+            0 0 38px rgba(232, 211, 154, 0.48),
+            0 0 64px rgba(201, 164, 92, 0.32),
+            inset 0 1px 0 rgba(255, 255, 255, 0.72);
         }
 
-        /* Desktop hover */
+        .gold-ambient-card:hover .gold-card-title,
+        .gold-ambient-card:active .gold-card-title,
+        .gold-ambient-card:focus-visible .gold-card-title,
+        .gold-ambient-card:hover .gold-card-accent,
+        .gold-ambient-card:active .gold-card-accent,
+        .gold-ambient-card:focus-visible .gold-card-accent {
+          color: #17140d !important;
+        }
+
+        .gold-ambient-card:hover .gold-card-muted,
+        .gold-ambient-card:active .gold-card-muted,
+        .gold-ambient-card:focus-visible .gold-card-muted {
+          color: rgba(23, 20, 13, 0.8) !important;
+        }
+
+        .gold-ambient-card:hover .gold-card-icon,
+        .gold-ambient-card:active .gold-card-icon,
+        .gold-ambient-card:focus-visible .gold-card-icon {
+          background-color: rgba(23, 20, 13, 0.14) !important;
+          border-color: rgba(23, 20, 13, 0.24) !important;
+          color: #17140d !important;
+        }
+
+        .gold-ambient-card:hover .gold-card-pill,
+        .gold-ambient-card:active .gold-card-pill,
+        .gold-ambient-card:focus-visible .gold-card-pill {
+          background-color: rgba(23, 20, 13, 0.14) !important;
+          border-color: rgba(23, 20, 13, 0.25) !important;
+          color: #17140d !important;
+        }
+
+        .gold-ambient-card:hover .gold-card-subpanel,
+        .gold-ambient-card:active .gold-card-subpanel,
+        .gold-ambient-card:focus-visible .gold-card-subpanel {
+          background-color: rgba(23, 20, 13, 0.12) !important;
+          border-color: rgba(23, 20, 13, 0.22) !important;
+          color: #17140d !important;
+        }
+
+        .gold-ambient-card:hover .gold-card-track,
+        .gold-ambient-card:active .gold-card-track {
+          background-color: rgba(23, 20, 13, 0.18) !important;
+        }
+
+        .gold-ambient-card:hover .gold-card-bar,
+        .gold-ambient-card:active .gold-card-bar {
+          background: #17140d !important;
+        }
+
         @media (hover: hover) and (pointer: fine) {
           .gold-ambient-card:hover {
             transform: translateY(-3px);
           }
         }
 
-        /* Mobile touch */
         @media (hover: none) {
           .gold-ambient-card:active {
             transform: scale(.99);
           }
         }
 
-        /* Reduced motion */
         @media (prefers-reduced-motion: reduce) {
           .gold-ambient-card {
             transition: none;
@@ -1223,28 +1298,27 @@ export default function InventoryPage() {
           background: linear-gradient(
             90deg,
             transparent,
-            rgba(239, 232, 168, .3),
+            rgba(232, 211, 154, .45),
             transparent
           );
         }
       `}</style>
 
       <div className="mx-auto max-w-[1600px] space-y-6">
-
         {/* HEADER */}
 
-        <div className="flex flex-col justify-between gap-5 xl:flex-row xl:items-center">
+        <div className="gold-ambient-card flex flex-col justify-between gap-5 rounded-2xl bg-[#121414] p-5 sm:p-6 xl:flex-row xl:items-center">
           <div>
-            <div className="mb-2 flex items-center gap-2 text-xs font-medium uppercase tracking-[0.2em] text-[#A9ACA2]">
-              <Sparkles size={14} />
+            <div className="gold-card-muted mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-[#E8D39A]">
+              <Sparkles size={14} className="gold-card-accent" />
               KBC Salon Academy
             </div>
 
-            <h1 className="text-2xl font-semibold tracking-tight text-[#EFE8A8] sm:text-3xl">
-              Inventory & Products
+            <h1 className="gold-card-title text-2xl font-semibold tracking-tight text-[#FFF4CE] sm:text-3xl">
+              Inventory &amp; Products
             </h1>
 
-            <p className="mt-2 text-sm text-[#92978F]">
+            <p className="gold-card-muted mt-2 text-sm text-[#9CA097]">
               Manage products, monitor stock, track expiry dates and suppliers.
             </p>
           </div>
@@ -1278,11 +1352,13 @@ export default function InventoryPage() {
           expiringProducts.length > 0) && (
           <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
             {outOfStockProducts.length > 0 && (
-              <div className="gold-ambient-card flex items-center gap-3 rounded-xl border border-red-500/20 bg-red-500/5 p-4">
-                <AlertTriangle className="shrink-0 text-red-400" size={20} />
+              <div className="gold-ambient-card flex items-center gap-3 rounded-xl bg-[#121414] p-4">
+                <AlertTriangle className="gold-card-accent shrink-0 text-red-400" size={20} />
                 <div>
-                  <p className="text-sm font-medium text-red-300">Out of stock</p>
-                  <p className="text-xs text-red-300/70">
+                  <p className="gold-card-title text-sm font-medium text-red-300">
+                    Out of stock
+                  </p>
+                  <p className="gold-card-muted text-xs text-red-200/75">
                     {outOfStockProducts.length} products need restocking
                   </p>
                 </div>
@@ -1290,11 +1366,13 @@ export default function InventoryPage() {
             )}
 
             {lowStockProducts.length > 0 && (
-              <div className="gold-ambient-card flex items-center gap-3 rounded-xl border border-amber-500/20 bg-amber-500/5 p-4">
-                <AlertTriangle className="shrink-0 text-amber-300" size={20} />
+              <div className="gold-ambient-card flex items-center gap-3 rounded-xl bg-[#121414] p-4">
+                <AlertTriangle className="gold-card-accent shrink-0 text-amber-300" size={20} />
                 <div>
-                  <p className="text-sm font-medium text-amber-200">Low stock alert</p>
-                  <p className="text-xs text-amber-200/70">
+                  <p className="gold-card-title text-sm font-medium text-amber-200">
+                    Low stock alert
+                  </p>
+                  <p className="gold-card-muted text-xs text-amber-100/75">
                     {lowStockProducts.length} products below minimum
                   </p>
                 </div>
@@ -1302,11 +1380,13 @@ export default function InventoryPage() {
             )}
 
             {expiredProducts.length > 0 && (
-              <div className="gold-ambient-card flex items-center gap-3 rounded-xl border border-red-500/20 bg-red-500/5 p-4">
-                <CalendarDays className="shrink-0 text-red-400" size={20} />
+              <div className="gold-ambient-card flex items-center gap-3 rounded-xl bg-[#121414] p-4">
+                <CalendarDays className="gold-card-accent shrink-0 text-red-400" size={20} />
                 <div>
-                  <p className="text-sm font-medium text-red-300">Expired products</p>
-                  <p className="text-xs text-red-300/70">
+                  <p className="gold-card-title text-sm font-medium text-red-300">
+                    Expired products
+                  </p>
+                  <p className="gold-card-muted text-xs text-red-200/75">
                     {expiredProducts.length} products have expired
                   </p>
                 </div>
@@ -1314,11 +1394,13 @@ export default function InventoryPage() {
             )}
 
             {expiringProducts.length > 0 && (
-              <div className="gold-ambient-card flex items-center gap-3 rounded-xl border border-amber-500/20 bg-amber-500/5 p-4">
-                <Clock className="shrink-0 text-amber-300" size={20} />
+              <div className="gold-ambient-card flex items-center gap-3 rounded-xl bg-[#121414] p-4">
+                <Clock className="gold-card-accent shrink-0 text-amber-300" size={20} />
                 <div>
-                  <p className="text-sm font-medium text-amber-200">Expiring soon</p>
-                  <p className="text-xs text-amber-200/70">
+                  <p className="gold-card-title text-sm font-medium text-amber-200">
+                    Expiring soon
+                  </p>
+                  <p className="gold-card-muted text-xs text-amber-100/75">
                     {expiringProducts.length} products within 30 days
                   </p>
                 </div>
@@ -1363,24 +1445,24 @@ export default function InventoryPage() {
 
         {/* TABS */}
 
-        <div className="inventory-scroll overflow-x-auto border-b border-[#343832]">
+        <div className="inventory-scroll overflow-x-auto border-b border-[#C9A45C]/35">
           <div className="flex min-w-max gap-2">
             {tabs.map(({ name, icon: Icon }) => (
               <button
                 type="button"
                 key={name}
                 onClick={() => setActiveTab(name)}
-                className={`relative flex items-center gap-2 px-4 py-3 text-sm transition ${
+                className={`relative flex items-center gap-2 rounded-t-xl px-4 py-3 text-sm transition ${
                   activeTab === name
-                    ? "font-semibold text-[#EFE8A8]"
-                    : "text-[#92978F] hover:text-[#E5E0C5]"
+                    ? "bg-[#121414] font-semibold text-[#FFF4CE] shadow-[0_0_16px_rgba(232,211,154,0.25)]"
+                    : "text-[#5C5549] hover:bg-[#121414]/10 hover:text-[#17140D]"
                 }`}
               >
                 <Icon size={16} />
                 {name}
 
                 {activeTab === name && (
-                  <span className="absolute bottom-0 left-3 right-3 h-0.5 rounded-full bg-[#EFE8A8]" />
+                  <span className="absolute bottom-0 left-3 right-3 h-0.5 rounded-full bg-[#FFF4CE]" />
                 )}
               </button>
             ))}
@@ -1392,16 +1474,17 @@ export default function InventoryPage() {
         {activeTab === "Overview" && (
           <div className="inventory-fade space-y-6">
             <div className="grid gap-5 xl:grid-cols-3">
-
               <FoldedCard className="p-5 xl:col-span-2">
                 <div className="mb-5 flex items-center justify-between">
                   <div>
-                    <h2 className="font-semibold text-[#EFE8A8]">Category Overview</h2>
-                    <p className="mt-1 text-xs text-[#92978F]">
+                    <h2 className="gold-card-title font-semibold text-[#FFF4CE]">
+                      Category Overview
+                    </h2>
+                    <p className="gold-card-muted mt-1 text-xs text-[#92978F]">
                       Products grouped by category
                     </p>
                   </div>
-                  <Tag className="text-[#A9ACA2]" size={19} />
+                  <Tag className="gold-card-accent text-[#E8D39A]" size={19} />
                 </div>
 
                 <div className="grid gap-3 sm:grid-cols-2">
@@ -1414,25 +1497,25 @@ export default function InventoryPage() {
                     return (
                       <div
                         key={category.name}
-                        className="gold-ambient-card rounded-xl border border-[#343832] bg-[#151917] p-4"
+                        className="gold-ambient-card gold-card-subpanel rounded-xl bg-[#121414] p-4"
                       >
                         <div className="flex items-center justify-between gap-3">
-                          <p className="text-sm text-[#D9D6C4]">
+                          <p className="gold-card-title text-sm text-[#D9D6C4]">
                             {category.name}
                           </p>
-                          <span className="text-lg font-semibold text-[#EFE8A8]">
+                          <span className="gold-card-accent text-lg font-semibold text-[#FFF4CE]">
                             {category.count}
                           </span>
                         </div>
 
-                        <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-[#343832]">
+                        <div className="gold-card-track mt-4 h-1.5 overflow-hidden rounded-full bg-[#262A28]">
                           <div
-                            className="h-full rounded-full bg-gradient-to-r from-[#A9A58A] to-[#EFE8A8] transition-all duration-700"
+                            className="gold-card-bar h-full rounded-full bg-gradient-to-r from-[#C9A45C] to-[#FFF4CE] transition-all duration-700"
                             style={{ width: `${percentage}%` }}
                           />
                         </div>
 
-                        <p className="mt-2 text-xs text-[#858B82]">
+                        <p className="gold-card-muted mt-2 text-xs text-[#858B82]">
                           {percentage.toFixed(1)}% of all products
                         </p>
                       </div>
@@ -1444,12 +1527,14 @@ export default function InventoryPage() {
               <FoldedCard className="p-5">
                 <div className="mb-5 flex items-center justify-between">
                   <div>
-                    <h2 className="font-semibold text-[#EFE8A8]">Stock Health</h2>
-                    <p className="mt-1 text-xs text-[#92978F]">
+                    <h2 className="gold-card-title font-semibold text-[#FFF4CE]">
+                      Stock Health
+                    </h2>
+                    <p className="gold-card-muted mt-1 text-xs text-[#92978F]">
                       Current inventory condition
                     </p>
                   </div>
-                  <Activity className="text-[#A9ACA2]" size={19} />
+                  <Activity className="gold-card-accent text-[#E8D39A]" size={19} />
                 </div>
 
                 <div className="space-y-5">
@@ -1477,14 +1562,16 @@ export default function InventoryPage() {
                   ].map((item) => (
                     <div key={item.label}>
                       <div className="mb-2 flex items-center justify-between text-sm">
-                        <span className="text-[#A9ACA2]">{item.label}</span>
-                        <span className="font-semibold text-[#EFE8A8]">
+                        <span className="gold-card-muted text-[#A9ACA2]">
+                          {item.label}
+                        </span>
+                        <span className="gold-card-accent font-semibold text-[#FFF4CE]">
                           {item.count}
                         </span>
                       </div>
-                      <div className="h-2 overflow-hidden rounded-full bg-[#343832]">
+                      <div className="gold-card-track h-2 overflow-hidden rounded-full bg-[#262A28]">
                         <div
-                          className={`h-full rounded-full ${item.color}`}
+                          className={`gold-card-bar h-full rounded-full ${item.color}`}
                           style={{
                             width: `${
                               products.length
@@ -1505,8 +1592,10 @@ export default function InventoryPage() {
             <FoldedCard className="p-5">
               <div className="mb-5 flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
                 <div>
-                  <h2 className="font-semibold text-[#EFE8A8]">Requires Attention</h2>
-                  <p className="mt-1 text-xs text-[#92978F]">
+                  <h2 className="gold-card-title font-semibold text-[#FFF4CE]">
+                    Requires Attention
+                  </h2>
+                  <p className="gold-card-muted mt-1 text-xs text-[#92978F]">
                     Products that need your attention
                   </p>
                 </div>
@@ -1517,16 +1606,16 @@ export default function InventoryPage() {
                     setActiveTab("Products");
                     setStockFilter("Low Stock");
                   }}
-                  className="text-sm text-[#EFE8A8] transition hover:underline"
+                  className="gold-card-title text-sm font-medium text-[#FFF4CE] transition hover:underline"
                 >
                   View products →
                 </button>
               </div>
 
               {[...outOfStockProducts, ...lowStockProducts].length === 0 ? (
-                <div className="rounded-xl border border-dashed border-[#45483A] py-10 text-center">
-                  <Check className="mx-auto mb-2 text-emerald-400" size={28} />
-                  <p className="text-sm text-[#D5D2BD]">
+                <div className="gold-card-subpanel rounded-xl border border-dashed border-[#E8D39A]/25 bg-[#121414] py-10 text-center">
+                  <Check className="gold-card-accent mx-auto mb-2 text-emerald-400" size={28} />
+                  <p className="gold-card-title text-sm text-[#D5D2BD]">
                     All products have healthy stock levels.
                   </p>
                 </div>
@@ -1537,14 +1626,14 @@ export default function InventoryPage() {
                     .map((product) => (
                       <div
                         key={product.id}
-                        className="gold-ambient-card rounded-xl border border-[#343832] bg-[#151917] p-4"
+                        className="gold-ambient-card gold-card-subpanel rounded-xl bg-[#121414] p-4"
                       >
                         <div className="flex items-start justify-between gap-3">
                           <div className="min-w-0">
-                            <p className="truncate text-sm font-medium text-[#E6E2CF]">
+                            <p className="gold-card-title truncate text-sm font-medium text-[#E6E2CF]">
                               {product.name}
                             </p>
-                            <p className="mt-1 text-xs text-[#858B82]">
+                            <p className="gold-card-muted mt-1 text-xs text-[#858B82]">
                               {product.sku}
                             </p>
                           </div>
@@ -1552,14 +1641,18 @@ export default function InventoryPage() {
                         </div>
                         <div className="gold-divider my-3" />
                         <div className="flex justify-between text-xs">
-                          <span className="text-[#92978F]">Current stock</span>
-                          <span className="text-[#E6E2CF]">
+                          <span className="gold-card-muted text-[#92978F]">
+                            Current stock
+                          </span>
+                          <span className="gold-card-title text-[#E6E2CF]">
                             {product.quantity} {product.unit}
                           </span>
                         </div>
                         <div className="mt-2 flex justify-between text-xs">
-                          <span className="text-[#92978F]">Minimum stock</span>
-                          <span className="text-[#A9ACA2]">
+                          <span className="gold-card-muted text-[#92978F]">
+                            Minimum stock
+                          </span>
+                          <span className="gold-card-muted text-[#A9ACA2]">
                             {product.minimumStock}
                           </span>
                         </div>
@@ -1574,16 +1667,18 @@ export default function InventoryPage() {
             <FoldedCard className="p-5">
               <div className="mb-4 flex items-center justify-between">
                 <div>
-                  <h2 className="font-semibold text-[#EFE8A8]">Expiry Monitoring</h2>
-                  <p className="mt-1 text-xs text-[#92978F]">
+                  <h2 className="gold-card-title font-semibold text-[#FFF4CE]">
+                    Expiry Monitoring
+                  </h2>
+                  <p className="gold-card-muted mt-1 text-xs text-[#92978F]">
                     Products expiring within the next 30 days
                   </p>
                 </div>
-                <CalendarDays className="text-[#A9ACA2]" size={20} />
+                <CalendarDays className="gold-card-accent text-[#E8D39A]" size={20} />
               </div>
 
               {expiringProducts.length === 0 && expiredProducts.length === 0 ? (
-                <p className="rounded-xl border border-dashed border-[#45483A] p-6 text-center text-sm text-[#92978F]">
+                <p className="gold-card-muted rounded-xl border border-dashed border-[#E8D39A]/25 bg-[#121414] p-6 text-center text-sm text-[#92978F]">
                   No expired or soon-to-expire products found.
                 </p>
               ) : (
@@ -1593,19 +1688,19 @@ export default function InventoryPage() {
                     .map((product) => (
                       <div
                         key={product.id}
-                        className="gold-ambient-card flex flex-col justify-between gap-3 rounded-xl border border-[#343832] bg-[#151917] p-4 sm:flex-row sm:items-center"
+                        className="gold-ambient-card gold-card-subpanel flex flex-col justify-between gap-3 rounded-xl bg-[#121414] p-4 sm:flex-row sm:items-center"
                       >
                         <div>
-                          <p className="text-sm font-medium text-[#E6E2CF]">
+                          <p className="gold-card-title text-sm font-medium text-[#E6E2CF]">
                             {product.name}
                           </p>
-                          <p className="mt-1 text-xs text-[#92978F]">
+                          <p className="gold-card-muted mt-1 text-xs text-[#92978F]">
                             {product.category} · {product.sku}
                           </p>
                         </div>
 
                         <div className="flex items-center gap-3">
-                          <span className="text-xs text-[#A9ACA2]">
+                          <span className="gold-card-muted text-xs text-[#A9ACA2]">
                             {dateLabel(product.expiryDate)}
                           </span>
                           {expiryStatus(product)}
@@ -1622,12 +1717,12 @@ export default function InventoryPage() {
 
         {activeTab === "Products" && (
           <div className="inventory-fade space-y-5">
-            <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-center">
+            <div className="gold-ambient-card flex flex-col justify-between gap-4 rounded-2xl bg-[#121414] p-5 lg:flex-row lg:items-center">
               <div>
-                <h2 className="text-lg font-semibold text-[#EFE8A8]">
+                <h2 className="gold-card-title text-lg font-semibold text-[#FFF4CE]">
                   Product Inventory
                 </h2>
-                <p className="mt-1 text-sm text-[#92978F]">
+                <p className="gold-card-muted mt-1 text-sm text-[#92978F]">
                   {filteredProducts.length} products displayed
                 </p>
               </div>
@@ -1644,7 +1739,7 @@ export default function InventoryPage() {
 
             {/* FILTERS */}
 
-            <div className="gold-ambient-card flex flex-col gap-3 rounded-2xl border border-[#343832] bg-[#1B1F1D] p-4 lg:flex-row">
+            <div className="gold-ambient-card flex flex-col gap-3 rounded-2xl bg-[#121414] p-4 lg:flex-row">
               <div className="relative flex-1">
                 <Search
                   className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#858B82]"
@@ -1663,9 +1758,11 @@ export default function InventoryPage() {
                 onChange={(e) => setCategoryFilter(e.target.value)}
                 className={`${inputClass} lg:w-48`}
               >
-                <option>All Categories</option>
+                <option className="bg-[#121414] text-[#F5F2E9]">All Categories</option>
                 {CATEGORIES.map((category) => (
-                  <option key={category}>{category}</option>
+                  <option key={category} className="bg-[#121414] text-[#F5F2E9]">
+                    {category}
+                  </option>
                 ))}
               </select>
 
@@ -1681,7 +1778,9 @@ export default function InventoryPage() {
                   "Out of Stock",
                   "Expiring Soon",
                 ].map((item) => (
-                  <option key={item}>{item}</option>
+                  <option key={item} className="bg-[#121414] text-[#F5F2E9]">
+                    {item}
+                  </option>
                 ))}
               </select>
 
@@ -1690,10 +1789,18 @@ export default function InventoryPage() {
                 onChange={(e) => setSortBy(e.target.value)}
                 className={`${inputClass} lg:w-40`}
               >
-                <option value="name">Sort: Name</option>
-                <option value="quantity">Sort: Quantity</option>
-                <option value="value">Sort: Value</option>
-                <option value="expiry">Sort: Expiry</option>
+                <option value="name" className="bg-[#121414] text-[#F5F2E9]">
+                  Sort: Name
+                </option>
+                <option value="quantity" className="bg-[#121414] text-[#F5F2E9]">
+                  Sort: Quantity
+                </option>
+                <option value="value" className="bg-[#121414] text-[#F5F2E9]">
+                  Sort: Value
+                </option>
+                <option value="expiry" className="bg-[#121414] text-[#F5F2E9]">
+                  Sort: Expiry
+                </option>
               </select>
 
               <button
@@ -1714,10 +1821,12 @@ export default function InventoryPage() {
             {/* PRODUCT CARDS */}
 
             {filteredProducts.length === 0 ? (
-              <div className="gold-ambient-card rounded-2xl border border-dashed border-[#45483A] bg-[#1B1F1D] px-5 py-16 text-center">
-                <Package className="mx-auto mb-3 text-[#858B82]" size={35} />
-                <p className="font-medium text-[#D5D2BD]">No products found</p>
-                <p className="mt-1 text-sm text-[#858B82]">
+              <div className="gold-ambient-card rounded-2xl bg-[#121414] px-5 py-16 text-center">
+                <Package className="gold-card-accent mx-auto mb-3 text-[#E8D39A]" size={35} />
+                <p className="gold-card-title font-medium text-[#D5D2BD]">
+                  No products found
+                </p>
+                <p className="gold-card-muted mt-1 text-sm text-[#858B82]">
                   Add a product or change your search filters.
                 </p>
                 <button
@@ -1733,20 +1842,19 @@ export default function InventoryPage() {
                 {filteredProducts.map((product) => (
                   <div key={product.id} className="product-fold gold-ambient-card">
                     <div className="product-fold-content flex h-full flex-col p-5">
-
                       {/* PRODUCT HEADER */}
 
                       <div className="flex items-start justify-between gap-3">
                         <div className="flex min-w-0 items-center gap-3">
-                          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-[#EFE8A8]/20 bg-gradient-to-br from-[#EFE8A8]/15 to-[#EFE8A8]/5 text-[#EFE8A8] shadow-inner">
+                          <div className="gold-card-icon flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-[#E8D39A]/25 bg-[#E8D39A]/15 text-[#FFF4CE] shadow-inner">
                             <Package size={22} />
                           </div>
 
                           <div className="min-w-0">
-                            <h3 className="truncate pr-2 text-sm font-semibold text-[#F5F2E9]">
+                            <h3 className="gold-card-title truncate pr-2 text-sm font-semibold text-[#F5F2E9]">
                               {product.name}
                             </h3>
-                            <p className="mt-1 text-xs text-[#858B82]">
+                            <p className="gold-card-muted mt-1 text-xs text-[#858B82]">
                               {product.sku}
                             </p>
                           </div>
@@ -1756,7 +1864,11 @@ export default function InventoryPage() {
                       {/* CATEGORY */}
 
                       <div className="mt-4 flex flex-wrap items-center gap-2">
-                        <span className={`inline-flex rounded-lg border px-2.5 py-1 text-xs ${categoryColor(product.category)}`}>
+                        <span
+                          className={`gold-card-pill inline-flex rounded-lg border px-2.5 py-1 text-xs ${categoryColor(
+                            product.category
+                          )}`}
+                        >
                           {product.category}
                         </span>
 
@@ -1765,31 +1877,33 @@ export default function InventoryPage() {
 
                       {/* STOCK QUANTITY */}
 
-                      <div className="mt-5 rounded-xl border border-[#EFE8A8]/10 bg-[#151917] p-4">
+                      <div className="gold-card-subpanel mt-5 rounded-xl border border-[#E8D39A]/15 bg-[#121414] p-4">
                         <div className="flex items-center justify-between">
                           <div>
-                            <p className="text-xs text-[#92978F]">
+                            <p className="gold-card-muted text-xs text-[#92978F]">
                               Available quantity
                             </p>
-                            <p className="mt-1 text-2xl font-semibold text-[#EFE8A8]">
+                            <p className="gold-card-accent mt-1 text-2xl font-semibold text-[#FFF4CE]">
                               {product.quantity}
-                              <span className="ml-1.5 text-xs font-normal text-[#A9ACA2]">
+                              <span className="gold-card-muted ml-1.5 text-xs font-normal text-[#A9ACA2]">
                                 {product.unit}
                               </span>
                             </p>
                           </div>
 
                           <div className="text-right">
-                            <p className="text-xs text-[#858B82]">Minimum</p>
-                            <p className="mt-1 text-lg font-medium text-[#C9C6B7]">
+                            <p className="gold-card-muted text-xs text-[#858B82]">
+                              Minimum
+                            </p>
+                            <p className="gold-card-title mt-1 text-lg font-medium text-[#C9C6B7]">
                               {product.minimumStock}
                             </p>
                           </div>
                         </div>
 
-                        <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-[#343832]">
+                        <div className="gold-card-track mt-3 h-1.5 overflow-hidden rounded-full bg-[#262A28]">
                           <div
-                            className={`h-full rounded-full transition-all ${
+                            className={`gold-card-bar h-full rounded-full transition-all ${
                               product.quantity <= 0
                                 ? "bg-red-400"
                                 : product.quantity <= product.minimumStock
@@ -1816,19 +1930,19 @@ export default function InventoryPage() {
 
                       <div className="mt-4 grid grid-cols-2 gap-3">
                         <div>
-                          <p className="text-[11px] uppercase tracking-wider text-[#858B82]">
+                          <p className="gold-card-muted text-[11px] uppercase tracking-wider text-[#858B82]">
                             Purchase
                           </p>
-                          <p className="mt-1 text-sm font-medium text-[#C9C6B7]">
+                          <p className="gold-card-title mt-1 text-sm font-medium text-[#C9C6B7]">
                             {money(product.purchasePrice)}
                           </p>
                         </div>
 
                         <div>
-                          <p className="text-[11px] uppercase tracking-wider text-[#858B82]">
+                          <p className="gold-card-muted text-[11px] uppercase tracking-wider text-[#858B82]">
                             Selling
                           </p>
-                          <p className="mt-1 text-sm font-semibold text-[#EFE8A8]">
+                          <p className="gold-card-accent mt-1 text-sm font-semibold text-[#FFF4CE]">
                             {money(product.sellingPrice)}
                           </p>
                         </div>
@@ -1840,27 +1954,35 @@ export default function InventoryPage() {
 
                       <div className="space-y-3">
                         <div className="flex items-center justify-between gap-3 text-xs">
-                          <span className="text-[#858B82]">Brand</span>
-                          <span className="truncate text-right text-[#C9C6B7]">
+                          <span className="gold-card-muted text-[#858B82]">
+                            Brand
+                          </span>
+                          <span className="gold-card-title truncate text-right text-[#C9C6B7]">
                             {product.brand || "Not specified"}
                           </span>
                         </div>
 
                         <div className="flex items-center justify-between gap-3 text-xs">
-                          <span className="text-[#858B82]">Expiry date</span>
-                          <span className="text-right text-[#C9C6B7]">
+                          <span className="gold-card-muted text-[#858B82]">
+                            Expiry date
+                          </span>
+                          <span className="gold-card-title text-right text-[#C9C6B7]">
                             {dateLabel(product.expiryDate)}
                           </span>
                         </div>
 
                         <div className="flex items-center justify-between gap-3 text-xs">
-                          <span className="text-[#858B82]">Expiry status</span>
+                          <span className="gold-card-muted text-[#858B82]">
+                            Expiry status
+                          </span>
                           {expiryStatus(product)}
                         </div>
 
                         <div className="flex items-center justify-between gap-3 text-xs">
-                          <span className="text-[#858B82]">Stock value</span>
-                          <span className="font-medium text-[#EFE8A8]">
+                          <span className="gold-card-muted text-[#858B82]">
+                            Stock value
+                          </span>
+                          <span className="gold-card-accent font-medium text-[#FFF4CE]">
                             {money(product.quantity * product.purchasePrice)}
                           </span>
                         </div>
@@ -1868,7 +1990,7 @@ export default function InventoryPage() {
 
                       {/* ACTIONS */}
 
-                      <div className="mt-auto flex gap-2 border-t border-[#343832] pt-4">
+                      <div className="mt-auto flex gap-2 border-t border-[#E8D39A]/15 pt-4">
                         <button
                           type="button"
                           title="Adjust stock"
@@ -1878,7 +2000,7 @@ export default function InventoryPage() {
                             setAdjustType("Stock In");
                             setAdjustNote("");
                           }}
-                          className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-emerald-500/20 bg-emerald-500/5 px-2 py-2.5 text-xs font-medium text-emerald-400 transition hover:bg-emerald-500/15"
+                          className="gold-card-pill flex flex-1 items-center justify-center gap-2 rounded-lg border border-emerald-400/25 bg-emerald-500/10 px-2 py-2.5 text-xs font-medium text-emerald-300 transition hover:bg-emerald-500/20"
                         >
                           <PackagePlus size={15} />
                           Stock
@@ -1888,7 +2010,7 @@ export default function InventoryPage() {
                           type="button"
                           title="Edit product"
                           onClick={() => openEditProduct(product)}
-                          className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-[#EFE8A8]/20 bg-[#EFE8A8]/5 px-2 py-2.5 text-xs font-medium text-[#EFE8A8] transition hover:bg-[#EFE8A8]/15"
+                          className="gold-card-pill flex flex-1 items-center justify-center gap-2 rounded-lg border border-[#E8D39A]/25 bg-[#E8D39A]/10 px-2 py-2.5 text-xs font-medium text-[#FFF4CE] transition hover:bg-[#E8D39A]/20"
                         >
                           <Edit size={15} />
                           Edit
@@ -1898,7 +2020,7 @@ export default function InventoryPage() {
                           type="button"
                           title="Delete product"
                           onClick={() => setDeleteProduct(product)}
-                          className="flex items-center justify-center rounded-lg border border-red-500/20 bg-red-500/5 px-3 py-2.5 text-red-400 transition hover:bg-red-500/15"
+                          className="gold-card-pill flex items-center justify-center rounded-lg border border-red-400/25 bg-red-500/10 px-3 py-2.5 text-red-300 transition hover:bg-red-500/20"
                         >
                           <Trash2 size={15} />
                         </button>
@@ -1915,11 +2037,11 @@ export default function InventoryPage() {
 
         {activeTab === "Stock Management" && (
           <div className="inventory-fade space-y-5">
-            <div>
-              <h2 className="text-lg font-semibold text-[#EFE8A8]">
+            <div className="gold-ambient-card rounded-2xl bg-[#121414] p-5">
+              <h2 className="gold-card-title text-lg font-semibold text-[#FFF4CE]">
                 Stock Management
               </h2>
-              <p className="mt-1 text-sm text-[#92978F]">
+              <p className="gold-card-muted mt-1 text-sm text-[#92978F]">
                 Manage stock additions, usage and adjustments.
               </p>
             </div>
@@ -1949,12 +2071,12 @@ export default function InventoryPage() {
             </div>
 
             <FoldedCard>
-              <div className="flex flex-col justify-between gap-3 border-b border-[#343832] p-5 sm:flex-row sm:items-center">
+              <div className="flex flex-col justify-between gap-3 border-b border-[#E8D39A]/15 p-5 sm:flex-row sm:items-center">
                 <div>
-                  <h3 className="font-semibold text-[#EFE8A8]">
+                  <h3 className="gold-card-title font-semibold text-[#FFF4CE]">
                     Stock Movement History
                   </h3>
-                  <p className="mt-1 text-xs text-[#92978F]">
+                  <p className="gold-card-muted mt-1 text-xs text-[#92978F]">
                     Every stock change recorded in this browser
                   </p>
                 </div>
@@ -1971,18 +2093,18 @@ export default function InventoryPage() {
 
               {movements.length === 0 ? (
                 <div className="px-5 py-14 text-center">
-                  <Activity className="mx-auto mb-3 text-[#858B82]" size={32} />
-                  <p className="text-sm text-[#D5D2BD]">
+                  <Activity className="gold-card-accent mx-auto mb-3 text-[#E8D39A]" size={32} />
+                  <p className="gold-card-title text-sm text-[#D5D2BD]">
                     No stock movements recorded yet.
                   </p>
-                  <p className="mt-1 text-xs text-[#858B82]">
+                  <p className="gold-card-muted mt-1 text-xs text-[#858B82]">
                     Add products or adjust existing stock to see history.
                   </p>
                 </div>
               ) : (
                 <div className="inventory-scroll overflow-x-auto">
                   <table className="w-full min-w-[700px] text-left text-sm">
-                    <thead className="bg-[#151917] text-xs text-[#92978F]">
+                    <thead className="bg-[#121414] text-xs text-[#92978F]">
                       <tr>
                         <th className="px-5 py-4 font-medium">Product</th>
                         <th className="px-4 py-4 font-medium">Movement</th>
@@ -1993,8 +2115,8 @@ export default function InventoryPage() {
                     </thead>
                     <tbody>
                       {movements.map((movement) => (
-                        <tr key={movement.id} className="border-t border-[#343832]/70">
-                          <td className="px-5 py-4 font-medium text-[#E6E2CF]">
+                        <tr key={movement.id} className="border-t border-[#E8D39A]/10">
+                          <td className="gold-card-title px-5 py-4 font-medium text-[#E6E2CF]">
                             {movement.productName}
                           </td>
                           <td className="px-4 py-4">
@@ -2010,13 +2132,13 @@ export default function InventoryPage() {
                               {movement.type}
                             </StatusBadge>
                           </td>
-                          <td className="px-4 py-4 text-[#D5D2BD]">
+                          <td className="gold-card-title px-4 py-4 text-[#D5D2BD]">
                             {movement.quantity}
                           </td>
-                          <td className="px-4 py-4 text-xs text-[#A9ACA2]">
+                          <td className="gold-card-muted px-4 py-4 text-xs text-[#A9ACA2]">
                             {new Date(movement.date).toLocaleString("en-IN")}
                           </td>
-                          <td className="px-5 py-4 text-xs text-[#92978F]">
+                          <td className="gold-card-muted px-5 py-4 text-xs text-[#92978F]">
                             {movement.note}
                           </td>
                         </tr>
@@ -2028,12 +2150,12 @@ export default function InventoryPage() {
             </FoldedCard>
 
             <FoldedCard className="p-5">
-              <h3 className="mb-4 font-semibold text-[#EFE8A8]">
+              <h3 className="gold-card-title mb-4 font-semibold text-[#FFF4CE]">
                 Products requiring restock
               </h3>
 
               {lowStockProducts.length + outOfStockProducts.length === 0 ? (
-                <p className="text-sm text-[#92978F]">
+                <p className="gold-card-muted text-sm text-[#92978F]">
                   No products currently need restocking.
                 </p>
               ) : (
@@ -2041,13 +2163,13 @@ export default function InventoryPage() {
                   {[...outOfStockProducts, ...lowStockProducts].map((product) => (
                     <div
                       key={product.id}
-                      className="gold-ambient-card flex flex-col justify-between gap-3 rounded-xl border border-[#343832] bg-[#151917] p-4 sm:flex-row sm:items-center"
+                      className="gold-ambient-card gold-card-subpanel flex flex-col justify-between gap-3 rounded-xl bg-[#121414] p-4 sm:flex-row sm:items-center"
                     >
                       <div>
-                        <p className="text-sm font-medium text-[#E6E2CF]">
+                        <p className="gold-card-title text-sm font-medium text-[#E6E2CF]">
                           {product.name}
                         </p>
-                        <p className="mt-1 text-xs text-[#92978F]">
+                        <p className="gold-card-muted mt-1 text-xs text-[#92978F]">
                           Current: {product.quantity} · Minimum: {product.minimumStock}
                         </p>
                       </div>
@@ -2076,12 +2198,12 @@ export default function InventoryPage() {
 
         {activeTab === "Suppliers" && (
           <div className="inventory-fade space-y-5">
-            <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
+            <div className="gold-ambient-card flex flex-col justify-between gap-3 rounded-2xl bg-[#121414] p-5 sm:flex-row sm:items-center">
               <div>
-                <h2 className="text-lg font-semibold text-[#EFE8A8]">
+                <h2 className="gold-card-title text-lg font-semibold text-[#FFF4CE]">
                   Supplier Management
                 </h2>
-                <p className="mt-1 text-sm text-[#92978F]">
+                <p className="gold-card-muted mt-1 text-sm text-[#92978F]">
                   Manage your salon product suppliers.
                 </p>
               </div>
@@ -2105,25 +2227,25 @@ export default function InventoryPage() {
                 return (
                   <FoldedCard key={supplier.id} className="p-5">
                     <div className="flex items-start justify-between">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-[#EFE8A8]/15 bg-[#EFE8A8]/10 text-[#EFE8A8]">
+                      <div className="gold-card-icon flex h-12 w-12 items-center justify-center rounded-xl border border-[#E8D39A]/25 bg-[#E8D39A]/15 text-[#FFF4CE]">
                         <Truck size={22} />
                       </div>
 
                       <button
                         type="button"
                         onClick={() => setDeleteSupplier(supplier)}
-                        className="rounded-lg p-2 text-red-400 hover:bg-red-400/10"
+                        className="gold-card-pill rounded-lg p-2 text-red-400 transition hover:bg-red-400/15"
                         title="Delete supplier"
                       >
                         <Trash2 size={17} />
                       </button>
                     </div>
 
-                    <h3 className="mt-4 font-semibold text-[#EFE8A8]">
+                    <h3 className="gold-card-title mt-4 font-semibold text-[#FFF4CE]">
                       {supplier.name}
                     </h3>
 
-                    <div className="mt-4 space-y-2 text-sm text-[#A9ACA2]">
+                    <div className="gold-card-muted mt-4 space-y-2 text-sm text-[#A9ACA2]">
                       <p>{supplier.contact || "No contact number"}</p>
                       <p className="break-all">{supplier.email || "No email"}</p>
                       <p>{supplier.address || "No address"}</p>
@@ -2132,10 +2254,10 @@ export default function InventoryPage() {
                     <div className="gold-divider my-4" />
 
                     <div className="flex items-center justify-between">
-                      <span className="text-xs text-[#92978F]">
+                      <span className="gold-card-muted text-xs text-[#92978F]">
                         Supplied products
                       </span>
-                      <span className="font-semibold text-[#EFE8A8]">
+                      <span className="gold-card-accent font-semibold text-[#FFF4CE]">
                         {supplierProducts.length}
                       </span>
                     </div>
@@ -2145,12 +2267,12 @@ export default function InventoryPage() {
             </div>
 
             {suppliers.length === 0 && (
-              <div className="gold-ambient-card rounded-2xl border border-dashed border-[#45483A] bg-[#1B1F1D] px-5 py-16 text-center">
-                <Users className="mx-auto mb-3 text-[#858B82]" size={36} />
-                <p className="font-medium text-[#D5D2BD]">
+              <div className="gold-ambient-card rounded-2xl bg-[#121414] px-5 py-16 text-center">
+                <Users className="gold-card-accent mx-auto mb-3 text-[#E8D39A]" size={36} />
+                <p className="gold-card-title font-medium text-[#D5D2BD]">
                   No suppliers added yet
                 </p>
-                <p className="mt-1 text-sm text-[#858B82]">
+                <p className="gold-card-muted mt-1 text-sm text-[#858B82]">
                   Add your supplier details to connect them with products.
                 </p>
                 <button
@@ -2169,11 +2291,11 @@ export default function InventoryPage() {
 
         {activeTab === "Reports" && (
           <div className="inventory-fade space-y-5">
-            <div>
-              <h2 className="text-lg font-semibold text-[#EFE8A8]">
+            <div className="gold-ambient-card rounded-2xl bg-[#121414] p-5">
+              <h2 className="gold-card-title text-lg font-semibold text-[#FFF4CE]">
                 Inventory Reports
               </h2>
-              <p className="mt-1 text-sm text-[#92978F]">
+              <p className="gold-card-muted mt-1 text-sm text-[#92978F]">
                 Export inventory insights and stock reports.
               </p>
             </div>
@@ -2209,22 +2331,22 @@ export default function InventoryPage() {
 
                 return (
                   <FoldedCard key={report.title} className="flex flex-col p-5">
-                    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#EFE8A8]/10 text-[#EFE8A8]">
+                    <div className="gold-card-icon flex h-11 w-11 items-center justify-center rounded-xl bg-[#E8D39A]/15 text-[#FFF4CE]">
                       <Icon size={21} />
                     </div>
 
-                    <h3 className="mt-4 font-semibold text-[#E6E2CF]">
+                    <h3 className="gold-card-title mt-4 font-semibold text-[#E6E2CF]">
                       {report.title}
                     </h3>
 
-                    <p className="mt-2 min-h-10 text-xs leading-5 text-[#92978F]">
+                    <p className="gold-card-muted mt-2 min-h-10 text-xs leading-5 text-[#92978F]">
                       {report.description}
                     </p>
 
                     <button
                       type="button"
                       onClick={report.action}
-                      className="mt-5 inline-flex items-center justify-center gap-2 rounded-xl border border-[#45483A] px-3 py-3 text-sm text-[#EFE8A8] transition hover:bg-[#EFE8A8]/10"
+                      className="gold-card-pill mt-5 inline-flex items-center justify-center gap-2 rounded-xl border border-[#E8D39A]/35 px-3 py-3 text-sm font-medium text-[#FFF4CE] transition hover:bg-[#E8D39A]/15"
                     >
                       <Download size={16} />
                       Export CSV
@@ -2236,33 +2358,43 @@ export default function InventoryPage() {
 
             <div className="grid gap-5 xl:grid-cols-2">
               <FoldedCard className="p-5">
-                <h3 className="font-semibold text-[#EFE8A8]">
+                <h3 className="gold-card-title font-semibold text-[#FFF4CE]">
                   Inventory Valuation
                 </h3>
 
                 <div className="mt-5 space-y-4">
                   <div className="flex justify-between text-sm">
-                    <span className="text-[#A9ACA2]">Total purchase value</span>
-                    <span className="font-semibold text-[#E6E2CF]">
+                    <span className="gold-card-muted text-[#A9ACA2]">
+                      Total purchase value
+                    </span>
+                    <span className="gold-card-title font-semibold text-[#E6E2CF]">
                       {money(purchaseValue)}
                     </span>
                   </div>
 
                   <div className="flex justify-between text-sm">
-                    <span className="text-[#A9ACA2]">Potential selling value</span>
-                    <span className="font-semibold text-[#EFE8A8]">
+                    <span className="gold-card-muted text-[#A9ACA2]">
+                      Potential selling value
+                    </span>
+                    <span className="gold-card-accent font-semibold text-[#FFF4CE]">
                       {money(sellingValue)}
                     </span>
                   </div>
 
-                  <div className="flex justify-between border-t border-[#343832] pt-4 text-sm">
-                    <span className="text-[#A9ACA2]">Estimated gross profit</span>
-                    <span className={`font-semibold ${potentialProfit >= 0 ? "text-emerald-400" : "text-red-400"}`}>
+                  <div className="flex justify-between border-t border-[#E8D39A]/15 pt-4 text-sm">
+                    <span className="gold-card-muted text-[#A9ACA2]">
+                      Estimated gross profit
+                    </span>
+                    <span
+                      className={`gold-card-title font-semibold ${
+                        potentialProfit >= 0 ? "text-emerald-400" : "text-red-400"
+                      }`}
+                    >
                       {money(potentialProfit)}
                     </span>
                   </div>
 
-                  <p className="text-xs leading-5 text-[#858B82]">
+                  <p className="gold-card-muted text-xs leading-5 text-[#858B82]">
                     This is an estimate based on current stock and entered prices.
                     It does not represent actual sales or realized profit.
                   </p>
@@ -2270,32 +2402,42 @@ export default function InventoryPage() {
               </FoldedCard>
 
               <FoldedCard className="p-5">
-                <h3 className="font-semibold text-[#EFE8A8]">
+                <h3 className="gold-card-title font-semibold text-[#FFF4CE]">
                   Expiry Summary
                 </h3>
 
                 <div className="mt-5 space-y-4">
                   <div className="flex justify-between text-sm">
-                    <span className="text-[#A9ACA2]">Products with expiry dates</span>
-                    <span className="text-[#E6E2CF]">
+                    <span className="gold-card-muted text-[#A9ACA2]">
+                      Products with expiry dates
+                    </span>
+                    <span className="gold-card-title text-[#E6E2CF]">
                       {products.filter((p) => p.expiryDate).length}
                     </span>
                   </div>
 
                   <div className="flex justify-between text-sm">
-                    <span className="text-[#A9ACA2]">Expired products</span>
-                    <span className="text-red-400">{expiredProducts.length}</span>
+                    <span className="gold-card-muted text-[#A9ACA2]">
+                      Expired products
+                    </span>
+                    <span className="gold-card-title text-red-400">
+                      {expiredProducts.length}
+                    </span>
                   </div>
 
                   <div className="flex justify-between text-sm">
-                    <span className="text-[#A9ACA2]">Expiring within 30 days</span>
-                    <span className="text-amber-300">{expiringProducts.length}</span>
+                    <span className="gold-card-muted text-[#A9ACA2]">
+                      Expiring within 30 days
+                    </span>
+                    <span className="gold-card-title text-amber-300">
+                      {expiringProducts.length}
+                    </span>
                   </div>
 
                   <button
                     type="button"
                     onClick={exportExpiryReport}
-                    className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl border border-[#45483A] px-3 py-3 text-sm text-[#EFE8A8] hover:bg-[#EFE8A8]/10"
+                    className="gold-card-pill mt-2 flex w-full items-center justify-center gap-2 rounded-xl border border-[#E8D39A]/35 px-3 py-3 text-sm font-medium text-[#FFF4CE] transition hover:bg-[#E8D39A]/15"
                   >
                     <Download size={16} />
                     Download expiry report
@@ -2305,7 +2447,7 @@ export default function InventoryPage() {
             </div>
 
             <FoldedCard className="p-5">
-              <h3 className="font-semibold text-[#EFE8A8]">
+              <h3 className="gold-card-title font-semibold text-[#FFF4CE]">
                 Category Valuation
               </h3>
 
@@ -2321,17 +2463,17 @@ export default function InventoryPage() {
                   return (
                     <div key={category.name}>
                       <div className="mb-2 flex justify-between text-sm">
-                        <span className="text-[#C9C6B7]">
+                        <span className="gold-card-title text-[#C9C6B7]">
                           {category.name}
                         </span>
-                        <span className="text-[#EFE8A8]">
+                        <span className="gold-card-accent text-[#FFF4CE]">
                           {money(value)}
                         </span>
                       </div>
 
-                      <div className="h-2 overflow-hidden rounded-full bg-[#343832]">
+                      <div className="gold-card-track h-2 overflow-hidden rounded-full bg-[#262A28]">
                         <div
-                          className="h-full rounded-full bg-gradient-to-r from-[#A9A58A] to-[#EFE8A8]"
+                          className="gold-card-bar h-full rounded-full bg-gradient-to-r from-[#C9A45C] to-[#FFF4CE]"
                           style={{
                             width: `${
                               purchaseValue > 0
@@ -2360,7 +2502,7 @@ export default function InventoryPage() {
           >
             <form onSubmit={saveProduct} className="space-y-6">
               <div>
-                <h3 className="mb-4 text-sm font-semibold text-[#EFE8A8]">
+                <h3 className="mb-4 text-sm font-semibold text-[#FFF4CE]">
                   Basic Information
                 </h3>
 
@@ -2412,7 +2554,12 @@ export default function InventoryPage() {
                       className={inputClass}
                     >
                       {CATEGORIES.map((category) => (
-                        <option key={category}>{category}</option>
+                        <option
+                          key={category}
+                          className="bg-[#121414] text-[#F5F2E9]"
+                        >
+                          {category}
+                        </option>
                       ))}
                     </select>
                   </Field>
@@ -2439,9 +2586,15 @@ export default function InventoryPage() {
                       }
                       className={inputClass}
                     >
-                      <option value="">Select supplier</option>
+                      <option value="" className="bg-[#121414] text-[#F5F2E9]">
+                        Select supplier
+                      </option>
                       {suppliers.map((supplier) => (
-                        <option key={supplier.id} value={supplier.id}>
+                        <option
+                          key={supplier.id}
+                          value={supplier.id}
+                          className="bg-[#121414] text-[#F5F2E9]"
+                        >
                           {supplier.name}
                         </option>
                       ))}
@@ -2465,9 +2618,9 @@ export default function InventoryPage() {
                 </div>
               </div>
 
-              <div className="border-t border-[#343832] pt-5">
-                <h3 className="mb-4 text-sm font-semibold text-[#EFE8A8]">
-                  Stock & Pricing
+              <div className="border-t border-[#E8D39A]/15 pt-5">
+                <h3 className="mb-4 text-sm font-semibold text-[#FFF4CE]">
+                  Stock &amp; Pricing
                 </h3>
 
                 <div className="grid gap-4 sm:grid-cols-2">
@@ -2522,7 +2675,12 @@ export default function InventoryPage() {
                         "Grams",
                         "Pairs",
                       ].map((unit) => (
-                        <option key={unit}>{unit}</option>
+                        <option
+                          key={unit}
+                          className="bg-[#121414] text-[#F5F2E9]"
+                        >
+                          {unit}
+                        </option>
                       ))}
                     </select>
                   </Field>
@@ -2562,11 +2720,11 @@ export default function InventoryPage() {
                   </Field>
                 </div>
 
-                <div className="gold-ambient-card mt-4 rounded-xl border border-[#EFE8A8]/15 bg-[#EFE8A8]/5 p-4">
-                  <p className="text-xs text-[#A9ACA2]">
+                <div className="gold-ambient-card mt-4 rounded-xl bg-[#121414] p-4">
+                  <p className="gold-card-muted text-xs text-[#A9ACA2]">
                     Estimated profit per unit
                   </p>
-                  <p className="mt-1 text-xl font-semibold text-[#EFE8A8]">
+                  <p className="gold-card-accent mt-1 text-xl font-semibold text-[#FFF4CE]">
                     {money(
                       productForm.sellingPrice - productForm.purchasePrice
                     )}
@@ -2574,8 +2732,8 @@ export default function InventoryPage() {
                 </div>
               </div>
 
-              <div className="border-t border-[#343832] pt-5">
-                <h3 className="mb-4 text-sm font-semibold text-[#EFE8A8]">
+              <div className="border-t border-[#E8D39A]/15 pt-5">
+                <h3 className="mb-4 text-sm font-semibold text-[#FFF4CE]">
                   Expiry Tracking
                 </h3>
 
@@ -2614,11 +2772,11 @@ export default function InventoryPage() {
                 </p>
               </div>
 
-              <div className="flex flex-col-reverse gap-3 border-t border-[#343832] pt-5 sm:flex-row sm:justify-end">
+              <div className="flex flex-col-reverse gap-3 border-t border-[#E8D39A]/15 pt-5 sm:flex-row sm:justify-end">
                 <button
                   type="button"
                   onClick={() => setProductModal(false)}
-                  className="rounded-xl border border-[#45483A] px-5 py-3 text-sm text-[#C9C6B7] hover:bg-white/5"
+                  className="rounded-xl border border-[#E8D39A]/35 px-5 py-3 text-sm text-[#C9C6B7] transition hover:bg-[#FFF4CE] hover:text-[#17140D]"
                 >
                   Cancel
                 </button>
@@ -2641,9 +2799,11 @@ export default function InventoryPage() {
             width="max-w-lg"
           >
             <form onSubmit={saveStockAdjustment} className="space-y-5">
-              <div className="gold-ambient-card rounded-xl border border-[#343832] bg-[#151917] p-4">
-                <p className="text-xs text-[#92978F]">Current available stock</p>
-                <p className="mt-1 text-2xl font-semibold text-[#EFE8A8]">
+              <div className="gold-ambient-card rounded-xl bg-[#121414] p-4">
+                <p className="gold-card-muted text-xs text-[#92978F]">
+                  Current available stock
+                </p>
+                <p className="gold-card-accent mt-1 text-2xl font-semibold text-[#FFF4CE]">
                   {adjustProduct.quantity} {adjustProduct.unit}
                 </p>
               </div>
@@ -2656,13 +2816,23 @@ export default function InventoryPage() {
                   }
                   className={inputClass}
                 >
-                  <option value="Stock In">Stock In – Add quantity</option>
-                  <option value="Stock Out">Stock Out – Remove quantity</option>
-                  <option value="Adjustment">Adjustment – Set exact quantity</option>
+                  <option value="Stock In" className="bg-[#121414] text-[#F5F2E9]">
+                    Stock In – Add quantity
+                  </option>
+                  <option value="Stock Out" className="bg-[#121414] text-[#F5F2E9]">
+                    Stock Out – Remove quantity
+                  </option>
+                  <option value="Adjustment" className="bg-[#121414] text-[#F5F2E9]">
+                    Adjustment – Set exact quantity
+                  </option>
                 </select>
               </Field>
 
-              <Field label={adjustType === "Adjustment" ? "New Total Quantity" : "Quantity"}>
+              <Field
+                label={
+                  adjustType === "Adjustment" ? "New Total Quantity" : "Quantity"
+                }
+              >
                 <input
                   type="number"
                   min="1"
@@ -2687,7 +2857,7 @@ export default function InventoryPage() {
                 <button
                   type="button"
                   onClick={() => setAdjustProduct(null)}
-                  className="rounded-xl border border-[#45483A] px-5 py-3 text-sm text-[#C9C6B7]"
+                  className="rounded-xl border border-[#E8D39A]/35 px-5 py-3 text-sm text-[#C9C6B7] transition hover:bg-[#FFF4CE] hover:text-[#17140D]"
                 >
                   Cancel
                 </button>
@@ -2760,7 +2930,7 @@ export default function InventoryPage() {
                 <button
                   type="button"
                   onClick={() => setSupplierModal(false)}
-                  className="rounded-xl border border-[#45483A] px-5 py-3 text-sm text-[#C9C6B7]"
+                  className="rounded-xl border border-[#E8D39A]/35 px-5 py-3 text-sm text-[#C9C6B7] transition hover:bg-[#FFF4CE] hover:text-[#17140D]"
                 >
                   Cancel
                 </button>
@@ -2782,7 +2952,7 @@ export default function InventoryPage() {
             width="max-w-md"
           >
             <div className="flex items-start gap-4">
-              <div className="rounded-xl bg-red-500/10 p-3 text-red-400">
+              <div className="rounded-xl bg-red-500/15 p-3 text-red-300">
                 <Trash2 size={23} />
               </div>
               <div>
@@ -2800,7 +2970,7 @@ export default function InventoryPage() {
               <button
                 type="button"
                 onClick={() => setDeleteProduct(null)}
-                className="rounded-xl border border-[#45483A] px-4 py-2.5 text-sm text-[#C9C6B7]"
+                className="rounded-xl border border-[#E8D39A]/35 px-4 py-2.5 text-sm text-[#C9C6B7] transition hover:bg-[#FFF4CE] hover:text-[#17140D]"
               >
                 Cancel
               </button>
@@ -2833,7 +3003,7 @@ export default function InventoryPage() {
               <button
                 type="button"
                 onClick={() => setDeleteSupplier(null)}
-                className="rounded-xl border border-[#45483A] px-4 py-2.5 text-sm text-[#C9C6B7]"
+                className="rounded-xl border border-[#E8D39A]/35 px-4 py-2.5 text-sm text-[#C9C6B7] transition hover:bg-[#FFF4CE] hover:text-[#17140D]"
               >
                 Cancel
               </button>
@@ -2851,13 +3021,13 @@ export default function InventoryPage() {
         {/* TOAST */}
 
         {toast && (
-          <div className="gold-ambient-card fixed bottom-5 right-5 z-[150] flex max-w-[calc(100vw-40px)] items-center gap-3 rounded-xl border border-[#D9D19A]/40 bg-[#1B1F1D] px-5 py-4 text-sm text-[#EFE8A8] shadow-2xl animate-[fadeIn_.2s_ease-out]">
-            <Check size={18} />
-            {toast}
+          <div className="gold-ambient-card fixed bottom-5 right-5 z-[150] flex max-w-[calc(100vw-40px)] items-center gap-3 rounded-xl bg-[#121414] px-5 py-4 text-sm font-medium text-[#FFF4CE] shadow-2xl animate-[fadeIn_.2s_ease-out]">
+            <Check size={18} className="gold-card-accent" />
+            <span className="gold-card-title">{toast}</span>
             <button
               type="button"
               onClick={() => setToast("")}
-              className="ml-2 text-[#A9ACA2] hover:text-white"
+              className="gold-card-muted ml-2 text-[#A9ACA2] hover:text-[#17140D]"
             >
               <X size={16} />
             </button>

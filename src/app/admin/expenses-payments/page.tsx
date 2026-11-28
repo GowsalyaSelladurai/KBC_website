@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useMemo, useState, type FormEvent } from "react";
@@ -546,50 +545,49 @@ export default function ExpensesPaymentsPage() {
   };
 
   const cardClass =
-    "gold-ambient-card rounded-2xl border border-[#343832] bg-[#1B1F1D] p-5";
+    "gold-ambient-card rounded-2xl bg-[#121414] p-5 text-[#F5F3E8]";
 
   const inputClass =
-    "w-full rounded-xl border border-[#3A403A] bg-[#151917] px-4 py-3 text-sm text-white outline-none transition focus:border-[#D9D19A]";
+    "w-full rounded-xl border border-[#D9BE64]/30 bg-[#121414] px-4 py-3 text-sm text-[#F5F3E8] outline-none transition placeholder:text-[#7A7E75] focus:border-[#FFF4CE]";
 
   const labelClass =
     "mb-2 block text-xs font-medium uppercase tracking-wider text-[#A9ACA2]";
 
   const statusStyle = (status: string) => {
     if (status === "Received") {
-      return "bg-emerald-400/10 text-emerald-300";
+      return "bg-emerald-400/15 text-emerald-300";
     }
 
     if (status === "Pending") {
-      return "bg-amber-400/10 text-amber-300";
+      return "bg-amber-400/15 text-amber-300";
     }
 
     if (status === "Refunded") {
-      return "bg-red-400/10 text-red-300";
+      return "bg-red-400/15 text-red-300";
     }
 
-    return "bg-[#D9D19A]/10 text-[#D9D19A]";
+    return "bg-[#D9D19A]/15 text-[#D9D19A]";
   };
 
   return (
-    <main className="min-h-screen bg-[#121414] p-4 text-white sm:p-6 lg:p-8">
+    <main className="min-h-screen bg-[#FAF5ED] p-4 text-[#F5F3E8] sm:p-6 lg:p-8">
       <div className="mx-auto max-w-[1600px] space-y-7">
-
         {/* HEADER */}
 
-        <header className="gold-ambient-card flex flex-col justify-between gap-5 rounded-2xl border border-transparent p-5 lg:flex-row lg:items-center">
+        <header className="gold-ambient-card flex flex-col justify-between gap-5 rounded-2xl bg-[#121414] p-5 sm:p-6 lg:flex-row lg:items-center">
           <div>
-            <div className="mb-2 flex items-center gap-2 text-[#D9D19A]">
+            <div className="gold-card-accent mb-2 flex items-center gap-2 text-[#E8D39A]">
               <Sparkles size={16} />
               <span className="text-xs font-semibold uppercase tracking-[0.2em]">
                 Financial Management
               </span>
             </div>
 
-            <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-              Expenses & Payments
+            <h1 className="gold-card-title text-3xl font-semibold tracking-tight text-[#F5F3E8] sm:text-4xl">
+              Expenses &amp; Payments
             </h1>
 
-            <p className="mt-2 text-sm text-[#92978F]">
+            <p className="gold-card-muted mt-2 text-sm text-[#9CA097]">
               Manage salon spending, customer payments and outstanding balances.
             </p>
           </div>
@@ -598,18 +596,18 @@ export default function ExpensesPaymentsPage() {
             <select
               value={period}
               onChange={(event) => setPeriod(event.target.value)}
-              className="rounded-xl border border-[#3A403A] bg-[#1B1F1D] px-4 py-3 text-sm outline-none"
+              className="rounded-xl border border-[#D9BE64]/35 bg-[#121414] px-4 py-3 text-sm text-[#F5F3E8] outline-none transition focus:border-[#FFF4CE]"
             >
-              <option>This Month</option>
-              <option>Today</option>
-              <option>This Week</option>
-              <option>This Year</option>
-              <option>All Time</option>
+              <option className="bg-[#121414] text-[#F5F3E8]">This Month</option>
+              <option className="bg-[#121414] text-[#F5F3E8]">Today</option>
+              <option className="bg-[#121414] text-[#F5F3E8]">This Week</option>
+              <option className="bg-[#121414] text-[#F5F3E8]">This Year</option>
+              <option className="bg-[#121414] text-[#F5F3E8]">All Time</option>
             </select>
 
             <button
               onClick={exportCSV}
-              className="flex items-center gap-2 rounded-xl border border-[#4B5044] px-4 py-3 text-sm text-[#E9E3B2] transition hover:bg-[#292D26]"
+              className="gold-card-pill flex items-center gap-2 rounded-xl border border-[#D9BE64]/45 bg-[#121414] px-4 py-3 text-sm text-[#FFF4CE] transition hover:bg-[#17140D] hover:text-[#FFF4CE]"
             >
               <Download size={17} />
               Export CSV
@@ -621,7 +619,7 @@ export default function ExpensesPaymentsPage() {
                   ? openAddExpense
                   : openAddPayment
               }
-              className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#EFE8A8] to-[#C8BD79] px-5 py-3 text-sm font-semibold text-[#171914] transition hover:brightness-110"
+              className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#FFF4CE] via-[#E8D39A] to-[#C9A45C] px-5 py-3 text-sm font-semibold text-[#17140D] shadow-md shadow-[#C9A45C]/25 transition hover:brightness-105"
             >
               <Plus size={18} />
               {activeTab === "Expenses"
@@ -636,60 +634,72 @@ export default function ExpensesPaymentsPage() {
         <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           <div className={cardClass}>
             <div className="flex items-center justify-between">
-              <span className="text-sm text-[#A9ACA2]">Total Expenses</span>
-              <div className="rounded-xl bg-red-400/10 p-3 text-red-300">
+              <span className="gold-card-muted text-sm text-[#A9ACA2]">
+                Total Expenses
+              </span>
+              <div className="gold-card-icon rounded-xl bg-red-400/15 p-3 text-red-300">
                 <Receipt size={20} />
               </div>
             </div>
-            <h2 className="mt-5 text-2xl font-semibold">
+            <h2 className="gold-card-title mt-5 text-2xl font-semibold text-[#F5F3E8]">
               {money(totalExpenses)}
             </h2>
-            <p className="mt-2 text-xs text-[#858B82]">
+            <p className="gold-card-muted mt-2 text-xs text-[#8D9289]">
               {visibleExpenses.length} expense records
             </p>
           </div>
 
           <div className={cardClass}>
             <div className="flex items-center justify-between">
-              <span className="text-sm text-[#A9ACA2]">Payments Received</span>
-              <div className="rounded-xl bg-emerald-400/10 p-3 text-emerald-300">
+              <span className="gold-card-muted text-sm text-[#A9ACA2]">
+                Payments Received
+              </span>
+              <div className="gold-card-icon rounded-xl bg-emerald-400/15 p-3 text-emerald-300">
                 <Wallet size={20} />
               </div>
             </div>
-            <h2 className="mt-5 text-2xl font-semibold text-emerald-300">
+            <h2 className="gold-card-title mt-5 text-2xl font-semibold text-emerald-300">
               {money(receivedPayments)}
             </h2>
-            <p className="mt-2 text-xs text-[#858B82]">
+            <p className="gold-card-muted mt-2 text-xs text-[#8D9289]">
               {visiblePayments.filter((item) => item.status === "Received").length} successful records
             </p>
           </div>
 
           <div className={cardClass}>
             <div className="flex items-center justify-between">
-              <span className="text-sm text-[#A9ACA2]">Pending Payments</span>
-              <div className="rounded-xl bg-amber-400/10 p-3 text-amber-300">
+              <span className="gold-card-muted text-sm text-[#A9ACA2]">
+                Pending Payments
+              </span>
+              <div className="gold-card-icon rounded-xl bg-amber-400/15 p-3 text-amber-300">
                 <Clock size={20} />
               </div>
             </div>
-            <h2 className="mt-5 text-2xl font-semibold text-amber-300">
+            <h2 className="gold-card-title mt-5 text-2xl font-semibold text-amber-300">
               {money(pendingPayments)}
             </h2>
-            <p className="mt-2 text-xs text-[#858B82]">
+            <p className="gold-card-muted mt-2 text-xs text-[#8D9289]">
               Awaiting customer payment
             </p>
           </div>
 
           <div className={cardClass}>
             <div className="flex items-center justify-between">
-              <span className="text-sm text-[#A9ACA2]">Net Cash Position</span>
-              <div className="rounded-xl bg-[#D9D19A]/10 p-3 text-[#E8DEA0]">
+              <span className="gold-card-muted text-sm text-[#A9ACA2]">
+                Net Cash Position
+              </span>
+              <div className="gold-card-icon rounded-xl bg-[#E8D39A]/15 p-3 text-[#FFF4CE]">
                 <TrendingUp size={20} />
               </div>
             </div>
-            <h2 className={`mt-5 text-2xl font-semibold ${netBalance >= 0 ? "text-[#EFE8A8]" : "text-red-300"}`}>
+            <h2
+              className={`gold-card-title mt-5 text-2xl font-semibold ${
+                netBalance >= 0 ? "text-[#FFF4CE]" : "text-red-300"
+              }`}
+            >
               {money(netBalance)}
             </h2>
-            <p className="mt-2 text-xs text-[#858B82]">
+            <p className="gold-card-muted mt-2 text-xs text-[#8D9289]">
               Collected payments minus expenses
             </p>
           </div>
@@ -698,7 +708,7 @@ export default function ExpensesPaymentsPage() {
         {/* TAB SWITCHER */}
 
         <section className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-          <div className="inline-flex w-fit rounded-xl border border-[#343832] bg-[#1B1F1D] p-1">
+          <div className="inline-flex w-fit rounded-xl border border-[#D9BE64]/35 bg-[#121414] p-1 shadow-sm">
             <button
               onClick={() => {
                 setActiveTab("Expenses");
@@ -707,8 +717,8 @@ export default function ExpensesPaymentsPage() {
               }}
               className={`flex items-center gap-2 rounded-lg px-5 py-3 text-sm font-medium transition ${
                 activeTab === "Expenses"
-                  ? "bg-gradient-to-r from-[#EFE8A8] to-[#C8BD79] text-[#171914] shadow-lg"
-                  : "text-[#A9ACA2] hover:text-white"
+                  ? "bg-gradient-to-r from-[#FFF4CE] via-[#E8D39A] to-[#C9A45C] font-semibold text-[#17140D] shadow-md"
+                  : "text-[#A9ACA2] hover:text-[#FFF4CE]"
               }`}
             >
               <Receipt size={17} />
@@ -723,8 +733,8 @@ export default function ExpensesPaymentsPage() {
               }}
               className={`flex items-center gap-2 rounded-lg px-5 py-3 text-sm font-medium transition ${
                 activeTab === "Payments"
-                  ? "bg-gradient-to-r from-[#EFE8A8] to-[#C8BD79] text-[#171914] shadow-lg"
-                  : "text-[#A9ACA2] hover:text-white"
+                  ? "bg-gradient-to-r from-[#FFF4CE] via-[#E8D39A] to-[#C9A45C] font-semibold text-[#17140D] shadow-md"
+                  : "text-[#A9ACA2] hover:text-[#FFF4CE]"
               }`}
             >
               <CreditCard size={17} />
@@ -732,7 +742,7 @@ export default function ExpensesPaymentsPage() {
             </button>
           </div>
 
-          <div className="text-xs text-[#858B82]">
+          <div className="text-xs font-medium text-[#5C5549]">
             Showing records: {period}
           </div>
         </section>
@@ -745,12 +755,14 @@ export default function ExpensesPaymentsPage() {
               <div className={`${cardClass} xl:col-span-1`}>
                 <div className="flex items-center justify-between">
                   <div>
-                    <h2 className="font-semibold">Expense Breakdown</h2>
-                    <p className="mt-1 text-xs text-[#92978F]">
+                    <h2 className="gold-card-title font-semibold text-[#F5F3E8]">
+                      Expense Breakdown
+                    </h2>
+                    <p className="gold-card-muted mt-1 text-xs text-[#92978F]">
                       Spending by category
                     </p>
                   </div>
-                  <Filter size={18} className="text-[#D9D19A]" />
+                  <Filter size={18} className="gold-card-accent text-[#E8D39A]" />
                 </div>
 
                 {categorySummary.length > 0 ? (
@@ -758,13 +770,19 @@ export default function ExpensesPaymentsPage() {
                     {categorySummary.map((item) => (
                       <div key={item.name}>
                         <div className="mb-2 flex justify-between gap-2 text-sm">
-                          <span className="text-[#D7D9D0]">{item.name}</span>
-                          <span className="text-[#D9D19A]">{money(item.amount)}</span>
+                          <span className="gold-card-title text-[#D7D9D0]">
+                            {item.name}
+                          </span>
+                          <span className="gold-card-accent font-medium text-[#E8D39A]">
+                            {money(item.amount)}
+                          </span>
                         </div>
-                        <div className="h-2 overflow-hidden rounded-full bg-[#30352F]">
+                        <div className="gold-card-track h-2 overflow-hidden rounded-full bg-[#242826]">
                           <div
-                            className="h-full rounded-full bg-gradient-to-r from-[#8D8250] to-[#EFE8A8]"
-                            style={{ width: `${(item.amount / maxCategoryAmount) * 100}%` }}
+                            className="gold-card-bar h-full rounded-full bg-gradient-to-r from-[#C9A45C] to-[#FFF4CE]"
+                            style={{
+                              width: `${(item.amount / maxCategoryAmount) * 100}%`,
+                            }}
                           />
                         </div>
                       </div>
@@ -772,9 +790,11 @@ export default function ExpensesPaymentsPage() {
                   </div>
                 ) : (
                   <div className="flex h-48 flex-col items-center justify-center text-center">
-                    <Receipt size={34} className="mb-3 text-[#73796F]" />
-                    <p className="text-sm text-[#A9ACA2]">No expenses recorded</p>
-                    <p className="mt-1 text-xs text-[#73796F]">
+                    <Receipt size={34} className="gold-card-muted mb-3 text-[#73796F]" />
+                    <p className="gold-card-title text-sm text-[#A9ACA2]">
+                      No expenses recorded
+                    </p>
+                    <p className="gold-card-muted mt-1 text-xs text-[#73796F]">
                       Add an expense to see your breakdown.
                     </p>
                   </div>
@@ -783,46 +803,48 @@ export default function ExpensesPaymentsPage() {
 
               <div className={`${cardClass} xl:col-span-2`}>
                 <div>
-                  <h2 className="font-semibold">Expense Overview</h2>
-                  <p className="mt-1 text-xs text-[#92978F]">
+                  <h2 className="gold-card-title font-semibold text-[#F5F3E8]">
+                    Expense Overview
+                  </h2>
+                  <p className="gold-card-muted mt-1 text-xs text-[#92978F]">
                     Your business spending summary
                   </p>
                 </div>
 
                 <div className="mt-7 grid gap-4 sm:grid-cols-2">
-                  <div className="gold-ambient-card rounded-xl border border-[#343832] bg-[#151917] p-5">
-                    <div className="flex items-center gap-2 text-[#A9ACA2]">
-                      <ArrowDownRight size={18} className="text-red-300" />
+                  <div className="gold-ambient-card rounded-xl bg-[#121414] p-5">
+                    <div className="gold-card-muted flex items-center gap-2 text-[#A9ACA2]">
+                      <ArrowDownRight size={18} className="gold-card-accent text-red-300" />
                       <span className="text-xs">Total Spending</span>
                     </div>
-                    <h3 className="mt-3 text-2xl font-semibold">
+                    <h3 className="gold-card-title mt-3 text-2xl font-semibold text-[#F5F3E8]">
                       {money(totalExpenses)}
                     </h3>
-                    <p className="mt-2 text-xs text-[#858B82]">
+                    <p className="gold-card-muted mt-2 text-xs text-[#858B82]">
                       In selected period
                     </p>
                   </div>
 
-                  <div className="gold-ambient-card rounded-xl border border-[#343832] bg-[#151917] p-5">
-                    <div className="flex items-center gap-2 text-[#A9ACA2]">
-                      <FileText size={18} className="text-[#D9D19A]" />
+                  <div className="gold-ambient-card rounded-xl bg-[#121414] p-5">
+                    <div className="gold-card-muted flex items-center gap-2 text-[#A9ACA2]">
+                      <FileText size={18} className="gold-card-accent text-[#E8D39A]" />
                       <span className="text-xs">Expense Records</span>
                     </div>
-                    <h3 className="mt-3 text-2xl font-semibold">
+                    <h3 className="gold-card-title mt-3 text-2xl font-semibold text-[#F5F3E8]">
                       {visibleExpenses.length}
                     </h3>
-                    <p className="mt-2 text-xs text-[#858B82]">
+                    <p className="gold-card-muted mt-2 text-xs text-[#858B82]">
                       Total entries in selected period
                     </p>
                   </div>
                 </div>
 
-                <div className="gold-ambient-card mt-5 rounded-xl border border-[#4B4937] bg-[#292A21] p-5">
-                  <div className="flex items-center gap-2 text-[#E7DDA0]">
+                <div className="gold-ambient-card mt-5 rounded-xl bg-[#121414] p-5">
+                  <div className="gold-card-accent flex items-center gap-2 text-[#FFF4CE]">
                     <Sparkles size={17} />
                     <span className="text-sm font-semibold">Spending Insight</span>
                   </div>
-                  <p className="mt-2 text-sm text-[#C5C7BC]">
+                  <p className="gold-card-muted mt-2 text-sm text-[#C5C7BC]">
                     {categorySummary.length > 0
                       ? `${categorySummary[0].name} is your highest expense category, accounting for ${money(categorySummary[0].amount)} in this period.`
                       : "Your expense insights will appear here once you record business expenses."}
@@ -834,31 +856,40 @@ export default function ExpensesPaymentsPage() {
             <div className={cardClass}>
               <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-center">
                 <div>
-                  <h2 className="text-lg font-semibold">Expense Records</h2>
-                  <p className="mt-1 text-xs text-[#92978F]">
+                  <h2 className="gold-card-title text-lg font-semibold text-[#F5F3E8]">
+                    Expense Records
+                  </h2>
+                  <p className="gold-card-muted mt-1 text-xs text-[#92978F]">
                     Manage your salon business expenses
                   </p>
                 </div>
 
                 <div className="flex flex-wrap gap-3">
                   <div className="relative min-w-[190px] flex-1">
-                    <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#858B82]" />
+                    <Search
+                      size={16}
+                      className="absolute left-3 top-1/2 -translate-y-1/2 text-[#858B82]"
+                    />
                     <input
                       value={search}
                       onChange={(event) => setSearch(event.target.value)}
                       placeholder="Search expenses..."
-                      className="w-full rounded-xl border border-[#3A403A] bg-[#151917] py-3 pl-9 pr-3 text-sm outline-none focus:border-[#D9D19A]"
+                      className="w-full rounded-xl border border-[#D9BE64]/30 bg-[#121414] py-3 pl-9 pr-3 text-sm text-[#F5F3E8] outline-none transition placeholder:text-[#7A7E75] focus:border-[#FFF4CE]"
                     />
                   </div>
 
                   <select
                     value={filter}
                     onChange={(event) => setFilter(event.target.value)}
-                    className="rounded-xl border border-[#3A403A] bg-[#151917] px-4 py-3 text-sm outline-none"
+                    className="rounded-xl border border-[#D9BE64]/30 bg-[#121414] px-4 py-3 text-sm text-[#F5F3E8] outline-none transition focus:border-[#FFF4CE]"
                   >
-                    <option value="All">All categories</option>
+                    <option value="All" className="bg-[#121414] text-[#F5F3E8]">
+                      All categories
+                    </option>
                     {expenseCategories.map((category) => (
-                      <option key={category}>{category}</option>
+                      <option key={category} className="bg-[#121414] text-[#F5F3E8]">
+                        {category}
+                      </option>
                     ))}
                   </select>
                 </div>
@@ -867,7 +898,7 @@ export default function ExpensesPaymentsPage() {
               <div className="mt-6 overflow-x-auto">
                 <table className="w-full min-w-[750px] text-left">
                   <thead>
-                    <tr className="border-b border-[#343832] text-xs uppercase tracking-wider text-[#858B82]">
+                    <tr className="gold-table-head border-b border-[#D9BE64]/20 text-xs uppercase tracking-wider text-[#858B82]">
                       <th className="pb-4 font-medium">Expense</th>
                       <th className="pb-4 font-medium">Category</th>
                       <th className="pb-4 font-medium">Date</th>
@@ -882,24 +913,30 @@ export default function ExpensesPaymentsPage() {
                       filteredExpenses.map((item) => (
                         <tr
                           key={item.id}
-                          className="border-b border-[#2D322D] last:border-0 hover:bg-[#252A25]/60"
+                          className="gold-table-row border-b border-[#D9BE64]/10 last:border-0"
                         >
                           <td className="py-4">
-                            <p className="text-sm font-medium">{item.title}</p>
+                            <p className="gold-card-title text-sm font-medium text-[#F5F3E8]">
+                              {item.title}
+                            </p>
                             {item.notes && (
-                              <p className="mt-1 max-w-[180px] truncate text-xs text-[#858B82]">
+                              <p className="gold-card-muted mt-1 max-w-[180px] truncate text-xs text-[#858B82]">
                                 {item.notes}
                               </p>
                             )}
                           </td>
                           <td className="py-4">
-                            <span className="rounded-full bg-[#D9D19A]/10 px-3 py-1 text-xs text-[#D9D19A]">
+                            <span className="gold-card-pill rounded-full bg-[#E8D39A]/15 px-3 py-1 text-xs text-[#FFF4CE]">
                               {item.category}
                             </span>
                           </td>
-                          <td className="py-4 text-sm text-[#A9ACA2]">{formatDate(item.date)}</td>
-                          <td className="py-4 text-sm text-[#A9ACA2]">{item.paymentMethod}</td>
-                          <td className="py-4 text-right text-sm font-semibold text-red-300">
+                          <td className="gold-card-muted py-4 text-sm text-[#A9ACA2]">
+                            {formatDate(item.date)}
+                          </td>
+                          <td className="gold-card-muted py-4 text-sm text-[#A9ACA2]">
+                            {item.paymentMethod}
+                          </td>
+                          <td className="gold-card-title py-4 text-right text-sm font-semibold text-red-300">
                             − {money(item.amount)}
                           </td>
                           <td className="py-4 text-right">
@@ -907,14 +944,14 @@ export default function ExpensesPaymentsPage() {
                               <button
                                 onClick={() => openEditExpense(item)}
                                 title="Edit expense"
-                                className="rounded-lg p-2 text-[#A9ACA2] hover:bg-[#343832] hover:text-[#EFE8A8]"
+                                className="gold-row-btn rounded-lg p-2 text-[#A9ACA2] transition hover:bg-black/15 hover:text-[#17140D]"
                               >
                                 <Pencil size={16} />
                               </button>
                               <button
                                 onClick={() => deleteExpense(item.id)}
                                 title="Delete expense"
-                                className="rounded-lg p-2 text-[#A9ACA2] hover:bg-red-400/10 hover:text-red-300"
+                                className="gold-row-btn rounded-lg p-2 text-[#A9ACA2] transition hover:bg-black/15 hover:text-[#17140D]"
                               >
                                 <Trash2 size={16} />
                               </button>
@@ -924,7 +961,10 @@ export default function ExpensesPaymentsPage() {
                       ))
                     ) : (
                       <tr>
-                        <td colSpan={6} className="py-14 text-center text-sm text-[#858B82]">
+                        <td
+                          colSpan={6}
+                          className="gold-card-muted py-14 text-center text-sm text-[#858B82]"
+                        >
                           No expenses found. Add your first expense.
                         </td>
                       </tr>
@@ -933,7 +973,7 @@ export default function ExpensesPaymentsPage() {
                 </table>
               </div>
 
-              <div className="mt-4 border-t border-[#343832] pt-4 text-xs text-[#858B82]">
+              <div className="gold-card-muted mt-4 border-t border-[#D9BE64]/15 pt-4 text-xs text-[#858B82]">
                 Showing {filteredExpenses.length} expense records
               </div>
             </div>
@@ -947,60 +987,93 @@ export default function ExpensesPaymentsPage() {
             <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
               <div className={cardClass}>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-[#A9ACA2]">Amount Received</span>
-                  <CheckCircle2 className="text-emerald-300" size={21} />
+                  <span className="gold-card-muted text-sm text-[#A9ACA2]">
+                    Amount Received
+                  </span>
+                  <CheckCircle2
+                    className="gold-card-accent text-emerald-300"
+                    size={21}
+                  />
                 </div>
-                <h3 className="mt-5 text-2xl font-semibold text-emerald-300">
+                <h3 className="gold-card-title mt-5 text-2xl font-semibold text-emerald-300">
                   {money(receivedPayments)}
                 </h3>
-                <p className="mt-2 text-xs text-[#858B82]">Successful payments</p>
+                <p className="gold-card-muted mt-2 text-xs text-[#858B82]">
+                  Successful payments
+                </p>
               </div>
 
               <div className={cardClass}>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-[#A9ACA2]">Outstanding</span>
-                  <AlertCircle className="text-amber-300" size={21} />
+                  <span className="gold-card-muted text-sm text-[#A9ACA2]">
+                    Outstanding
+                  </span>
+                  <AlertCircle
+                    className="gold-card-accent text-amber-300"
+                    size={21}
+                  />
                 </div>
-                <h3 className="mt-5 text-2xl font-semibold text-amber-300">
+                <h3 className="gold-card-title mt-5 text-2xl font-semibold text-amber-300">
                   {money(pendingPayments)}
                 </h3>
-                <p className="mt-2 text-xs text-[#858B82]">Pending payment records</p>
+                <p className="gold-card-muted mt-2 text-xs text-[#858B82]">
+                  Pending payment records
+                </p>
               </div>
 
               <div className={cardClass}>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-[#A9ACA2]">Refunds</span>
-                  <RefreshCw className="text-red-300" size={21} />
+                  <span className="gold-card-muted text-sm text-[#A9ACA2]">
+                    Refunds
+                  </span>
+                  <RefreshCw
+                    className="gold-card-accent text-red-300"
+                    size={21}
+                  />
                 </div>
-                <h3 className="mt-5 text-2xl font-semibold text-red-300">
+                <h3 className="gold-card-title mt-5 text-2xl font-semibold text-red-300">
                   {money(refundedPayments)}
                 </h3>
-                <p className="mt-2 text-xs text-[#858B82]">Refunded payment records</p>
+                <p className="gold-card-muted mt-2 text-xs text-[#858B82]">
+                  Refunded payment records
+                </p>
               </div>
 
               <div className={cardClass}>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-[#A9ACA2]">Net Collected</span>
-                  <Wallet className="text-[#EFE8A8]" size={21} />
+                  <span className="gold-card-muted text-sm text-[#A9ACA2]">
+                    Net Collected
+                  </span>
+                  <Wallet
+                    className="gold-card-accent text-[#FFF4CE]"
+                    size={21}
+                  />
                 </div>
-                <h3 className="mt-5 text-2xl font-semibold text-[#EFE8A8]">
+                <h3 className="gold-card-title mt-5 text-2xl font-semibold text-[#FFF4CE]">
                   {money(netCollected)}
                 </h3>
-                <p className="mt-2 text-xs text-[#858B82]">Received minus refunds</p>
+                <p className="gold-card-muted mt-2 text-xs text-[#858B82]">
+                  Received minus refunds
+                </p>
               </div>
             </div>
 
             <div className={`${cardClass} grid gap-5 md:grid-cols-3`}>
               <div className="flex items-center gap-4">
-                <div className="rounded-xl bg-emerald-400/10 p-3 text-emerald-300">
+                <div className="gold-card-icon rounded-xl bg-emerald-400/15 p-3 text-emerald-300">
                   <Banknote size={23} />
                 </div>
                 <div>
-                  <p className="text-xs text-[#92978F]">Cash Received</p>
-                  <p className="mt-1 text-lg font-semibold">
+                  <p className="gold-card-muted text-xs text-[#92978F]">
+                    Cash Received
+                  </p>
+                  <p className="gold-card-title mt-1 text-lg font-semibold text-[#F5F3E8]">
                     {money(
                       visiblePayments
-                        .filter((item) => item.status === "Received" && item.method === "Cash")
+                        .filter(
+                          (item) =>
+                            item.status === "Received" && item.method === "Cash"
+                        )
                         .reduce((sum, item) => sum + item.amount, 0)
                     )}
                   </p>
@@ -1008,15 +1081,20 @@ export default function ExpensesPaymentsPage() {
               </div>
 
               <div className="flex items-center gap-4">
-                <div className="rounded-xl bg-blue-400/10 p-3 text-blue-300">
+                <div className="gold-card-icon rounded-xl bg-blue-400/15 p-3 text-blue-300">
                   <Smartphone size={23} />
                 </div>
                 <div>
-                  <p className="text-xs text-[#92978F]">UPI Received</p>
-                  <p className="mt-1 text-lg font-semibold">
+                  <p className="gold-card-muted text-xs text-[#92978F]">
+                    UPI Received
+                  </p>
+                  <p className="gold-card-title mt-1 text-lg font-semibold text-[#F5F3E8]">
                     {money(
                       visiblePayments
-                        .filter((item) => item.status === "Received" && item.method === "UPI")
+                        .filter(
+                          (item) =>
+                            item.status === "Received" && item.method === "UPI"
+                        )
                         .reduce((sum, item) => sum + item.amount, 0)
                     )}
                   </p>
@@ -1024,15 +1102,20 @@ export default function ExpensesPaymentsPage() {
               </div>
 
               <div className="flex items-center gap-4">
-                <div className="rounded-xl bg-purple-400/10 p-3 text-purple-300">
+                <div className="gold-card-icon rounded-xl bg-purple-400/15 p-3 text-purple-300">
                   <CreditCard size={23} />
                 </div>
                 <div>
-                  <p className="text-xs text-[#92978F]">Card Received</p>
-                  <p className="mt-1 text-lg font-semibold">
+                  <p className="gold-card-muted text-xs text-[#92978F]">
+                    Card Received
+                  </p>
+                  <p className="gold-card-title mt-1 text-lg font-semibold text-[#F5F3E8]">
                     {money(
                       visiblePayments
-                        .filter((item) => item.status === "Received" && item.method === "Card")
+                        .filter(
+                          (item) =>
+                            item.status === "Received" && item.method === "Card"
+                        )
                         .reduce((sum, item) => sum + item.amount, 0)
                     )}
                   </p>
@@ -1043,34 +1126,45 @@ export default function ExpensesPaymentsPage() {
             <div className={cardClass}>
               <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-center">
                 <div>
-                  <h2 className="text-lg font-semibold">Payment Transactions</h2>
-                  <p className="mt-1 text-xs text-[#92978F]">
+                  <h2 className="gold-card-title text-lg font-semibold text-[#F5F3E8]">
+                    Payment Transactions
+                  </h2>
+                  <p className="gold-card-muted mt-1 text-xs text-[#92978F]">
                     Customer payments, advances and outstanding records
                   </p>
                 </div>
 
                 <div className="flex flex-wrap gap-3">
                   <div className="relative min-w-[190px] flex-1">
-                    <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#858B82]" />
+                    <Search
+                      size={16}
+                      className="absolute left-3 top-1/2 -translate-y-1/2 text-[#858B82]"
+                    />
                     <input
                       value={search}
                       onChange={(event) => setSearch(event.target.value)}
                       placeholder="Search customer or service..."
-                      className="w-full rounded-xl border border-[#3A403A] bg-[#151917] py-3 pl-9 pr-3 text-sm outline-none focus:border-[#D9D19A]"
+                      className="w-full rounded-xl border border-[#D9BE64]/30 bg-[#121414] py-3 pl-9 pr-3 text-sm text-[#F5F3E8] outline-none transition placeholder:text-[#7A7E75] focus:border-[#FFF4CE]"
                     />
                   </div>
 
                   <select
                     value={filter}
                     onChange={(event) => setFilter(event.target.value)}
-                    className="rounded-xl border border-[#3A403A] bg-[#151917] px-4 py-3 text-sm outline-none"
+                    className="rounded-xl border border-[#D9BE64]/30 bg-[#121414] px-4 py-3 text-sm text-[#F5F3E8] outline-none transition focus:border-[#FFF4CE]"
                   >
-                    <option value="All">All payments</option>
+                    <option value="All" className="bg-[#121414] text-[#F5F3E8]">
+                      All payments
+                    </option>
                     {paymentStatuses.map((status) => (
-                      <option key={status}>{status}</option>
+                      <option key={status} className="bg-[#121414] text-[#F5F3E8]">
+                        {status}
+                      </option>
                     ))}
                     {paymentMethods.map((method) => (
-                      <option key={method}>{method}</option>
+                      <option key={method} className="bg-[#121414] text-[#F5F3E8]">
+                        {method}
+                      </option>
                     ))}
                   </select>
                 </div>
@@ -1079,7 +1173,7 @@ export default function ExpensesPaymentsPage() {
               <div className="mt-6 overflow-x-auto">
                 <table className="w-full min-w-[950px] text-left">
                   <thead>
-                    <tr className="border-b border-[#343832] text-xs uppercase tracking-wider text-[#858B82]">
+                    <tr className="gold-table-head border-b border-[#D9BE64]/20 text-xs uppercase tracking-wider text-[#858B82]">
                       <th className="pb-4 font-medium">Customer</th>
                       <th className="pb-4 font-medium">Service</th>
                       <th className="pb-4 font-medium">Date</th>
@@ -1096,39 +1190,56 @@ export default function ExpensesPaymentsPage() {
                       filteredPayments.map((item) => (
                         <tr
                           key={item.id}
-                          className="border-b border-[#2D322D] last:border-0 hover:bg-[#252A25]/60"
+                          className="gold-table-row border-b border-[#D9BE64]/10 last:border-0"
                         >
                           <td className="py-4">
-                            <p className="text-sm font-medium">{item.customer}</p>
+                            <p className="gold-card-title text-sm font-medium text-[#F5F3E8]">
+                              {item.customer}
+                            </p>
                             {item.reference && (
-                              <p className="mt-1 text-xs text-[#858B82]">
+                              <p className="gold-card-muted mt-1 text-xs text-[#858B82]">
                                 Ref: {item.reference}
                               </p>
                             )}
                           </td>
-                          <td className="py-4 text-sm text-[#A9ACA2]">
+                          <td className="gold-card-muted py-4 text-sm text-[#A9ACA2]">
                             {item.service || "General Payment"}
                           </td>
-                          <td className="py-4 text-sm text-[#A9ACA2]">{formatDate(item.date)}</td>
-                          <td className="py-4 text-sm text-[#A9ACA2]">{item.method}</td>
-                          <td className="py-4 text-sm text-[#A9ACA2]">{item.type}</td>
+                          <td className="gold-card-muted py-4 text-sm text-[#A9ACA2]">
+                            {formatDate(item.date)}
+                          </td>
+                          <td className="gold-card-muted py-4 text-sm text-[#A9ACA2]">
+                            {item.method}
+                          </td>
+                          <td className="gold-card-muted py-4 text-sm text-[#A9ACA2]">
+                            {item.type}
+                          </td>
                           <td className="py-4">
                             <select
                               value={item.status}
                               onChange={(event) =>
-                                updatePaymentStatus(item.id, event.target.value as PaymentStatus)
+                                updatePaymentStatus(
+                                  item.id,
+                                  event.target.value as PaymentStatus
+                                )
                               }
-                              className={`rounded-full border-0 px-3 py-1.5 text-xs font-semibold outline-none ${statusStyle(item.status)}`}
+                              className={`gold-card-pill rounded-full border-0 px-3 py-1.5 text-xs font-semibold outline-none ${statusStyle(
+                                item.status
+                              )}`}
                               aria-label={`Payment status for ${item.customer}`}
                             >
                               {paymentStatuses.map((status) => (
-                                <option key={status} value={status} className="bg-[#1B1F1D] text-white">
+                                <option
+                                  key={status}
+                                  value={status}
+                                  className="bg-[#121414] text-[#F5F3E8]"
+                                >
                                   {status}
                                 </option>
                               ))}
                             </select>
                           </td>
-                          <td className="py-4 text-right text-sm font-semibold">
+                          <td className="gold-card-title py-4 text-right text-sm font-semibold text-[#F5F3E8]">
                             {money(item.amount)}
                           </td>
                           <td className="py-4 text-right">
@@ -1136,14 +1247,14 @@ export default function ExpensesPaymentsPage() {
                               <button
                                 onClick={() => openEditPayment(item)}
                                 title="Edit payment"
-                                className="rounded-lg p-2 text-[#A9ACA2] hover:bg-[#343832] hover:text-[#EFE8A8]"
+                                className="gold-row-btn rounded-lg p-2 text-[#A9ACA2] transition hover:bg-black/15 hover:text-[#17140D]"
                               >
                                 <Pencil size={16} />
                               </button>
                               <button
                                 onClick={() => deletePayment(item.id)}
                                 title="Delete payment"
-                                className="rounded-lg p-2 text-[#A9ACA2] hover:bg-red-400/10 hover:text-red-300"
+                                className="gold-row-btn rounded-lg p-2 text-[#A9ACA2] transition hover:bg-black/15 hover:text-[#17140D]"
                               >
                                 <Trash2 size={16} />
                               </button>
@@ -1153,7 +1264,10 @@ export default function ExpensesPaymentsPage() {
                       ))
                     ) : (
                       <tr>
-                        <td colSpan={8} className="py-14 text-center text-sm text-[#858B82]">
+                        <td
+                          colSpan={8}
+                          className="gold-card-muted py-14 text-center text-sm text-[#858B82]"
+                        >
                           No payment records found. Record your first payment.
                         </td>
                       </tr>
@@ -1162,7 +1276,7 @@ export default function ExpensesPaymentsPage() {
                 </table>
               </div>
 
-              <div className="mt-4 border-t border-[#343832] pt-4 text-xs text-[#858B82]">
+              <div className="gold-card-muted mt-4 border-t border-[#D9BE64]/15 pt-4 text-xs text-[#858B82]">
                 Showing {filteredPayments.length} payment records
               </div>
             </div>
@@ -1180,10 +1294,10 @@ export default function ExpensesPaymentsPage() {
               }
             }}
           >
-            <div className="gold-ambient-card my-auto w-full max-w-lg rounded-2xl border border-[#454A3D] bg-[#1B1F1D] p-6 shadow-2xl">
+            <div className="gold-modal-card my-auto w-full max-w-lg rounded-2xl border border-[#D9BE64]/50 bg-[#121414] p-6 text-[#F5F3E8] shadow-[0_0_40px_rgba(232,211,154,0.22)]">
               <div className="mb-6 flex items-center justify-between">
                 <div>
-                  <h2 className="text-xl font-semibold">
+                  <h2 className="text-xl font-semibold text-[#F5F3E8]">
                     {editingExpenseId ? "Edit Expense" : "Add Expense"}
                   </h2>
                   <p className="mt-1 text-xs text-[#92978F]">
@@ -1193,7 +1307,7 @@ export default function ExpensesPaymentsPage() {
 
                 <button
                   onClick={() => setExpenseModal(false)}
-                  className="rounded-lg p-2 text-[#A9ACA2] hover:bg-[#30352F]"
+                  className="rounded-lg p-2 text-[#A9ACA2] transition hover:bg-[#FFF4CE] hover:text-[#17140D]"
                 >
                   <X size={20} />
                 </button>
@@ -1206,7 +1320,10 @@ export default function ExpensesPaymentsPage() {
                     required
                     value={expenseDraft.title}
                     onChange={(event) =>
-                      setExpenseDraft({ ...expenseDraft, title: event.target.value })
+                      setExpenseDraft({
+                        ...expenseDraft,
+                        title: event.target.value,
+                      })
                     }
                     placeholder="Example: Monthly shop rent"
                     className={inputClass}
@@ -1219,12 +1336,20 @@ export default function ExpensesPaymentsPage() {
                     <select
                       value={expenseDraft.category}
                       onChange={(event) =>
-                        setExpenseDraft({ ...expenseDraft, category: event.target.value })
+                        setExpenseDraft({
+                          ...expenseDraft,
+                          category: event.target.value,
+                        })
                       }
                       className={inputClass}
                     >
                       {expenseCategories.map((category) => (
-                        <option key={category}>{category}</option>
+                        <option
+                          key={category}
+                          className="bg-[#121414] text-[#F5F3E8]"
+                        >
+                          {category}
+                        </option>
                       ))}
                     </select>
                   </div>
@@ -1237,7 +1362,10 @@ export default function ExpensesPaymentsPage() {
                       type="number"
                       value={expenseDraft.amount || ""}
                       onChange={(event) =>
-                        setExpenseDraft({ ...expenseDraft, amount: Number(event.target.value) })
+                        setExpenseDraft({
+                          ...expenseDraft,
+                          amount: Number(event.target.value),
+                        })
                       }
                       placeholder="Enter amount"
                       className={inputClass}
@@ -1253,7 +1381,10 @@ export default function ExpensesPaymentsPage() {
                       type="date"
                       value={expenseDraft.date}
                       onChange={(event) =>
-                        setExpenseDraft({ ...expenseDraft, date: event.target.value })
+                        setExpenseDraft({
+                          ...expenseDraft,
+                          date: event.target.value,
+                        })
                       }
                       className={inputClass}
                     />
@@ -1264,12 +1395,20 @@ export default function ExpensesPaymentsPage() {
                     <select
                       value={expenseDraft.paymentMethod}
                       onChange={(event) =>
-                        setExpenseDraft({ ...expenseDraft, paymentMethod: event.target.value })
+                        setExpenseDraft({
+                          ...expenseDraft,
+                          paymentMethod: event.target.value,
+                        })
                       }
                       className={inputClass}
                     >
                       {paymentMethods.map((method) => (
-                        <option key={method}>{method}</option>
+                        <option
+                          key={method}
+                          className="bg-[#121414] text-[#F5F3E8]"
+                        >
+                          {method}
+                        </option>
                       ))}
                     </select>
                   </div>
@@ -1281,7 +1420,10 @@ export default function ExpensesPaymentsPage() {
                     rows={3}
                     value={expenseDraft.notes}
                     onChange={(event) =>
-                      setExpenseDraft({ ...expenseDraft, notes: event.target.value })
+                      setExpenseDraft({
+                        ...expenseDraft,
+                        notes: event.target.value,
+                      })
                     }
                     placeholder="Additional details..."
                     className={inputClass}
@@ -1292,14 +1434,14 @@ export default function ExpensesPaymentsPage() {
                   <button
                     type="button"
                     onClick={() => setExpenseModal(false)}
-                    className="flex-1 rounded-xl border border-[#454A3D] px-4 py-3 text-sm text-[#C0C3B9] hover:bg-[#30352F]"
+                    className="flex-1 rounded-xl border border-[#D9BE64]/35 px-4 py-3 text-sm text-[#C0C3B9] transition hover:bg-[#FFF4CE] hover:text-[#17140D]"
                   >
                     Cancel
                   </button>
 
                   <button
                     type="submit"
-                    className="flex-1 rounded-xl bg-gradient-to-r from-[#EFE8A8] to-[#C8BD79] px-4 py-3 text-sm font-semibold text-[#171914] hover:brightness-110"
+                    className="flex-1 rounded-xl bg-gradient-to-r from-[#FFF4CE] via-[#E8D39A] to-[#C9A45C] px-4 py-3 text-sm font-semibold text-[#17140D] transition hover:brightness-105"
                   >
                     {editingExpenseId ? "Update Expense" : "Save Expense"}
                   </button>
@@ -1320,10 +1462,10 @@ export default function ExpensesPaymentsPage() {
               }
             }}
           >
-            <div className="gold-ambient-card my-auto w-full max-w-xl rounded-2xl border border-[#454A3D] bg-[#1B1F1D] p-6 shadow-2xl">
+            <div className="gold-modal-card my-auto w-full max-w-xl rounded-2xl border border-[#D9BE64]/50 bg-[#121414] p-6 text-[#F5F3E8] shadow-[0_0_40px_rgba(232,211,154,0.22)]">
               <div className="mb-6 flex items-center justify-between">
                 <div>
-                  <h2 className="text-xl font-semibold">
+                  <h2 className="text-xl font-semibold text-[#F5F3E8]">
                     {editingPaymentId ? "Edit Payment" : "Record Customer Payment"}
                   </h2>
                   <p className="mt-1 text-xs text-[#92978F]">
@@ -1333,7 +1475,7 @@ export default function ExpensesPaymentsPage() {
 
                 <button
                   onClick={() => setPaymentModal(false)}
-                  className="rounded-lg p-2 text-[#A9ACA2] hover:bg-[#30352F]"
+                  className="rounded-lg p-2 text-[#A9ACA2] transition hover:bg-[#FFF4CE] hover:text-[#17140D]"
                 >
                   <X size={20} />
                 </button>
@@ -1350,10 +1492,17 @@ export default function ExpensesPaymentsPage() {
                       onChange={(event) => selectAppointment(event.target.value)}
                       className={inputClass}
                     >
-                      <option value="">Select appointment</option>
+                      <option value="" className="bg-[#121414] text-[#F5F3E8]">
+                        Select appointment
+                      </option>
                       {appointments.map((appointment) => (
-                        <option key={appointment.id} value={appointment.id}>
-                          {appointment.customer} · {appointment.service} · {formatDate(appointment.date)}
+                        <option
+                          key={appointment.id}
+                          value={appointment.id}
+                          className="bg-[#121414] text-[#F5F3E8]"
+                        >
+                          {appointment.customer} · {appointment.service} ·{" "}
+                          {formatDate(appointment.date)}
                         </option>
                       ))}
                     </select>
@@ -1386,7 +1535,10 @@ export default function ExpensesPaymentsPage() {
                     <input
                       value={paymentDraft.service}
                       onChange={(event) =>
-                        setPaymentDraft({ ...paymentDraft, service: event.target.value })
+                        setPaymentDraft({
+                          ...paymentDraft,
+                          service: event.target.value,
+                        })
                       }
                       placeholder="Example: Hair Styling"
                       className={inputClass}
@@ -1403,7 +1555,10 @@ export default function ExpensesPaymentsPage() {
                       type="number"
                       value={paymentDraft.amount || ""}
                       onChange={(event) =>
-                        setPaymentDraft({ ...paymentDraft, amount: Number(event.target.value) })
+                        setPaymentDraft({
+                          ...paymentDraft,
+                          amount: Number(event.target.value),
+                        })
                       }
                       placeholder="Enter amount"
                       className={inputClass}
@@ -1417,7 +1572,10 @@ export default function ExpensesPaymentsPage() {
                       type="date"
                       value={paymentDraft.date}
                       onChange={(event) =>
-                        setPaymentDraft({ ...paymentDraft, date: event.target.value })
+                        setPaymentDraft({
+                          ...paymentDraft,
+                          date: event.target.value,
+                        })
                       }
                       className={inputClass}
                     />
@@ -1430,12 +1588,20 @@ export default function ExpensesPaymentsPage() {
                     <select
                       value={paymentDraft.method}
                       onChange={(event) =>
-                        setPaymentDraft({ ...paymentDraft, method: event.target.value })
+                        setPaymentDraft({
+                          ...paymentDraft,
+                          method: event.target.value,
+                        })
                       }
                       className={inputClass}
                     >
                       {paymentMethods.map((method) => (
-                        <option key={method}>{method}</option>
+                        <option
+                          key={method}
+                          className="bg-[#121414] text-[#F5F3E8]"
+                        >
+                          {method}
+                        </option>
                       ))}
                     </select>
                   </div>
@@ -1445,13 +1611,22 @@ export default function ExpensesPaymentsPage() {
                     <select
                       value={paymentDraft.type}
                       onChange={(event) =>
-                        setPaymentDraft({ ...paymentDraft, type: event.target.value as PaymentType })
+                        setPaymentDraft({
+                          ...paymentDraft,
+                          type: event.target.value as PaymentType,
+                        })
                       }
                       className={inputClass}
                     >
-                      <option>Advance</option>
-                      <option>Partial</option>
-                      <option>Full</option>
+                      <option className="bg-[#121414] text-[#F5F3E8]">
+                        Advance
+                      </option>
+                      <option className="bg-[#121414] text-[#F5F3E8]">
+                        Partial
+                      </option>
+                      <option className="bg-[#121414] text-[#F5F3E8]">
+                        Full
+                      </option>
                     </select>
                   </div>
                 </div>
@@ -1461,22 +1636,36 @@ export default function ExpensesPaymentsPage() {
                   <select
                     value={paymentDraft.status}
                     onChange={(event) =>
-                      setPaymentDraft({ ...paymentDraft, status: event.target.value as PaymentStatus })
+                      setPaymentDraft({
+                        ...paymentDraft,
+                        status: event.target.value as PaymentStatus,
+                      })
                     }
                     className={inputClass}
                   >
-                    <option>Received</option>
-                    <option>Pending</option>
-                    <option>Refunded</option>
+                    <option className="bg-[#121414] text-[#F5F3E8]">
+                      Received
+                    </option>
+                    <option className="bg-[#121414] text-[#F5F3E8]">
+                      Pending
+                    </option>
+                    <option className="bg-[#121414] text-[#F5F3E8]">
+                      Refunded
+                    </option>
                   </select>
                 </div>
 
                 <div>
-                  <label className={labelClass}>Transaction reference (optional)</label>
+                  <label className={labelClass}>
+                    Transaction reference (optional)
+                  </label>
                   <input
                     value={paymentDraft.reference}
                     onChange={(event) =>
-                      setPaymentDraft({ ...paymentDraft, reference: event.target.value })
+                      setPaymentDraft({
+                        ...paymentDraft,
+                        reference: event.target.value,
+                      })
                     }
                     placeholder="UPI ID / transaction number"
                     className={inputClass}
@@ -1489,15 +1678,18 @@ export default function ExpensesPaymentsPage() {
                     rows={2}
                     value={paymentDraft.notes}
                     onChange={(event) =>
-                      setPaymentDraft({ ...paymentDraft, notes: event.target.value })
+                      setPaymentDraft({
+                        ...paymentDraft,
+                        notes: event.target.value,
+                      })
                     }
                     placeholder="Additional payment details..."
                     className={inputClass}
                   />
                 </div>
 
-                <div className="rounded-xl border border-[#4B4937] bg-[#292A21] p-3 text-xs text-[#C5C7BC]">
-                  <p className="font-medium text-[#E7DDA0]">Payment accounting</p>
+                <div className="rounded-xl border border-[#D9BE64]/35 bg-[#191C1B] p-3 text-xs text-[#C5C7BC]">
+                  <p className="font-medium text-[#FFF4CE]">Payment accounting</p>
                   <p className="mt-1">
                     Only records marked Received are counted as collected income.
                     Pending records are not included until their status is updated.
@@ -1508,14 +1700,14 @@ export default function ExpensesPaymentsPage() {
                   <button
                     type="button"
                     onClick={() => setPaymentModal(false)}
-                    className="flex-1 rounded-xl border border-[#454A3D] px-4 py-3 text-sm text-[#C0C3B9] hover:bg-[#30352F]"
+                    className="flex-1 rounded-xl border border-[#D9BE64]/35 px-4 py-3 text-sm text-[#C0C3B9] transition hover:bg-[#FFF4CE] hover:text-[#17140D]"
                   >
                     Cancel
                   </button>
 
                   <button
                     type="submit"
-                    className="flex-1 rounded-xl bg-gradient-to-r from-[#EFE8A8] to-[#C8BD79] px-4 py-3 text-sm font-semibold text-[#171914] hover:brightness-110"
+                    className="flex-1 rounded-xl bg-gradient-to-r from-[#FFF4CE] via-[#E8D39A] to-[#C9A45C] px-4 py-3 text-sm font-semibold text-[#17140D] transition hover:brightness-105"
                   >
                     {editingPaymentId ? "Update Payment" : "Save Payment"}
                   </button>
@@ -1525,33 +1717,106 @@ export default function ExpensesPaymentsPage() {
           </div>
         )}
 
-        <footer className="pb-3 pt-2 text-center text-xs text-[#656D64]">
+        <footer className="pb-3 pt-2 text-center text-xs font-medium text-[#6B6457]">
           KBC Salon Academy · Financial Management
         </footer>
       </div>
 
-      {/* SOFT ANTIQUE GOLD CARD GLOW */}
+      {/* CHAMPAGNE GOLD CARD HOVER, OUTER GLOW & TOUCH EFFECT */}
 
       <style jsx global>{`
         .gold-ambient-card {
           position: relative;
           isolation: isolate;
-          border: 1px solid rgba(217, 190, 100, 0.22);
+          background-color: #121414;
+          color: #f5f3e8;
+          border: 1px solid rgba(232, 211, 154, 0.55);
+          box-shadow:
+            0 0 12px rgba(232, 211, 154, 0.16),
+            0 0 28px rgba(201, 164, 92, 0.12),
+            0 10px 26px rgba(18, 20, 20, 0.16);
           transition:
-            transform 250ms ease,
-            border-color 250ms ease,
-            box-shadow 250ms ease;
+            transform 280ms cubic-bezier(0.22, 1, 0.36, 1),
+            border-color 280ms ease,
+            box-shadow 280ms ease,
+            background 280ms ease,
+            color 280ms ease;
           -webkit-tap-highlight-color: transparent;
+          touch-action: manipulation;
         }
 
         .gold-ambient-card:hover,
         .gold-ambient-card:active,
         .gold-ambient-card:focus-visible {
-          border-color: rgba(217, 190, 100, 0.65) !important;
+          background: linear-gradient(
+            135deg,
+            #fff4ce 0%,
+            #e8d39a 52%,
+            #c9a45c 100%
+          ) !important;
+          color: #17140d !important;
+          border-color: #fff4ce !important;
           box-shadow:
-            0 0 8px 1px rgba(217, 190, 100, 0.22),
-            0 0 18px 4px rgba(217, 190, 100, 0.16),
-            0 0 32px 8px rgba(217, 190, 100, 0.10);
+            0 0 16px rgba(255, 244, 206, 0.65),
+            0 0 36px rgba(232, 211, 154, 0.48),
+            0 0 60px rgba(201, 164, 92, 0.32),
+            inset 0 1px 0 rgba(255, 255, 255, 0.7);
+        }
+
+        .gold-ambient-card:hover .gold-card-title,
+        .gold-ambient-card:active .gold-card-title,
+        .gold-ambient-card:focus-visible .gold-card-title,
+        .gold-ambient-card:hover .gold-card-accent,
+        .gold-ambient-card:active .gold-card-accent,
+        .gold-ambient-card:focus-visible .gold-card-accent {
+          color: #17140d !important;
+        }
+
+        .gold-ambient-card:hover .gold-card-muted,
+        .gold-ambient-card:active .gold-card-muted,
+        .gold-ambient-card:focus-visible .gold-card-muted {
+          color: rgba(23, 20, 13, 0.8) !important;
+        }
+
+        .gold-ambient-card:hover .gold-card-icon,
+        .gold-ambient-card:active .gold-card-icon,
+        .gold-ambient-card:focus-visible .gold-card-icon {
+          background-color: rgba(23, 20, 13, 0.14) !important;
+          color: #17140d !important;
+        }
+
+        .gold-ambient-card:hover .gold-card-pill,
+        .gold-ambient-card:active .gold-card-pill,
+        .gold-ambient-card:focus-visible .gold-card-pill {
+          background-color: rgba(23, 20, 13, 0.14) !important;
+          border-color: rgba(23, 20, 13, 0.25) !important;
+          color: #17140d !important;
+        }
+
+        .gold-ambient-card:hover .gold-card-track,
+        .gold-ambient-card:active .gold-card-track {
+          background-color: rgba(23, 20, 13, 0.16) !important;
+        }
+
+        .gold-ambient-card:hover .gold-card-bar,
+        .gold-ambient-card:active .gold-card-bar {
+          background: #17140d !important;
+        }
+
+        .gold-ambient-card:hover .gold-table-head,
+        .gold-ambient-card:active .gold-table-head {
+          color: rgba(23, 20, 13, 0.78) !important;
+          border-color: rgba(23, 20, 13, 0.2) !important;
+        }
+
+        .gold-ambient-card:hover .gold-table-row,
+        .gold-ambient-card:active .gold-table-row {
+          border-color: rgba(23, 20, 13, 0.14) !important;
+        }
+
+        .gold-ambient-card:hover .gold-row-btn,
+        .gold-ambient-card:active .gold-row-btn {
+          color: #17140d !important;
         }
 
         @media (hover: hover) {
@@ -1562,10 +1827,7 @@ export default function ExpensesPaymentsPage() {
 
         @media (hover: none) {
           .gold-ambient-card:active {
-            border-color: rgba(217, 190, 100, 0.7) !important;
-            box-shadow:
-              0 0 8px 2px rgba(217, 190, 100, 0.25),
-              0 0 20px 5px rgba(217, 190, 100, 0.16);
+            transform: scale(0.992);
           }
         }
 
@@ -1574,7 +1836,8 @@ export default function ExpensesPaymentsPage() {
             transition: none;
           }
 
-          .gold-ambient-card:hover {
+          .gold-ambient-card:hover,
+          .gold-ambient-card:active {
             transform: none;
           }
         }

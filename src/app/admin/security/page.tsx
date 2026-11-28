@@ -1,33 +1,11 @@
-
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
 import {
-  ShieldCheck,
-  ShieldAlert,
-  Lock,
-  KeyRound,
-  Smartphone,
-  Laptop,
-  Monitor,
-  Tablet,
-  MapPin,
-  Clock,
-  CheckCircle2,
-  AlertTriangle,
-  Eye,
-  EyeOff,
-  Bell,
-  LogOut,
-  MoreVertical,
-  Search,
-  X,
-  ChevronRight,
-  Fingerprint,
-  Globe,
-  Wifi,
-  Copy,
-  Check,
+  ShieldCheck, ShieldAlert, Lock, KeyRound, Smartphone, Laptop,
+  Monitor, Tablet, MapPin, Clock, CheckCircle2, AlertTriangle,
+  Eye, EyeOff, Bell, LogOut, MoreVertical, Search, X, ChevronRight,
+  Fingerprint, Globe, Wifi, Copy, Check,
 } from "lucide-react";
 
 type DeviceType = "Desktop" | "Laptop" | "Mobile" | "Tablet";
@@ -149,16 +127,16 @@ const defaultSettings: SecuritySettings = {
 };
 
 const cardClass =
-  "gold-ambient-card rounded-2xl border border-[#343832] bg-[#1B1F1D] p-5";
+  "gold-ambient-card rounded-2xl bg-[#121414] p-5 text-[#F5F1E6]";
 
 const inputClass =
-  "w-full rounded-xl border border-[#3A403A] bg-[#151917] px-4 py-3 text-sm text-white outline-none transition focus:border-[#D9D19A]";
+  "w-full rounded-xl border border-[#E8D39A]/30 bg-[#121414] px-4 py-3 text-sm text-[#F5F1E6] outline-none transition placeholder:text-[#858B82] focus:border-[#FFF4CE]";
 
 const primaryButtonClass =
-  "flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#EFE8A8] to-[#C8BD79] px-4 py-3 text-sm font-semibold text-[#171914] transition hover:brightness-105";
+  "flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#FFF4CE] via-[#E8D39A] to-[#C9A45C] px-4 py-3 text-sm font-semibold text-[#17140D] shadow-md shadow-[#C9A45C]/25 transition hover:brightness-105";
 
 const secondaryButtonClass =
-  "flex items-center justify-center gap-2 rounded-xl border border-[#3A403A] px-4 py-3 text-sm text-[#D9D19A] transition hover:border-[#D9D19A] hover:bg-[#EFE8A8]/5";
+  "flex items-center justify-center gap-2 rounded-xl border border-[#E8D39A]/40 bg-[#121414] px-4 py-3 text-sm font-medium text-[#FFF4CE] transition hover:bg-gradient-to-r hover:from-[#FFF4CE] hover:via-[#E8D39A] hover:to-[#C9A45C] hover:text-[#17140D]";
 
 const formatDate = (value: string) =>
   new Date(value).toLocaleString("en-IN", {
@@ -179,8 +157,7 @@ const timeAgo = (value: string) => {
   const hours = Math.floor(minutes / 60);
   if (hours < 24) return `${hours} hours ago`;
 
-  const days = Math.floor(hours / 24);
-  return `${days} days ago`;
+  return `${Math.floor(hours / 24)} days ago`;
 };
 
 function DeviceIcon({ type }: { type: DeviceType }) {
@@ -193,8 +170,7 @@ function DeviceIcon({ type }: { type: DeviceType }) {
 export default function SecurityPage() {
   const [devices, setDevices] = useState<Device[]>([]);
   const [activity, setActivity] = useState<LoginActivity[]>([]);
-  const [settings, setSettings] =
-    useState<SecuritySettings>(defaultSettings);
+  const [settings, setSettings] = useState<SecuritySettings>(defaultSettings);
   const [loaded, setLoaded] = useState(false);
 
   const [activeTab, setActiveTab] = useState<
@@ -214,26 +190,17 @@ export default function SecurityPage() {
   const [toast, setToast] = useState("");
   const [copiedIp, setCopiedIp] = useState(false);
 
-  // Load saved demo data before enabling persistence.
   useEffect(() => {
     try {
       const savedDevices = localStorage.getItem(DEVICE_KEY);
       const savedActivity = localStorage.getItem(ACTIVITY_KEY);
       const savedSettings = localStorage.getItem(SETTINGS_KEY);
 
-      setDevices(
-        savedDevices ? JSON.parse(savedDevices) : initialDevices
-      );
-
-      setActivity(
-        savedActivity ? JSON.parse(savedActivity) : initialActivity
-      );
+      setDevices(savedDevices ? JSON.parse(savedDevices) : initialDevices);
+      setActivity(savedActivity ? JSON.parse(savedActivity) : initialActivity);
 
       if (savedSettings) {
-        setSettings({
-          ...defaultSettings,
-          ...JSON.parse(savedSettings),
-        });
+        setSettings({ ...defaultSettings, ...JSON.parse(savedSettings) });
       }
     } catch {
       setDevices(initialDevices);
@@ -245,18 +212,15 @@ export default function SecurityPage() {
   }, []);
 
   useEffect(() => {
-    if (!loaded) return;
-    localStorage.setItem(DEVICE_KEY, JSON.stringify(devices));
+    if (loaded) localStorage.setItem(DEVICE_KEY, JSON.stringify(devices));
   }, [devices, loaded]);
 
   useEffect(() => {
-    if (!loaded) return;
-    localStorage.setItem(ACTIVITY_KEY, JSON.stringify(activity));
+    if (loaded) localStorage.setItem(ACTIVITY_KEY, JSON.stringify(activity));
   }, [activity, loaded]);
 
   useEffect(() => {
-    if (!loaded) return;
-    localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+    if (loaded) localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
   }, [settings, loaded]);
 
   useEffect(() => {
@@ -285,13 +249,7 @@ export default function SecurityPage() {
   const filteredDevices = useMemo(
     () =>
       devices.filter((device) =>
-        [
-          device.name,
-          device.type,
-          device.browser,
-          device.os,
-          device.location,
-        ]
+        [device.name, device.type, device.browser, device.os, device.location]
           .join(" ")
           .toLowerCase()
           .includes(search.toLowerCase())
@@ -318,11 +276,7 @@ export default function SecurityPage() {
   };
 
   const toggleSetting = (key: keyof SecuritySettings) => {
-    setSettings((current) => ({
-      ...current,
-      [key]: !current[key],
-    }));
-
+    setSettings((current) => ({ ...current, [key]: !current[key] }));
     setToast("Security preference updated");
   };
 
@@ -350,9 +304,7 @@ export default function SecurityPage() {
       !window.confirm(
         `Sign out ${otherDevices.length} other device(s) from this demo list?`
       )
-    ) {
-      return;
-    }
+    ) return;
 
     setDevices((current) => current.filter((d) => d.current));
     addActivity("Signed out other listed devices");
@@ -362,12 +314,9 @@ export default function SecurityPage() {
   const toggleTrust = (id: string) => {
     setDevices((current) =>
       current.map((device) =>
-        device.id === id
-          ? { ...device, trusted: !device.trusted }
-          : device
+        device.id === id ? { ...device, trusted: !device.trusted } : device
       )
     );
-
     setDeviceMenu(null);
     setToast("Device trust status updated");
   };
@@ -406,15 +355,12 @@ export default function SecurityPage() {
       return;
     }
 
-    // Demo UI only: no actual authentication password is changed.
     setShowPasswordModal(false);
     setCurrentPassword("");
     setNewPassword("");
     setConfirmPassword("");
     addActivity("Password change form completed");
-    setToast(
-      "Demo password form completed — connect authentication to change it"
-    );
+    setToast("Demo password form completed — connect authentication to change it");
   };
 
   const copyCurrentIp = async () => {
@@ -424,7 +370,7 @@ export default function SecurityPage() {
     try {
       await navigator.clipboard.writeText(current.ip);
       setCopiedIp(true);
-      setTimeout(() => setCopiedIp(false), 1800);
+      window.setTimeout(() => setCopiedIp(false), 1800);
       setToast("Displayed demo IP copied");
     } catch {
       setToast("Could not copy IP address");
@@ -432,13 +378,9 @@ export default function SecurityPage() {
   };
 
   const statusStyle = (status: LoginActivity["status"]) => {
-    if (status === "Successful") {
-      return "bg-[#8DCBA5]/10 text-[#8DCBA5]";
-    }
-    if (status === "Failed") {
-      return "bg-[#E7AD75]/10 text-[#E7AD75]";
-    }
-    return "bg-[#F18C8C]/10 text-[#F18C8C]";
+    if (status === "Successful") return "bg-[#8DCBA5]/15 text-[#8DCBA5]";
+    if (status === "Failed") return "bg-[#E7AD75]/15 text-[#E7AD75]";
+    return "bg-[#F18C8C]/15 text-[#F18C8C]";
   };
 
   const preferenceRows: {
@@ -450,8 +392,7 @@ export default function SecurityPage() {
     {
       key: "twoFactor",
       title: "Two-factor authentication",
-      description:
-        "Require an additional verification step when signing in.",
+      description: "Require an additional verification step when signing in.",
       icon: Fingerprint,
     },
     {
@@ -475,29 +416,27 @@ export default function SecurityPage() {
     {
       key: "trustedDeviceOnly",
       title: "Trusted devices only",
-      description:
-        "Restrict access to approved devices (requires backend enforcement).",
+      description: "Restrict access to approved devices (requires backend enforcement).",
       icon: ShieldCheck,
     },
   ];
 
   return (
-    <main className="min-h-screen bg-[#121414] p-4 text-white sm:p-6 lg:p-8">
+    <main className="security-page min-h-screen bg-[#FAF5ED] p-4 text-[#17140D] sm:p-6 lg:p-8">
       <div className="mx-auto max-w-[1600px] space-y-7">
-
         {/* Header */}
-        <div className="gold-ambient-card flex flex-col justify-between gap-5 rounded-2xl border border-[#343832] bg-[#1B1F1D] p-5 lg:flex-row lg:items-center">
+        <div className="gold-ambient-card flex flex-col justify-between gap-5 rounded-2xl bg-[#121414] p-5 text-[#F5F1E6] lg:flex-row lg:items-center">
           <div>
-            <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.25em] text-[#A9ACA2]">
+            <div className="gold-card-accent mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.25em] text-[#E8D39A]">
               <ShieldCheck size={15} />
               KBC Admin Center
             </div>
 
-            <h1 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-              Security & Devices
+            <h1 className="gold-card-title text-3xl font-semibold tracking-tight text-[#FFF4CE] sm:text-4xl">
+              Security &amp; Devices
             </h1>
 
-            <p className="mt-2 text-sm text-[#92978F]">
+            <p className="gold-card-muted mt-2 text-sm text-[#C9C4B8]">
               Protect your academy account and manage connected devices.
             </p>
           </div>
@@ -511,10 +450,7 @@ export default function SecurityPage() {
               Change password
             </button>
 
-            <button
-              onClick={signOutOtherDevices}
-              className={primaryButtonClass}
-            >
+            <button onClick={signOutOtherDevices} className={primaryButtonClass}>
               <LogOut size={17} />
               Sign out other devices
             </button>
@@ -523,41 +459,39 @@ export default function SecurityPage() {
 
         {/* Security score */}
         <section className="grid grid-cols-1 gap-4 xl:grid-cols-3">
-          <div className={`${cardClass} relative overflow-hidden p-6 sm:p-7 xl:col-span-2`}>
-            <div className="pointer-events-none absolute -right-10 -top-16 h-64 w-64 rounded-full bg-[#EFE8A8]/[0.06] blur-3xl" />
-
+          <div className={`${cardClass} p-6 sm:p-7 xl:col-span-2`}>
             <div className="relative flex flex-col justify-between gap-6 sm:flex-row sm:items-center">
               <div>
-                <div className="flex items-center gap-2 text-sm text-[#A9ACA2]">
-                  <ShieldCheck size={18} className="text-[#EFE8A8]" />
+                <div className="gold-card-muted flex items-center gap-2 text-sm text-[#D4CDBB]">
+                  <ShieldCheck size={18} className="gold-card-accent text-[#FFF4CE]" />
                   Account security score
                 </div>
 
                 <div className="mt-4 flex items-baseline gap-2">
-                  <span className="text-5xl font-semibold tracking-tight text-[#EFE8A8]">
+                  <span className="gold-card-accent text-5xl font-semibold tracking-tight text-[#FFF4CE]">
                     {securityScore}
                   </span>
-                  <span className="text-lg text-[#858B82]">/ 100</span>
+                  <span className="gold-card-muted text-lg text-[#A8A18F]">/ 100</span>
                 </div>
 
-                <p className="mt-3 max-w-md text-sm leading-6 text-[#92978F]">
+                <p className="gold-card-muted mt-3 max-w-md text-sm leading-6 text-[#C1BBAE]">
                   {securityScore >= 85
                     ? "Your demo security settings are looking strong. Continue reviewing your account regularly."
                     : "Strengthen your account by enabling additional security options."}
                 </p>
 
-                <div className="mt-5 h-2 max-w-md overflow-hidden rounded-full bg-[#343832]">
+                <div className="gold-card-track mt-5 h-2 max-w-md overflow-hidden rounded-full bg-[#262A28]">
                   <div
-                    className="h-full rounded-full bg-gradient-to-r from-[#EFE8A8] to-[#C8BD79] transition-all duration-500"
+                    className="gold-card-bar h-full rounded-full bg-gradient-to-r from-[#FFF4CE] via-[#E8D39A] to-[#C9A45C] transition-all duration-500"
                     style={{ width: `${securityScore}%` }}
                   />
                 </div>
               </div>
 
-              <div className="flex h-32 w-32 shrink-0 items-center justify-center self-center rounded-full border-[7px] border-[#EFE8A8]/20 sm:self-auto">
-                <div className="flex h-24 w-24 flex-col items-center justify-center rounded-full bg-[#EFE8A8]/10">
-                  <ShieldCheck size={34} className="text-[#EFE8A8]" />
-                  <span className="mt-1 text-[10px] uppercase tracking-wider text-[#C4C0A3]">
+              <div className="gold-card-icon flex h-32 w-32 shrink-0 items-center justify-center self-center rounded-full border-[7px] border-[#E8D39A]/25 bg-[#191C1B] sm:self-auto">
+                <div className="flex h-24 w-24 flex-col items-center justify-center rounded-full bg-[#E8D39A]/10">
+                  <ShieldCheck size={34} className="gold-card-accent text-[#FFF4CE]" />
+                  <span className="gold-card-muted mt-1 text-[10px] uppercase tracking-wider text-[#C4C0A3]">
                     Protected
                   </span>
                 </div>
@@ -568,30 +502,30 @@ export default function SecurityPage() {
           <div className="grid grid-cols-2 gap-4 xl:grid-cols-1">
             <div className={cardClass}>
               <div className="flex items-center justify-between">
-                <span className="text-xs text-[#A9ACA2]">
+                <span className="gold-card-muted text-xs text-[#D4CDBB]">
                   Active devices
                 </span>
-                <Monitor size={19} className="text-[#EFE8A8]" />
+                <Monitor size={19} className="gold-card-accent text-[#FFF4CE]" />
               </div>
-              <div className="mt-3 text-3xl font-semibold text-white">
+              <div className="gold-card-title mt-3 text-3xl font-semibold text-white">
                 {activeDevices}
               </div>
-              <p className="mt-1 text-xs text-[#858B82]">
+              <p className="gold-card-muted mt-1 text-xs text-[#A8A18F]">
                 Listed in this browser demo
               </p>
             </div>
 
             <div className={cardClass}>
               <div className="flex items-center justify-between">
-                <span className="text-xs text-[#A9ACA2]">
+                <span className="gold-card-muted text-xs text-[#D4CDBB]">
                   Trusted devices
                 </span>
-                <CheckCircle2 size={19} className="text-[#8DCBA5]" />
+                <CheckCircle2 size={19} className="gold-card-accent text-[#8DCBA5]" />
               </div>
-              <div className="mt-3 text-3xl font-semibold text-white">
+              <div className="gold-card-title mt-3 text-3xl font-semibold text-white">
                 {trustedDevices}
               </div>
-              <p className="mt-1 text-xs text-[#858B82]">
+              <p className="gold-card-muted mt-1 text-xs text-[#A8A18F]">
                 Marked as trusted
               </p>
             </div>
@@ -600,17 +534,14 @@ export default function SecurityPage() {
 
         {/* Alert */}
         {failedLogins > 0 && (
-          <div className="gold-ambient-card flex flex-col gap-3 rounded-2xl border border-[#B47C4A]/30 bg-[#1B1F1D] p-4 sm:flex-row sm:items-center">
+          <div className="gold-ambient-card flex flex-col gap-3 rounded-2xl bg-[#121414] p-4 text-[#F5F1E6] sm:flex-row sm:items-center">
             <div className="flex items-center gap-3">
-              <AlertTriangle
-                size={20}
-                className="shrink-0 text-[#E7AD75]"
-              />
+              <AlertTriangle size={20} className="gold-card-accent shrink-0 text-[#E7AD75]" />
               <div>
-                <p className="text-sm font-semibold text-[#E7AD75]">
+                <p className="gold-card-title text-sm font-semibold text-[#E7AD75]">
                   Login activity needs review
                 </p>
-                <p className="mt-1 text-xs text-[#A9ACA2]">
+                <p className="gold-card-muted mt-1 text-xs text-[#C1BBAE]">
                   {failedLogins} failed or blocked login record(s) appear in
                   the demo activity list.
                 </p>
@@ -619,7 +550,7 @@ export default function SecurityPage() {
 
             <button
               onClick={() => setActiveTab("Activity")}
-              className="ml-auto text-xs font-semibold text-[#EFE8A8] hover:underline"
+              className="gold-card-title ml-auto text-xs font-semibold text-[#FFF4CE] hover:underline"
             >
               Review activity →
             </button>
@@ -627,22 +558,20 @@ export default function SecurityPage() {
         )}
 
         {/* Tabs */}
-        <div className="flex gap-2 overflow-x-auto border-b border-[#343832] pb-3">
-          {(["Overview", "Devices", "Activity", "Settings"] as const).map(
-            (tab) => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className={`shrink-0 rounded-xl px-5 py-3 text-sm transition ${
-                  activeTab === tab
-                    ? "bg-gradient-to-r from-[#EFE8A8] to-[#C8BD79] font-semibold text-[#171914]"
-                    : "text-[#A9ACA2] hover:bg-[#1B1F1D] hover:text-[#EFE8A8]"
-                }`}
-              >
-                {tab}
-              </button>
-            )
-          )}
+        <div className="flex gap-2 overflow-x-auto border-b border-[#C9A45C]/35 pb-3">
+          {(["Overview", "Devices", "Activity", "Settings"] as const).map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`shrink-0 rounded-xl px-5 py-3 text-sm transition ${
+                activeTab === tab
+                  ? "bg-gradient-to-r from-[#FFF4CE] via-[#E8D39A] to-[#C9A45C] font-semibold text-[#17140D] shadow-md shadow-[#C9A45C]/25"
+                  : "text-[#5C5549] hover:bg-[#121414]/10 hover:text-[#17140D]"
+              }`}
+            >
+              {tab}
+            </button>
+          ))}
         </div>
 
         {/* Overview */}
@@ -652,16 +581,16 @@ export default function SecurityPage() {
               <div className={cardClass}>
                 <div className="mb-5 flex items-center justify-between">
                   <div>
-                    <h2 className="font-semibold text-white">
+                    <h2 className="gold-card-title font-semibold text-white">
                       Recent devices
                     </h2>
-                    <p className="mt-1 text-xs text-[#858B82]">
+                    <p className="gold-card-muted mt-1 text-xs text-[#A8A18F]">
                       Devices listed for this account demo.
                     </p>
                   </div>
                   <button
                     onClick={() => setActiveTab("Devices")}
-                    className="text-xs text-[#D9D19A] hover:underline"
+                    className="gold-card-title text-xs font-medium text-[#FFF4CE] hover:underline"
                   >
                     View all
                   </button>
@@ -671,39 +600,39 @@ export default function SecurityPage() {
                   {devices.slice(0, 3).map((device) => (
                     <div
                       key={device.id}
-                      className="flex items-center gap-4 rounded-xl border border-[#343832] bg-[#151917] p-4 transition hover:border-[#D9D19A]/40"
+                      className="gold-card-subpanel flex items-center gap-4 rounded-xl border border-[#E8D39A]/20 bg-[#121414] p-4 transition"
                     >
-                      <div className="rounded-xl bg-[#EFE8A8]/10 p-3 text-[#EFE8A8]">
+                      <div className="gold-card-icon rounded-xl bg-[#E8D39A]/15 p-3 text-[#FFF4CE]">
                         <DeviceIcon type={device.type} />
                       </div>
 
                       <div className="min-w-0 flex-1">
                         <div className="flex flex-wrap items-center gap-2">
-                          <p className="truncate text-sm font-medium text-white">
+                          <p className="gold-card-title truncate text-sm font-medium text-white">
                             {device.name}
                           </p>
                           {device.current && (
-                            <span className="rounded-md bg-[#8DCBA5]/10 px-2 py-1 text-[10px] text-[#8DCBA5]">
+                            <span className="gold-card-pill rounded-md bg-[#8DCBA5]/15 px-2 py-1 text-[10px] text-[#8DCBA5]">
                               Current
                             </span>
                           )}
                         </div>
-                        <p className="mt-1 text-xs text-[#92978F]">
+                        <p className="gold-card-muted mt-1 text-xs text-[#C1BBAE]">
                           {device.browser} · {device.os}
                         </p>
-                        <p className="mt-1 text-xs text-[#858B82]">
+                        <p className="gold-card-muted mt-1 text-xs text-[#A8A18F]">
                           {device.location} · {timeAgo(device.lastActive)}
                         </p>
                       </div>
 
-                      <div className="hidden text-xs text-[#8DCBA5] sm:block">
+                      <div className="gold-card-title hidden text-xs font-medium text-[#8DCBA5] sm:block">
                         {device.trusted ? "Trusted" : "Not trusted"}
                       </div>
                     </div>
                   ))}
 
                   {devices.length === 0 && (
-                    <p className="py-8 text-center text-sm text-[#858B82]">
+                    <p className="gold-card-muted py-8 text-center text-sm text-[#A8A18F]">
                       No devices are listed.
                     </p>
                   )}
@@ -713,16 +642,16 @@ export default function SecurityPage() {
               <div className={cardClass}>
                 <div className="mb-5 flex items-center justify-between">
                   <div>
-                    <h2 className="font-semibold text-white">
+                    <h2 className="gold-card-title font-semibold text-white">
                       Recent login activity
                     </h2>
-                    <p className="mt-1 text-xs text-[#858B82]">
+                    <p className="gold-card-muted mt-1 text-xs text-[#A8A18F]">
                       Latest recorded demo events.
                     </p>
                   </div>
                   <button
                     onClick={() => setActiveTab("Activity")}
-                    className="text-xs text-[#D9D19A] hover:underline"
+                    className="gold-card-title text-xs font-medium text-[#FFF4CE] hover:underline"
                   >
                     View history
                   </button>
@@ -733,40 +662,31 @@ export default function SecurityPage() {
                     <div key={item.id} className="flex gap-3">
                       <div className="mt-1">
                         {item.status === "Successful" ? (
-                          <CheckCircle2
-                            size={18}
-                            className="text-[#8DCBA5]"
-                          />
+                          <CheckCircle2 size={18} className="gold-card-accent text-[#8DCBA5]" />
                         ) : item.status === "Failed" ? (
-                          <AlertTriangle
-                            size={18}
-                            className="text-[#E7AD75]"
-                          />
+                          <AlertTriangle size={18} className="gold-card-accent text-[#E7AD75]" />
                         ) : (
-                          <ShieldAlert
-                            size={18}
-                            className="text-[#F18C8C]"
-                          />
+                          <ShieldAlert size={18} className="gold-card-accent text-[#F18C8C]" />
                         )}
                       </div>
 
                       <div className="min-w-0 flex-1">
-                        <p className="text-sm text-[#D6D8CE]">
+                        <p className="gold-card-title text-sm text-[#D6D8CE]">
                           {item.description}
                         </p>
-                        <p className="mt-1 text-xs text-[#858B82]">
+                        <p className="gold-card-muted mt-1 text-xs text-[#A8A18F]">
                           {item.device} · {item.location}
                         </p>
                       </div>
 
-                      <span className="whitespace-nowrap text-[11px] text-[#858B82]">
+                      <span className="gold-card-muted whitespace-nowrap text-[11px] text-[#A8A18F]">
                         {timeAgo(item.time)}
                       </span>
                     </div>
                   ))}
 
                   {activity.length === 0 && (
-                    <p className="py-6 text-center text-sm text-[#858B82]">
+                    <p className="gold-card-muted py-6 text-center text-sm text-[#A8A18F]">
                       No login activity recorded.
                     </p>
                   )}
@@ -777,39 +697,27 @@ export default function SecurityPage() {
             <section className="space-y-5">
               <div className={cardClass}>
                 <div className="flex items-center gap-2">
-                  <Lock size={18} className="text-[#EFE8A8]" />
-                  <h2 className="font-semibold text-white">
+                  <Lock size={18} className="gold-card-accent text-[#FFF4CE]" />
+                  <h2 className="gold-card-title font-semibold text-white">
                     Quick security
                   </h2>
                 </div>
 
                 <div className="mt-5 space-y-4">
                   {[
-                    {
-                      label: "Two-factor authentication",
-                      enabled: settings.twoFactor,
-                    },
-                    {
-                      label: "Login alerts",
-                      enabled: settings.loginAlerts,
-                    },
-                    {
-                      label: "New device alerts",
-                      enabled: settings.newDeviceAlerts,
-                    },
+                    { label: "Two-factor authentication", enabled: settings.twoFactor },
+                    { label: "Login alerts", enabled: settings.loginAlerts },
+                    { label: "New device alerts", enabled: settings.newDeviceAlerts },
                   ].map((item) => (
-                    <div
-                      key={item.label}
-                      className="flex items-center justify-between gap-3"
-                    >
-                      <span className="text-xs text-[#A9ACA2]">
+                    <div key={item.label} className="flex items-center justify-between gap-3">
+                      <span className="gold-card-muted text-xs text-[#D4CDBB]">
                         {item.label}
                       </span>
                       <span
-                        className={`rounded-md px-2 py-1 text-[10px] ${
+                        className={`gold-card-pill rounded-md px-2 py-1 text-[10px] font-medium ${
                           item.enabled
-                            ? "bg-[#8DCBA5]/10 text-[#8DCBA5]"
-                            : "bg-[#E7AD75]/10 text-[#E7AD75]"
+                            ? "bg-[#8DCBA5]/15 text-[#8DCBA5]"
+                            : "bg-[#E7AD75]/15 text-[#E7AD75]"
                         }`}
                       >
                         {item.enabled ? "Enabled" : "Disabled"}
@@ -820,7 +728,7 @@ export default function SecurityPage() {
 
                 <button
                   onClick={() => setActiveTab("Settings")}
-                  className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl border border-[#3A403A] py-3 text-xs text-[#D9D19A] transition hover:border-[#D9D19A] hover:bg-[#EFE8A8]/5"
+                  className="gold-card-pill mt-6 flex w-full items-center justify-center gap-2 rounded-xl border border-[#E8D39A]/40 bg-[#121414] py-3 text-xs font-medium text-[#FFF4CE] transition"
                 >
                   Manage security settings
                   <ChevronRight size={15} />
@@ -829,45 +737,45 @@ export default function SecurityPage() {
 
               <div className={cardClass}>
                 <div className="flex items-center gap-2">
-                  <Globe size={18} className="text-[#EFE8A8]" />
-                  <h2 className="font-semibold text-white">
+                  <Globe size={18} className="gold-card-accent text-[#FFF4CE]" />
+                  <h2 className="gold-card-title font-semibold text-white">
                     Current session
                   </h2>
                 </div>
 
                 {devices.find((d) => d.current) ? (
                   <>
-                    <p className="mt-4 text-sm font-medium text-white">
+                    <p className="gold-card-title mt-4 text-sm font-medium text-white">
                       {devices.find((d) => d.current)?.name}
                     </p>
-                    <p className="mt-1 text-xs text-[#858B82]">
+                    <p className="gold-card-muted mt-1 text-xs text-[#A8A18F]">
                       {devices.find((d) => d.current)?.browser}
                     </p>
 
-                    <div className="mt-4 flex items-center justify-between rounded-lg border border-[#343832] bg-[#151917] p-3">
+                    <div className="gold-card-subpanel mt-4 flex items-center justify-between rounded-lg border border-[#E8D39A]/20 bg-[#121414] p-3">
                       <div>
-                        <p className="text-[10px] text-[#858B82]">
+                        <p className="gold-card-muted text-[10px] text-[#A8A18F]">
                           Displayed IP
                         </p>
-                        <p className="mt-1 text-xs text-white">
+                        <p className="gold-card-title mt-1 text-xs text-white">
                           {devices.find((d) => d.current)?.ip}
                         </p>
                       </div>
                       <button
                         onClick={copyCurrentIp}
-                        className="rounded-lg p-2 text-[#D9D19A] transition hover:bg-[#EFE8A8]/10"
+                        className="gold-card-pill rounded-lg p-2 text-[#FFF4CE] transition hover:bg-black/15"
                       >
                         {copiedIp ? <Check size={15} /> : <Copy size={15} />}
                       </button>
                     </div>
 
-                    <p className="mt-3 text-[10px] leading-5 text-[#858B82]">
+                    <p className="gold-card-muted mt-3 text-[10px] leading-5 text-[#A8A18F]">
                       The displayed device and IP details are sample data,
                       not verified browser or network information.
                     </p>
                   </>
                 ) : (
-                  <p className="mt-4 text-sm text-[#858B82]">
+                  <p className="gold-card-muted mt-4 text-sm text-[#A8A18F]">
                     No current device is marked.
                   </p>
                 )}
@@ -879,12 +787,12 @@ export default function SecurityPage() {
         {/* Devices */}
         {activeTab === "Devices" && (
           <section className={`${cardClass} !p-0`}>
-            <div className="flex flex-col justify-between gap-4 border-b border-[#343832] p-5 sm:flex-row sm:items-center sm:p-6">
+            <div className="gold-card-divider flex flex-col justify-between gap-4 border-b border-[#E8D39A]/15 p-5 sm:flex-row sm:items-center sm:p-6">
               <div>
-                <h2 className="font-semibold text-white">
+                <h2 className="gold-card-title font-semibold text-white">
                   Connected devices
                 </h2>
-                <p className="mt-1 text-xs text-[#858B82]">
+                <p className="gold-card-muted mt-1 text-xs text-[#A8A18F]">
                   Review and manage devices listed in this demo.
                 </p>
               </div>
@@ -892,7 +800,7 @@ export default function SecurityPage() {
               <div className="relative">
                 <Search
                   size={16}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-[#858B82]"
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-[#A8A18F]"
                 />
                 <input
                   value={search}
@@ -907,26 +815,26 @@ export default function SecurityPage() {
               {filteredDevices.map((device) => (
                 <div
                   key={device.id}
-                  className="gold-ambient-card relative rounded-2xl border border-[#343832] bg-[#151917] p-5"
+                  className="gold-ambient-card relative rounded-2xl bg-[#121414] p-5 text-[#F5F1E6]"
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-center gap-3">
-                      <div className="rounded-xl bg-[#EFE8A8]/10 p-3 text-[#EFE8A8]">
+                      <div className="gold-card-icon rounded-xl bg-[#E8D39A]/15 p-3 text-[#FFF4CE]">
                         <DeviceIcon type={device.type} />
                       </div>
 
                       <div>
                         <div className="flex flex-wrap items-center gap-2">
-                          <h3 className="text-sm font-semibold text-white">
+                          <h3 className="gold-card-title text-sm font-semibold text-white">
                             {device.name}
                           </h3>
                           {device.current && (
-                            <span className="rounded-md bg-[#8DCBA5]/10 px-2 py-1 text-[9px] text-[#8DCBA5]">
+                            <span className="gold-card-pill rounded-md bg-[#8DCBA5]/15 px-2 py-1 text-[9px] text-[#8DCBA5]">
                               Current session
                             </span>
                           )}
                         </div>
-                        <p className="mt-1 text-xs text-[#858B82]">
+                        <p className="gold-card-muted mt-1 text-xs text-[#A8A18F]">
                           {device.type}
                         </p>
                       </div>
@@ -934,31 +842,29 @@ export default function SecurityPage() {
 
                     <button
                       onClick={() =>
-                        setDeviceMenu(
-                          deviceMenu === device.id ? null : device.id
-                        )
+                        setDeviceMenu(deviceMenu === device.id ? null : device.id)
                       }
-                      className="rounded-lg p-2 text-[#858B82] transition hover:bg-[#252A25] hover:text-[#EFE8A8]"
+                      className="gold-card-pill rounded-lg p-2 text-[#A8A18F] transition hover:bg-black/15 hover:text-[#17140D]"
                     >
                       <MoreVertical size={18} />
                     </button>
 
                     {deviceMenu === device.id && (
-                      <div className="absolute right-5 top-14 z-20 w-48 rounded-xl border border-[#3A403A] bg-[#1B1F1D] p-1 shadow-2xl">
+                      <div className="absolute right-5 top-14 z-20 w-48 rounded-xl border border-[#E8D39A]/45 bg-[#121414] p-1 text-[#F5F1E6] shadow-2xl">
                         <button
                           onClick={() => {
                             setRenameDevice(device);
                             setRenameValue(device.name);
                             setDeviceMenu(null);
                           }}
-                          className="w-full rounded-lg px-3 py-2.5 text-left text-xs text-[#D6D8CE] hover:bg-[#303630]"
+                          className="w-full rounded-lg px-3 py-2.5 text-left text-xs text-[#F5F1E6] hover:bg-[#FFF4CE] hover:text-[#17140D]"
                         >
                           Rename device
                         </button>
 
                         <button
                           onClick={() => toggleTrust(device.id)}
-                          className="w-full rounded-lg px-3 py-2.5 text-left text-xs text-[#D6D8CE] hover:bg-[#303630]"
+                          className="w-full rounded-lg px-3 py-2.5 text-left text-xs text-[#F5F1E6] hover:bg-[#FFF4CE] hover:text-[#17140D]"
                         >
                           {device.trusted
                             ? "Remove trusted status"
@@ -968,7 +874,7 @@ export default function SecurityPage() {
                         {!device.current && (
                           <button
                             onClick={() => removeDevice(device.id)}
-                            className="w-full rounded-lg px-3 py-2.5 text-left text-xs text-[#F18C8C] hover:bg-[#F18C8C]/10"
+                            className="w-full rounded-lg px-3 py-2.5 text-left text-xs text-[#F18C8C] hover:bg-[#F18C8C]/15"
                           >
                             Remove device
                           </button>
@@ -977,28 +883,12 @@ export default function SecurityPage() {
                     )}
                   </div>
 
-                  <div className="mt-5 space-y-3 border-t border-[#343832] pt-4">
+                  <div className="gold-card-divider mt-5 space-y-3 border-t border-[#E8D39A]/15 pt-4">
                     {[
-                      {
-                        icon: Globe,
-                        label: "Browser",
-                        value: device.browser,
-                      },
-                      {
-                        icon: Monitor,
-                        label: "Operating system",
-                        value: device.os,
-                      },
-                      {
-                        icon: MapPin,
-                        label: "Location",
-                        value: device.location,
-                      },
-                      {
-                        icon: Wifi,
-                        label: "IP address",
-                        value: device.ip,
-                      },
+                      { icon: Globe, label: "Browser", value: device.browser },
+                      { icon: Monitor, label: "Operating system", value: device.os },
+                      { icon: MapPin, label: "Location", value: device.location },
+                      { icon: Wifi, label: "IP address", value: device.ip },
                       {
                         icon: Clock,
                         label: "Last active",
@@ -1006,17 +896,16 @@ export default function SecurityPage() {
                       },
                     ].map((row) => {
                       const Icon = row.icon;
-
                       return (
                         <div
                           key={row.label}
                           className="flex items-center justify-between gap-3 text-xs"
                         >
-                          <span className="flex items-center gap-2 text-[#858B82]">
-                            <Icon size={14} />
+                          <span className="gold-card-muted flex items-center gap-2 text-[#A8A18F]">
+                            <Icon size={14} className="gold-card-accent" />
                             {row.label}
                           </span>
-                          <span className="text-right text-[#C1C5BA]">
+                          <span className="gold-card-title text-right text-[#D6D0C2]">
                             {row.value}
                           </span>
                         </div>
@@ -1024,18 +913,16 @@ export default function SecurityPage() {
                     })}
                   </div>
 
-                  <div className="mt-4 flex items-center justify-between border-t border-[#343832] pt-4">
+                  <div className="gold-card-divider mt-4 flex items-center justify-between border-t border-[#E8D39A]/15 pt-4">
                     <span
-                      className={`flex items-center gap-2 text-xs ${
-                        device.trusted
-                          ? "text-[#8DCBA5]"
-                          : "text-[#E7AD75]"
+                      className={`gold-card-title flex items-center gap-2 text-xs font-medium ${
+                        device.trusted ? "text-[#8DCBA5]" : "text-[#E7AD75]"
                       }`}
                     >
                       <span className="h-2 w-2 rounded-full bg-current" />
                       {device.trusted ? "Trusted device" : "Not trusted"}
                     </span>
-                    <span className="text-[10px] text-[#858B82]">
+                    <span className="gold-card-muted text-[10px] text-[#A8A18F]">
                       {timeAgo(device.lastActive)}
                     </span>
                   </div>
@@ -1043,7 +930,7 @@ export default function SecurityPage() {
               ))}
 
               {filteredDevices.length === 0 && (
-                <div className="col-span-full py-14 text-center text-sm text-[#858B82]">
+                <div className="gold-card-muted col-span-full py-14 text-center text-sm text-[#A8A18F]">
                   No matching devices found.
                 </div>
               )}
@@ -1054,66 +941,62 @@ export default function SecurityPage() {
         {/* Activity */}
         {activeTab === "Activity" && (
           <section className={`${cardClass} !overflow-hidden !p-0`}>
-            <div className="flex flex-col justify-between gap-3 border-b border-[#343832] p-5 sm:flex-row sm:items-center sm:p-6">
+            <div className="gold-card-divider flex flex-col justify-between gap-3 border-b border-[#E8D39A]/15 p-5 sm:flex-row sm:items-center sm:p-6">
               <div>
-                <h2 className="font-semibold text-white">
+                <h2 className="gold-card-title font-semibold text-white">
                   Login activity
                 </h2>
-                <p className="mt-1 text-xs text-[#858B82]">
+                <p className="gold-card-muted mt-1 text-xs text-[#A8A18F]">
                   Review successful, failed and blocked sign-in records.
                 </p>
               </div>
 
-              <div className="rounded-lg border border-[#343832] bg-[#151917] px-3 py-2 text-xs text-[#D9D19A]">
+              <div className="gold-card-pill rounded-lg border border-[#E8D39A]/30 bg-[#E8D39A]/10 px-3 py-2 text-xs font-medium text-[#FFF4CE]">
                 {activity.length} records
               </div>
             </div>
 
             <div className="overflow-x-auto">
               <table className="w-full min-w-[800px] text-left">
-                <thead className="bg-[#151917] text-[10px] uppercase tracking-wider text-[#858B82]">
+                <thead className="gold-table-head bg-[#121414] text-[10px] uppercase tracking-wider text-[#A8A18F]">
                   <tr>
                     <th className="px-5 py-4 font-medium">Device</th>
                     <th className="px-5 py-4 font-medium">Location</th>
                     <th className="px-5 py-4 font-medium">IP address</th>
-                    <th className="px-5 py-4 font-medium">Date & time</th>
+                    <th className="px-5 py-4 font-medium">Date &amp; time</th>
                     <th className="px-5 py-4 font-medium">Status</th>
                   </tr>
                 </thead>
 
-                <tbody className="divide-y divide-[#343832]">
+                <tbody className="divide-y divide-[#E8D39A]/15">
                   {activity.map((item) => (
                     <tr
                       key={item.id}
-                      className="transition hover:bg-[#252A25]"
+                      className="gold-table-row transition hover:bg-black/15"
                     >
                       <td className="px-5 py-4">
-                        <p className="text-sm text-[#D5D8CE]">
+                        <p className="gold-card-title text-sm text-[#F5F1E6]">
                           {item.device}
                         </p>
-                        <p className="mt-1 text-xs text-[#858B82]">
+                        <p className="gold-card-muted mt-1 text-xs text-[#A8A18F]">
                           {item.browser}
                         </p>
-                        <p className="mt-1 text-[10px] text-[#858B82]">
+                        <p className="gold-card-muted mt-1 text-[10px] text-[#A8A18F]">
                           {item.description}
                         </p>
                       </td>
-
-                      <td className="px-5 py-4 text-xs text-[#A9ACA2]">
+                      <td className="gold-card-muted px-5 py-4 text-xs text-[#C1BBAE]">
                         {item.location}
                       </td>
-
-                      <td className="px-5 py-4 font-mono text-xs text-[#A9ACA2]">
+                      <td className="gold-card-title px-5 py-4 font-mono text-xs text-[#C1BBAE]">
                         {item.ip}
                       </td>
-
-                      <td className="px-5 py-4 text-xs text-[#A9ACA2]">
+                      <td className="gold-card-muted px-5 py-4 text-xs text-[#C1BBAE]">
                         {formatDate(item.time)}
                       </td>
-
                       <td className="px-5 py-4">
                         <span
-                          className={`rounded-lg px-2.5 py-1.5 text-[10px] font-semibold ${statusStyle(
+                          className={`gold-card-pill rounded-lg px-2.5 py-1.5 text-[10px] font-semibold ${statusStyle(
                             item.status
                           )}`}
                         >
@@ -1126,7 +1009,7 @@ export default function SecurityPage() {
               </table>
 
               {activity.length === 0 && (
-                <p className="py-12 text-center text-sm text-[#858B82]">
+                <p className="gold-card-muted py-12 text-center text-sm text-[#A8A18F]">
                   No login activity recorded.
                 </p>
               )}
@@ -1139,15 +1022,15 @@ export default function SecurityPage() {
           <section className="grid grid-cols-1 gap-5 xl:grid-cols-3">
             <div className={`${cardClass} xl:col-span-2`}>
               <div className="mb-6">
-                <h2 className="font-semibold text-white">
+                <h2 className="gold-card-title font-semibold text-white">
                   Security preferences
                 </h2>
-                <p className="mt-1 text-xs text-[#858B82]">
+                <p className="gold-card-muted mt-1 text-xs text-[#A8A18F]">
                   Manage your account protection preferences.
                 </p>
               </div>
 
-              <div className="space-y-2">
+              <div className="space-y-3">
                 {preferenceRows.map((row) => {
                   const Icon = row.icon;
                   const enabled = settings[row.key];
@@ -1155,18 +1038,17 @@ export default function SecurityPage() {
                   return (
                     <div
                       key={row.key}
-                      className="flex flex-col justify-between gap-4 rounded-xl border border-[#343832] bg-[#151917] p-4 sm:flex-row sm:items-center"
+                      className="gold-card-subpanel flex flex-col justify-between gap-4 rounded-xl border border-[#E8D39A]/20 bg-[#121414] p-4 sm:flex-row sm:items-center"
                     >
                       <div className="flex items-start gap-3">
-                        <div className="rounded-lg bg-[#EFE8A8]/10 p-2.5 text-[#EFE8A8]">
+                        <div className="gold-card-icon rounded-lg bg-[#E8D39A]/15 p-2.5 text-[#FFF4CE]">
                           <Icon size={18} />
                         </div>
-
                         <div>
-                          <h3 className="text-sm font-medium text-white">
+                          <h3 className="gold-card-title text-sm font-medium text-white">
                             {row.title}
                           </h3>
-                          <p className="mt-1 max-w-lg text-xs leading-5 text-[#858B82]">
+                          <p className="gold-card-muted mt-1 max-w-lg text-xs leading-5 text-[#A8A18F]">
                             {row.description}
                           </p>
                         </div>
@@ -1177,14 +1059,12 @@ export default function SecurityPage() {
                         aria-checked={enabled}
                         onClick={() => toggleSetting(row.key)}
                         className={`relative h-6 w-11 shrink-0 rounded-full transition ${
-                          enabled ? "bg-[#EFE8A8]" : "bg-[#454B43]"
+                          enabled ? "bg-[#FFF4CE]" : "bg-[#3A403A]"
                         }`}
                       >
                         <span
                           className={`absolute top-1 h-4 w-4 rounded-full transition ${
-                            enabled
-                              ? "left-6 bg-[#24251F]"
-                              : "left-1 bg-[#B9BDB3]"
+                            enabled ? "left-6 bg-[#17140D]" : "left-1 bg-[#B9BDB3]"
                           }`}
                         />
                       </button>
@@ -1197,15 +1077,15 @@ export default function SecurityPage() {
             <div className="space-y-5">
               <div className={cardClass}>
                 <div className="flex items-center gap-2">
-                  <KeyRound size={19} className="text-[#EFE8A8]" />
-                  <h2 className="font-semibold text-white">Password</h2>
+                  <KeyRound size={19} className="gold-card-accent text-[#FFF4CE]" />
+                  <h2 className="gold-card-title font-semibold text-white">
+                    Password
+                  </h2>
                 </div>
-
-                <p className="mt-3 text-xs leading-6 text-[#858B82]">
+                <p className="gold-card-muted mt-3 text-xs leading-6 text-[#A8A18F]">
                   Update your account password regularly and use a strong,
                   unique password.
                 </p>
-
                 <button
                   onClick={() => setShowPasswordModal(true)}
                   className={`${secondaryButtonClass} mt-5 w-full`}
@@ -1216,19 +1096,17 @@ export default function SecurityPage() {
 
               <div className={cardClass}>
                 <div className="flex items-center gap-2">
-                  <LogOut size={19} className="text-[#F18C8C]" />
-                  <h2 className="font-semibold text-white">
+                  <LogOut size={19} className="gold-card-accent text-[#F18C8C]" />
+                  <h2 className="gold-card-title font-semibold text-white">
                     Session control
                   </h2>
                 </div>
-
-                <p className="mt-3 text-xs leading-6 text-[#858B82]">
+                <p className="gold-card-muted mt-3 text-xs leading-6 text-[#A8A18F]">
                   Remove all other devices from the local demo list.
                 </p>
-
                 <button
                   onClick={signOutOtherDevices}
-                  className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl border border-[#A15D5D]/40 py-3 text-xs font-semibold text-[#F18C8C] transition hover:bg-[#F18C8C]/10"
+                  className="gold-card-pill mt-5 flex w-full items-center justify-center gap-2 rounded-xl border border-[#F18C8C]/40 bg-[#121414] py-3 text-xs font-semibold text-[#F18C8C] transition hover:bg-[#F18C8C]/15"
                 >
                   Sign out other devices
                 </button>
@@ -1240,23 +1118,22 @@ export default function SecurityPage() {
         {/* Rename device modal */}
         {renameDevice && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm">
-            <div className="gold-ambient-card w-full max-w-md rounded-2xl border border-[#343832] bg-[#1B1F1D] p-6 shadow-2xl">
+            <div className="w-full max-w-md rounded-2xl border border-[#E8D39A]/50 bg-[#121414] p-6 text-[#F5F1E6] shadow-[0_0_40px_rgba(232,211,154,0.22)]">
               <div className="flex items-center justify-between">
-                <h2 className="text-lg font-semibold text-white">
+                <h2 className="text-lg font-semibold text-[#FFF4CE]">
                   Rename device
                 </h2>
                 <button
                   onClick={() => setRenameDevice(null)}
-                  className="rounded-lg p-2 text-[#92978F] transition hover:bg-[#303630] hover:text-white"
+                  className="rounded-lg p-2 text-[#A8A18F] transition hover:bg-[#FFF4CE] hover:text-[#17140D]"
                 >
                   <X size={18} />
                 </button>
               </div>
 
-              <label className="mt-5 block text-xs text-[#A9ACA2]">
+              <label className="mt-5 block text-xs text-[#D4CDBB]">
                 Device name
               </label>
-
               <input
                 value={renameValue}
                 onChange={(e) => setRenameValue(e.target.value)}
@@ -1271,10 +1148,7 @@ export default function SecurityPage() {
                 >
                   Cancel
                 </button>
-                <button
-                  onClick={saveRename}
-                  className={primaryButtonClass}
-                >
+                <button onClick={saveRename} className={primaryButtonClass}>
                   Save changes
                 </button>
               </div>
@@ -1287,22 +1161,21 @@ export default function SecurityPage() {
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm">
             <form
               onSubmit={changePassword}
-              className="gold-ambient-card w-full max-w-md rounded-2xl border border-[#343832] bg-[#1B1F1D] p-6 shadow-2xl"
+              className="w-full max-w-md rounded-2xl border border-[#E8D39A]/50 bg-[#121414] p-6 text-[#F5F1E6] shadow-[0_0_40px_rgba(232,211,154,0.22)]"
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <h2 className="text-lg font-semibold text-white">
+                  <h2 className="text-lg font-semibold text-[#FFF4CE]">
                     Change password
                   </h2>
-                  <p className="mt-1 text-xs text-[#858B82]">
+                  <p className="mt-1 text-xs text-[#A8A18F]">
                     Enter your current and new password.
                   </p>
                 </div>
-
                 <button
                   type="button"
                   onClick={() => setShowPasswordModal(false)}
-                  className="rounded-lg p-2 text-[#92978F] transition hover:bg-[#303630] hover:text-white"
+                  className="rounded-lg p-2 text-[#A8A18F] transition hover:bg-[#FFF4CE] hover:text-[#17140D]"
                 >
                   <X size={18} />
                 </button>
@@ -1310,10 +1183,9 @@ export default function SecurityPage() {
 
               <div className="mt-6 space-y-4">
                 <div>
-                  <label className="text-xs text-[#A9ACA2]">
+                  <label className="text-xs text-[#D4CDBB]">
                     Current password
                   </label>
-
                   <div className="relative mt-2">
                     <input
                       type={showPassword ? "text" : "password"}
@@ -1322,26 +1194,18 @@ export default function SecurityPage() {
                       className={`${inputClass} pr-12`}
                       placeholder="Enter current password"
                     />
-
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[#858B82] transition hover:text-[#EFE8A8]"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[#A8A18F] transition hover:text-[#FFF4CE]"
                     >
-                      {showPassword ? (
-                        <EyeOff size={17} />
-                      ) : (
-                        <Eye size={17} />
-                      )}
+                      {showPassword ? <EyeOff size={17} /> : <Eye size={17} />}
                     </button>
                   </div>
                 </div>
 
                 <div>
-                  <label className="text-xs text-[#A9ACA2]">
-                    New password
-                  </label>
-
+                  <label className="text-xs text-[#D4CDBB]">New password</label>
                   <div className="relative mt-2">
                     <input
                       type={showNewPassword ? "text" : "password"}
@@ -1350,13 +1214,10 @@ export default function SecurityPage() {
                       className={`${inputClass} pr-12`}
                       placeholder="Minimum 8 characters"
                     />
-
                     <button
                       type="button"
-                      onClick={() =>
-                        setShowNewPassword(!showNewPassword)
-                      }
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[#858B82] transition hover:text-[#EFE8A8]"
+                      onClick={() => setShowNewPassword(!showNewPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[#A8A18F] transition hover:text-[#FFF4CE]"
                     >
                       {showNewPassword ? (
                         <EyeOff size={17} />
@@ -1368,10 +1229,9 @@ export default function SecurityPage() {
                 </div>
 
                 <div>
-                  <label className="text-xs text-[#A9ACA2]">
+                  <label className="text-xs text-[#D4CDBB]">
                     Confirm new password
                   </label>
-
                   <input
                     type="password"
                     value={confirmPassword}
@@ -1382,7 +1242,7 @@ export default function SecurityPage() {
                 </div>
               </div>
 
-              <div className="mt-6 rounded-xl border border-[#343832] bg-[#151917] p-3 text-xs leading-5 text-[#A9ACA2]">
+              <div className="mt-6 rounded-xl border border-[#E8D39A]/25 bg-[#191C1B] p-3 text-xs leading-5 text-[#C1BBAE]">
                 This is a front-end demonstration. Connect your authentication
                 backend before using this form to change a real password.
               </div>
@@ -1395,7 +1255,6 @@ export default function SecurityPage() {
                 >
                   Cancel
                 </button>
-
                 <button type="submit" className={primaryButtonClass}>
                   Save password
                 </button>
@@ -1406,12 +1265,12 @@ export default function SecurityPage() {
 
         {/* Toast */}
         {toast && (
-          <div className="gold-ambient-card fixed bottom-6 right-6 z-[70] flex max-w-[calc(100vw-3rem)] items-center gap-3 rounded-xl border border-[#66644D] bg-[#1B1F1D] px-5 py-4 text-sm text-[#EFE8A8] shadow-2xl">
-            <CheckCircle2 size={18} />
-            {toast}
+          <div className="gold-ambient-card fixed bottom-6 right-6 z-[70] flex max-w-[calc(100vw-3rem)] items-center gap-3 rounded-xl bg-[#121414] px-5 py-4 text-sm font-medium text-[#FFF4CE] shadow-2xl">
+            <CheckCircle2 size={18} className="gold-card-accent" />
+            <span className="gold-card-title">{toast}</span>
             <button
               onClick={() => setToast("")}
-              className="ml-2 text-[#92978F] transition hover:text-white"
+              className="gold-card-muted ml-2 text-[#A8A18F] transition hover:text-[#17140D]"
             >
               <X size={15} />
             </button>
@@ -1419,78 +1278,155 @@ export default function SecurityPage() {
         )}
       </div>
 
+      {/* Champagne hover, outer glow & mobile touch effects — scoped to this page */}
       <style jsx global>{`
-        .gold-ambient-card {
+        .security-page .gold-ambient-card {
           position: relative;
           isolation: isolate;
+          background-color: #121414;
+          color: #f5f1e6;
+          border: 1px solid rgba(232, 211, 154, 0.55);
+          box-shadow:
+            0 0 14px rgba(232, 211, 154, 0.18),
+            0 0 30px rgba(201, 164, 92, 0.12),
+            0 10px 24px rgba(18, 20, 20, 0.14);
           -webkit-tap-highlight-color: transparent;
-
+          touch-action: manipulation;
           transition:
-            transform 0.35s ease,
-            border-color 0.35s ease,
-            box-shadow 0.35s ease;
+            transform 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+            border-color 0.32s ease,
+            box-shadow 0.32s ease,
+            background 0.32s ease,
+            color 0.32s ease;
         }
 
-        .gold-ambient-card::before {
+        .security-page .gold-ambient-card::before {
           content: "";
           position: absolute;
-          inset: -3px;
+          inset: -6px;
           border-radius: inherit;
           pointer-events: none;
           z-index: -1;
-
           background: radial-gradient(
             ellipse at center,
-            rgba(255, 226, 130, 0.25) 0%,
-            rgba(239, 200, 85, 0.16) 35%,
-            rgba(205, 157, 55, 0.08) 65%,
+            rgba(255, 244, 206, 0.38) 0%,
+            rgba(232, 211, 154, 0.24) 40%,
+            rgba(201, 164, 92, 0.12) 70%,
             transparent 100%
           );
-
-          filter: blur(24px);
+          filter: blur(22px);
           opacity: 0;
-
-          transition: opacity 0.35s ease;
+          transition: opacity 0.32s ease;
         }
 
-        .gold-ambient-card:hover,
-        .gold-ambient-card:active,
-        .gold-ambient-card:focus-visible {
-          border-color: rgba(239, 210, 130, 0.45);
-
+        .security-page .gold-ambient-card:hover,
+        .security-page .gold-ambient-card:active,
+        .security-page .gold-ambient-card:focus-visible {
+          background: linear-gradient(
+            135deg,
+            #fff4ce 0%,
+            #e8d39a 52%,
+            #c9a45c 100%
+          ) !important;
+          color: #17140d !important;
+          border-color: #fff4ce !important;
           box-shadow:
-            0 0 12px rgba(239, 200, 85, 0.13),
-            0 0 28px rgba(239, 200, 85, 0.12),
-            0 0 50px rgba(239, 200, 85, 0.08),
-            inset 0 0 18px rgba(239, 200, 85, 0.025);
+            0 0 18px rgba(255, 244, 206, 0.68),
+            0 0 38px rgba(232, 211, 154, 0.48),
+            0 0 64px rgba(201, 164, 92, 0.32),
+            inset 0 1px 0 rgba(255, 255, 255, 0.72) !important;
         }
 
-        .gold-ambient-card:hover::before,
-        .gold-ambient-card:active::before,
-        .gold-ambient-card:focus-visible::before {
+        .security-page .gold-ambient-card:hover .gold-card-title,
+        .security-page .gold-ambient-card:active .gold-card-title,
+        .security-page .gold-ambient-card:focus-visible .gold-card-title,
+        .security-page .gold-ambient-card:hover .gold-card-accent,
+        .security-page .gold-ambient-card:active .gold-card-accent,
+        .security-page .gold-ambient-card:focus-visible .gold-card-accent {
+          color: #17140d !important;
+        }
+
+        .security-page .gold-ambient-card:hover .gold-card-muted,
+        .security-page .gold-ambient-card:active .gold-card-muted,
+        .security-page .gold-ambient-card:focus-visible .gold-card-muted {
+          color: rgba(23, 20, 13, 0.8) !important;
+        }
+
+        .security-page .gold-ambient-card:hover .gold-card-icon,
+        .security-page .gold-ambient-card:active .gold-card-icon,
+        .security-page .gold-ambient-card:focus-visible .gold-card-icon {
+          background-color: rgba(23, 20, 13, 0.14) !important;
+          color: #17140d !important;
+        }
+
+        .security-page .gold-ambient-card:hover .gold-card-pill,
+        .security-page .gold-ambient-card:active .gold-card-pill,
+        .security-page .gold-ambient-card:focus-visible .gold-card-pill {
+          background-color: rgba(23, 20, 13, 0.14) !important;
+          border-color: rgba(23, 20, 13, 0.25) !important;
+          color: #17140d !important;
+        }
+
+        .security-page .gold-ambient-card:hover .gold-card-subpanel,
+        .security-page .gold-ambient-card:active .gold-card-subpanel,
+        .security-page .gold-ambient-card:focus-visible .gold-card-subpanel {
+          background-color: rgba(23, 20, 13, 0.12) !important;
+          border-color: rgba(23, 20, 13, 0.22) !important;
+          color: #17140d !important;
+        }
+
+        .security-page .gold-ambient-card:hover .gold-card-track,
+        .security-page .gold-ambient-card:active .gold-card-track {
+          background-color: rgba(23, 20, 13, 0.18) !important;
+        }
+
+        .security-page .gold-ambient-card:hover .gold-card-bar,
+        .security-page .gold-ambient-card:active .gold-card-bar {
+          background: #17140d !important;
+        }
+
+        .security-page .gold-ambient-card:hover .gold-card-divider,
+        .security-page .gold-ambient-card:active .gold-card-divider {
+          border-color: rgba(23, 20, 13, 0.2) !important;
+        }
+
+        .security-page .gold-ambient-card:hover .gold-table-head,
+        .security-page .gold-ambient-card:active .gold-table-head {
+          color: rgba(23, 20, 13, 0.78) !important;
+          border-color: rgba(23, 20, 13, 0.2) !important;
+        }
+
+        .security-page .gold-ambient-card:hover .gold-table-row,
+        .security-page .gold-ambient-card:active .gold-table-row {
+          border-color: rgba(23, 20, 13, 0.14) !important;
+        }
+
+        .security-page .gold-ambient-card:hover::before,
+        .security-page .gold-ambient-card:active::before,
+        .security-page .gold-ambient-card:focus-visible::before {
           opacity: 1;
         }
 
         @media (hover: hover) and (pointer: fine) {
-          .gold-ambient-card:hover {
+          .security-page .gold-ambient-card:hover {
             transform: translateY(-3px);
           }
         }
 
         @media (hover: none) {
-          .gold-ambient-card:active {
+          .security-page .gold-ambient-card:active {
             transform: scale(0.99);
           }
         }
 
         @media (prefers-reduced-motion: reduce) {
-          .gold-ambient-card,
-          .gold-ambient-card::before {
+          .security-page .gold-ambient-card,
+          .security-page .gold-ambient-card::before {
             transition: none;
           }
 
-          .gold-ambient-card:hover,
-          .gold-ambient-card:active {
+          .security-page .gold-ambient-card:hover,
+          .security-page .gold-ambient-card:active {
             transform: none;
           }
         }

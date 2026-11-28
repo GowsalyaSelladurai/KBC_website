@@ -443,22 +443,22 @@ export default function CustomersPage() {
 
   return (
     <>
-      <div className="min-h-screen bg-[#121414] px-4 py-6 text-[#f5f3e8] sm:px-6 lg:px-8">
+      <div className="min-h-screen bg-[#FAF5ED] px-4 py-6 text-[#17140D] sm:px-6 lg:px-8">
         <div className="mx-auto max-w-[1500px] space-y-7">
 
           {/* HEADER */}
           <div className="flex flex-col justify-between gap-5 lg:flex-row lg:items-center">
             <div>
-              <div className="mb-2 flex items-center gap-2 text-xs uppercase tracking-[0.22em] text-[#b4a96d]">
+              <div className="mb-2 flex items-center gap-2 text-xs uppercase tracking-[0.22em] text-[#98783D]">
                 <Users size={14} />
                 Customer Relationship Management
               </div>
 
-              <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-                Customers <span className="text-[#EFE8A8]">Management</span>
+              <h1 className="text-3xl font-semibold tracking-tight text-[#17140D] sm:text-4xl">
+                Customers <span className="text-[#A88643]">Management</span>
               </h1>
 
-              <p className="mt-2 text-sm text-[#92948c]">
+              <p className="mt-2 text-sm text-[#777064]">
                 Build stronger relationships and manage your salon community.
               </p>
             </div>
@@ -466,7 +466,7 @@ export default function CustomersPage() {
             <div className="flex flex-wrap gap-3">
               <button
                 onClick={exportCustomers}
-                className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-[#d5d1c4] transition hover:border-[#EFE8A8]/30 hover:bg-white/[0.07]"
+                className="inline-flex items-center gap-2 rounded-xl border border-[#C9A45C]/35 bg-white px-4 py-3 text-sm text-[#393126] shadow-sm transition hover:border-[#C9A45C] hover:bg-[#FFF4CE]"
               >
                 <Download size={16} />
                 Export
@@ -474,7 +474,7 @@ export default function CustomersPage() {
 
               <button
                 onClick={openAddForm}
-                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#e9dfa1] to-[#bca96b] px-5 py-3 text-sm font-semibold text-[#171812] shadow-lg shadow-[#bca96b]/10 transition hover:-translate-y-0.5 hover:brightness-110"
+                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#EFE8A8] to-[#C9A45C] px-5 py-3 text-sm font-semibold text-[#17140D] shadow-lg shadow-[#bca96b]/20 transition hover:-translate-y-0.5 hover:brightness-105"
               >
                 <UserPlus size={17} />
                 Add Customer
@@ -517,7 +517,6 @@ export default function CustomersPage() {
 
           {/* INSIGHT STRIP */}
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-
             <div className="gold-ambient-card flex items-center justify-between rounded-2xl border border-[#EFE8A8]/15 bg-gradient-to-r from-[#29291f] to-[#1c1f1b] p-5">
               <div>
                 <p className="text-xs uppercase tracking-widest text-[#aaa48a]">
@@ -545,7 +544,9 @@ export default function CustomersPage() {
                 </p>
 
                 <h3 className="mt-2 text-2xl font-semibold text-[#f5f3e8]">
-                  {customers.reduce((sum, c) => sum + c.points, 0).toLocaleString("en-IN")}
+                  {customers
+                    .reduce((sum, c) => sum + c.points, 0)
+                    .toLocaleString("en-IN")}
                 </h3>
 
                 <p className="mt-1 text-xs text-[#96978e]">
@@ -583,9 +584,11 @@ export default function CustomersPage() {
           <section className="space-y-5">
             <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
               <div>
-                <h2 className="text-xl font-semibold">Customer Directory</h2>
+                <h2 className="text-xl font-semibold text-[#17140D]">
+                  Customer Directory
+                </h2>
 
-                <p className="mt-1 text-sm text-[#92948c]">
+                <p className="mt-1 text-sm text-[#777064]">
                   Manage customer profiles, membership and loyalty information.
                 </p>
               </div>
@@ -594,27 +597,27 @@ export default function CustomersPage() {
                 <div className="relative">
                   <Search
                     size={17}
-                    className="absolute left-3 top-1/2 -translate-y-1/2 text-[#898b83]"
+                    className="absolute left-3 top-1/2 -translate-y-1/2 text-[#898174]"
                   />
 
                   <input
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     placeholder="Search customers..."
-                    className="w-full rounded-xl border border-white/10 bg-[#1b1f1d] py-3 pl-10 pr-4 text-sm text-white outline-none transition placeholder:text-[#777970] focus:border-[#EFE8A8]/40 sm:w-64"
+                    className="w-full rounded-xl border border-[#D9C9A9] bg-white py-3 pl-10 pr-4 text-sm text-[#17140D] outline-none transition placeholder:text-[#999084] focus:border-[#C9A45C] focus:ring-2 focus:ring-[#C9A45C]/15 sm:w-64"
                   />
                 </div>
 
                 <div className="relative">
                   <Filter
                     size={15}
-                    className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[#aaa48a]"
+                    className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[#98783D]"
                   />
 
                   <select
                     value={filter}
                     onChange={(e) => setFilter(e.target.value)}
-                    className="w-full appearance-none rounded-xl border border-white/10 bg-[#1b1f1d] py-3 pl-9 pr-9 text-sm text-[#e5e1d5] outline-none focus:border-[#EFE8A8]/40 sm:w-40"
+                    className="w-full appearance-none rounded-xl border border-[#D9C9A9] bg-white py-3 pl-9 pr-9 text-sm text-[#393126] outline-none focus:border-[#C9A45C] sm:w-40"
                   >
                     <option value="All">All Members</option>
                     <option value="VIP">VIP</option>
@@ -633,7 +636,6 @@ export default function CustomersPage() {
                   key={customer.id}
                   className="gold-ambient-card group relative overflow-hidden rounded-[22px] border border-[#EFE8A8]/10 bg-gradient-to-br from-[#252820] via-[#1c201d] to-[#171a18] p-5"
                 >
-                  {/* Decorative corner */}
                   <div className="absolute -right-12 -top-12 h-36 w-36 rounded-full border border-[#EFE8A8]/[0.06] transition-all duration-500 group-hover:scale-125 group-hover:border-[#EFE8A8]/15" />
 
                   <div className="absolute right-0 top-0 h-20 w-20 bg-gradient-to-bl from-[#EFE8A8]/[0.07] to-transparent" />
@@ -799,14 +801,14 @@ export default function CustomersPage() {
 
             {/* EMPTY STATE */}
             {filteredCustomers.length === 0 && (
-              <div className="rounded-2xl border border-dashed border-white/10 bg-[#1b1f1d] px-5 py-16 text-center">
-                <UserRound size={35} className="mx-auto text-[#8e8c7d]" />
+              <div className="rounded-2xl border border-dashed border-[#C9A45C]/35 bg-white/70 px-5 py-16 text-center">
+                <UserRound size={35} className="mx-auto text-[#98783D]" />
 
-                <h3 className="mt-4 font-semibold text-[#e9e5d8]">
+                <h3 className="mt-4 font-semibold text-[#17140D]">
                   No customers found
                 </h3>
 
-                <p className="mt-2 text-sm text-[#8b8d85]">
+                <p className="mt-2 text-sm text-[#777064]">
                   Try another search or membership filter.
                 </p>
 
@@ -815,7 +817,7 @@ export default function CustomersPage() {
                     setSearch("");
                     setFilter("All");
                   }}
-                  className="mt-4 text-sm font-medium text-[#EFE8A8] hover:underline"
+                  className="mt-4 text-sm font-medium text-[#98783D] hover:underline"
                 >
                   Clear filters
                 </button>
@@ -1182,87 +1184,88 @@ export default function CustomersPage() {
           )}
 
           {/* FOOTER */}
-          <div className="border-t border-white/[0.07] pt-5 text-center text-xs text-[#73766e]">
+          <div className="border-t border-[#C9A45C]/25 pt-5 text-center text-xs text-[#777064]">
             KBC Salon Academy · Customer Management
           </div>
         </div>
       </div>
 
       {/* =========================================
-          GOLD AMBIENT CARD EFFECT
+          CHAMPAGNE GOLD CARD HOVER EFFECT
       ========================================= */}
+
       <style jsx global>{`
         .gold-ambient-card {
           position: relative;
           isolation: isolate;
           -webkit-tap-highlight-color: transparent;
 
+          background: #121414 !important;
+          border: 1px solid rgba(201, 164, 92, 0.28) !important;
+          color: #EFE8A8;
+
           transition:
-            transform 0.35s ease,
+            background 0.4s ease,
+            color 0.35s ease,
             border-color 0.35s ease,
-            box-shadow 0.35s ease;
+            box-shadow 0.4s ease,
+            transform 0.35s ease;
         }
 
-        /* Soft golden aura outside the card */
-        .gold-ambient-card::before {
-          content: "";
-          position: absolute;
-          inset: -3px;
-          border-radius: inherit;
-          pointer-events: none;
-          z-index: -1;
-
-          background: radial-gradient(
-            ellipse at center,
-            rgba(255, 226, 130, 0.25) 0%,
-            rgba(239, 200, 85, 0.16) 35%,
-            rgba(205, 157, 55, 0.08) 65%,
-            transparent 100%
-          );
-
-          filter: blur(24px);
-          opacity: 0;
-
-          transition: opacity 0.35s ease;
-        }
-
-        /* Hover and touch glow */
+        /* CHAMPAGNE GOLD GRADIENT */
         .gold-ambient-card:hover,
-        .gold-ambient-card:active,
-        .gold-ambient-card:focus-visible {
-          border-color: rgba(239, 210, 130, 0.45);
+        .gold-ambient-card:active {
+          background: linear-gradient(
+            135deg,
+            #FFF4CE 0%,
+            #E8D39A 52%,
+            #C9A45C 100%
+          ) !important;
+
+          border-color: #FFF4CE !important;
+          color: #17140D !important;
 
           box-shadow:
-            0 0 12px rgba(239, 200, 85, 0.13),
-            0 0 28px rgba(239, 200, 85, 0.12),
-            0 0 50px rgba(239, 200, 85, 0.08),
-            inset 0 0 18px rgba(239, 200, 85, 0.025);
+            0 0 10px rgba(255, 244, 206, 0.95),
+            0 0 22px rgba(232, 211, 154, 0.85),
+            0 0 38px rgba(201, 164, 92, 0.75),
+            0 0 58px rgba(201, 164, 92, 0.45),
+            0 0 85px rgba(201, 164, 92, 0.22),
+            inset 0 0 22px rgba(255, 255, 255, 0.3);
         }
 
-        .gold-ambient-card:hover::before,
-        .gold-ambient-card:active::before,
-        .gold-ambient-card:focus-visible::before {
-          opacity: 1;
+        /* DARK CHARCOAL TEXT ON HOVER */
+        .gold-ambient-card:hover :is(
+          h1, h2, h3, h4, p, span, label, svg
+        ),
+        .gold-ambient-card:active :is(
+          h1, h2, h3, h4, p, span, label, svg
+        ) {
+          color: #17140D !important;
         }
 
-        /* Desktop floating movement */
+        /* DESKTOP HOVER MOVEMENT */
         @media (hover: hover) and (pointer: fine) {
           .gold-ambient-card:hover {
-            transform: translateY(-3px);
+            transform: translateY(-4px);
           }
         }
 
-        /* Touchscreen press effect */
+        /* MOBILE TOUCH EFFECT */
         @media (hover: none) {
           .gold-ambient-card:active {
-            transform: scale(0.99);
+            transform: scale(0.985);
+
+            box-shadow:
+              0 0 12px rgba(255, 244, 206, 0.95),
+              0 0 28px rgba(232, 211, 154, 0.8),
+              0 0 48px rgba(201, 164, 92, 0.6);
           }
         }
 
-        /* Reduced motion accessibility */
+        /* ACCESSIBILITY */
         @media (prefers-reduced-motion: reduce) {
-          .gold-ambient-card,
-          .gold-ambient-card::before {
+          .gold-ambient-card {
             transition: none;
           }
 

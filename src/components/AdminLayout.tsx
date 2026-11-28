@@ -21,7 +21,6 @@ export default function AdminLayout({
   const initialized = useRef(false);
 
   useEffect(() => {
-    // Prevent duplicate initialization in React Strict Mode.
     if (initialized.current) return;
     initialized.current = true;
 
@@ -35,7 +34,6 @@ export default function AdminLayout({
       setIntroState("hidden");
     }
 
-    // Replay the intro on the next page refresh.
     const handleBeforeUnload = () => {
       sessionStorage.removeItem(introKey);
     };
@@ -53,18 +51,32 @@ export default function AdminLayout({
 
   return (
     <>
-      <div className="relative isolate min-h-screen w-full overflow-hidden bg-[#121414] text-[#f5f3e8]">
+      <div
+        className="relative isolate min-h-screen w-full overflow-hidden"
+        style={{
+          backgroundColor: "var(--kbc-background)",
+          color: "var(--kbc-text)",
+          transition: "background-color 0.3s ease, color 0.3s ease",
+        }}
+      >
         <LiquidGoldBackground />
 
         {introState === "hidden" && (
           <>
             <GoldenParticleCursor />
+
             <AdminSidebar />
 
-            <div className="relative z-10 min-h-screen bg-transparent lg:ml-72">
+            <div
+              className="relative z-10 min-h-screen bg-transparent lg:ml-72"
+              style={{ color: "var(--kbc-text)" }}
+            >
               <AdminHeader />
 
-              <main className="min-h-screen w-full bg-transparent p-4 sm:p-5 md:p-8">
+              <main
+                className="min-h-screen w-full bg-transparent p-4 sm:p-5 md:p-8"
+                style={{ color: "var(--kbc-text)" }}
+              >
                 {children}
               </main>
             </div>

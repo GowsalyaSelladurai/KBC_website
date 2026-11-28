@@ -1,6 +1,15 @@
+
 "use client";
 
-import { useEffect, useMemo, useState, type FormEvent, type ReactNode, type ElementType } from "react";
+import {
+  useEffect,
+  useMemo,
+  useState,
+  type FormEvent,
+  type ReactNode,
+  type ElementType,
+} from "react";
+
 import {
   Activity,
   ArrowDownRight,
@@ -26,6 +35,10 @@ import {
   Pencil,
 } from "lucide-react";
 
+/* =========================================
+   TYPES
+========================================= */
+
 type LeadStatus =
   | "New"
   | "Contacted"
@@ -48,19 +61,31 @@ type Enquiry = {
   notes: string;
 };
 
+/* =========================================
+   STORAGE
+========================================= */
+
 const STORAGE_KEY = "kbc_enquiries_v1";
 
+/* =========================================
+   THEME STYLES
+========================================= */
+
 const cardClass =
-  "gold-ambient-card rounded-2xl border border-[#343832] bg-[#1B1F1D]";
+  "gold-ambient-card rounded-2xl border border-[#343832] bg-[#121414]";
 
 const inputClass =
-  "w-full rounded-xl border border-[#3A403A] bg-[#151917] px-4 py-3 text-sm text-white outline-none transition placeholder:text-[#73796F] focus:border-[#D9D19A]";
+  "w-full rounded-xl border border-[#D8CDBB] bg-white px-4 py-3 text-sm text-[#17140D] outline-none transition placeholder:text-[#928879] focus:border-[#C9A45C] focus:ring-2 focus:ring-[#C9A45C]/20";
 
 const primaryButtonClass =
-  "flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#EFE8A8] to-[#C8BD79] px-5 py-3 text-sm font-bold text-[#171914] transition hover:brightness-110";
+  "inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#EFE8A8] to-[#C9A45C] px-5 py-3 text-sm font-bold text-[#17140D] shadow-sm transition hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-40";
 
 const secondaryButtonClass =
-  "flex items-center justify-center gap-2 rounded-xl border border-[#3A403A] bg-[#1B1F1D] px-4 py-3 text-sm text-[#D8D8CD] transition hover:border-[#D9D19A] hover:text-[#EFE8A8]";
+  "inline-flex items-center justify-center gap-2 rounded-xl border border-[#C9A45C] bg-white px-4 py-3 text-sm font-medium text-[#17140D] transition hover:bg-[#FFF4CE]";
+
+/* =========================================
+   STATUS CONFIG
+========================================= */
 
 const statuses: LeadStatus[] = [
   "New",
@@ -79,6 +104,10 @@ const statusColors: Record<LeadStatus, string> = {
   Converted: "text-emerald-300 bg-emerald-400/10 border-emerald-300/20",
   Lost: "text-rose-300 bg-rose-400/10 border-rose-300/20",
 };
+
+/* =========================================
+   SAMPLE DATA
+========================================= */
 
 const initialEnquiries: Enquiry[] = [
   {
@@ -161,6 +190,10 @@ const initialEnquiries: Enquiry[] = [
   },
 ];
 
+/* =========================================
+   EMPTY FORM
+========================================= */
+
 const emptyForm = {
   name: "",
   phone: "",
@@ -173,6 +206,10 @@ const emptyForm = {
   followUp: "",
   notes: "",
 };
+
+/* =========================================
+   HELPERS
+========================================= */
 
 function formatDate(value: string) {
   if (!value) return "Not scheduled";
@@ -190,6 +227,7 @@ function readEnquiries(): Enquiry[] {
 
     if (stored) {
       const parsed = JSON.parse(stored);
+
       if (Array.isArray(parsed)) return parsed;
     }
   } catch {
@@ -249,6 +287,10 @@ function downloadCSV(rows: Enquiry[]) {
   URL.revokeObjectURL(url);
 }
 
+/* =========================================
+   PANEL COMPONENT
+========================================= */
+
 function Panel({
   children,
   className = "",
@@ -258,6 +300,10 @@ function Panel({
 }) {
   return <div className={`${cardClass} ${className}`}>{children}</div>;
 }
+
+/* =========================================
+   STATUS BADGE
+========================================= */
 
 function StatusBadge({ status }: { status: LeadStatus }) {
   return (
@@ -269,6 +315,10 @@ function StatusBadge({ status }: { status: LeadStatus }) {
     </span>
   );
 }
+
+/* =========================================
+   STAT CARD
+========================================= */
 
 function StatCard({
   title,
@@ -289,7 +339,9 @@ function StatCard({
     <div className={`${cardClass} p-5`}>
       <div className="flex items-start justify-between gap-3">
         <div>
-          <p className="text-xs font-medium text-[#A9ACA2]">{title}</p>
+          <p className="text-xs font-medium text-[#A9ACA2]">
+            {title}
+          </p>
 
           <h3
             className={`mt-3 text-3xl font-semibold tracking-tight ${
@@ -299,7 +351,9 @@ function StatCard({
             {value}
           </h3>
 
-          <p className="mt-2 text-[11px] text-[#858B82]">{subtitle}</p>
+          <p className="mt-2 text-[11px] text-[#858B82]">
+            {subtitle}
+          </p>
         </div>
 
         <div className="rounded-xl border border-[#D9D19A]/20 bg-[#D9D19A]/10 p-3 text-[#EFE8A8]">
@@ -317,42 +371,63 @@ function StatCard({
   );
 }
 
+/* =========================================
+   MAIN PAGE
+========================================= */
+
 export default function EnquiriesPage() {
   const [enquiries, setEnquiries] = useState<Enquiry[]>([]);
   const [loaded, setLoaded] = useState(false);
+
   const [search, setSearch] = useState("");
   const [filterStatus, setFilterStatus] = useState("All");
   const [filterSource, setFilterSource] = useState("All");
   const [activeTab, setActiveTab] = useState("All");
+
   const [modalOpen, setModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [selected, setSelected] = useState<Enquiry | null>(null);
+
   const [form, setForm] = useState(emptyForm);
   const [toast, setToast] = useState("");
   const [menuId, setMenuId] = useState<number | null>(null);
+
+  /* LOAD DATA */
 
   useEffect(() => {
     setEnquiries(readEnquiries());
     setLoaded(true);
   }, []);
 
+  /* SAVE DATA */
+
   useEffect(() => {
-    if (loaded) {
+    if (!loaded) return;
+
+    try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(enquiries));
+    } catch {
+      setToast("Unable to save data. Browser storage may be full.");
     }
   }, [enquiries, loaded]);
+
+  /* TOAST TIMER */
 
   useEffect(() => {
     if (!toast) return;
 
-    const timer = setTimeout(() => setToast(""), 2800);
+    const timer = window.setTimeout(() => setToast(""), 2800);
 
     return () => clearTimeout(timer);
   }, [toast]);
 
+  /* STATISTICS */
+
   const total = enquiries.length;
 
-  const newLeads = enquiries.filter((e) => e.status === "New").length;
+  const newLeads = enquiries.filter(
+    (e) => e.status === "New"
+  ).length;
 
   const followUps = enquiries.filter(
     (e) => e.status === "Follow-up"
@@ -369,6 +444,8 @@ export default function EnquiriesPage() {
   const conversionRate = total
     ? Math.round((converted / total) * 100)
     : 0;
+
+  /* FILTERED ENQUIRIES */
 
   const filtered = useMemo(() => {
     const term = search.toLowerCase().trim();
@@ -399,10 +476,14 @@ export default function EnquiriesPage() {
     });
   }, [enquiries, search, filterStatus, filterSource, activeTab]);
 
+  /* PIPELINE */
+
   const pipeline = statuses.map((status) => ({
     status,
     count: enquiries.filter((e) => e.status === status).length,
   }));
+
+  /* SOURCE DATA */
 
   const sourceData = useMemo(() => {
     const counts: Record<string, number> = {};
@@ -414,11 +495,30 @@ export default function EnquiriesPage() {
     return Object.entries(counts).sort((a, b) => b[1] - a[1]);
   }, [enquiries]);
 
+  /* OTHER COUNTS */
+
+  const lostCount = enquiries.filter(
+    (e) => e.status === "Lost"
+  ).length;
+
+  const contactedCount = enquiries.filter(
+    (e) => e.status === "Contacted"
+  ).length;
+
+  /* OPEN ADD FORM */
+
   function openAdd() {
     setEditingId(null);
-    setForm(emptyForm);
+
+    setForm({
+      ...emptyForm,
+      date: new Date().toISOString().slice(0, 10),
+    });
+
     setModalOpen(true);
   }
+
+  /* OPEN EDIT FORM */
 
   function openEdit(item: Enquiry) {
     setEditingId(item.id);
@@ -439,6 +539,8 @@ export default function EnquiriesPage() {
     setModalOpen(true);
     setMenuId(null);
   }
+
+  /* SAVE ENQUIRY */
 
   function saveEnquiry(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -470,11 +572,14 @@ export default function EnquiriesPage() {
       };
 
       setEnquiries((prev) => [newItem, ...prev]);
+
       setToast("New enquiry added successfully.");
     }
 
     setModalOpen(false);
   }
+
+  /* DELETE ENQUIRY */
 
   function deleteEnquiry(id: number) {
     if (!window.confirm("Are you sure you want to delete this enquiry?")) {
@@ -482,10 +587,14 @@ export default function EnquiriesPage() {
     }
 
     setEnquiries((prev) => prev.filter((item) => item.id !== id));
+
     setMenuId(null);
     setSelected(null);
+
     setToast("Enquiry deleted.");
   }
+
+  /* CHANGE STATUS */
 
   function changeStatus(id: number, status: LeadStatus) {
     setEnquiries((prev) =>
@@ -500,52 +609,52 @@ export default function EnquiriesPage() {
 
   const tabs = ["All", ...statuses];
 
-  const lostCount = enquiries.filter(
-    (e) => e.status === "Lost"
-  ).length;
-
-  const contactedCount = enquiries.filter(
-    (e) => e.status === "Contacted"
-  ).length;
+  /* =========================================
+     RENDER
+  ========================================= */
 
   return (
-    <div className="min-h-screen bg-[#121414] p-4 text-[#F5F2E9] sm:p-6 lg:p-8">
+    <div className="min-h-screen bg-[#FAF5ED] p-4 text-[#17140D] sm:p-6 lg:p-8">
       <div className="mx-auto max-w-[1600px] space-y-7">
 
-        {/* Header */}
-        <div className="flex flex-col justify-between gap-5 lg:flex-row lg:items-center">
-          <div>
-            <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.25em] text-[#C8BD79]">
-              <span className="h-px w-7 bg-[#EFE8A8]" />
-              Business Management
+        {/* HEADER */}
+
+        <div className={`${cardClass} p-5 sm:p-7`}>
+          <div className="flex flex-col justify-between gap-5 lg:flex-row lg:items-center">
+            <div>
+              <div className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.25em] text-[#D9D19A]">
+                <span className="h-px w-7 bg-[#EFE8A8]" />
+                Business Management
+              </div>
+
+              <h1 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+                Enquiries <span className="text-[#EFE8A8]">& Leads</span>
+              </h1>
+
+              <p className="mt-2 text-sm text-[#92978F]">
+                Manage prospects, nurture relationships and convert opportunities.
+              </p>
             </div>
 
-            <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-              Enquiries <span className="text-[#EFE8A8]">& Leads</span>
-            </h1>
+            <div className="flex flex-wrap items-center gap-3">
+              <button
+                onClick={() => downloadCSV(filtered)}
+                className={secondaryButtonClass}
+              >
+                <Download size={16} />
+                Export CSV
+              </button>
 
-            <p className="mt-2 text-sm text-[#92978F]">
-              Manage prospects, nurture relationships and convert opportunities.
-            </p>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-3">
-            <button
-              onClick={() => downloadCSV(filtered)}
-              className={secondaryButtonClass}
-            >
-              <Download size={16} />
-              Export CSV
-            </button>
-
-            <button onClick={openAdd} className={primaryButtonClass}>
-              <Plus size={17} />
-              Add Enquiry
-            </button>
+              <button onClick={openAdd} className={primaryButtonClass}>
+                <Plus size={17} />
+                Add Enquiry
+              </button>
+            </div>
           </div>
         </div>
 
-        {/* KPI Cards */}
+        {/* KPI CARDS */}
+
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
           <StatCard
             title="Total Enquiries"
@@ -579,13 +688,17 @@ export default function EnquiriesPage() {
           />
         </div>
 
-        {/* Lead Pipeline */}
+        {/* LEAD PIPELINE */}
+
         <Panel className="p-5 sm:p-6">
           <div className="mb-6 flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
             <div>
               <div className="flex items-center gap-2">
                 <Activity size={18} className="text-[#EFE8A8]" />
-                <h2 className="text-lg font-semibold">Lead Pipeline</h2>
+
+                <h2 className="text-lg font-semibold text-white">
+                  Lead Pipeline
+                </h2>
               </div>
 
               <p className="mt-1 text-xs text-[#858B82]">
@@ -603,13 +716,16 @@ export default function EnquiriesPage() {
               <button
                 key={item.status}
                 onClick={() => {
-                  setActiveTab(item.status);
+                  setActiveTab(
+                    activeTab === item.status ? "All" : item.status
+                  );
+
                   setFilterStatus("All");
                 }}
                 className={`gold-ambient-card rounded-xl border p-4 text-left transition ${
                   activeTab === item.status
                     ? "border-[#D9D19A]/60 bg-[#29291F]"
-                    : "border-[#343832] bg-[#151917] hover:border-[#D9D19A]/40"
+                    : "border-[#343832] bg-[#151917]"
                 }`}
               >
                 <div className="mb-3 flex items-center justify-between">
@@ -620,7 +736,7 @@ export default function EnquiriesPage() {
                   <span className="h-2 w-2 rounded-full bg-[#D9D19A]" />
                 </div>
 
-                <p className="text-2xl font-semibold text-[#F5F2E9]">
+                <p className="text-2xl font-semibold text-white">
                   {item.count}
                 </p>
 
@@ -637,15 +753,17 @@ export default function EnquiriesPage() {
           </div>
         </Panel>
 
-        {/* Main Content */}
+        {/* MAIN CONTENT */}
+
         <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
 
-          {/* Enquiry Management */}
+          {/* ENQUIRY MANAGEMENT */}
+
           <Panel className="min-w-0">
             <div className="border-b border-[#343832] p-5 sm:p-6">
               <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-center">
                 <div>
-                  <h2 className="text-lg font-semibold">
+                  <h2 className="text-lg font-semibold text-white">
                     Enquiry Management
                   </h2>
 
@@ -677,7 +795,9 @@ export default function EnquiriesPage() {
                     <option value="All">All Statuses</option>
 
                     {statuses.map((status) => (
-                      <option key={status}>{status}</option>
+                      <option key={status} value={status}>
+                        {status}
+                      </option>
                     ))}
                   </select>
 
@@ -696,13 +816,16 @@ export default function EnquiriesPage() {
                       "Facebook",
                       "Google",
                     ].map((source) => (
-                      <option key={source}>{source}</option>
+                      <option key={source} value={source}>
+                        {source}
+                      </option>
                     ))}
                   </select>
                 </div>
               </div>
 
-              {/* Tabs */}
+              {/* TABS */}
+
               <div className="mt-5 flex gap-2 overflow-x-auto pb-1">
                 {tabs.map((tab) => (
                   <button
@@ -720,17 +843,36 @@ export default function EnquiriesPage() {
               </div>
             </div>
 
-            {/* Table */}
+            {/* TABLE */}
+
             <div className="overflow-x-auto">
               <table className="w-full min-w-[900px] text-left">
                 <thead>
                   <tr className="border-b border-[#343832] bg-[#151917] text-[10px] uppercase tracking-[0.14em] text-[#858B82]">
-                    <th className="px-5 py-4 font-semibold">Prospect</th>
-                    <th className="px-4 py-4 font-semibold">Course</th>
-                    <th className="px-4 py-4 font-semibold">Source</th>
-                    <th className="px-4 py-4 font-semibold">Assigned To</th>
-                    <th className="px-4 py-4 font-semibold">Status</th>
-                    <th className="px-4 py-4 font-semibold">Follow-up</th>
+                    <th className="px-5 py-4 font-semibold">
+                      Prospect
+                    </th>
+
+                    <th className="px-4 py-4 font-semibold">
+                      Course
+                    </th>
+
+                    <th className="px-4 py-4 font-semibold">
+                      Source
+                    </th>
+
+                    <th className="px-4 py-4 font-semibold">
+                      Assigned To
+                    </th>
+
+                    <th className="px-4 py-4 font-semibold">
+                      Status
+                    </th>
+
+                    <th className="px-4 py-4 font-semibold">
+                      Follow-up
+                    </th>
+
                     <th className="px-4 py-4 text-right font-semibold">
                       Action
                     </th>
@@ -900,6 +1042,8 @@ export default function EnquiriesPage() {
               </table>
             </div>
 
+            {/* TABLE FOOTER */}
+
             <div className="flex flex-col justify-between gap-2 border-t border-[#343832] px-5 py-4 text-xs text-[#858B82] sm:flex-row">
               <span>
                 Showing {filtered.length} of {total} enquiries
@@ -912,14 +1056,19 @@ export default function EnquiriesPage() {
             </div>
           </Panel>
 
-          {/* Insights */}
+          {/* INSIGHTS */}
+
           <div className="space-y-6">
 
-            {/* Lead Insights */}
+            {/* LEAD INSIGHTS */}
+
             <Panel className="p-5">
               <div className="flex items-center gap-2">
                 <TrendingUp size={17} className="text-[#EFE8A8]" />
-                <h3 className="text-sm font-semibold">Lead Insights</h3>
+
+                <h3 className="text-sm font-semibold text-white">
+                  Lead Insights
+                </h3>
               </div>
 
               <div className="mt-6 rounded-xl border border-[#D9D19A]/20 bg-[#151917] p-4">
@@ -953,7 +1102,7 @@ export default function EnquiriesPage() {
                     Active leads
                   </span>
 
-                  <span className="text-sm font-semibold text-[#F5F2E9]">
+                  <span className="text-sm font-semibold text-white">
                     {activeLeads}
                   </span>
                 </div>
@@ -984,11 +1133,15 @@ export default function EnquiriesPage() {
               </div>
             </Panel>
 
-            {/* Enquiry Sources */}
+            {/* ENQUIRY SOURCES */}
+
             <Panel className="p-5">
               <div className="flex items-center gap-2">
                 <Send size={17} className="text-[#EFE8A8]" />
-                <h3 className="text-sm font-semibold">Enquiry Sources</h3>
+
+                <h3 className="text-sm font-semibold text-white">
+                  Enquiry Sources
+                </h3>
               </div>
 
               <p className="mt-1 text-[11px] text-[#858B82]">
@@ -1027,13 +1180,14 @@ export default function EnquiriesPage() {
               </div>
             </Panel>
 
-            {/* Follow-up Reminder */}
+            {/* FOLLOW-UP REMINDER */}
+
             <Panel className="p-5">
               <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#D9D19A]/20 bg-[#D9D19A]/10 text-[#EFE8A8]">
                 <CalendarDays size={19} />
               </div>
 
-              <h3 className="mt-4 text-sm font-semibold">
+              <h3 className="mt-4 text-sm font-semibold text-white">
                 Follow-up Reminder
               </h3>
 
@@ -1056,13 +1210,20 @@ export default function EnquiriesPage() {
           </div>
         </div>
 
-        {/* Add / Edit Modal */}
+        {/* ADD / EDIT MODAL */}
+
         {modalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4 backdrop-blur-sm">
-            <div className="max-h-[92vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-[#343832] bg-[#1B1F1D] shadow-2xl">
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4 backdrop-blur-sm"
+            onClick={() => setModalOpen(false)}
+          >
+            <div
+              className="gold-modal-card max-h-[92vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-[#C9A45C]/50 bg-[#1B1F1D] shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
               <div className="sticky top-0 z-10 flex items-center justify-between border-b border-[#343832] bg-[#1B1F1D] px-6 py-5">
                 <div>
-                  <h2 className="text-lg font-semibold">
+                  <h2 className="text-lg font-semibold text-white">
                     {editingId ? "Edit Enquiry" : "Add New Enquiry"}
                   </h2>
 
@@ -1083,7 +1244,7 @@ export default function EnquiriesPage() {
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
 
                   <label className="space-y-2">
-                    <span className="text-xs text-[#C9CCC1]">
+                    <span className="block text-xs text-[#C9CCC1]">
                       Customer Name *
                     </span>
 
@@ -1099,7 +1260,7 @@ export default function EnquiriesPage() {
                   </label>
 
                   <label className="space-y-2">
-                    <span className="text-xs text-[#C9CCC1]">
+                    <span className="block text-xs text-[#C9CCC1]">
                       Phone Number *
                     </span>
 
@@ -1115,7 +1276,7 @@ export default function EnquiriesPage() {
                   </label>
 
                   <label className="space-y-2">
-                    <span className="text-xs text-[#C9CCC1]">
+                    <span className="block text-xs text-[#C9CCC1]">
                       Email Address
                     </span>
 
@@ -1131,7 +1292,7 @@ export default function EnquiriesPage() {
                   </label>
 
                   <label className="space-y-2">
-                    <span className="text-xs text-[#C9CCC1]">
+                    <span className="block text-xs text-[#C9CCC1]">
                       Interested Course
                     </span>
 
@@ -1151,13 +1312,15 @@ export default function EnquiriesPage() {
                         "Bridal Makeup",
                         "Other",
                       ].map((course) => (
-                        <option key={course}>{course}</option>
+                        <option key={course} value={course}>
+                          {course}
+                        </option>
                       ))}
                     </select>
                   </label>
 
                   <label className="space-y-2">
-                    <span className="text-xs text-[#C9CCC1]">
+                    <span className="block text-xs text-[#C9CCC1]">
                       Enquiry Source
                     </span>
 
@@ -1176,13 +1339,15 @@ export default function EnquiriesPage() {
                         "Facebook",
                         "Google",
                       ].map((source) => (
-                        <option key={source}>{source}</option>
+                        <option key={source} value={source}>
+                          {source}
+                        </option>
                       ))}
                     </select>
                   </label>
 
                   <label className="space-y-2">
-                    <span className="text-xs text-[#C9CCC1]">
+                    <span className="block text-xs text-[#C9CCC1]">
                       Assigned Staff
                     </span>
 
@@ -1194,13 +1359,15 @@ export default function EnquiriesPage() {
                       className={inputClass}
                     >
                       {["Anitha", "Meena", "Priya", "Admin"].map((staff) => (
-                        <option key={staff}>{staff}</option>
+                        <option key={staff} value={staff}>
+                          {staff}
+                        </option>
                       ))}
                     </select>
                   </label>
 
                   <label className="space-y-2">
-                    <span className="text-xs text-[#C9CCC1]">
+                    <span className="block text-xs text-[#C9CCC1]">
                       Lead Status
                     </span>
 
@@ -1215,13 +1382,15 @@ export default function EnquiriesPage() {
                       className={inputClass}
                     >
                       {statuses.map((status) => (
-                        <option key={status}>{status}</option>
+                        <option key={status} value={status}>
+                          {status}
+                        </option>
                       ))}
                     </select>
                   </label>
 
                   <label className="space-y-2">
-                    <span className="text-xs text-[#C9CCC1]">
+                    <span className="block text-xs text-[#C9CCC1]">
                       Enquiry Date
                     </span>
 
@@ -1236,7 +1405,7 @@ export default function EnquiriesPage() {
                   </label>
 
                   <label className="space-y-2 sm:col-span-2">
-                    <span className="text-xs text-[#C9CCC1]">
+                    <span className="block text-xs text-[#C9CCC1]">
                       Next Follow-up Date
                     </span>
 
@@ -1251,7 +1420,7 @@ export default function EnquiriesPage() {
                   </label>
 
                   <label className="space-y-2 sm:col-span-2">
-                    <span className="text-xs text-[#C9CCC1]">
+                    <span className="block text-xs text-[#C9CCC1]">
                       Notes
                     </span>
 
@@ -1271,7 +1440,7 @@ export default function EnquiriesPage() {
                   <button
                     type="button"
                     onClick={() => setModalOpen(false)}
-                    className="rounded-xl border border-[#3A403A] px-5 py-3 text-xs text-[#C9CCC1] transition hover:bg-white/5"
+                    className="rounded-xl border border-[#C9A45C] bg-white px-5 py-3 text-xs text-[#17140D] transition hover:bg-[#FFF4CE]"
                   >
                     Cancel
                   </button>
@@ -1286,12 +1455,21 @@ export default function EnquiriesPage() {
           </div>
         )}
 
-        {/* View Details Modal */}
+        {/* VIEW DETAILS MODAL */}
+
         {selected && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4 backdrop-blur-sm">
-            <div className="w-full max-w-lg overflow-hidden rounded-2xl border border-[#343832] bg-[#1B1F1D] shadow-2xl">
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4 backdrop-blur-sm"
+            onClick={() => setSelected(null)}
+          >
+            <div
+              className="gold-modal-card w-full max-w-lg overflow-hidden rounded-2xl border border-[#C9A45C]/50 bg-[#1B1F1D] shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
               <div className="flex items-center justify-between border-b border-[#343832] p-5">
-                <h2 className="font-semibold">Enquiry Details</h2>
+                <h2 className="font-semibold text-white">
+                  Enquiry Details
+                </h2>
 
                 <button
                   onClick={() => setSelected(null)}
@@ -1313,7 +1491,7 @@ export default function EnquiriesPage() {
                   </div>
 
                   <div>
-                    <h3 className="text-lg font-semibold">
+                    <h3 className="text-lg font-semibold text-white">
                       {selected.name}
                     </h3>
 
@@ -1367,7 +1545,7 @@ export default function EnquiriesPage() {
                 <div className="mt-5 flex flex-wrap gap-3">
                   <a
                     href={`tel:${selected.phone}`}
-                    className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-[#3A403A] py-3 text-xs text-[#D8D8CD] transition hover:border-[#D9D19A] hover:text-[#EFE8A8]"
+                    className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-[#C9A45C] bg-white py-3 text-xs text-[#17140D] transition hover:bg-[#FFF4CE]"
                   >
                     <Phone size={15} />
                     Call
@@ -1399,19 +1577,20 @@ export default function EnquiriesPage() {
           </div>
         )}
 
-        {/* Toast */}
+        {/* TOAST */}
+
         {toast && (
-          <div className="fixed bottom-6 right-6 z-[70] flex max-w-sm items-center gap-3 rounded-xl border border-[#D9D19A]/40 bg-[#1B1F1D] px-5 py-4 text-sm text-[#F5F2E9] shadow-2xl">
+          <div className="fixed bottom-6 right-6 z-[70] flex max-w-sm items-center gap-3 rounded-xl border border-[#C9A45C]/60 bg-[#25271F] px-5 py-4 text-sm text-[#EFE8A8] shadow-2xl">
             <CheckCircle2
               size={18}
               className="shrink-0 text-[#EFE8A8]"
             />
 
-            {toast}
+            <span>{toast}</span>
 
             <button
               onClick={() => setToast("")}
-              className="ml-2 text-[#858B82] transition hover:text-white"
+              className="ml-2 text-[#A9ACA2] transition hover:text-white"
             >
               <X size={15} />
             </button>
@@ -1419,7 +1598,10 @@ export default function EnquiriesPage() {
         )}
       </div>
 
-      {/* Soft Gold Hover Aura */}
+      {/* =====================================
+          GOLDEN CARD HOVER EFFECT
+      ===================================== */}
+
       <style jsx global>{`
         .gold-ambient-card {
           position: relative;
@@ -1428,24 +1610,26 @@ export default function EnquiriesPage() {
 
           transition:
             transform 0.35s ease,
+            background 0.35s ease,
             border-color 0.35s ease,
             box-shadow 0.35s ease;
         }
+
+        /* OUTER GOLDEN GLOW */
 
         .gold-ambient-card::before {
           content: "";
           position: absolute;
           inset: -3px;
+          z-index: -1;
           border-radius: inherit;
           pointer-events: none;
-          z-index: -1;
 
-          background: radial-gradient(
-            ellipse at center,
-            rgba(255, 226, 130, 0.25) 0%,
-            rgba(239, 200, 85, 0.16) 35%,
-            rgba(205, 157, 55, 0.08) 65%,
-            transparent 100%
+          background: linear-gradient(
+            135deg,
+            #fff4ce 0%,
+            #e8d39a 52%,
+            #c9a45c 100%
           );
 
           filter: blur(24px);
@@ -1454,40 +1638,107 @@ export default function EnquiriesPage() {
           transition: opacity 0.35s ease;
         }
 
+        /* CHAMPAGNE GOLD HOVER */
+
         .gold-ambient-card:hover,
-        .gold-ambient-card:active,
-        .gold-ambient-card:focus-visible {
-          border-color: rgba(239, 210, 130, 0.45);
+        .gold-ambient-card:active {
+          background: linear-gradient(
+            135deg,
+            #fff4ce 0%,
+            #e8d39a 52%,
+            #c9a45c 100%
+          ) !important;
+
+          border-color: #fff0b8 !important;
+
+          color: #17140d !important;
 
           box-shadow:
-            0 0 12px rgba(239, 200, 85, 0.13),
-            0 0 28px rgba(239, 200, 85, 0.12),
-            0 0 50px rgba(239, 200, 85, 0.08),
-            inset 0 0 18px rgba(239, 200, 85, 0.025);
+            0 0 10px rgba(255, 244, 206, 0.85),
+            0 0 24px rgba(232, 211, 154, 0.75),
+            0 0 45px rgba(201, 164, 92, 0.65),
+            0 0 70px rgba(201, 164, 92, 0.35),
+            inset 0 0 20px rgba(255, 255, 255, 0.3) !important;
+        }
+
+        /* DARK TEXT ON HOVER */
+
+        .gold-ambient-card:hover h1,
+        .gold-ambient-card:hover h2,
+        .gold-ambient-card:hover h3,
+        .gold-ambient-card:hover h4,
+        .gold-ambient-card:hover p,
+        .gold-ambient-card:hover span,
+        .gold-ambient-card:hover label,
+        .gold-ambient-card:active h1,
+        .gold-ambient-card:active h2,
+        .gold-ambient-card:active h3,
+        .gold-ambient-card:active h4,
+        .gold-ambient-card:active p,
+        .gold-ambient-card:active span,
+        .gold-ambient-card:active label {
+          color: #17140d !important;
+        }
+
+        /* ICONS ON HOVER */
+
+        .gold-ambient-card:hover svg,
+        .gold-ambient-card:active svg {
+          color: #17140d;
         }
 
         .gold-ambient-card:hover::before,
-        .gold-ambient-card:active::before,
-        .gold-ambient-card:focus-visible::before {
+        .gold-ambient-card:active::before {
           opacity: 1;
         }
 
+        /* DESKTOP HOVER */
+
         @media (hover: hover) and (pointer: fine) {
           .gold-ambient-card:hover {
-            transform: translateY(-3px);
+            transform: translateY(-4px);
           }
         }
+
+        /* MOBILE TOUCH */
 
         @media (hover: none) {
           .gold-ambient-card:active {
-            transform: scale(0.99);
+            transform: scale(0.985);
+            border-color: #fff0b8 !important;
+          }
+
+          .gold-ambient-card:active::before {
+            opacity: 1;
           }
         }
 
+        /* MODAL ANIMATION */
+
+        .gold-modal-card {
+          animation: modalAppear 0.25s ease-out;
+        }
+
+        @keyframes modalAppear {
+          from {
+            opacity: 0;
+            transform: translateY(12px) scale(0.98);
+          }
+
+          to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+          }
+        }
+
+        /* ACCESSIBILITY */
+
         @media (prefers-reduced-motion: reduce) {
           .gold-ambient-card,
-          .gold-ambient-card::before {
+          .gold-ambient-card::before,
+          .gold-modal-card {
             transition: none;
+            animation: none;
           }
 
           .gold-ambient-card:hover,

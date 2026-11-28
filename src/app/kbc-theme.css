@@ -1,0 +1,212 @@
+
+/* =====================================================
+   KBC SALON ACADEMY — CENTRAL THEME
+   Warm Ivory + Luxury Champagne Gold
+===================================================== */
+
+:root {
+  /* Main palette */
+  --kbc-ivory: #FAF5ED;
+  --kbc-champagne: #EFE8A8;
+  --kbc-gold: #C9A45C;
+  --kbc-charcoal: #121414;
+  --kbc-white: #FFFFFF;
+  --kbc-beige: #E8D8C5;
+  --kbc-antique-gold: #5D4218;
+
+  /* Card normal appearance */
+  --kbc-card-bg: linear-gradient(
+    135deg,
+    #242116 0%,
+    #15140F 55%,
+    #090908 100%
+  );
+
+  --kbc-card-text: #FAF5ED;
+  --kbc-card-heading: #EFE8A8;
+  --kbc-card-muted: #C9B98F;
+  --kbc-card-border: rgba(201, 164, 92, 0.6);
+
+  /* Card hover appearance */
+  --kbc-card-hover-bg: linear-gradient(
+    135deg,
+    #FFF4CE 0%,
+    #E8D39A 55%,
+    #C9A45C 100%
+  );
+
+  --kbc-card-hover-text: #17140D;
+  --kbc-card-hover-border: #EFE8A8;
+
+  /* Golden glow */
+  --kbc-card-shadow:
+    0 8px 25px rgba(0, 0, 0, 0.12);
+
+  --kbc-card-hover-shadow:
+    0 0 18px rgba(239, 232, 168, 0.55),
+    0 0 45px rgba(201, 164, 92, 0.4),
+    0 15px 35px rgba(93, 66, 24, 0.2);
+
+  /* Icons */
+  --kbc-icon-color: #EFE8A8;
+  --kbc-icon-hover-color: #5D4218;
+
+  /* Card dimensions */
+  --kbc-card-radius: 24px;
+  --kbc-card-padding: 24px;
+  --kbc-card-transition: 500ms;
+
+  /* Page background */
+  --kbc-page-bg: #FAF5ED;
+  --kbc-page-text: #121414;
+}
+
+/* =====================================================
+   REUSABLE KBC CARD
+===================================================== */
+
+.kbc-theme-card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+
+  background: var(--kbc-card-bg);
+  color: var(--kbc-card-text);
+
+  border: 1px solid var(--kbc-card-border);
+  border-radius: var(--kbc-card-radius);
+
+  padding: var(--kbc-card-padding);
+
+  box-shadow: var(--kbc-card-shadow);
+
+  transition:
+    background var(--kbc-card-transition) ease,
+    color var(--kbc-card-transition) ease,
+    border-color var(--kbc-card-transition) ease,
+    box-shadow var(--kbc-card-transition) ease,
+    transform var(--kbc-card-transition) ease;
+}
+
+/* Normal card headings */
+.kbc-theme-card h1,
+.kbc-theme-card h2,
+.kbc-theme-card h3 {
+  color: var(--kbc-card-heading);
+}
+
+/* Normal card icons */
+.kbc-theme-card svg {
+  color: var(--kbc-icon-color);
+}
+
+/* =====================================================
+   DESKTOP HOVER EFFECT
+===================================================== */
+
+@media (hover: hover) and (pointer: fine) {
+  .kbc-theme-card:hover {
+    transform: translateY(-8px);
+    background: var(--kbc-card-hover-bg);
+    color: var(--kbc-card-hover-text);
+    border-color: var(--kbc-card-hover-border);
+    box-shadow: var(--kbc-card-hover-shadow);
+  }
+
+  .kbc-theme-card:hover h1,
+  .kbc-theme-card:hover h2,
+  .kbc-theme-card:hover h3,
+  .kbc-theme-card:hover p,
+  .kbc-theme-card:hover span,
+  .kbc-theme-card:hover div,
+  .kbc-theme-card:hover label {
+    color: var(--kbc-card-hover-text);
+  }
+
+  .kbc-theme-card:hover svg {
+    color: var(--kbc-icon-hover-color);
+    stroke: var(--kbc-icon-hover-color);
+    transform: scale(1.08) rotate(-4deg);
+  }
+}
+
+/* =====================================================
+   MOBILE TOUCH EFFECT
+===================================================== */
+
+@media (hover: none) {
+  .kbc-theme-card:active {
+    background: var(--kbc-card-hover-bg);
+    color: var(--kbc-card-hover-text);
+    border-color: var(--kbc-card-hover-border);
+    box-shadow: var(--kbc-card-hover-shadow);
+  }
+
+  .kbc-theme-card:active h1,
+  .kbc-theme-card:active h2,
+  .kbc-theme-card:active h3,
+  .kbc-theme-card:active p,
+  .kbc-theme-card:active span,
+  .kbc-theme-card:active div {
+    color: var(--kbc-card-hover-text);
+  }
+
+  .kbc-theme-card:active svg {
+    color: var(--kbc-icon-hover-color);
+    stroke: var(--kbc-icon-hover-color);
+  }
+}
+
+/* =====================================================
+   REUSABLE ICON
+===================================================== */
+
+.kbc-theme-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--kbc-icon-color);
+  background: rgba(239, 232, 168, 0.1);
+
+  border: 1px solid rgba(201, 164, 92, 0.5);
+  border-radius: 12px;
+
+  transition: all 400ms ease;
+}
+
+/* =====================================================
+   REUSABLE BUTTON
+===================================================== */
+
+.kbc-theme-button {
+  background: var(--kbc-charcoal);
+  color: var(--kbc-champagne);
+  border: 1px solid var(--kbc-gold);
+  border-radius: 12px;
+
+  transition: all 300ms ease;
+}
+
+.kbc-theme-button:hover {
+  background: var(--kbc-champagne);
+  color: var(--kbc-charcoal);
+  box-shadow: 0 0 18px rgba(201, 164, 92, 0.35);
+}
+
+/* =====================================================
+   REUSABLE INPUT
+===================================================== */
+
+.kbc-theme-input {
+  background: var(--kbc-white);
+  color: var(--kbc-charcoal);
+  border: 1px solid var(--kbc-gold);
+  border-radius: 10px;
+}
+
+.kbc-theme-input:focus {
+  outline: none;
+  border-color: var(--kbc-antique-gold);
+  box-shadow: 0 0 0 3px rgba(201, 164, 92, 0.18);
+}

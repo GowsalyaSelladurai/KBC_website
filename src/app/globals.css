@@ -2330,3 +2330,131 @@ nav::-webkit-scrollbar-button {
     opacity: 0.15;
   }
 }
+
+/* =========================================
+   KBC GLOBAL LIGHT / DARK THEME
+========================================= */
+
+:root,
+html[data-theme="light"] {
+  color-scheme: light;
+
+  --kbc-background: #FAF5ED;
+  --kbc-surface: #FFFFFF;
+  --kbc-surface-soft: #E8D8C5;
+  --kbc-text: #121414;
+  --kbc-text-muted: #625B50;
+  --kbc-champagne: #EFE8A8;
+  --kbc-gold: #C9A45C;
+  --kbc-border: rgba(201, 164, 92, 0.45);
+  --kbc-shadow: rgba(65, 48, 20, 0.12);
+}
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+
+  --kbc-background: #121414;
+  --kbc-surface: #242424;
+  --kbc-surface-soft: #33302B;
+  --kbc-text: #FAF5ED;
+  --kbc-text-muted: #D1C5B3;
+  --kbc-champagne: #EFE8A8;
+  --kbc-gold: #C9A45C;
+  --kbc-border: rgba(201, 164, 92, 0.5);
+  --kbc-shadow: rgba(0, 0, 0, 0.35);
+}
+
+/* Main website background and text */
+
+html[data-theme] body {
+  background-color: var(--kbc-background) !important;
+  color: var(--kbc-text);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Main page wrappers */
+
+html[data-theme] .kbc-public-theme,
+html[data-theme] .kbc-admin-pages-theme {
+  background-color: var(--kbc-background) !important;
+  color: var(--kbc-text) !important;
+}
+
+/* Dashboard wrapper */
+
+html[data-theme] .dashboard {
+  background-color: var(--kbc-background) !important;
+  color: var(--kbc-text);
+}
+
+/* Shared card surfaces */
+
+html[data-theme] .kbc-panel,
+html[data-theme] .kbc-glass-card {
+  background-color: var(--kbc-surface);
+  border-color: var(--kbc-border);
+  color: var(--kbc-text);
+}
+
+/* Global theme switch button */
+
+.kbc-theme-toggle {
+  position: fixed;
+  right: 24px;
+  bottom: 90px;
+  z-index: 9999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+
+  padding: 11px 17px;
+  border: 1px solid var(--kbc-gold);
+  border-radius: 999px;
+
+  background: var(--kbc-surface);
+  color: var(--kbc-text);
+
+  font-size: 13px;
+  font-weight: 600;
+
+  box-shadow: 0 5px 22px var(--kbc-shadow);
+  cursor: pointer;
+
+  transition:
+    background 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    transform 0.3s ease;
+}
+
+.kbc-theme-toggle:hover {
+  border-color: var(--kbc-gold);
+  box-shadow:
+    0 0 0 1px var(--kbc-gold),
+    0 0 18px rgba(201, 164, 92, 0.5);
+  transform: translateY(-2px);
+}
+
+.kbc-theme-toggle:focus-visible {
+  outline: 2px solid var(--kbc-gold);
+  outline-offset: 4px;
+}
+
+@media (max-width: 640px) {
+  .kbc-theme-toggle {
+    right: 14px;
+    bottom: 80px;
+    padding: 10px 13px;
+    font-size: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kbc-theme-toggle,
+  html[data-theme] body {
+    transition: none;
+  }
+}

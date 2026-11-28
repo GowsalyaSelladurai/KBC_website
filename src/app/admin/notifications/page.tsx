@@ -252,31 +252,21 @@ function timeAgo(date: string) {
   return new Date(date).toLocaleDateString();
 }
 
-function formatDate(date: string) {
-  return new Date(date).toLocaleString("en-IN", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-}
-
 /* =========================================
    REUSABLE STYLES
 ========================================= */
 
 const cardClass =
-  "gold-ambient-card rounded-2xl border border-[#343832] bg-[#1B1F1D] p-5";
+  "gold-ambient-card rounded-2xl border border-[#343832] bg-[#121414] p-5";
 
 const inputClass =
-  "w-full rounded-xl border border-[#3A403A] bg-[#151917] px-4 py-3 text-sm text-white outline-none transition focus:border-[#D9D19A]";
+  "w-full rounded-xl border border-[#D8CDBB] bg-white px-4 py-3 text-sm text-[#17140D] outline-none transition placeholder:text-[#928879] focus:border-[#C9A45C] focus:ring-2 focus:ring-[#C9A45C]/20";
 
 const primaryButtonClass =
-  "inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#EFE8A8] to-[#C8BD79] px-4 py-2.5 text-sm font-semibold text-[#171914] transition hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-40";
+  "inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#EFE8A8] to-[#C9A45C] px-4 py-2.5 text-sm font-semibold text-[#17140D] transition hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-40";
 
 const secondaryButtonClass =
-  "inline-flex items-center justify-center gap-2 rounded-xl border border-[#3A403A] bg-[#151917] px-4 py-2.5 text-sm font-medium text-[#D7D9D1] transition hover:border-[#D9D19A] hover:text-[#EFE8A8] disabled:cursor-not-allowed disabled:opacity-40";
+  "inline-flex items-center justify-center gap-2 rounded-xl border border-[#C9A45C] bg-white px-4 py-2.5 text-sm font-medium text-[#17140D] transition hover:bg-[#FFF4CE] disabled:cursor-not-allowed disabled:opacity-40";
 
 /* =========================================
    MAIN COMPONENT
@@ -326,7 +316,11 @@ export default function NotificationsPage() {
       );
 
       if (savedNotifications) {
-        setNotifications(JSON.parse(savedNotifications));
+        const parsed = JSON.parse(savedNotifications);
+
+        if (Array.isArray(parsed)) {
+          setNotifications(parsed);
+        }
       }
 
       if (savedPreferences) {
@@ -349,19 +343,27 @@ export default function NotificationsPage() {
   useEffect(() => {
     if (!loaded) return;
 
-    localStorage.setItem(
-      NOTIFICATIONS_STORAGE_KEY,
-      JSON.stringify(notifications)
-    );
+    try {
+      localStorage.setItem(
+        NOTIFICATIONS_STORAGE_KEY,
+        JSON.stringify(notifications)
+      );
+    } catch (error) {
+      console.error("Unable to save notifications:", error);
+    }
   }, [notifications, loaded]);
 
   useEffect(() => {
     if (!loaded) return;
 
-    localStorage.setItem(
-      PREFERENCES_STORAGE_KEY,
-      JSON.stringify(preferences)
-    );
+    try {
+      localStorage.setItem(
+        PREFERENCES_STORAGE_KEY,
+        JSON.stringify(preferences)
+      );
+    } catch (error) {
+      console.error("Unable to save preferences:", error);
+    }
   }, [preferences, loaded]);
 
   /* =========================================
@@ -371,7 +373,7 @@ export default function NotificationsPage() {
   useEffect(() => {
     if (!toast) return;
 
-    const timer = setTimeout(() => {
+    const timer = window.setTimeout(() => {
       setToast("");
     }, 2800);
 
@@ -517,6 +519,8 @@ export default function NotificationsPage() {
   const clearArchived = () => {
     if (archivedCount === 0) return;
 
+    if (!window.confirm("Delete all archived notifications?")) return;
+
     setNotifications((previous) =>
       previous.filter((item) => item.status !== "Archived")
     );
@@ -537,6 +541,7 @@ export default function NotificationsPage() {
     setActiveCategory("All");
     setSearch("");
     setSelectedIds([]);
+    setMenuId(null);
   };
 
   /* =========================================
@@ -574,10 +579,6 @@ export default function NotificationsPage() {
     },
   ];
 
-  /* =========================================
-     CATEGORY ICON
-  ========================================= */
-
   const getCategoryIcon = (category: Category) => {
     const Icon = categoryConfig[category].icon;
     return <Icon size={18} />;
@@ -588,18 +589,16 @@ export default function NotificationsPage() {
   ========================================= */
 
   return (
-    <div className="min-h-screen bg-[#121414] px-4 py-6 text-white sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#FAF5ED] px-4 py-6 text-[#17140D] sm:px-6 lg:px-8">
       <div className="mx-auto flex max-w-[1600px] flex-col gap-6">
 
-        {/* =====================================
-            HEADER
-        ===================================== */}
+        {/* HEADER */}
 
         <section className={cardClass}>
           <div className="flex flex-col justify-between gap-5 lg:flex-row lg:items-center">
             <div>
               <div className="mb-3 flex items-center gap-2">
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#5A5438] bg-[#28291F] text-[#EFE8A8]">
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#756B42] bg-[#302F23] text-[#EFE8A8]">
                   <Bell size={19} />
                 </div>
 
@@ -638,9 +637,7 @@ export default function NotificationsPage() {
           </div>
         </section>
 
-        {/* =====================================
-            SUMMARY CARDS
-        ===================================== */}
+        {/* SUMMARY CARDS */}
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
           {summaryCards.map((item) => {
@@ -678,9 +675,7 @@ export default function NotificationsPage() {
           })}
         </div>
 
-        {/* =====================================
-            MAIN NOTIFICATIONS CARD
-        ===================================== */}
+        {/* MAIN NOTIFICATIONS CARD */}
 
         <section className={cardClass}>
 
@@ -745,7 +740,7 @@ export default function NotificationsPage() {
               {search && (
                 <button
                   onClick={() => setSearch("")}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-[#858B82] transition hover:text-white"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-[#858B82] transition hover:text-[#17140D]"
                 >
                   <X size={16} />
                 </button>
@@ -765,7 +760,7 @@ export default function NotificationsPage() {
               </button>
 
               {showCategoryMenu && (
-                <div className="absolute right-0 top-full z-30 mt-2 w-full min-w-[210px] rounded-xl border border-[#343832] bg-[#1B1F1D] p-2 shadow-2xl">
+                <div className="absolute right-0 top-full z-30 mt-2 w-full min-w-[210px] rounded-xl border border-[#C9A45C] bg-white p-2 shadow-2xl">
                   <button
                     onClick={() => {
                       setActiveCategory("All");
@@ -773,8 +768,8 @@ export default function NotificationsPage() {
                     }}
                     className={`flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-sm transition ${
                       activeCategory === "All"
-                        ? "bg-[#343326] text-[#EFE8A8]"
-                        : "text-[#C4C8BE] hover:bg-[#252A27]"
+                        ? "bg-[#FFF4CE] text-[#17140D]"
+                        : "text-[#514A3D] hover:bg-[#FAF5ED]"
                     }`}
                   >
                     All Categories
@@ -790,8 +785,8 @@ export default function NotificationsPage() {
                       }}
                       className={`flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-sm transition ${
                         activeCategory === category
-                          ? "bg-[#343326] text-[#EFE8A8]"
-                          : "text-[#C4C8BE] hover:bg-[#252A27]"
+                          ? "bg-[#FFF4CE] text-[#17140D]"
+                          : "text-[#514A3D] hover:bg-[#FAF5ED]"
                       }`}
                     >
                       <span className="flex items-center gap-2">
@@ -835,8 +830,8 @@ export default function NotificationsPage() {
                   }}
                   className={`flex items-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-medium transition ${
                     active
-                      ? "border-[#756B42] bg-[#302F23] text-[#EFE8A8]"
-                      : "border-[#343832] bg-[#151917] text-[#A9ACA2] hover:border-[#756B42] hover:text-[#EFE8A8]"
+                      ? "border-[#C9A45C] bg-gradient-to-r from-[#EFE8A8] to-[#C9A45C] text-[#17140D]"
+                      : "border-[#343832] bg-[#151917] text-[#A9ACA2] hover:border-[#C9A45C] hover:text-[#EFE8A8]"
                   }`}
                 >
                   {filter}
@@ -844,7 +839,7 @@ export default function NotificationsPage() {
                   <span
                     className={`rounded-md px-1.5 py-0.5 text-xs ${
                       active
-                        ? "bg-[#4A4530] text-[#EFE8A8]"
+                        ? "bg-white/40 text-[#17140D]"
                         : "bg-[#252A27] text-[#92978F]"
                     }`}
                   >
@@ -858,8 +853,8 @@ export default function NotificationsPage() {
           {/* BULK ACTIONS */}
 
           {selectedIds.length > 0 && (
-            <div className="mb-5 flex flex-col justify-between gap-3 rounded-xl border border-[#756B42] bg-[#26271F] p-4 sm:flex-row sm:items-center">
-              <div className="flex items-center gap-2 text-sm text-[#EFE8A8]">
+            <div className="mb-5 flex flex-col justify-between gap-3 rounded-xl border border-[#C9A45C] bg-[#FFF4CE] p-4 sm:flex-row sm:items-center">
+              <div className="flex items-center gap-2 text-sm text-[#17140D]">
                 <CheckCircle2 size={17} />
                 <span>
                   {selectedIds.length} notification
@@ -937,18 +932,16 @@ export default function NotificationsPage() {
                   >
                     <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
 
-                      {/* CHECKBOX */}
+                      {/* CHECKBOX AND CATEGORY */}
 
                       <div className="flex items-start gap-3">
                         <input
                           type="checkbox"
                           checked={selectedIds.includes(item.id)}
                           onChange={() => toggleSelect(item.id)}
-                          className="mt-1 h-4 w-4 cursor-pointer accent-[#D9D19A]"
+                          className="mt-1 h-4 w-4 cursor-pointer accent-[#C9A45C]"
                           aria-label={`Select ${item.title}`}
                         />
-
-                        {/* CATEGORY ICON */}
 
                         <div
                           className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-[#3A403A]"
@@ -976,11 +969,11 @@ export default function NotificationsPage() {
                           </h3>
 
                           {item.status === "Unread" && (
-                            <span className="h-2 w-2 rounded-full bg-[#D9D19A]" />
+                            <span className="notification-unread-dot h-2 w-2 rounded-full bg-[#D9D19A]" />
                           )}
 
                           <span
-                            className="rounded-md px-2 py-1 text-[10px] font-semibold uppercase tracking-wide"
+                            className="notification-priority rounded-md px-2 py-1 text-[10px] font-semibold uppercase tracking-wide"
                             style={{
                               color: priority.color,
                               backgroundColor: priority.bg,
@@ -1026,7 +1019,7 @@ export default function NotificationsPage() {
                               setToast("Notification marked as read");
                             }}
                             title="Mark as read"
-                            className="flex h-9 w-9 items-center justify-center rounded-lg border border-[#3A403A] bg-[#151917] text-[#A9ACA2] transition hover:border-[#756B42] hover:text-[#EFE8A8]"
+                            className="flex h-9 w-9 items-center justify-center rounded-lg border border-[#3A403A] bg-[#151917] text-[#A9ACA2] transition hover:border-[#C9A45C] hover:text-[#EFE8A8]"
                           >
                             <MailOpen size={16} />
                           </button>
@@ -1041,7 +1034,7 @@ export default function NotificationsPage() {
                               setToast("Notification marked as unread");
                             }}
                             title="Mark as unread"
-                            className="flex h-9 w-9 items-center justify-center rounded-lg border border-[#3A403A] bg-[#151917] text-[#A9ACA2] transition hover:border-[#756B42] hover:text-[#EFE8A8]"
+                            className="flex h-9 w-9 items-center justify-center rounded-lg border border-[#3A403A] bg-[#151917] text-[#A9ACA2] transition hover:border-[#C9A45C] hover:text-[#EFE8A8]"
                           >
                             <Mail size={16} />
                           </button>
@@ -1056,7 +1049,7 @@ export default function NotificationsPage() {
                               setToast("Notification restored");
                             }}
                             title="Restore notification"
-                            className="flex h-9 w-9 items-center justify-center rounded-lg border border-[#3A403A] bg-[#151917] text-[#A9ACA2] transition hover:border-[#756B42] hover:text-[#EFE8A8]"
+                            className="flex h-9 w-9 items-center justify-center rounded-lg border border-[#3A403A] bg-[#151917] text-[#A9ACA2] transition hover:border-[#C9A45C] hover:text-[#EFE8A8]"
                           >
                             <RotateCcw size={16} />
                           </button>
@@ -1069,13 +1062,13 @@ export default function NotificationsPage() {
                             )
                           }
                           title="More options"
-                          className="flex h-9 w-9 items-center justify-center rounded-lg border border-[#3A403A] bg-[#151917] text-[#A9ACA2] transition hover:border-[#756B42] hover:text-[#EFE8A8]"
+                          className="flex h-9 w-9 items-center justify-center rounded-lg border border-[#3A403A] bg-[#151917] text-[#A9ACA2] transition hover:border-[#C9A45C] hover:text-[#EFE8A8]"
                         >
                           <MoreVertical size={17} />
                         </button>
 
                         {menuId === item.id && (
-                          <div className="absolute right-0 top-11 z-20 w-48 rounded-xl border border-[#343832] bg-[#1B1F1D] p-2 shadow-2xl">
+                          <div className="absolute right-0 top-11 z-20 w-48 rounded-xl border border-[#C9A45C] bg-white p-2 shadow-2xl">
                             {item.status !== "Archived" && (
                               <button
                                 onClick={() => {
@@ -1085,7 +1078,7 @@ export default function NotificationsPage() {
                                   setMenuId(null);
                                   setToast("Notification archived");
                                 }}
-                                className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-left text-sm text-[#C4C8BE] transition hover:bg-[#292D29] hover:text-[#EFE8A8]"
+                                className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-left text-sm text-[#514A3D] transition hover:bg-[#FFF4CE] hover:text-[#17140D]"
                               >
                                 <Archive size={15} />
                                 Archive
@@ -1101,7 +1094,7 @@ export default function NotificationsPage() {
                                   setMenuId(null);
                                   setToast("Notification restored");
                                 }}
-                                className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-left text-sm text-[#C4C8BE] transition hover:bg-[#292D29] hover:text-[#EFE8A8]"
+                                className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-left text-sm text-[#514A3D] transition hover:bg-[#FFF4CE] hover:text-[#17140D]"
                               >
                                 <RotateCcw size={15} />
                                 Restore
@@ -1110,7 +1103,7 @@ export default function NotificationsPage() {
 
                             <button
                               onClick={() => deleteNotification(item.id)}
-                              className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-left text-sm text-[#F18C8C] transition hover:bg-[#382424]"
+                              className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-left text-sm text-rose-600 transition hover:bg-rose-50"
                             >
                               <Trash2 size={15} />
                               Delete
@@ -1153,11 +1146,9 @@ export default function NotificationsPage() {
           onClick={() => setShowPreferences(false)}
         >
           <div
-            className="gold-modal-card my-auto w-full max-w-lg rounded-2xl border border-[#49483A] bg-[#1B1F1D] p-5 shadow-2xl sm:p-6"
+            className="gold-modal-card my-auto w-full max-w-lg rounded-2xl border border-[#C9A45C]/50 bg-[#1B1F1D] p-5 shadow-2xl sm:p-6"
             onClick={(event) => event.stopPropagation()}
           >
-            {/* MODAL HEADER */}
-
             <div className="flex items-start justify-between gap-4 border-b border-[#343832] pb-5">
               <div>
                 <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl border border-[#5A5438] bg-[#28291F] text-[#EFE8A8]">
@@ -1175,13 +1166,11 @@ export default function NotificationsPage() {
 
               <button
                 onClick={() => setShowPreferences(false)}
-                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-[#3A403A] bg-[#151917] text-[#A9ACA2] transition hover:border-[#756B42] hover:text-[#EFE8A8]"
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-[#3A403A] bg-[#151917] text-[#A9ACA2] transition hover:border-[#C9A45C] hover:text-[#EFE8A8]"
               >
                 <X size={17} />
               </button>
             </div>
-
-            {/* PREFERENCES */}
 
             <div className="mt-5 flex flex-col gap-3">
               {categories.map((category) => {
@@ -1191,7 +1180,7 @@ export default function NotificationsPage() {
                 return (
                   <div
                     key={category}
-                    className="flex items-center justify-between gap-3 rounded-xl border border-[#343832] bg-[#151917] p-3.5 transition hover:border-[#756B42]"
+                    className="flex items-center justify-between gap-3 rounded-xl border border-[#343832] bg-[#151917] p-3.5 transition hover:border-[#C9A45C]"
                   >
                     <div className="flex items-center gap-3">
                       <div
@@ -1241,8 +1230,6 @@ export default function NotificationsPage() {
               })}
             </div>
 
-            {/* MODAL FOOTER */}
-
             <div className="mt-6 flex flex-col-reverse gap-3 border-t border-[#343832] pt-5 sm:flex-row sm:justify-between">
               <button
                 onClick={() => {
@@ -1270,12 +1257,10 @@ export default function NotificationsPage() {
         </div>
       )}
 
-      {/* =====================================
-          TOAST
-      ===================================== */}
+      {/* TOAST */}
 
       {toast && (
-        <div className="fixed bottom-5 right-5 z-[70] flex max-w-[calc(100vw-40px)] items-center gap-3 rounded-xl border border-[#756B42] bg-[#25271F] px-4 py-3.5 text-sm text-[#EFE8A8] shadow-2xl">
+        <div className="fixed bottom-5 right-5 z-[70] flex max-w-[calc(100vw-40px)] items-center gap-3 rounded-xl border border-[#C9A45C] bg-[#25271F] px-4 py-3.5 text-sm text-[#EFE8A8] shadow-2xl">
           <CheckCircle2 size={18} className="shrink-0 text-[#D9D19A]" />
           <span>{toast}</span>
 
@@ -1300,6 +1285,7 @@ export default function NotificationsPage() {
 
           transition:
             transform 0.35s ease,
+            background 0.35s ease,
             border-color 0.35s ease,
             box-shadow 0.35s ease;
         }
@@ -1308,65 +1294,107 @@ export default function NotificationsPage() {
           content: "";
           position: absolute;
           inset: -3px;
+          z-index: -1;
           border-radius: inherit;
           pointer-events: none;
-          z-index: -1;
 
-          background: radial-gradient(
-            ellipse at center,
-            rgba(255, 226, 130, 0.25) 0%,
-            rgba(239, 200, 85, 0.16) 35%,
-            rgba(205, 157, 55, 0.08) 65%,
-            transparent 100%
+          background: linear-gradient(
+            135deg,
+            #fff4ce 0%,
+            #e8d39a 52%,
+            #c9a45c 100%
           );
 
           filter: blur(24px);
           opacity: 0;
-
           transition: opacity 0.35s ease;
         }
 
+        /* FULL CHAMPAGNE GOLD HOVER */
+
         .gold-ambient-card:hover,
-        .gold-ambient-card:active,
-        .gold-ambient-card:focus-visible {
-          border-color: rgba(239, 210, 130, 0.45);
+        .gold-ambient-card:active {
+          background: linear-gradient(
+            135deg,
+            #fff4ce 0%,
+            #e8d39a 52%,
+            #c9a45c 100%
+          ) !important;
+
+          border-color: #fff0b8 !important;
+
+          color: #17140d !important;
 
           box-shadow:
-            0 0 12px rgba(239, 200, 85, 0.13),
-            0 0 28px rgba(239, 200, 85, 0.12),
-            0 0 50px rgba(239, 200, 85, 0.08),
-            inset 0 0 18px rgba(239, 200, 85, 0.025);
+            0 0 10px rgba(255, 244, 206, 0.85),
+            0 0 24px rgba(232, 211, 154, 0.75),
+            0 0 45px rgba(201, 164, 92, 0.65),
+            0 0 70px rgba(201, 164, 92, 0.35),
+            inset 0 0 20px rgba(255, 255, 255, 0.3) !important;
         }
 
         .gold-ambient-card:hover::before,
-        .gold-ambient-card:active::before,
-        .gold-ambient-card:focus-visible::before {
+        .gold-ambient-card:active::before {
           opacity: 1;
         }
 
+        /* DARK TEXT WHEN CARD IS HOVERED */
+
+        .gold-ambient-card:hover h1,
+        .gold-ambient-card:hover h2,
+        .gold-ambient-card:hover h3,
+        .gold-ambient-card:hover h4,
+        .gold-ambient-card:hover p,
+        .gold-ambient-card:hover label,
+        .gold-ambient-card:active h1,
+        .gold-ambient-card:active h2,
+        .gold-ambient-card:active h3,
+        .gold-ambient-card:active h4,
+        .gold-ambient-card:active p,
+        .gold-ambient-card:active label {
+          color: #17140d !important;
+        }
+
+        /* PRESERVE PRIORITY AND CATEGORY COLORS */
+
+        .gold-ambient-card:hover .notification-priority,
+        .gold-ambient-card:active .notification-priority {
+          background-color: rgba(255, 255, 255, 0.45) !important;
+        }
+
+        /* BUTTONS AND ICONS */
+
+        .gold-ambient-card:hover button,
+        .gold-ambient-card:active button {
+          color: #17140d;
+        }
+
+        .gold-ambient-card:hover button svg,
+        .gold-ambient-card:active button svg {
+          color: #17140d;
+        }
+
+        /* DESKTOP HOVER */
+
         @media (hover: hover) and (pointer: fine) {
           .gold-ambient-card:hover {
-            transform: translateY(-3px);
+            transform: translateY(-4px);
           }
         }
+
+        /* MOBILE TOUCH */
 
         @media (hover: none) {
           .gold-ambient-card:active {
-            transform: scale(0.99);
+            transform: scale(0.985);
+          }
+
+          .gold-ambient-card:active::before {
+            opacity: 1;
           }
         }
 
-        @media (prefers-reduced-motion: reduce) {
-          .gold-ambient-card,
-          .gold-ambient-card::before {
-            transition: none;
-          }
-
-          .gold-ambient-card:hover,
-          .gold-ambient-card:active {
-            transform: none;
-          }
-        }
+        /* MODAL ANIMATION */
 
         .gold-modal-card {
           animation: modalAppear 0.25s ease-out;
@@ -1381,6 +1409,22 @@ export default function NotificationsPage() {
           to {
             opacity: 1;
             transform: translateY(0) scale(1);
+          }
+        }
+
+        /* ACCESSIBILITY */
+
+        @media (prefers-reduced-motion: reduce) {
+          .gold-ambient-card,
+          .gold-ambient-card::before,
+          .gold-modal-card {
+            transition: none;
+            animation: none;
+          }
+
+          .gold-ambient-card:hover,
+          .gold-ambient-card:active {
+            transform: none;
           }
         }
       `}</style>

@@ -6,7 +6,6 @@ import {
   Award,
   FileText,
   Files,
-  Clock,
   AlertTriangle,
   Search,
   Plus,
@@ -25,7 +24,6 @@ import {
   Building2,
   BookOpen,
   MoreVertical,
-  ChevronDown,
   Sparkles,
   FolderOpen,
 } from "lucide-react";
@@ -228,16 +226,16 @@ const statusConfig: Record<Status, { color: string; bg: string }> = {
 ========================================= */
 
 const cardClass =
-  "gold-ambient-card rounded-2xl border border-[#343832] bg-[#1B1F1D] p-5";
+  "gold-ambient-card rounded-2xl border border-[#343832] bg-[#121414] p-5";
 
 const inputClass =
-  "w-full rounded-xl border border-[#3A403A] bg-[#151917] px-4 py-3 text-sm text-white outline-none transition focus:border-[#D9D19A]";
+  "w-full rounded-xl border border-[#D8CDBB] bg-white px-4 py-3 text-sm text-[#17140D] placeholder:text-[#928879] outline-none transition focus:border-[#C9A45C] focus:ring-2 focus:ring-[#C9A45C]/20";
 
 const primaryButtonClass =
-  "inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#EFE8A8] to-[#C8BD79] px-4 py-2.5 text-sm font-semibold text-[#171914] transition hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-40";
+  "inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#EFE8A8] to-[#C9A45C] px-4 py-2.5 text-sm font-semibold text-[#17140D] shadow-sm transition hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-40";
 
 const secondaryButtonClass =
-  "inline-flex items-center justify-center gap-2 rounded-xl border border-[#3A403A] bg-[#151917] px-4 py-2.5 text-sm font-medium text-[#D7D9D1] transition hover:border-[#D9D19A] hover:text-[#EFE8A8] disabled:cursor-not-allowed disabled:opacity-40";
+  "inline-flex items-center justify-center gap-2 rounded-xl border border-[#C9A45C] bg-white px-4 py-2.5 text-sm font-medium text-[#17140D] transition hover:bg-[#FFF4CE] disabled:cursor-not-allowed disabled:opacity-40";
 
 /* =========================================
    HELPERS
@@ -331,9 +329,7 @@ export default function DocumentsPage() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  /* =========================================
-     LOAD STORAGE
-  ========================================= */
+  /* LOAD STORAGE */
 
   useEffect(() => {
     try {
@@ -352,9 +348,7 @@ export default function DocumentsPage() {
     }
   }, []);
 
-  /* =========================================
-     SAVE STORAGE
-  ========================================= */
+  /* SAVE STORAGE */
 
   useEffect(() => {
     if (!loaded) return;
@@ -366,9 +360,7 @@ export default function DocumentsPage() {
     }
   }, [documents, loaded]);
 
-  /* =========================================
-     TOAST TIMER
-  ========================================= */
+  /* TOAST TIMER */
 
   useEffect(() => {
     if (!toast) return;
@@ -377,9 +369,7 @@ export default function DocumentsPage() {
     return () => window.clearTimeout(timer);
   }, [toast]);
 
-  /* =========================================
-     COUNTS
-  ========================================= */
+  /* COUNTS */
 
   const totalDocuments = documents.length;
 
@@ -396,8 +386,7 @@ export default function DocumentsPage() {
   ).length;
 
   const expiredCount = documents.filter(
-    (item) =>
-      item.status === "Approved" && isExpired(item.expiryDate)
+    (item) => item.status === "Approved" && isExpired(item.expiryDate)
   ).length;
 
   const expiringCount = documents.filter(
@@ -405,9 +394,7 @@ export default function DocumentsPage() {
       item.status === "Approved" && isExpiringSoon(item.expiryDate)
   ).length;
 
-  /* =========================================
-     FILTER DOCUMENTS
-  ========================================= */
+  /* FILTER DOCUMENTS */
 
   const filteredDocuments = useMemo(() => {
     return documents
@@ -456,9 +443,7 @@ export default function DocumentsPage() {
       );
   }, [documents, activeTab, categoryFilter, statusFilter, search]);
 
-  /* =========================================
-     FORM HANDLERS
-  ========================================= */
+  /* FORM HANDLERS */
 
   const resetForm = () => {
     setForm({
@@ -475,7 +460,6 @@ export default function DocumentsPage() {
     });
 
     setSelectedFile(null);
-
     setEditingDocument(null);
 
     if (fileInputRef.current) {
@@ -509,9 +493,7 @@ export default function DocumentsPage() {
     setMenuId(null);
   };
 
-  /* =========================================
-     SAVE DOCUMENT
-  ========================================= */
+  /* SAVE DOCUMENT */
 
   const saveDocument = async (
     e: React.FormEvent<HTMLFormElement>
@@ -599,9 +581,7 @@ export default function DocumentsPage() {
     resetForm();
   };
 
-  /* =========================================
-     DELETE DOCUMENT
-  ========================================= */
+  /* DELETE DOCUMENT */
 
   const deleteDocument = (id: string) => {
     const item = documents.find((doc) => doc.id === id);
@@ -623,9 +603,7 @@ export default function DocumentsPage() {
     setToast("Document deleted");
   };
 
-  /* =========================================
-     UPDATE STATUS
-  ========================================= */
+  /* UPDATE STATUS */
 
   const updateStatus = (id: string, status: Status) => {
     setDocuments((current) =>
@@ -638,9 +616,7 @@ export default function DocumentsPage() {
     setToast(`Document marked as ${status.toLowerCase()}`);
   };
 
-  /* =========================================
-     DOWNLOAD DOCUMENT
-  ========================================= */
+  /* DOWNLOAD DOCUMENT */
 
   const downloadDocument = (item: DocumentItem) => {
     if (!item.fileData) {
@@ -656,9 +632,7 @@ export default function DocumentsPage() {
     link.remove();
   };
 
-  /* =========================================
-     EXPORT CSV
-  ========================================= */
+  /* EXPORT CSV */
 
   const exportCsv = () => {
     const headers = [
@@ -711,9 +685,7 @@ export default function DocumentsPage() {
     setToast("Document register exported");
   };
 
-  /* =========================================
-     CREATE CERTIFICATE
-  ========================================= */
+  /* CREATE CERTIFICATE */
 
   const createCertificate = () => {
     setForm({
@@ -736,9 +708,7 @@ export default function DocumentsPage() {
     setShowForm(true);
   };
 
-  /* =========================================
-     CERTIFICATE PREVIEW
-  ========================================= */
+  /* CERTIFICATE PREVIEW */
 
   const previewCertificate = (item: DocumentItem) => {
     setPreviewDocument(item);
@@ -779,9 +749,7 @@ KBC SALON ACADEMY
     URL.revokeObjectURL(url);
   };
 
-  /* =========================================
-     TABS
-  ========================================= */
+  /* TABS */
 
   const tabs = [
     { name: "All", count: totalDocuments },
@@ -793,9 +761,7 @@ KBC SALON ACADEMY
     { name: "Pending", count: pendingCount },
   ] as const;
 
-  /* =========================================
-     SUMMARY CARDS
-  ========================================= */
+  /* SUMMARY CARDS */
 
   const summaryCards = [
     {
@@ -833,7 +799,7 @@ KBC SALON ACADEMY
   ========================================= */
 
   return (
-    <main className="min-h-screen bg-[#121414] px-4 py-6 text-white sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-[#FAF5ED] px-4 py-6 text-[#17140D] sm:px-6 lg:px-8">
       <div className="mx-auto flex max-w-[1600px] flex-col gap-6">
 
         {/* HEADER */}
@@ -861,18 +827,12 @@ KBC SALON ACADEMY
             </div>
 
             <div className="flex flex-wrap items-center gap-3">
-              <button
-                onClick={exportCsv}
-                className={secondaryButtonClass}
-              >
+              <button onClick={exportCsv} className={secondaryButtonClass}>
                 <Download size={16} />
                 Export CSV
               </button>
 
-              <button
-                onClick={openAddForm}
-                className={primaryButtonClass}
-              >
+              <button onClick={openAddForm} className={primaryButtonClass}>
                 <Plus size={17} />
                 Add document
               </button>
@@ -921,7 +881,7 @@ KBC SALON ACADEMY
         {/* EXPIRY ALERT */}
 
         {(expiringCount > 0 || expiredCount > 0) && (
-          <div className="gold-ambient-card flex flex-col gap-3 rounded-2xl border border-[#5C4933] bg-[#1B1F1D] p-4 sm:flex-row sm:items-center">
+          <div className="gold-ambient-card flex flex-col gap-3 rounded-2xl border border-[#343832] bg-[#121414] p-4 sm:flex-row sm:items-center">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#E7AD75]/10 text-[#E7AD75]">
               <AlertTriangle size={20} />
             </div>
@@ -971,7 +931,7 @@ KBC SALON ACADEMY
                   );
                   setActiveTab("All");
                 }}
-                className={`gold-ambient-card rounded-2xl border bg-[#1B1F1D] p-4 text-left transition ${
+                className={`gold-ambient-card rounded-2xl border bg-[#121414] p-4 text-left transition ${
                   categoryFilter === category
                     ? "border-[#756B42]"
                     : "border-[#343832]"
@@ -1296,7 +1256,7 @@ KBC SALON ACADEMY
             </table>
 
             {filteredDocuments.length === 0 && (
-              <div className="flex min-h-[280px] flex-col items-center justify-center px-6 text-center">
+              <div className="flex min-h-[280px] flex-col items-center justify-center bg-[#121414] px-6 text-center">
                 <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-[#343832] bg-[#202522] text-[#D9D19A]">
                   <FolderOpen size={28} />
                 </div>
@@ -1338,9 +1298,7 @@ KBC SALON ACADEMY
           </div>
         </section>
 
-        {/* =====================================
-            ADD / EDIT MODAL
-        ===================================== */}
+        {/* ADD / EDIT MODAL */}
 
         {showForm && (
           <div
@@ -1551,7 +1509,7 @@ KBC SALON ACADEMY
 
                   <div
                     onClick={() => fileInputRef.current?.click()}
-                    className="gold-ambient-card flex cursor-pointer flex-col items-center justify-center rounded-xl border border-dashed border-[#5A5438] bg-[#151917] px-5 py-7 text-center transition hover:border-[#D9D19A] hover:bg-[#1D211D]"
+                    className="gold-ambient-card flex cursor-pointer flex-col items-center justify-center rounded-xl border border-dashed border-[#5A5438] bg-[#121414] px-5 py-7 text-center transition"
                   >
                     <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-[#5A5438] bg-[#28291F] text-[#EFE8A8]">
                       <Upload size={22} />
@@ -1617,9 +1575,7 @@ KBC SALON ACADEMY
           </div>
         )}
 
-        {/* =====================================
-            PREVIEW MODAL
-        ===================================== */}
+        {/* PREVIEW MODAL */}
 
         {previewDocument && (
           <div
@@ -1758,9 +1714,7 @@ KBC SALON ACADEMY
           </div>
         )}
 
-        {/* =====================================
-            TOAST
-        ===================================== */}
+        {/* TOAST */}
 
         {toast && (
           <div className="fixed bottom-5 right-5 z-[70] flex max-w-[calc(100vw-40px)] items-center gap-3 rounded-xl border border-[#756B42] bg-[#25271F] px-4 py-3.5 text-sm text-[#EFE8A8] shadow-2xl">
@@ -1790,27 +1744,32 @@ KBC SALON ACADEMY
           position: relative;
           isolation: isolate;
           -webkit-tap-highlight-color: transparent;
+          background-color: #121414;
+          border: 1px solid #343832;
+          color: #f5f1e6;
 
           transition:
             transform 0.35s ease,
+            background 0.35s ease,
             border-color 0.35s ease,
             box-shadow 0.35s ease;
         }
+
+        /* GOLDEN GLOW AROUND THE CARD */
 
         .gold-ambient-card::before {
           content: "";
           position: absolute;
           inset: -3px;
+          z-index: -1;
           border-radius: inherit;
           pointer-events: none;
-          z-index: -1;
 
-          background: radial-gradient(
-            ellipse at center,
-            rgba(255, 226, 130, 0.25) 0%,
-            rgba(239, 200, 85, 0.16) 35%,
-            rgba(205, 157, 55, 0.08) 65%,
-            transparent 100%
+          background: linear-gradient(
+            135deg,
+            #fff4ce 0%,
+            #e8d39a 52%,
+            #c9a45c 100%
           );
 
           filter: blur(24px);
@@ -1819,47 +1778,84 @@ KBC SALON ACADEMY
           transition: opacity 0.35s ease;
         }
 
+        /* CHAMPAGNE GOLD HOVER */
+
         .gold-ambient-card:hover,
-        .gold-ambient-card:active,
-        .gold-ambient-card:focus-visible {
-          border-color: rgba(239, 210, 130, 0.45);
+        .gold-ambient-card:active {
+          background: linear-gradient(
+            135deg,
+            #fff4ce 0%,
+            #e8d39a 52%,
+            #c9a45c 100%
+          ) !important;
+
+          border-color: #fff0b8 !important;
+
+          color: #17140d !important;
 
           box-shadow:
-            0 0 12px rgba(239, 200, 85, 0.13),
-            0 0 28px rgba(239, 200, 85, 0.12),
-            0 0 50px rgba(239, 200, 85, 0.08),
-            inset 0 0 18px rgba(239, 200, 85, 0.025);
+            0 0 10px rgba(255, 244, 206, 0.85),
+            0 0 24px rgba(232, 211, 154, 0.75),
+            0 0 45px rgba(201, 164, 92, 0.65),
+            0 0 70px rgba(201, 164, 92, 0.35),
+            inset 0 0 20px rgba(255, 255, 255, 0.3) !important;
         }
 
+        /* DARK TEXT ON HOVER */
+
+        .gold-ambient-card:hover h1,
+        .gold-ambient-card:hover h2,
+        .gold-ambient-card:hover h3,
+        .gold-ambient-card:hover h4,
+        .gold-ambient-card:hover p,
+        .gold-ambient-card:hover span,
+        .gold-ambient-card:hover label,
+        .gold-ambient-card:active h1,
+        .gold-ambient-card:active h2,
+        .gold-ambient-card:active h3,
+        .gold-ambient-card:active h4,
+        .gold-ambient-card:active p,
+        .gold-ambient-card:active span,
+        .gold-ambient-card:active label {
+          color: #17140d !important;
+        }
+
+        /* ICONS ON HOVER */
+
+        .gold-ambient-card:hover svg,
+        .gold-ambient-card:active svg {
+          color: #17140d;
+        }
+
+        /* SHOW THE GOLDEN GLOW */
+
         .gold-ambient-card:hover::before,
-        .gold-ambient-card:active::before,
-        .gold-ambient-card:focus-visible::before {
+        .gold-ambient-card:active::before {
           opacity: 1;
         }
 
+        /* DESKTOP HOVER MOVEMENT */
+
         @media (hover: hover) and (pointer: fine) {
           .gold-ambient-card:hover {
-            transform: translateY(-3px);
+            transform: translateY(-4px);
           }
         }
+
+        /* MOBILE TOUCH EFFECT */
 
         @media (hover: none) {
           .gold-ambient-card:active {
-            transform: scale(0.99);
+            transform: scale(0.985);
+            border-color: #fff0b8 !important;
+          }
+
+          .gold-ambient-card:active::before {
+            opacity: 1;
           }
         }
 
-        @media (prefers-reduced-motion: reduce) {
-          .gold-ambient-card,
-          .gold-ambient-card::before {
-            transition: none;
-          }
-
-          .gold-ambient-card:hover,
-          .gold-ambient-card:active {
-            transform: none;
-          }
-        }
+        /* MODAL ANIMATION */
 
         .gold-modal-card {
           animation: modalAppear 0.25s ease-out;
@@ -1874,6 +1870,22 @@ KBC SALON ACADEMY
           to {
             opacity: 1;
             transform: translateY(0) scale(1);
+          }
+        }
+
+        /* REDUCED MOTION ACCESSIBILITY */
+
+        @media (prefers-reduced-motion: reduce) {
+          .gold-ambient-card,
+          .gold-ambient-card::before,
+          .gold-modal-card {
+            transition: none;
+            animation: none;
+          }
+
+          .gold-ambient-card:hover,
+          .gold-ambient-card:active {
+            transform: none;
           }
         }
       `}</style>

@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useMemo, useState, type FormEvent } from "react";
@@ -361,25 +360,24 @@ export default function RevenuePage() {
     URL.revokeObjectURL(url);
   };
 
-  // Shared golden ambient card effect
+  // Shared champagne gold card effect with deep charcoal default
   const cardClass =
-    "gold-ambient-card rounded-2xl border border-[#343832] bg-[#1B1F1D] p-5";
+    "gold-ambient-card rounded-2xl bg-[#121414] p-5 text-[#F5F2E9]";
 
   const inputClass =
-    "w-full rounded-xl border border-[#3A403A] bg-[#151917] px-4 py-3 text-sm text-white outline-none transition placeholder:text-[#858B82] focus:border-[#D9D19A]";
+    "w-full rounded-xl border border-[#E8D39A]/30 bg-[#121414] px-4 py-3 text-sm text-[#F5F2E9] outline-none transition placeholder:text-[#858B82] focus:border-[#FFF4CE]";
 
   const labelClass =
     "mb-2 block text-xs font-medium uppercase tracking-wider text-[#A9ACA2]";
 
   return (
-    <main className="min-h-screen bg-[#121414] p-4 text-[#F5F2E9] sm:p-6 lg:p-8">
+    <main className="min-h-screen bg-[#FAF5ED] p-4 text-[#F5F2E9] sm:p-6 lg:p-8">
       <div className="mx-auto max-w-[1600px] space-y-7">
-
         {/* HEADER */}
 
-        <div className="gold-ambient-card flex flex-col justify-between gap-5 rounded-2xl border border-[#343832] bg-[#1B1F1D] p-5 lg:flex-row lg:items-center">
+        <div className="gold-ambient-card flex flex-col justify-between gap-5 rounded-2xl bg-[#121414] p-5 lg:flex-row lg:items-center">
           <div>
-            <div className="mb-2 flex items-center gap-2 text-[#D9D19A]">
+            <div className="gold-card-accent mb-2 flex items-center gap-2 text-[#E8D39A]">
               <Sparkles size={16} />
 
               <span className="text-xs font-semibold uppercase tracking-[0.2em]">
@@ -387,11 +385,11 @@ export default function RevenuePage() {
               </span>
             </div>
 
-            <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-              Revenue & Income
+            <h1 className="gold-card-title text-3xl font-semibold tracking-tight text-[#FFF4CE] sm:text-4xl">
+              Revenue &amp; Income
             </h1>
 
-            <p className="mt-2 text-sm text-[#92978F]">
+            <p className="gold-card-muted mt-2 text-sm text-[#9CA097]">
               Track your salon earnings, expenses and business performance.
             </p>
           </div>
@@ -400,19 +398,19 @@ export default function RevenuePage() {
             <select
               value={period}
               onChange={(event) => setPeriod(event.target.value)}
-              className="rounded-xl border border-[#3A403A] bg-[#1B1F1D] px-4 py-3 text-sm text-white outline-none transition focus:border-[#D9D19A]"
+              className="rounded-xl border border-[#E8D39A]/35 bg-[#121414] px-4 py-3 text-sm text-[#F5F2E9] outline-none transition focus:border-[#FFF4CE]"
             >
-              <option>Today</option>
-              <option>This Week</option>
-              <option>This Month</option>
-              <option>This Year</option>
-              <option>All Time</option>
+              <option className="bg-[#121414] text-[#F5F2E9]">Today</option>
+              <option className="bg-[#121414] text-[#F5F2E9]">This Week</option>
+              <option className="bg-[#121414] text-[#F5F2E9]">This Month</option>
+              <option className="bg-[#121414] text-[#F5F2E9]">This Year</option>
+              <option className="bg-[#121414] text-[#F5F2E9]">All Time</option>
             </select>
 
             <button
               type="button"
               onClick={exportCSV}
-              className="flex items-center gap-2 rounded-xl border border-[#4B5044] px-4 py-3 text-sm text-[#E9E3B2] transition hover:border-[#D9D19A]/50 hover:bg-[#292D26]"
+              className="gold-card-pill flex items-center gap-2 rounded-xl border border-[#E8D39A]/45 bg-[#121414] px-4 py-3 text-sm font-medium text-[#FFF4CE] transition hover:bg-[#FFF4CE] hover:text-[#17140D]"
             >
               <Download size={17} />
               Export
@@ -424,7 +422,7 @@ export default function RevenuePage() {
                 setDraft(emptyDraft);
                 setModalOpen(true);
               }}
-              className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#EFE8A8] to-[#C8BD79] px-5 py-3 text-sm font-semibold text-[#171914] transition hover:brightness-110"
+              className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#FFF4CE] via-[#E8D39A] to-[#C9A45C] px-5 py-3 text-sm font-semibold text-[#17140D] shadow-md shadow-[#C9A45C]/25 transition hover:brightness-105"
             >
               <Plus size={18} />
               Add Expense
@@ -435,28 +433,25 @@ export default function RevenuePage() {
         {/* FINANCIAL CARDS */}
 
         <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-
           {/* TOTAL REVENUE */}
 
           <div className={cardClass}>
-            <div className="absolute -right-6 -top-8 h-28 w-28 rounded-full bg-[#D9D19A]/10 blur-2xl" />
-
             <div className="relative">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-[#A9ACA2]">
+                <span className="gold-card-muted text-sm text-[#A9ACA2]">
                   Total Revenue
                 </span>
 
-                <div className="rounded-xl bg-[#D9D19A]/10 p-3 text-[#E8DEA0]">
+                <div className="gold-card-icon rounded-xl bg-[#E8D39A]/15 p-3 text-[#FFF4CE]">
                   <Wallet size={20} />
                 </div>
               </div>
 
-              <h2 className="mt-5 text-3xl font-semibold text-[#EFE8A8]">
+              <h2 className="gold-card-accent mt-5 text-3xl font-semibold text-[#FFF4CE]">
                 {money(totalRevenue)}
               </h2>
 
-              <p className="mt-2 text-xs text-[#8D948B]">
+              <p className="gold-card-muted mt-2 text-xs text-[#8D948B]">
                 From completed appointments
               </p>
             </div>
@@ -466,20 +461,20 @@ export default function RevenuePage() {
 
           <div className={cardClass}>
             <div className="flex items-center justify-between">
-              <span className="text-sm text-[#A9ACA2]">
+              <span className="gold-card-muted text-sm text-[#A9ACA2]">
                 Total Expenses
               </span>
 
-              <div className="rounded-xl bg-red-400/10 p-3 text-red-300">
+              <div className="gold-card-icon rounded-xl bg-red-400/15 p-3 text-red-300">
                 <TrendingDown size={20} />
               </div>
             </div>
 
-            <h2 className="mt-5 text-3xl font-semibold">
+            <h2 className="gold-card-title mt-5 text-3xl font-semibold text-[#F5F2E9]">
               {money(totalExpenses)}
             </h2>
 
-            <p className="mt-2 text-xs text-[#8D948B]">
+            <p className="gold-card-muted mt-2 text-xs text-[#8D948B]">
               Recorded business expenses
             </p>
           </div>
@@ -488,24 +483,24 @@ export default function RevenuePage() {
 
           <div className={cardClass}>
             <div className="flex items-center justify-between">
-              <span className="text-sm text-[#A9ACA2]">
+              <span className="gold-card-muted text-sm text-[#A9ACA2]">
                 Net Income
               </span>
 
-              <div className="rounded-xl bg-emerald-400/10 p-3 text-emerald-300">
+              <div className="gold-card-icon rounded-xl bg-emerald-400/15 p-3 text-emerald-300">
                 <PiggyBank size={20} />
               </div>
             </div>
 
             <h2
-              className={`mt-5 text-3xl font-semibold ${
+              className={`gold-card-title mt-5 text-3xl font-semibold ${
                 netIncome < 0 ? "text-red-300" : "text-emerald-300"
               }`}
             >
               {money(netIncome)}
             </h2>
 
-            <p className="mt-2 text-xs text-[#8D948B]">
+            <p className="gold-card-muted mt-2 text-xs text-[#8D948B]">
               Revenue minus expenses
             </p>
           </div>
@@ -514,20 +509,20 @@ export default function RevenuePage() {
 
           <div className={cardClass}>
             <div className="flex items-center justify-between">
-              <span className="text-sm text-[#A9ACA2]">
+              <span className="gold-card-muted text-sm text-[#A9ACA2]">
                 Completed Bookings
               </span>
 
-              <div className="rounded-xl bg-blue-400/10 p-3 text-blue-300">
+              <div className="gold-card-icon rounded-xl bg-blue-400/15 p-3 text-blue-300">
                 <CalendarDays size={20} />
               </div>
             </div>
 
-            <h2 className="mt-5 text-3xl font-semibold">
+            <h2 className="gold-card-title mt-5 text-3xl font-semibold text-[#F5F2E9]">
               {totalBookings}
             </h2>
 
-            <p className="mt-2 text-xs text-[#8D948B]">
+            <p className="gold-card-muted mt-2 text-xs text-[#8D948B]">
               Average booking: {money(averageBooking)}
             </p>
           </div>
@@ -536,35 +531,34 @@ export default function RevenuePage() {
         {/* CHART AND SERVICE BREAKDOWN */}
 
         <section className="grid gap-5 xl:grid-cols-3">
-
           {/* REVENUE CHART */}
 
           <div className={`${cardClass} xl:col-span-2`}>
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div>
-                <h2 className="text-lg font-semibold">
+                <h2 className="gold-card-title text-lg font-semibold text-[#F5F2E9]">
                   Revenue Overview
                 </h2>
 
-                <p className="mt-1 text-xs text-[#92978F]">
+                <p className="gold-card-muted mt-1 text-xs text-[#92978F]">
                   Income and expenses over the last 7 days
                 </p>
               </div>
 
               <div className="flex gap-4 text-xs">
-                <span className="flex items-center gap-2 text-[#DCD49A]">
-                  <span className="h-2 w-2 rounded-full bg-[#DCD49A]" />
+                <span className="gold-card-accent flex items-center gap-2 text-[#FFF4CE]">
+                  <span className="gold-card-dot h-2 w-2 rounded-full bg-[#FFF4CE]" />
                   Revenue
                 </span>
 
-                <span className="flex items-center gap-2 text-red-300">
+                <span className="gold-card-title flex items-center gap-2 text-red-300">
                   <span className="h-2 w-2 rounded-full bg-red-300" />
                   Expenses
                 </span>
               </div>
             </div>
 
-            <div className="mt-8 flex h-64 items-end justify-between gap-3 border-b border-[#343832] pb-2">
+            <div className="gold-card-divider mt-8 flex h-64 items-end justify-between gap-3 border-b border-[#E8D39A]/20 pb-2">
               {weeklyData.map((item) => (
                 <div
                   key={item.day}
@@ -573,7 +567,7 @@ export default function RevenuePage() {
                   <div className="flex h-full w-full items-end justify-center gap-1.5">
                     <div
                       title={`Revenue: ${money(item.income)}`}
-                      className="w-[38%] max-w-8 rounded-t-md bg-gradient-to-t from-[#9B915A] to-[#EFE8A8] transition-all duration-500 hover:brightness-125"
+                      className="gold-card-bar w-[38%] max-w-8 rounded-t-md bg-gradient-to-t from-[#C9A45C] to-[#FFF4CE] transition-all duration-500 hover:brightness-110"
                       style={{
                         height: `${Math.max(
                           item.income > 0 ? 3 : 0,
@@ -584,7 +578,7 @@ export default function RevenuePage() {
 
                     <div
                       title={`Expenses: ${money(item.expense)}`}
-                      className="w-[38%] max-w-8 rounded-t-md bg-gradient-to-t from-[#8E4545] to-[#E7A0A0] transition-all duration-500 hover:brightness-125"
+                      className="w-[38%] max-w-8 rounded-t-md bg-gradient-to-t from-[#8E4545] to-[#E7A0A0] transition-all duration-500 hover:brightness-110"
                       style={{
                         height: `${Math.max(
                           item.expense > 0 ? 3 : 0,
@@ -594,14 +588,14 @@ export default function RevenuePage() {
                     />
                   </div>
 
-                  <span className="text-xs text-[#92978F]">
+                  <span className="gold-card-muted text-xs text-[#92978F]">
                     {item.day}
                   </span>
                 </div>
               ))}
             </div>
 
-            <div className="mt-4 flex items-center justify-between text-xs text-[#92978F]">
+            <div className="gold-card-muted mt-4 flex items-center justify-between text-xs text-[#92978F]">
               <span>Last 7 days</span>
               <span>Amounts in INR</span>
             </div>
@@ -611,11 +605,11 @@ export default function RevenuePage() {
 
           <div className={cardClass}>
             <div>
-              <h2 className="text-lg font-semibold">
+              <h2 className="gold-card-title text-lg font-semibold text-[#F5F2E9]">
                 Top Services
               </h2>
 
-              <p className="mt-1 text-xs text-[#92978F]">
+              <p className="gold-card-muted mt-1 text-xs text-[#92978F]">
                 Revenue by service
               </p>
             </div>
@@ -631,23 +625,23 @@ export default function RevenuePage() {
                   return (
                     <div key={service.name}>
                       <div className="mb-2 flex items-center justify-between gap-2">
-                        <span className="truncate text-sm text-[#E5E6DE]">
+                        <span className="gold-card-title truncate text-sm text-[#E5E6DE]">
                           {service.name}
                         </span>
 
-                        <span className="text-xs text-[#D9D19A]">
+                        <span className="gold-card-accent text-xs font-medium text-[#E8D39A]">
                           {money(service.amount)}
                         </span>
                       </div>
 
-                      <div className="h-2 overflow-hidden rounded-full bg-[#30352F]">
+                      <div className="gold-card-track h-2 overflow-hidden rounded-full bg-[#262A28]">
                         <div
-                          className="h-full rounded-full bg-gradient-to-r from-[#8D8250] to-[#EFE8A8]"
+                          className="gold-card-bar h-full rounded-full bg-gradient-to-r from-[#C9A45C] to-[#FFF4CE]"
                           style={{ width: `${percentage}%` }}
                         />
                       </div>
 
-                      <p className="mt-1 text-right text-[10px] text-[#858B82]">
+                      <p className="gold-card-muted mt-1 text-right text-[10px] text-[#858B82]">
                         {percentage.toFixed(1)}%
                       </p>
                     </div>
@@ -658,33 +652,33 @@ export default function RevenuePage() {
               <div className="flex h-56 flex-col items-center justify-center text-center">
                 <ChartColumnIncreasing
                   size={35}
-                  className="mb-3 text-[#73796F]"
+                  className="gold-card-muted mb-3 text-[#73796F]"
                 />
 
-                <p className="text-sm text-[#A9ACA2]">
+                <p className="gold-card-title text-sm text-[#A9ACA2]">
                   No service revenue yet
                 </p>
 
-                <p className="mt-1 text-xs text-[#73796F]">
+                <p className="gold-card-muted mt-1 text-xs text-[#73796F]">
                   Complete appointments to see your top services.
                 </p>
               </div>
             )}
 
             {topService && (
-              <div className="gold-ambient-card mt-6 rounded-xl border border-[#4B4937] bg-[#292A21] p-4">
-                <div className="flex items-center gap-2 text-[#E7DDA0]">
+              <div className="gold-ambient-card gold-card-subpanel mt-6 rounded-xl bg-[#121414] p-4">
+                <div className="gold-card-accent flex items-center gap-2 text-[#FFF4CE]">
                   <Sparkles size={15} />
                   <span className="text-xs font-semibold">
                     Top performer
                   </span>
                 </div>
 
-                <p className="mt-2 text-sm font-medium">
+                <p className="gold-card-title mt-2 text-sm font-medium text-[#F5F2E9]">
                   {topService.name}
                 </p>
 
-                <p className="mt-1 text-xs text-[#A9ACA2]">
+                <p className="gold-card-muted mt-1 text-xs text-[#A9ACA2]">
                   {money(topService.amount)} generated in this period
                 </p>
               </div>
@@ -695,21 +689,20 @@ export default function RevenuePage() {
         {/* FINANCIAL SUMMARY */}
 
         <section className="grid gap-5 lg:grid-cols-2">
-
           {/* BUSINESS SUMMARY */}
 
           <div className={cardClass}>
             <div className="flex items-center gap-3">
-              <div className="rounded-xl bg-[#D9D19A]/10 p-3 text-[#E8DEA0]">
+              <div className="gold-card-icon rounded-xl bg-[#E8D39A]/15 p-3 text-[#FFF4CE]">
                 <BriefcaseBusiness size={21} />
               </div>
 
               <div>
-                <h2 className="font-semibold">
+                <h2 className="gold-card-title font-semibold text-[#F5F2E9]">
                   Business Summary
                 </h2>
 
-                <p className="text-xs text-[#92978F]">
+                <p className="gold-card-muted text-xs text-[#92978F]">
                   Financial position for selected period
                 </p>
               </div>
@@ -717,30 +710,32 @@ export default function RevenuePage() {
 
             <div className="mt-6 space-y-4">
               <div className="flex justify-between text-sm">
-                <span className="text-[#A9ACA2]">
+                <span className="gold-card-muted text-[#A9ACA2]">
                   Gross revenue
                 </span>
 
-                <span>{money(totalRevenue)}</span>
+                <span className="gold-card-title font-medium text-[#F5F2E9]">
+                  {money(totalRevenue)}
+                </span>
               </div>
 
               <div className="flex justify-between text-sm">
-                <span className="text-[#A9ACA2]">
+                <span className="gold-card-muted text-[#A9ACA2]">
                   Business expenses
                 </span>
 
-                <span className="text-red-300">
+                <span className="gold-card-title font-medium text-red-300">
                   − {money(totalExpenses)}
                 </span>
               </div>
 
-              <div className="border-t border-[#3A403A] pt-4">
+              <div className="gold-card-divider border-t border-[#E8D39A]/20 pt-4">
                 <div className="flex justify-between">
-                  <span className="font-semibold">
+                  <span className="gold-card-title font-semibold text-[#F5F2E9]">
                     Net income
                   </span>
 
-                  <span className="text-xl font-semibold text-[#EFE8A8]">
+                  <span className="gold-card-accent text-xl font-semibold text-[#FFF4CE]">
                     {money(netIncome)}
                   </span>
                 </div>
@@ -752,51 +747,51 @@ export default function RevenuePage() {
 
           <div className={cardClass}>
             <div className="flex items-center gap-3">
-              <div className="rounded-xl bg-emerald-400/10 p-3 text-emerald-300">
+              <div className="gold-card-icon rounded-xl bg-emerald-400/15 p-3 text-emerald-300">
                 <Sparkles size={21} />
               </div>
 
               <div>
-                <h2 className="font-semibold">
+                <h2 className="gold-card-title font-semibold text-[#F5F2E9]">
                   Business Insights
                 </h2>
 
-                <p className="text-xs text-[#92978F]">
+                <p className="gold-card-muted text-xs text-[#92978F]">
                   Based on your current records
                 </p>
               </div>
             </div>
 
             <div className="mt-5 space-y-3">
-              <div className="gold-ambient-card rounded-xl border border-[#343832] bg-[#151917] p-4">
-                <p className="text-xs text-[#A9ACA2]">
+              <div className="gold-ambient-card gold-card-subpanel rounded-xl bg-[#121414] p-4">
+                <p className="gold-card-muted text-xs text-[#A9ACA2]">
                   Average booking value
                 </p>
 
-                <p className="mt-1 text-xl font-semibold text-[#EFE8A8]">
+                <p className="gold-card-accent mt-1 text-xl font-semibold text-[#FFF4CE]">
                   {money(averageBooking)}
                 </p>
               </div>
 
-              <div className="gold-ambient-card rounded-xl border border-[#343832] bg-[#151917] p-4">
-                <p className="text-xs text-[#A9ACA2]">
+              <div className="gold-ambient-card gold-card-subpanel rounded-xl bg-[#121414] p-4">
+                <p className="gold-card-muted text-xs text-[#A9ACA2]">
                   Expense ratio
                 </p>
 
-                <p className="mt-1 text-xl font-semibold">
+                <p className="gold-card-title mt-1 text-xl font-semibold text-[#F5F2E9]">
                   {totalRevenue > 0
                     ? `${((totalExpenses / totalRevenue) * 100).toFixed(1)}%`
                     : "—"}
                 </p>
               </div>
 
-              <div className="gold-ambient-card rounded-xl border border-[#343832] bg-[#151917] p-4">
-                <p className="text-xs text-[#A9ACA2]">
+              <div className="gold-ambient-card gold-card-subpanel rounded-xl bg-[#121414] p-4">
+                <p className="gold-card-muted text-xs text-[#A9ACA2]">
                   Financial status
                 </p>
 
                 <p
-                  className={`mt-1 text-sm font-semibold ${
+                  className={`gold-card-title mt-1 text-sm font-semibold ${
                     netIncome >= 0
                       ? "text-emerald-300"
                       : "text-red-300"
@@ -816,11 +811,11 @@ export default function RevenuePage() {
         <section className={cardClass}>
           <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-center">
             <div>
-              <h2 className="text-lg font-semibold">
+              <h2 className="gold-card-title text-lg font-semibold text-[#F5F2E9]">
                 Recent Transactions
               </h2>
 
-              <p className="mt-1 text-xs text-[#92978F]">
+              <p className="gold-card-muted mt-1 text-xs text-[#92978F]">
                 All income and expenses for the selected period
               </p>
             </div>
@@ -836,7 +831,7 @@ export default function RevenuePage() {
                   value={search}
                   onChange={(event) => setSearch(event.target.value)}
                   placeholder="Search transactions..."
-                  className="w-full rounded-xl border border-[#3A403A] bg-[#151917] py-3 pl-9 pr-3 text-sm text-white outline-none transition placeholder:text-[#858B82] focus:border-[#D9D19A]"
+                  className="w-full rounded-xl border border-[#E8D39A]/30 bg-[#121414] py-3 pl-9 pr-3 text-sm text-[#F5F2E9] outline-none transition placeholder:text-[#858B82] focus:border-[#FFF4CE]"
                 />
               </div>
 
@@ -845,11 +840,17 @@ export default function RevenuePage() {
                 onChange={(event) =>
                   setCategoryFilter(event.target.value)
                 }
-                className="rounded-xl border border-[#3A403A] bg-[#151917] px-4 py-3 text-sm text-white outline-none transition focus:border-[#D9D19A]"
+                className="rounded-xl border border-[#E8D39A]/30 bg-[#121414] px-4 py-3 text-sm text-[#F5F2E9] outline-none transition focus:border-[#FFF4CE]"
               >
-                <option value="All">All transactions</option>
-                <option value="Income">Income</option>
-                <option value="Expense">Expenses</option>
+                <option value="All" className="bg-[#121414] text-[#F5F2E9]">
+                  All transactions
+                </option>
+                <option value="Income" className="bg-[#121414] text-[#F5F2E9]">
+                  Income
+                </option>
+                <option value="Expense" className="bg-[#121414] text-[#F5F2E9]">
+                  Expenses
+                </option>
               </select>
             </div>
           </div>
@@ -857,30 +858,13 @@ export default function RevenuePage() {
           <div className="mt-6 overflow-x-auto">
             <table className="w-full min-w-[700px] text-left">
               <thead>
-                <tr className="border-b border-[#343832] text-xs uppercase tracking-wider text-[#858B82]">
-                  <th className="pb-4 font-medium">
-                    Transaction
-                  </th>
-
-                  <th className="pb-4 font-medium">
-                    Date
-                  </th>
-
-                  <th className="pb-4 font-medium">
-                    Category
-                  </th>
-
-                  <th className="pb-4 font-medium">
-                    Payment
-                  </th>
-
-                  <th className="pb-4 text-right font-medium">
-                    Amount
-                  </th>
-
-                  <th className="pb-4 text-right font-medium">
-                    Type
-                  </th>
+                <tr className="gold-table-head border-b border-[#E8D39A]/20 text-xs uppercase tracking-wider text-[#858B82]">
+                  <th className="pb-4 font-medium">Transaction</th>
+                  <th className="pb-4 font-medium">Date</th>
+                  <th className="pb-4 font-medium">Category</th>
+                  <th className="pb-4 font-medium">Payment</th>
+                  <th className="pb-4 text-right font-medium">Amount</th>
+                  <th className="pb-4 text-right font-medium">Type</th>
                 </tr>
               </thead>
 
@@ -889,32 +873,32 @@ export default function RevenuePage() {
                   visibleTransactions.map((item) => (
                     <tr
                       key={`${item.type}-${item.id}`}
-                      className="border-b border-[#2D322D] transition last:border-0 hover:bg-[#252A25]/60"
+                      className="gold-table-row border-b border-[#E8D39A]/10 transition last:border-0"
                     >
                       <td className="py-4">
-                        <p className="text-sm font-medium">
+                        <p className="gold-card-title text-sm font-medium text-[#F5F2E9]">
                           {item.title}
                         </p>
 
-                        <p className="mt-1 text-xs text-[#858B82]">
+                        <p className="gold-card-muted mt-1 text-xs text-[#858B82]">
                           {item.customer}
                         </p>
                       </td>
 
-                      <td className="py-4 text-sm text-[#A9ACA2]">
+                      <td className="gold-card-muted py-4 text-sm text-[#A9ACA2]">
                         {formatDate(item.date)}
                       </td>
 
-                      <td className="py-4 text-sm text-[#A9ACA2]">
+                      <td className="gold-card-muted py-4 text-sm text-[#A9ACA2]">
                         {item.category}
                       </td>
 
-                      <td className="py-4 text-sm text-[#A9ACA2]">
+                      <td className="gold-card-muted py-4 text-sm text-[#A9ACA2]">
                         {item.method}
                       </td>
 
                       <td
-                        className={`py-4 text-right text-sm font-semibold ${
+                        className={`gold-card-title py-4 text-right text-sm font-semibold ${
                           item.type === "Income"
                             ? "text-emerald-300"
                             : "text-red-300"
@@ -926,10 +910,10 @@ export default function RevenuePage() {
 
                       <td className="py-4 text-right">
                         <span
-                          className={`rounded-full px-3 py-1 text-[10px] font-semibold ${
+                          className={`gold-card-pill rounded-full px-3 py-1 text-[10px] font-semibold ${
                             item.type === "Income"
-                              ? "bg-emerald-400/10 text-emerald-300"
-                              : "bg-red-400/10 text-red-300"
+                              ? "bg-emerald-400/15 text-emerald-300"
+                              : "bg-red-400/15 text-red-300"
                           }`}
                         >
                           {item.type}
@@ -940,7 +924,7 @@ export default function RevenuePage() {
                             type="button"
                             onClick={() => deleteExpense(item.id)}
                             title="Delete expense"
-                            className="ml-3 inline-flex text-[#858B82] transition hover:text-red-300"
+                            className="gold-row-btn ml-3 inline-flex text-[#858B82] transition hover:text-[#17140D]"
                           >
                             <Trash2 size={15} />
                           </button>
@@ -952,7 +936,7 @@ export default function RevenuePage() {
                   <tr>
                     <td
                       colSpan={6}
-                      className="py-14 text-center text-sm text-[#858B82]"
+                      className="gold-card-muted py-14 text-center text-sm text-[#858B82]"
                     >
                       No transactions found for this period.
                     </td>
@@ -962,7 +946,7 @@ export default function RevenuePage() {
             </table>
           </div>
 
-          <div className="mt-4 border-t border-[#343832] pt-4 text-xs text-[#858B82]">
+          <div className="gold-card-muted mt-4 border-t border-[#E8D39A]/15 pt-4 text-xs text-[#858B82]">
             Showing {visibleTransactions.length} transactions
           </div>
         </section>
@@ -978,10 +962,10 @@ export default function RevenuePage() {
               }
             }}
           >
-            <div className="gold-ambient-card my-auto w-full max-w-lg rounded-2xl border border-[#343832] bg-[#1B1F1D] p-6 shadow-2xl">
+            <div className="my-auto w-full max-w-lg rounded-2xl border border-[#E8D39A]/50 bg-[#121414] p-6 text-[#F5F2E9] shadow-[0_0_40px_rgba(232,211,154,0.22)]">
               <div className="mb-6 flex items-center justify-between">
                 <div>
-                  <h2 className="text-xl font-semibold">
+                  <h2 className="text-xl font-semibold text-[#FFF4CE]">
                     Add Expense
                   </h2>
 
@@ -993,7 +977,7 @@ export default function RevenuePage() {
                 <button
                   type="button"
                   onClick={() => setModalOpen(false)}
-                  className="rounded-lg p-2 text-[#A9ACA2] transition hover:bg-[#30352F] hover:text-white"
+                  className="rounded-lg p-2 text-[#A9ACA2] transition hover:bg-[#FFF4CE] hover:text-[#17140D]"
                 >
                   <X size={20} />
                 </button>
@@ -1036,7 +1020,10 @@ export default function RevenuePage() {
                       className={inputClass}
                     >
                       {expenseCategories.map((category) => (
-                        <option key={category}>
+                        <option
+                          key={category}
+                          className="bg-[#121414] text-[#F5F2E9]"
+                        >
                           {category}
                         </option>
                       ))}
@@ -1101,7 +1088,10 @@ export default function RevenuePage() {
                       className={inputClass}
                     >
                       {paymentMethods.map((method) => (
-                        <option key={method}>
+                        <option
+                          key={method}
+                          className="bg-[#121414] text-[#F5F2E9]"
+                        >
                           {method}
                         </option>
                       ))}
@@ -1132,14 +1122,14 @@ export default function RevenuePage() {
                   <button
                     type="button"
                     onClick={() => setModalOpen(false)}
-                    className="flex-1 rounded-xl border border-[#454A3D] px-4 py-3 text-sm text-[#C0C3B9] transition hover:bg-[#30352F]"
+                    className="flex-1 rounded-xl border border-[#E8D39A]/35 px-4 py-3 text-sm text-[#C0C3B9] transition hover:bg-[#FFF4CE] hover:text-[#17140D]"
                   >
                     Cancel
                   </button>
 
                   <button
                     type="submit"
-                    className="flex-1 rounded-xl bg-gradient-to-r from-[#EFE8A8] to-[#C8BD79] px-4 py-3 text-sm font-semibold text-[#171914] transition hover:brightness-110"
+                    className="flex-1 rounded-xl bg-gradient-to-r from-[#FFF4CE] via-[#E8D39A] to-[#C9A45C] px-4 py-3 text-sm font-semibold text-[#17140D] transition hover:brightness-105"
                   >
                     Save Expense
                   </button>
@@ -1149,59 +1139,140 @@ export default function RevenuePage() {
           </div>
         )}
 
-        <p className="pb-3 text-center text-xs text-[#656D64]">
+        <p className="pb-3 text-center text-xs font-medium text-[#6B6457]">
           KBC Salon Academy · Financial Dashboard
         </p>
       </div>
 
       {/* =========================================
-          GOLDEN AMBIENT GLOW STYLES
+          CHAMPAGNE HOVER, OUTER GLOW & TOUCH STYLES
       ========================================= */}
 
       <style jsx global>{`
         .gold-ambient-card {
           position: relative;
           isolation: isolate;
+          background-color: #121414;
+          color: #f5f2e9;
+          border: 1px solid rgba(232, 211, 154, 0.55);
+          box-shadow:
+            0 0 14px rgba(232, 211, 154, 0.18),
+            0 0 30px rgba(201, 164, 92, 0.12),
+            0 10px 24px rgba(18, 20, 20, 0.14);
           -webkit-tap-highlight-color: transparent;
-
+          touch-action: manipulation;
           transition:
-            transform 0.35s ease,
-            border-color 0.35s ease,
-            box-shadow 0.35s ease;
+            transform 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+            border-color 0.32s ease,
+            box-shadow 0.32s ease,
+            background 0.32s ease,
+            color 0.32s ease;
         }
 
         .gold-ambient-card::before {
           content: "";
           position: absolute;
-          inset: -3px;
+          inset: -6px;
           border-radius: inherit;
           pointer-events: none;
           z-index: -1;
-
           background: radial-gradient(
             ellipse at center,
-            rgba(255, 226, 130, 0.25) 0%,
-            rgba(239, 200, 85, 0.16) 35%,
-            rgba(205, 157, 55, 0.08) 65%,
+            rgba(255, 244, 206, 0.38) 0%,
+            rgba(232, 211, 154, 0.24) 40%,
+            rgba(201, 164, 92, 0.12) 70%,
             transparent 100%
           );
-
-          filter: blur(24px);
+          filter: blur(22px);
           opacity: 0;
-
-          transition: opacity 0.35s ease;
+          transition: opacity 0.32s ease;
         }
 
         .gold-ambient-card:hover,
         .gold-ambient-card:active,
         .gold-ambient-card:focus-visible {
-          border-color: rgba(239, 210, 130, 0.45);
-
+          background: linear-gradient(
+            135deg,
+            #fff4ce 0%,
+            #e8d39a 52%,
+            #c9a45c 100%
+          ) !important;
+          color: #17140d !important;
+          border-color: #fff4ce !important;
           box-shadow:
-            0 0 12px rgba(239, 200, 85, 0.13),
-            0 0 28px rgba(239, 200, 85, 0.12),
-            0 0 50px rgba(239, 200, 85, 0.08),
-            inset 0 0 18px rgba(239, 200, 85, 0.025);
+            0 0 18px rgba(255, 244, 206, 0.68),
+            0 0 38px rgba(232, 211, 154, 0.48),
+            0 0 64px rgba(201, 164, 92, 0.32),
+            inset 0 1px 0 rgba(255, 255, 255, 0.72);
+        }
+
+        .gold-ambient-card:hover .gold-card-title,
+        .gold-ambient-card:active .gold-card-title,
+        .gold-ambient-card:focus-visible .gold-card-title,
+        .gold-ambient-card:hover .gold-card-accent,
+        .gold-ambient-card:active .gold-card-accent,
+        .gold-ambient-card:focus-visible .gold-card-accent {
+          color: #17140d !important;
+        }
+
+        .gold-ambient-card:hover .gold-card-muted,
+        .gold-ambient-card:active .gold-card-muted,
+        .gold-ambient-card:focus-visible .gold-card-muted {
+          color: rgba(23, 20, 13, 0.8) !important;
+        }
+
+        .gold-ambient-card:hover .gold-card-icon,
+        .gold-ambient-card:active .gold-card-icon,
+        .gold-ambient-card:focus-visible .gold-card-icon {
+          background-color: rgba(23, 20, 13, 0.14) !important;
+          color: #17140d !important;
+        }
+
+        .gold-ambient-card:hover .gold-card-pill,
+        .gold-ambient-card:active .gold-card-pill,
+        .gold-ambient-card:focus-visible .gold-card-pill {
+          background-color: rgba(23, 20, 13, 0.14) !important;
+          border-color: rgba(23, 20, 13, 0.25) !important;
+          color: #17140d !important;
+        }
+
+        .gold-ambient-card:hover .gold-card-subpanel,
+        .gold-ambient-card:active .gold-card-subpanel,
+        .gold-ambient-card:focus-visible .gold-card-subpanel {
+          background-color: rgba(23, 20, 13, 0.12) !important;
+          border-color: rgba(23, 20, 13, 0.22) !important;
+          color: #17140d !important;
+        }
+
+        .gold-ambient-card:hover .gold-card-track,
+        .gold-ambient-card:active .gold-card-track {
+          background-color: rgba(23, 20, 13, 0.18) !important;
+        }
+
+        .gold-ambient-card:hover .gold-card-bar,
+        .gold-ambient-card:active .gold-card-bar {
+          background: #17140d !important;
+        }
+
+        .gold-ambient-card:hover .gold-card-divider,
+        .gold-ambient-card:active .gold-card-divider {
+          border-color: rgba(23, 20, 13, 0.2) !important;
+        }
+
+        .gold-ambient-card:hover .gold-table-head,
+        .gold-ambient-card:active .gold-table-head {
+          color: rgba(23, 20, 13, 0.78) !important;
+          border-color: rgba(23, 20, 13, 0.2) !important;
+        }
+
+        .gold-ambient-card:hover .gold-table-row,
+        .gold-ambient-card:active .gold-table-row {
+          border-color: rgba(23, 20, 13, 0.14) !important;
+        }
+
+        .gold-ambient-card:hover .gold-row-btn,
+        .gold-ambient-card:active .gold-row-btn {
+          color: #17140d !important;
         }
 
         .gold-ambient-card:hover::before,

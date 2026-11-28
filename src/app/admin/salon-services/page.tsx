@@ -1,3 +1,4 @@
+
 "use client";
 
 import {
@@ -383,74 +384,77 @@ export default function SalonServicesPage() {
     selectedCategory !== "All";
 
   return (
-    <main className="min-h-screen bg-[#121414] text-[#F4F0D0] p-4 md:p-7 space-y-7">
+    <main className="salon-page min-h-screen bg-[#FAF5ED] text-[#121414] p-4 md:p-7 space-y-7">
 
       {/* EDITORIAL HEADER */}
-      <section className="gold-ambient-card relative overflow-hidden rounded-[28px] border border-[#D9D19A]/20 bg-[#1B201D]">
+      <section className="gold-ambient-card relative overflow-hidden rounded-[28px] border border-[#C9A45C]/40 bg-[#121414] text-[#F5F1E6]">
+
         <div className="absolute inset-0 opacity-30 pointer-events-none">
-          <div className="absolute -right-20 -top-32 w-96 h-96 rounded-full border border-[#D9D19A]/20" />
-          <div className="absolute -right-8 -top-20 w-72 h-72 rounded-full border border-[#D9D19A]/20" />
-          <div className="absolute right-20 -top-10 w-52 h-52 rounded-full bg-[#D9D19A]/10 blur-3xl" />
+          <div className="absolute -right-20 -top-32 w-96 h-96 rounded-full border border-[#C9A45C]/30" />
+          <div className="absolute -right-8 -top-20 w-72 h-72 rounded-full border border-[#C9A45C]/30" />
+          <div className="absolute right-20 -top-10 w-52 h-52 rounded-full bg-[#C9A45C]/20 blur-3xl" />
         </div>
 
         <div className="relative flex flex-col lg:flex-row lg:items-end justify-between gap-7 p-6 md:p-9">
+
           <div className="max-w-2xl">
-            <div className="flex items-center gap-2 text-[#D9D19A] text-[10px] font-bold tracking-[0.25em] uppercase mb-5">
+            <div className="flex items-center gap-2 text-[#C9A45C] text-[10px] font-bold tracking-[0.25em] uppercase mb-5">
               <Gem size={14} />
               KBC ACADEMY
-              <span className="text-[#63695E]">/</span>
+              <span className="text-[#777568]">/</span>
               SERVICE ATELIER
             </div>
 
             <div className="flex items-center gap-3 mb-3">
-              <span className="w-9 h-px bg-[#D9D19A]" />
+              <span className="w-9 h-px bg-[#C9A45C]" />
 
-              <span className="text-xs uppercase tracking-[0.2em] text-[#A7A58C]">
+              <span className="text-xs uppercase tracking-[0.2em] text-[#D2C9A9]">
                 The art of beauty
               </span>
             </div>
 
             <h1 className="font-serif text-4xl md:text-6xl leading-tight tracking-tight">
               Salon{" "}
-              <span className="italic text-[#D9D19A]">
+              <span className="italic text-[#EFE8A8]">
                 Services.
               </span>
             </h1>
 
-            <p className="text-sm md:text-base text-[#A2A79D] mt-4 max-w-lg leading-7">
+            <p className="text-sm md:text-base text-[#D0CBBE] mt-4 max-w-lg leading-7">
               Curate your signature treatments. Manage your service
               collection, pricing and appointment durations in one place.
             </p>
 
             <div className="flex items-center gap-3 mt-7">
               <div className="flex -space-x-2">
-                {["#D9D19A", "#8D927A", "#B6A77B"].map(
+                {["#EFE8A8", "#C9A45C", "#E8D8C5"].map(
                   (color, index) => (
                     <span
                       key={index}
-                      className="w-7 h-7 rounded-full border-2 border-[#1B201D]"
+                      className="w-7 h-7 rounded-full border-2 border-[#121414]"
                       style={{ backgroundColor: color }}
                     />
                   )
                 )}
               </div>
 
-              <span className="text-xs text-[#A3A798]">
+              <span className="text-xs text-[#C9C4B5]">
                 Your complete beauty service collection
               </span>
             </div>
           </div>
 
           <div className="flex flex-col sm:flex-row lg:flex-col items-stretch sm:items-center lg:items-end gap-3">
+
             <div className="text-left lg:text-right mb-1">
-              <p className="text-[10px] tracking-[0.2em] uppercase text-[#888F81]">
+              <p className="text-[10px] tracking-[0.2em] uppercase text-[#C9A45C]">
                 Collection size
               </p>
 
-              <p className="text-3xl font-serif text-[#E8E0AF] mt-1">
+              <p className="text-3xl font-serif text-[#EFE8A8] mt-1">
                 {String(stats.total).padStart(2, "0")}
 
-                <span className="text-sm text-[#898F80] ml-2">
+                <span className="text-sm text-[#D0CBBE] ml-2">
                   services
                 </span>
               </p>
@@ -458,7 +462,7 @@ export default function SalonServicesPage() {
 
             <button
               onClick={openAddModal}
-              className="group flex items-center justify-center gap-3 px-6 py-4 rounded-xl bg-[#D9D19A] text-[#171914] font-semibold text-sm hover:bg-[#EEE7B5] transition-all duration-300 hover:-translate-y-1 shadow-xl shadow-black/20"
+              className="group flex items-center justify-center gap-3 px-6 py-4 rounded-xl bg-gradient-to-r from-[#EFE8A8] to-[#C9A45C] text-[#121414] font-semibold text-sm hover:brightness-110 transition-all duration-300 hover:-translate-y-1 shadow-xl shadow-black/20"
             >
               <span className="w-7 h-7 flex items-center justify-center rounded-full bg-black/10">
                 <Plus size={17} />
@@ -477,6 +481,7 @@ export default function SalonServicesPage() {
 
       {/* OVERVIEW CARDS */}
       <section className="grid grid-cols-2 xl:grid-cols-4 gap-3 md:gap-4">
+
         <OverviewCard
           title="Total collection"
           value={stats.total}
@@ -512,26 +517,28 @@ export default function SalonServicesPage() {
 
       {/* CATEGORY EXPLORER */}
       <section className="space-y-4">
+
         <div className="flex items-end justify-between gap-3">
           <div>
-            <p className="text-[10px] uppercase tracking-[0.22em] text-[#A49D72] mb-2">
+            <p className="text-[10px] uppercase tracking-[0.22em] text-[#98763A] mb-2">
               Explore collection
             </p>
 
-            <h2 className="text-xl md:text-2xl font-serif">
+            <h2 className="text-xl md:text-2xl font-serif text-[#121414]">
               Browse by{" "}
-              <span className="italic text-[#D9D19A]">
+              <span className="italic text-[#98763A]">
                 category
               </span>
             </h2>
           </div>
 
-          <span className="text-xs text-[#888F81] hidden sm:block">
+          <span className="text-xs text-[#756D60] hidden sm:block">
             {categories.length} service groups
           </span>
         </div>
 
         <div className="flex gap-2 overflow-x-auto pb-2 salon-scroll">
+
           <CategoryPill
             label="All services"
             active={selectedCategory === "All"}
@@ -564,23 +571,26 @@ export default function SalonServicesPage() {
       </section>
 
       {/* SERVICE COLLECTION WORKSPACE */}
-      <section className="gold-ambient-card rounded-[24px] border border-[#303731] bg-[#191E1B] overflow-hidden">
-        <div className="p-5 md:p-6 border-b border-[#303731]">
+      <section className="gold-ambient-card rounded-[24px] border border-[#C9A45C]/30 bg-[#121414] text-[#F5F1E6] overflow-visible">
+
+        <div className="p-5 md:p-6 border-b border-[#C9A45C]/20">
+
           <div className="flex flex-col xl:flex-row xl:items-end justify-between gap-5">
+
             <div>
-              <div className="flex items-center gap-2 text-[#D9D19A] text-[10px] tracking-[0.2em] uppercase mb-2">
+              <div className="flex items-center gap-2 text-[#C9A45C] text-[10px] tracking-[0.2em] uppercase mb-2">
                 <Sparkles size={13} />
                 Curated collection
               </div>
 
               <h2 className="text-2xl font-serif">
                 Service{" "}
-                <span className="italic text-[#D9D19A]">
+                <span className="italic text-[#EFE8A8]">
                   directory
                 </span>
               </h2>
 
-              <p className="text-xs text-[#8D958B] mt-2">
+              <p className="text-xs text-[#C7C1B3] mt-2">
                 {filteredServices.length} matching services in your collection
               </p>
             </div>
@@ -588,12 +598,11 @@ export default function SalonServicesPage() {
             {/* SEARCH AND FILTERS */}
             <div className="flex flex-col md:flex-row gap-3 w-full xl:w-auto">
 
-              {/* SEARCH INPUT */}
               <div className="relative flex-1 md:min-w-[240px]">
                 <Search
                   size={16}
                   strokeWidth={1.8}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 text-[#858D80] pointer-events-none z-10"
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-[#C9A45C] pointer-events-none z-10"
                 />
 
                 <input
@@ -605,12 +614,11 @@ export default function SalonServicesPage() {
                 />
               </div>
 
-              {/* CATEGORY FILTER */}
               <div className="relative w-full md:w-[190px] shrink-0">
                 <Filter
                   size={15}
                   strokeWidth={1.8}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-[#A49D72] pointer-events-none z-10"
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-[#C9A45C] pointer-events-none z-10"
                 />
 
                 <select
@@ -633,11 +641,10 @@ export default function SalonServicesPage() {
                 <ChevronDown
                   size={14}
                   strokeWidth={2}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-[#858D80] z-10"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-[#C9A45C] z-10"
                 />
               </div>
 
-              {/* STATUS FILTER */}
               <div className="relative w-full md:w-[155px] shrink-0">
                 <select
                   value={statusFilter}
@@ -652,7 +659,7 @@ export default function SalonServicesPage() {
                 <ChevronDown
                   size={14}
                   strokeWidth={2}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-[#858D80] z-10"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-[#C9A45C] z-10"
                 />
               </div>
             </div>
@@ -661,7 +668,8 @@ export default function SalonServicesPage() {
           {/* ACTIVE FILTER TAGS */}
           {hasFilters && (
             <div className="flex items-center flex-wrap gap-2 mt-4">
-              <span className="text-[10px] uppercase tracking-widest text-[#81897E]">
+
+              <span className="text-[10px] uppercase tracking-widest text-[#C9C4B5]">
                 Active filters
               </span>
 
@@ -683,7 +691,7 @@ export default function SalonServicesPage() {
 
               <button
                 onClick={clearFilters}
-                className="text-[11px] text-[#D9D19A] hover:text-white underline underline-offset-4 ml-1"
+                className="text-[11px] text-[#EFE8A8] hover:text-white underline underline-offset-4 ml-1"
               >
                 Clear all
               </button>
@@ -693,27 +701,31 @@ export default function SalonServicesPage() {
 
         {/* SERVICE GALLERY */}
         <div className="p-4 md:p-6">
+
           {filteredServices.length === 0 ? (
-            <div className="rounded-2xl border border-dashed border-[#454B40] bg-[#151A17] py-16 px-5 text-center">
-              <div className="w-16 h-16 rounded-full border border-[#D9D19A]/20 bg-[#D9D19A]/10 flex items-center justify-center mx-auto mb-5 text-[#D9D19A]">
+
+            <div className="rounded-2xl border border-dashed border-[#C9A45C]/40 bg-[#191D1A] py-16 px-5 text-center">
+
+              <div className="w-16 h-16 rounded-full border border-[#C9A45C]/30 bg-[#C9A45C]/10 flex items-center justify-center mx-auto mb-5 text-[#EFE8A8]">
                 <Scissors size={27} />
               </div>
 
-              <h3 className="text-xl font-serif">
+              <h3 className="text-xl font-serif text-[#F5F1E6]">
                 Nothing in this collection yet
               </h3>
 
-              <p className="text-sm text-[#8F978D] mt-2">
+              <p className="text-sm text-[#C7C1B3] mt-2">
                 {services.length === 0
                   ? "Start building your salon service collection."
                   : "Try another search or remove some filters."}
               </p>
 
               <div className="flex justify-center flex-wrap gap-3 mt-6">
+
                 {hasFilters && (
                   <button
                     onClick={clearFilters}
-                    className="px-5 py-3 rounded-xl border border-[#454B40] text-sm hover:bg-white/5"
+                    className="px-5 py-3 rounded-xl border border-[#C9A45C]/40 text-sm text-[#EFE8A8] hover:bg-[#C9A45C]/10"
                   >
                     Clear filters
                   </button>
@@ -721,7 +733,7 @@ export default function SalonServicesPage() {
 
                 <button
                   onClick={openAddModal}
-                  className="px-5 py-3 rounded-xl bg-[#D9D19A] text-[#171914] text-sm font-semibold hover:bg-[#EEE7B5]"
+                  className="px-5 py-3 rounded-xl bg-gradient-to-r from-[#EFE8A8] to-[#C9A45C] text-[#121414] text-sm font-semibold hover:brightness-110"
                 >
                   <span className="flex items-center gap-2">
                     <Plus size={16} />
@@ -730,9 +742,13 @@ export default function SalonServicesPage() {
                 </button>
               </div>
             </div>
+
           ) : (
+
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+
               {filteredServices.map((service, index) => (
+
                 <article
                   key={service.id}
                   className="service-card gold-ambient-card group"
@@ -740,8 +756,10 @@ export default function SalonServicesPage() {
                     animationDelay: `${index * 60}ms`,
                   }}
                 >
+
                   {/* IMAGE */}
                   <div className="relative h-56 bg-[#252C27] overflow-hidden rounded-t-[18px]">
+
                     {service.image ? (
                       <img
                         src={service.image}
@@ -749,7 +767,7 @@ export default function SalonServicesPage() {
                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                       />
                     ) : (
-                      <div className="w-full h-full flex flex-col items-center justify-center text-[#777F72] bg-gradient-to-br from-[#293029] to-[#171C19]">
+                      <div className="w-full h-full flex flex-col items-center justify-center text-[#C9A45C] bg-gradient-to-br from-[#292B25] to-[#171C19]">
                         <Scissors
                           size={39}
                           strokeWidth={1}
@@ -764,7 +782,8 @@ export default function SalonServicesPage() {
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-black/20" />
 
                     <div className="absolute top-4 left-4 right-4 flex justify-between items-start gap-2">
-                      <span className="px-3 py-1.5 rounded-full text-[10px] font-medium tracking-wide bg-black/55 backdrop-blur-md border border-white/10 text-[#E8E0AF]">
+
+                      <span className="px-3 py-1.5 rounded-full text-[10px] font-medium tracking-wide bg-black/55 backdrop-blur-md border border-white/10 text-[#EFE8A8]">
                         {service.category}
                       </span>
 
@@ -781,8 +800,9 @@ export default function SalonServicesPage() {
                     </div>
 
                     <div className="absolute bottom-4 left-5 right-5 flex justify-between items-end">
+
                       <div>
-                        <p className="text-[10px] tracking-[0.2em] uppercase text-[#D9D19A] mb-1">
+                        <p className="text-[10px] tracking-[0.2em] uppercase text-[#EFE8A8] mb-1">
                           Signature treatment
                         </p>
 
@@ -799,33 +819,35 @@ export default function SalonServicesPage() {
 
                   {/* CARD CONTENT */}
                   <div className="p-5">
-                    <p className="text-xs text-[#929A8F] leading-6 min-h-[48px] line-clamp-2">
+
+                    <p className="text-xs text-[#C7C1B3] leading-6 min-h-[48px] line-clamp-2">
                       {service.description ||
                         "Professional salon service crafted with care and expertise."}
                     </p>
 
                     {/* PRICE AND DURATION */}
                     <div className="grid grid-cols-2 gap-3 mt-5">
-                      <div className="rounded-xl bg-[#121714] border border-[#303831] p-3">
-                        <p className="text-[9px] uppercase tracking-[0.15em] text-[#858D80] mb-2">
+
+                      <div className="rounded-xl bg-[#FAF5ED] border border-[#C9A45C]/40 p-3 text-[#121414]">
+                        <p className="text-[9px] uppercase tracking-[0.15em] text-[#756D60] mb-2">
                           Service price
                         </p>
 
-                        <p className="flex items-center gap-1 text-lg font-semibold text-[#E4DCA8]">
+                        <p className="flex items-center gap-1 text-lg font-semibold text-[#8B682C]">
                           <IndianRupee size={15} />
                           {service.price.toLocaleString("en-IN")}
                         </p>
                       </div>
 
-                      <div className="rounded-xl bg-[#121714] border border-[#303831] p-3">
-                        <p className="text-[9px] uppercase tracking-[0.15em] text-[#858D80] mb-2">
+                      <div className="rounded-xl bg-[#FAF5ED] border border-[#C9A45C]/40 p-3 text-[#121414]">
+                        <p className="text-[9px] uppercase tracking-[0.15em] text-[#756D60] mb-2">
                           Duration
                         </p>
 
-                        <p className="flex items-center gap-1.5 text-sm font-semibold text-[#E5E5D7]">
+                        <p className="flex items-center gap-1.5 text-sm font-semibold text-[#121414]">
                           <Clock
                             size={14}
-                            className="text-[#D9D19A]"
+                            className="text-[#98763A]"
                           />
                           {service.duration} min
                         </p>
@@ -833,16 +855,18 @@ export default function SalonServicesPage() {
                     </div>
 
                     {/* ACTIONS */}
-                    <div className="flex items-center gap-2 mt-4 pt-4 border-t border-[#343A35]">
+                    <div className="flex items-center gap-2 mt-4 pt-4 border-t border-[#C9A45C]/25">
+
                       <button
                         onClick={() => openEditModal(service)}
-                        className="flex-1 flex items-center justify-center gap-2 py-3 rounded-lg border border-[#5A604B] text-[#E6DFA8] text-xs font-semibold hover:bg-[#D9D19A]/10 hover:border-[#D9D19A]/50 transition"
+                        className="flex-1 flex items-center justify-center gap-2 py-3 rounded-lg border border-[#C9A45C]/50 text-[#EFE8A8] text-xs font-semibold hover:bg-[#C9A45C]/15 hover:border-[#EFE8A8] transition"
                       >
                         <Pencil size={14} />
                         Edit service
                       </button>
 
                       <div className="relative">
+
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
@@ -854,16 +878,18 @@ export default function SalonServicesPage() {
                             );
                           }}
                           aria-label={`More options for ${service.name}`}
-                          className="w-11 h-11 flex items-center justify-center rounded-lg border border-[#424940] text-[#A7AC9F] hover:text-[#E5DDA6] hover:border-[#D9D19A]/40 transition"
+                          className="w-11 h-11 flex items-center justify-center rounded-lg border border-[#C9A45C]/40 text-[#EFE8A8] hover:bg-[#C9A45C]/15 transition"
                         >
                           <MoreHorizontal size={19} />
                         </button>
 
                         {menuId === service.id && (
+
                           <div
                             onClick={(e) => e.stopPropagation()}
-                            className="absolute bottom-12 right-0 z-30 w-48 bg-[#252B26] border border-[#424940] rounded-xl shadow-2xl p-1.5 animate-menu"
+                            className="absolute bottom-12 right-0 z-30 w-48 bg-[#FAF5ED] border border-[#C9A45C]/50 rounded-xl shadow-2xl p-1.5 animate-menu"
                           >
+
                             <button
                               onClick={() =>
                                 openEditModal(service)
@@ -886,13 +912,13 @@ export default function SalonServicesPage() {
                                 : "Activate"}
                             </button>
 
-                            <div className="h-px bg-[#424940] my-1" />
+                            <div className="h-px bg-[#D8CBAE] my-1" />
 
                             <button
                               onClick={() =>
                                 deleteService(service.id)
                               }
-                              className="menu-item text-red-300 hover:bg-red-400/10"
+                              className="menu-item text-red-700 hover:bg-red-100"
                             >
                               <Trash2 size={14} />
                               Delete service
@@ -911,30 +937,33 @@ export default function SalonServicesPage() {
 
       {/* CREATE / EDIT MODAL */}
       {modalOpen && (
+
         <div
-          className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-3 md:p-6"
+          className="fixed inset-0 z-50 bg-black/75 backdrop-blur-md flex items-center justify-center p-3 md:p-6"
           onMouseDown={(e) => {
             if (e.target === e.currentTarget) {
               closeModal();
             }
           }}
         >
-          <div className="gold-ambient-card w-full max-w-3xl max-h-[94vh] overflow-y-auto bg-[#1B201D] border border-[#656047]/50 rounded-[24px] shadow-2xl animate-modal">
+
+          <div className="modal-panel gold-ambient-card w-full max-w-3xl max-h-[94vh] overflow-y-auto bg-[#FAF5ED] text-[#121414] border border-[#C9A45C]/60 rounded-[24px] shadow-2xl animate-modal">
 
             {/* MODAL HEADER */}
-            <div className="sticky top-0 z-20 flex items-center justify-between bg-[#1B201D]/95 backdrop-blur-xl border-b border-[#343A35] px-5 md:px-7 py-5">
+            <div className="sticky top-0 z-20 flex items-center justify-between bg-[#FAF5ED]/95 backdrop-blur-xl border-b border-[#C9A45C]/30 px-5 md:px-7 py-5">
+
               <div>
-                <div className="text-[10px] tracking-[0.2em] uppercase text-[#D9D19A] mb-2">
+                <div className="text-[10px] tracking-[0.2em] uppercase text-[#98763A] mb-2">
                   KBC · Service atelier
                 </div>
 
-                <h2 className="text-2xl font-serif">
+                <h2 className="text-2xl font-serif text-[#121414]">
                   {editingId
                     ? "Refine your service"
                     : "Create a new service"}
                 </h2>
 
-                <p className="text-xs text-[#91978E] mt-1">
+                <p className="text-xs text-[#756D60] mt-1">
                   Add the details that make this treatment special.
                 </p>
               </div>
@@ -942,7 +971,7 @@ export default function SalonServicesPage() {
               <button
                 onClick={closeModal}
                 aria-label="Close modal"
-                className="w-10 h-10 flex items-center justify-center rounded-xl bg-[#292F2A] border border-[#3B433B] text-[#B9BDAF] hover:text-white hover:bg-[#353C35]"
+                className="w-10 h-10 flex items-center justify-center rounded-xl bg-white border border-[#C9A45C]/40 text-[#121414] hover:bg-[#EFE8A8]"
               >
                 <X size={19} />
               </button>
@@ -952,6 +981,7 @@ export default function SalonServicesPage() {
               onSubmit={handleSubmit}
               className="p-5 md:p-7 space-y-7"
             >
+
               {/* IMAGE */}
               <div>
                 <ModalSection
@@ -959,7 +989,8 @@ export default function SalonServicesPage() {
                   number="01"
                 />
 
-                <label className="relative flex items-center justify-center h-48 md:h-56 mt-4 rounded-2xl border border-dashed border-[#62634B] bg-[#141916] cursor-pointer overflow-hidden hover:border-[#D9D19A]/70 transition group">
+                <label className="relative flex items-center justify-center h-48 md:h-56 mt-4 rounded-2xl border border-dashed border-[#C9A45C] bg-white cursor-pointer overflow-hidden hover:border-[#98763A] transition group">
+
                   {imagePreview ? (
                     <>
                       <img
@@ -976,12 +1007,13 @@ export default function SalonServicesPage() {
                       </span>
                     </>
                   ) : (
-                    <div className="text-center text-[#969C8F]">
-                      <div className="w-14 h-14 rounded-2xl bg-[#D9D19A]/10 border border-[#D9D19A]/20 flex items-center justify-center mx-auto mb-3 text-[#D9D19A]">
+                    <div className="text-center text-[#756D60]">
+
+                      <div className="w-14 h-14 rounded-2xl bg-[#EFE8A8]/50 border border-[#C9A45C]/40 flex items-center justify-center mx-auto mb-3 text-[#98763A]">
                         <ImagePlus size={26} />
                       </div>
 
-                      <p className="text-sm font-semibold text-[#E3E1D1]">
+                      <p className="text-sm font-semibold text-[#121414]">
                         Upload service photography
                       </p>
 
@@ -1010,6 +1042,7 @@ export default function SalonServicesPage() {
                 />
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-5">
+
                   <FormField label="Service name *">
                     <input
                       required
@@ -1045,7 +1078,7 @@ export default function SalonServicesPage() {
                     <div className="relative">
                       <IndianRupee
                         size={15}
-                        className="absolute left-4 top-1/2 -translate-y-1/2 text-[#A49D72]"
+                        className="absolute left-4 top-1/2 -translate-y-1/2 text-[#98763A]"
                       />
 
                       <input
@@ -1067,7 +1100,7 @@ export default function SalonServicesPage() {
                     <div className="relative">
                       <Clock
                         size={15}
-                        className="absolute left-4 top-1/2 -translate-y-1/2 text-[#A49D72]"
+                        className="absolute left-4 top-1/2 -translate-y-1/2 text-[#98763A]"
                       />
 
                       <input
@@ -1120,14 +1153,16 @@ export default function SalonServicesPage() {
               </div>
 
               {/* LIVE PREVIEW */}
-              <div className="rounded-2xl bg-[#121714] border border-[#353C35] p-4 md:p-5">
-                <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-[#A49D72] mb-4">
+              <div className="rounded-2xl bg-white border border-[#C9A45C]/40 p-4 md:p-5">
+
+                <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-[#98763A] mb-4">
                   <Eye size={14} />
                   Live service preview
                 </div>
 
                 <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 rounded-xl overflow-hidden shrink-0 bg-[#293029] flex items-center justify-center">
+
+                  <div className="w-16 h-16 rounded-xl overflow-hidden shrink-0 bg-[#EFE8A8]/40 flex items-center justify-center">
                     {imagePreview ? (
                       <img
                         src={imagePreview}
@@ -1137,31 +1172,32 @@ export default function SalonServicesPage() {
                     ) : (
                       <Scissors
                         size={23}
-                        className="text-[#D9D19A]"
+                        className="text-[#98763A]"
                       />
                     )}
                   </div>
 
                   <div className="min-w-0 flex-1">
-                    <p className="text-[10px] text-[#A49D72] uppercase tracking-widest">
+
+                    <p className="text-[10px] text-[#98763A] uppercase tracking-widest">
                       {form.category}
                     </p>
 
-                    <h3 className="font-serif text-lg truncate mt-1">
+                    <h3 className="font-serif text-lg text-[#121414] truncate mt-1">
                       {form.name || "Your service name"}
                     </h3>
 
-                    <p className="text-xs text-[#929A8F] mt-1">
+                    <p className="text-xs text-[#756D60] mt-1">
                       {form.duration || "0"} minutes
                     </p>
                   </div>
 
                   <div className="text-right">
-                    <p className="text-[10px] uppercase tracking-widest text-[#858D80]">
+                    <p className="text-[10px] uppercase tracking-widest text-[#756D60]">
                       Price
                     </p>
 
-                    <p className="text-lg font-semibold text-[#E3DCA8] mt-1">
+                    <p className="text-lg font-semibold text-[#98763A] mt-1">
                       {form.price
                         ? formatPrice(Number(form.price) || 0)
                         : "₹0"}
@@ -1171,18 +1207,19 @@ export default function SalonServicesPage() {
               </div>
 
               {/* MODAL ACTIONS */}
-              <div className="flex flex-col-reverse sm:flex-row gap-3 justify-end border-t border-[#343A35] pt-5">
+              <div className="flex flex-col-reverse sm:flex-row gap-3 justify-end border-t border-[#D8CBAE] pt-5">
+
                 <button
                   type="button"
                   onClick={closeModal}
-                  className="px-6 py-3 rounded-xl border border-[#454B43] text-sm text-[#C6C8BA] hover:bg-[#292F2A] transition"
+                  className="px-6 py-3 rounded-xl border border-[#C9A45C]/50 text-sm text-[#121414] hover:bg-[#EFE8A8]/50 transition"
                 >
                   Cancel
                 </button>
 
                 <button
                   type="submit"
-                  className="px-7 py-3 rounded-xl bg-[#D9D19A] text-[#171914] font-semibold text-sm hover:bg-[#EEE7B5] transition flex items-center justify-center gap-2"
+                  className="px-7 py-3 rounded-xl bg-gradient-to-r from-[#EFE8A8] to-[#C9A45C] text-[#121414] font-semibold text-sm hover:brightness-105 transition flex items-center justify-center gap-2"
                 >
                   <CheckCircle2 size={16} />
 
@@ -1200,7 +1237,16 @@ export default function SalonServicesPage() {
       <style jsx global>{`
 
         /* =========================================
-           FLOATING GOLDEN AMBIENT CARD GLOW
+           KBC WARM IVORY PAGE
+        ========================================= */
+
+        .salon-page {
+          background: #FAF5ED;
+          color: #121414;
+        }
+
+        /* =========================================
+           STRONG GOLDEN CARD GLOW
         ========================================= */
 
         .gold-ambient-card {
@@ -1210,48 +1256,22 @@ export default function SalonServicesPage() {
 
           transition:
             transform 0.35s ease,
+            background 0.35s ease,
+            background-image 0.35s ease,
             border-color 0.35s ease,
             box-shadow 0.35s ease;
-        }
-
-        .gold-ambient-card::before {
-          content: "";
-          position: absolute;
-          inset: -3px;
-          border-radius: inherit;
-          pointer-events: none;
-          z-index: -1;
-
-          background: radial-gradient(
-            ellipse at center,
-            rgba(255, 226, 130, 0.25) 0%,
-            rgba(239, 200, 85, 0.16) 35%,
-            rgba(205, 157, 55, 0.08) 65%,
-            transparent 100%
-          );
-
-          filter: blur(24px);
-          opacity: 0;
-
-          transition: opacity 0.35s ease;
         }
 
         .gold-ambient-card:hover,
         .gold-ambient-card:active,
         .gold-ambient-card:focus-visible {
-          border-color: rgba(239, 210, 130, 0.45);
+          border-color: #C9A45C !important;
 
           box-shadow:
-            0 0 12px rgba(239, 200, 85, 0.13),
-            0 0 28px rgba(239, 200, 85, 0.12),
-            0 0 50px rgba(239, 200, 85, 0.08),
-            inset 0 0 18px rgba(239, 200, 85, 0.025);
-        }
-
-        .gold-ambient-card:hover::before,
-        .gold-ambient-card:active::before,
-        .gold-ambient-card:focus-visible::before {
-          opacity: 1;
+            0 0 10px rgba(201, 164, 92, 0.75),
+            0 0 24px rgba(201, 164, 92, 0.55),
+            0 0 42px rgba(201, 164, 92, 0.35),
+            0 12px 30px rgba(90, 62, 20, 0.20);
         }
 
         @media (hover: hover) and (pointer: fine) {
@@ -1267,7 +1287,68 @@ export default function SalonServicesPage() {
         }
 
         /* =========================================
-           SEARCH AND FILTER ALIGNMENT
+           OVERVIEW CARDS
+        ========================================= */
+
+        .overview-card {
+          background: #121414;
+          color: #F5F1E6;
+          border: 1px solid rgba(201, 164, 92, 0.3);
+        }
+
+        .overview-card:hover,
+        .overview-card:active {
+          background-image: linear-gradient(
+            135deg,
+            #FFF4CE 0%,
+            #EFE8A8 42%,
+            #E8D8C5 72%,
+            #C9A45C 100%
+          ) !important;
+          color: #121414 !important;
+        }
+
+        .overview-card:hover h3,
+        .overview-card:hover p,
+        .overview-card:active h3,
+        .overview-card:active p {
+          color: #121414 !important;
+        }
+
+        /* =========================================
+           SERVICE CARDS
+        ========================================= */
+
+        .service-card {
+          position: relative;
+          overflow: visible;
+          background: #121414;
+          color: #F5F1E6;
+          border: 1px solid rgba(201, 164, 92, 0.3);
+          border-radius: 19px;
+
+          transition:
+            transform 0.35s ease,
+            border-color 0.35s ease,
+            box-shadow 0.35s ease,
+            background 0.35s ease;
+
+          animation: serviceEnter 0.5s ease both;
+        }
+
+        .service-card:hover,
+        .service-card:active {
+          border-color: #C9A45C;
+
+          box-shadow:
+            0 0 12px rgba(201, 164, 92, 0.65),
+            0 0 28px rgba(201, 164, 92, 0.45),
+            0 0 48px rgba(201, 164, 92, 0.28),
+            0 18px 40px rgba(90, 62, 20, 0.18);
+        }
+
+        /* =========================================
+           SEARCH AND FILTER INPUTS
         ========================================= */
 
         .salon-input,
@@ -1278,11 +1359,11 @@ export default function SalonServicesPage() {
           min-height: 46px;
           box-sizing: border-box;
 
-          background: #121714;
-          border: 1px solid #353c35;
+          background: #FAF5ED;
+          border: 1px solid #C9A45C;
           border-radius: 11px;
 
-          color: #e9e6d4;
+          color: #121414;
           font-family: inherit;
           font-size: 12px;
           line-height: 1;
@@ -1315,19 +1396,19 @@ export default function SalonServicesPage() {
         .salon-input:focus,
         .salon-select:focus,
         .form-input:focus {
-          border-color: #d9d19a;
-          box-shadow: 0 0 0 3px rgba(217, 209, 154, 0.08);
+          border-color: #98763A;
+          box-shadow: 0 0 0 3px rgba(201, 164, 92, 0.20);
         }
 
         .salon-input::placeholder,
         .form-input::placeholder {
-          color: #737c70;
+          color: #817969;
         }
 
         .salon-select option,
         .form-input option {
-          background: #1b201d;
-          color: #f2f0dd;
+          background: #FAF5ED;
+          color: #121414;
         }
 
         /* =========================================
@@ -1340,9 +1421,9 @@ export default function SalonServicesPage() {
           min-height: 46px;
           box-sizing: border-box;
 
-          background: #121714;
-          border: 1px solid #3b433b;
-          color: #f2f0dd;
+          background: #FFFFFF;
+          border: 1px solid #C9A45C;
+          color: #121414;
 
           border-radius: 11px;
           padding: 13px 14px;
@@ -1354,37 +1435,6 @@ export default function SalonServicesPage() {
           transition:
             border-color 0.2s ease,
             box-shadow 0.2s ease;
-        }
-
-        /* =========================================
-           SERVICE CARDS
-        ========================================= */
-
-        .service-card {
-          position: relative;
-          overflow: visible;
-
-          background: #1d231f;
-          border: 1px solid #343c35;
-          border-radius: 19px;
-
-          transition:
-            transform 0.35s ease,
-            border-color 0.35s ease,
-            box-shadow 0.35s ease;
-
-          animation: serviceEnter 0.5s ease both;
-        }
-
-        .service-card:hover {
-          transform: translateY(-3px);
-          border-color: rgba(217, 209, 154, 0.45);
-
-          box-shadow:
-            0 0 15px rgba(239, 200, 85, 0.13),
-            0 0 32px rgba(239, 200, 85, 0.11),
-            0 0 55px rgba(239, 200, 85, 0.07),
-            0 18px 40px rgba(0, 0, 0, 0.22);
         }
 
         /* =========================================
@@ -1401,14 +1451,14 @@ export default function SalonServicesPage() {
 
           border-radius: 8px;
           font-size: 12px;
-          color: #e9e6d4;
+          color: #121414;
 
           transition: background 0.2s ease;
           text-align: left;
         }
 
         .menu-item:hover {
-          background: #353c35;
+          background: #EFE8A8;
         }
 
         /* =========================================
@@ -1417,7 +1467,7 @@ export default function SalonServicesPage() {
 
         .salon-scroll {
           scrollbar-width: thin;
-          scrollbar-color: #555a43 transparent;
+          scrollbar-color: #C9A45C transparent;
         }
 
         .salon-scroll::-webkit-scrollbar {
@@ -1425,7 +1475,7 @@ export default function SalonServicesPage() {
         }
 
         .salon-scroll::-webkit-scrollbar-thumb {
-          background: #555a43;
+          background: #C9A45C;
           border-radius: 10px;
         }
 
@@ -1478,7 +1528,7 @@ export default function SalonServicesPage() {
         }
 
         /* =========================================
-           MOBILE RESPONSIVENESS
+           MOBILE
         ========================================= */
 
         @media (max-width: 767px) {
@@ -1495,7 +1545,6 @@ export default function SalonServicesPage() {
 
         @media (prefers-reduced-motion: reduce) {
           .gold-ambient-card,
-          .gold-ambient-card::before,
           .service-card,
           .animate-modal,
           .animate-menu {
@@ -1534,17 +1583,19 @@ function OverviewCard({
 }) {
   const iconColor =
     accent === "green"
-      ? "text-emerald-300 bg-emerald-400/10"
+      ? "text-emerald-700 bg-emerald-100"
       : accent === "muted"
-      ? "text-[#A2A99D] bg-white/5"
-      : "text-[#D9D19A] bg-[#D9D19A]/10";
+      ? "text-[#756D60] bg-white/10"
+      : "text-[#EFE8A8] bg-[#C9A45C]/15";
 
   return (
-    <div className="gold-ambient-card relative overflow-hidden rounded-2xl border border-[#303731] bg-[#1B201D] p-4 md:p-5 group hover:border-[#B5A96B]/40 transition duration-300">
-      <div className="absolute -right-7 -top-8 w-24 h-24 rounded-full bg-[#D9D19A]/[0.035] blur-2xl group-hover:bg-[#D9D19A]/10 transition" />
+    <div className="overview-card gold-ambient-card relative overflow-hidden rounded-2xl p-4 md:p-5 group">
+
+      <div className="absolute -right-7 -top-8 w-24 h-24 rounded-full bg-[#C9A45C]/10 blur-2xl group-hover:bg-[#C9A45C]/20 transition" />
 
       <div className="relative flex items-center justify-between gap-2">
-        <p className="text-xs md:text-sm text-[#A1A69A]">
+
+        <p className="text-xs md:text-sm text-[#D0CBBE]">
           {title}
         </p>
 
@@ -1556,11 +1607,12 @@ function OverviewCard({
       </div>
 
       <div className="relative mt-5 flex items-end justify-between gap-2">
-        <h3 className="text-3xl md:text-4xl font-serif text-[#F1EDCF]">
+
+        <h3 className="text-3xl md:text-4xl font-serif text-[#EFE8A8]">
           {value.toString().padStart(2, "0")}
         </h3>
 
-        <span className="text-[10px] text-[#858D82] text-right">
+        <span className="text-[10px] text-[#C7C1B3] text-right">
           {label}
         </span>
       </div>
@@ -1588,8 +1640,8 @@ function CategoryPill({
       onClick={onClick}
       className={`shrink-0 flex items-center gap-2 px-4 py-3 rounded-xl border text-xs transition-all duration-200 ${
         active
-          ? "bg-[#D9D19A] border-[#D9D19A] text-[#171914] font-semibold shadow-lg shadow-black/10"
-          : "bg-[#1B201D] border-[#343A35] text-[#AEB3A5] hover:border-[#B5A96B]/50 hover:text-[#E5DDA6]"
+          ? "bg-gradient-to-r from-[#EFE8A8] to-[#C9A45C] border-[#C9A45C] text-[#121414] font-semibold shadow-lg shadow-[#C9A45C]/20"
+          : "bg-[#FFFFFF] border-[#D8CBAE] text-[#514A3D] hover:border-[#C9A45C] hover:text-[#121414]"
       }`}
     >
       {label}
@@ -1597,8 +1649,8 @@ function CategoryPill({
       <span
         className={`text-[10px] rounded-full px-1.5 py-0.5 ${
           active
-            ? "bg-black/10 text-[#171914]"
-            : "bg-white/5 text-[#8E9689]"
+            ? "bg-black/10 text-[#121414]"
+            : "bg-[#EFE8A8] text-[#75602D]"
         }`}
       >
         {count}
@@ -1613,7 +1665,7 @@ function CategoryPill({
 
 function FilterTag({ label }: { label: string }) {
   return (
-    <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#D9D19A]/10 border border-[#D9D19A]/20 text-[10px] text-[#D9D19A]">
+    <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#EFE8A8] border border-[#C9A45C]/50 text-[10px] text-[#51401E]">
       {label}
     </span>
   );
@@ -1631,14 +1683,17 @@ function ModalSection({
   number: string;
 }) {
   return (
-    <div className="flex items-center gap-3 border-b border-[#343A35] pb-3">
-      <span className="text-xs font-serif text-[#D9D19A]">
+    <div className="flex items-center gap-3 border-b border-[#D8CBAE] pb-3">
+
+      <span className="text-xs font-serif text-[#98763A]">
         {number}
       </span>
 
-      <h3 className="font-semibold text-sm">{title}</h3>
+      <h3 className="font-semibold text-sm text-[#121414]">
+        {title}
+      </h3>
 
-      <span className="flex-1 h-px bg-[#343A35]" />
+      <span className="flex-1 h-px bg-[#D8CBAE]" />
     </div>
   );
 }
@@ -1656,7 +1711,8 @@ function FormField({
 }) {
   return (
     <div className="space-y-2">
-      <label className="block text-xs font-medium text-[#C9CCBE]">
+
+      <label className="block text-xs font-medium text-[#514A3D]">
         {label}
       </label>
 

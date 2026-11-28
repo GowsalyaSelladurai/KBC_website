@@ -1,4 +1,3 @@
-
 "use client";
 
 import {
@@ -30,16 +29,13 @@ import {
   Sparkles,
   AlertTriangle,
   ArrowUpRight,
-  MoreHorizontal,
   Users,
   CalendarClock,
-  LayoutGrid,
-  List,
-  CircleCheck,
-  CircleDashed,
   Timer,
   RefreshCw,
   ClipboardList,
+  CircleCheck,
+  CircleDashed,
 } from "lucide-react";
 
 // =====================================================
@@ -74,8 +70,6 @@ type CalendarView = "Day" | "Week" | "Month";
 // =====================================================
 
 const STORAGE_KEY = "kbc_appointments_v1";
-
-const GOLD = "#EFE8A8";
 
 const services = [
   "Hair Styling",
@@ -120,21 +114,21 @@ const statusStyles: Record<AppointmentStatus, string> = {
 
 const statusBadgeStyles: Record<AppointmentStatus, string> = {
   Confirmed:
-    "border-emerald-400/20 bg-emerald-400/10 text-emerald-300",
+    "border-emerald-400/25 bg-emerald-400/15 text-emerald-200",
   Pending:
-    "border-amber-300/20 bg-amber-300/10 text-amber-200",
+    "border-amber-300/25 bg-amber-300/15 text-amber-100",
   Completed:
-    "border-sky-400/20 bg-sky-400/10 text-sky-300",
+    "border-sky-400/25 bg-sky-400/15 text-sky-200",
   Cancelled:
-    "border-red-400/20 bg-red-400/10 text-red-300",
+    "border-red-400/25 bg-red-400/15 text-red-200",
 };
 
-// Every reusable panel gets the ambient glow.
+// Reusable panel with deep charcoal default and champagne hover/touch state.
 const panel =
-  "gold-ambient-card rounded-2xl border border-[#EFE8A8]/10 bg-[#1B1F1D]";
+  "gold-ambient-card rounded-2xl border border-[#EFE8A8]/15 bg-[#121414]";
 
 const inputClass =
-  "mt-2 w-full rounded-xl border border-[#EFE8A8]/15 bg-[#121414] px-4 py-3 text-sm text-[#F5F3E8] outline-none transition placeholder:text-[#73766E] focus:border-[#EFE8A8]/60";
+  "mt-2 w-full rounded-xl border border-[#EFE8A8]/20 bg-[#121414] px-4 py-3 text-sm text-[#F5F3E8] outline-none transition placeholder:text-[#73766E] focus:border-[#EFE8A8]/60";
 
 const labelClass =
   "text-sm font-medium text-[#D8D6C8]";
@@ -372,7 +366,7 @@ function StatusBadge({
 }) {
   return (
     <span
-      className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[11px] font-medium ${statusBadgeStyles[status]}`}
+      className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[11px] font-medium transition ${statusBadgeStyles[status]}`}
     >
       <span
         className={`h-1.5 w-1.5 rounded-full ${statusStyles[status]}`}
@@ -396,21 +390,16 @@ function StatCard({
   accent: string;
 }) {
   return (
-    <div className="gold-ambient-card group relative overflow-hidden rounded-2xl border border-[#EFE8A8]/10 bg-[#1B1F1D] p-5 transition duration-300 hover:-translate-y-1">
-      <div
-        className="pointer-events-none absolute -right-8 -top-8 h-28 w-28 rounded-full opacity-[0.06] blur-2xl transition group-hover:opacity-20"
-        style={{ background: accent }}
-      />
-
+    <div className="gold-ambient-card group relative rounded-2xl border border-[#EFE8A8]/15 bg-[#121414] p-5 transition duration-300 hover:-translate-y-1">
       <div className="relative flex items-center justify-between">
-        <p className="text-xs font-medium text-[#A5A79D]">
+        <p className="gold-card-muted text-xs font-medium text-[#A5A79D] transition-colors duration-300">
           {title}
         </p>
 
         <div
-          className="rounded-xl border border-white/5 p-2.5"
+          className="gold-card-icon rounded-xl border border-white/10 p-2.5 transition-colors duration-300"
           style={{
-            backgroundColor: `${accent}15`,
+            backgroundColor: `${accent}18`,
             color: accent,
           }}
         >
@@ -419,11 +408,11 @@ function StatCard({
       </div>
 
       <div className="relative mt-5">
-        <p className="text-3xl font-semibold tracking-tight text-[#F5F3E8]">
+        <p className="gold-card-title text-3xl font-semibold tracking-tight text-[#F5F3E8] transition-colors duration-300">
           {value}
         </p>
 
-        <p className="mt-1.5 text-[11px] text-[#92958C]">
+        <p className="gold-card-muted mt-1.5 text-[11px] text-[#92958C] transition-colors duration-300">
           {description}
         </p>
       </div>
@@ -444,21 +433,21 @@ function SectionHeading({
 }) {
   return (
     <div className="flex items-start gap-3">
-      <div className="rounded-xl border border-[#EFE8A8]/15 bg-[#EFE8A8]/10 p-2.5 text-[#EFE8A8]">
+      <div className="gold-card-icon rounded-xl border border-[#EFE8A8]/20 bg-[#EFE8A8]/10 p-2.5 text-[#EFE8A8] transition-colors duration-300">
         <Icon size={19} />
       </div>
 
       <div>
-        <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#EFE8A8]/65">
+        <p className="gold-card-muted text-[10px] font-semibold uppercase tracking-[0.2em] text-[#EFE8A8]/70 transition-colors duration-300">
           {eyebrow}
         </p>
 
-        <h2 className="mt-1 text-lg font-semibold text-[#F5F3E8]">
+        <h2 className="gold-card-title mt-1 text-lg font-semibold text-[#F5F3E8] transition-colors duration-300">
           {title}
         </h2>
 
         {description && (
-          <p className="mt-1 text-xs text-[#92958C]">
+          <p className="gold-card-muted mt-1 text-xs text-[#92958C] transition-colors duration-300">
             {description}
           </p>
         )}
@@ -494,12 +483,10 @@ function CalendarDateCell({
 
   return (
     <div
-      className={`gold-ambient-card group relative min-h-[112px] border-b border-r border-[#EFE8A8]/10 p-2 transition sm:min-h-[130px] sm:p-3 ${
-        !currentMonth ? "opacity-30" : ""
+      className={`gold-ambient-card group relative min-h-[112px] border-b border-r border-[#EFE8A8]/10 bg-[#121414] p-2 transition sm:min-h-[130px] sm:p-3 ${
+        !currentMonth ? "opacity-35" : ""
       } ${
-        selected
-          ? "bg-[#EFE8A8]/10 ring-1 ring-inset ring-[#EFE8A8]/40"
-          : "hover:bg-[#EFE8A8]/[0.04]"
+        selected ? "ring-1 ring-inset ring-[#EFE8A8]/50" : ""
       }`}
     >
       <button
@@ -509,17 +496,17 @@ function CalendarDateCell({
         <span
           className={`flex h-8 w-8 items-center justify-center rounded-full text-sm transition ${
             today
-              ? "bg-[#EFE8A8] font-bold text-[#121414]"
+              ? "bg-[#EFE8A8] font-bold text-[#17140D]"
               : selected
-                ? "bg-[#EFE8A8]/20 font-semibold text-[#EFE8A8]"
-                : "text-[#D8D6C8] group-hover:bg-white/5"
+                ? "gold-card-title bg-[#EFE8A8]/20 font-semibold text-[#EFE8A8]"
+                : "gold-card-title text-[#D8D6C8]"
           }`}
         >
           {date.getDate()}
         </span>
 
         {activeAppointments.length > 0 && (
-          <span className="rounded-full bg-[#EFE8A8]/10 px-2 py-0.5 text-[10px] text-[#EFE8A8]">
+          <span className="gold-card-pill rounded-full bg-[#EFE8A8]/12 px-2 py-0.5 text-[10px] font-medium text-[#EFE8A8] transition-colors duration-300">
             {activeAppointments.length}
           </span>
         )}
@@ -531,7 +518,7 @@ function CalendarDateCell({
             key={item.id}
             onClick={onSelect}
             title={`${item.customer} – ${item.service}`}
-            className="flex w-full items-center gap-1.5 truncate rounded-md bg-white/[0.035] px-1.5 py-1 text-left text-[10px] text-[#D8D6C8] transition hover:bg-white/[0.08]"
+            className="gold-card-subitem flex w-full items-center gap-1.5 truncate rounded-md bg-white/[0.04] px-1.5 py-1 text-left text-[10px] text-[#D8D6C8] transition hover:bg-black/15"
           >
             <span
               className={`h-1.5 w-1.5 shrink-0 rounded-full ${statusStyles[item.status]}`}
@@ -545,7 +532,7 @@ function CalendarDateCell({
         {appointments.length > 2 && (
           <button
             onClick={onSelect}
-            className="px-1 text-[10px] text-[#EFE8A8] hover:underline"
+            className="gold-card-title px-1 text-[10px] font-medium text-[#EFE8A8] hover:underline"
           >
             +{appointments.length - 2} more
           </button>
@@ -555,7 +542,7 @@ function CalendarDateCell({
       <button
         onClick={onAdd}
         title="Add appointment on this date"
-        className="absolute bottom-2 right-2 hidden h-6 w-6 items-center justify-center rounded-md border border-[#EFE8A8]/20 bg-[#1B1F1D] text-[#EFE8A8] opacity-0 transition hover:bg-[#EFE8A8] hover:text-[#121414] group-hover:opacity-100 sm:flex"
+        className="absolute bottom-2 right-2 hidden h-6 w-6 items-center justify-center rounded-md border border-[#EFE8A8]/25 bg-[#121414] text-[#EFE8A8] opacity-0 transition hover:bg-[#17140D] hover:text-[#FFF4CE] group-hover:opacity-100 sm:flex"
       >
         <Plus size={13} />
       </button>
@@ -579,10 +566,10 @@ function AppointmentRow({
   onDelete: (id: string) => void;
 }) {
   return (
-    <tr className="border-b border-[#EFE8A8]/[0.07] transition hover:bg-[#EFE8A8]/[0.025]">
+    <tr className="gold-table-row border-b border-[#EFE8A8]/[0.08] bg-[#121414] text-[#F5F3E8] transition-all duration-300">
       <td className="px-4 py-4">
         <div className="flex items-center gap-3">
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[#EFE8A8]/15 bg-[#EFE8A8]/10 text-xs font-semibold text-[#EFE8A8]">
+          <div className="gold-card-icon flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[#EFE8A8]/20 bg-[#EFE8A8]/10 text-xs font-semibold text-[#EFE8A8] transition-colors duration-300">
             {appointment.customer
               .split(" ")
               .map((part) => part[0])
@@ -592,10 +579,10 @@ function AppointmentRow({
           </div>
 
           <div>
-            <p className="font-medium text-[#F5F3E8]">
+            <p className="gold-card-title font-medium text-[#F5F3E8] transition-colors duration-300">
               {appointment.customer}
             </p>
-            <p className="mt-1 flex items-center gap-1 text-[11px] text-[#92958C]">
+            <p className="gold-card-muted mt-1 flex items-center gap-1 text-[11px] text-[#92958C] transition-colors duration-300">
               <Phone size={11} />
               {appointment.phone}
             </p>
@@ -604,28 +591,28 @@ function AppointmentRow({
       </td>
 
       <td className="px-4 py-4">
-        <p className="text-sm text-[#D8D6C8]">
+        <p className="gold-card-title text-sm text-[#D8D6C8] transition-colors duration-300">
           {appointment.service}
         </p>
-        <p className="mt-1 text-[11px] text-[#92958C]">
+        <p className="gold-card-muted mt-1 text-[11px] text-[#92958C] transition-colors duration-300">
           {formatDuration(getAppointmentDuration(appointment))}
         </p>
       </td>
 
       <td className="px-4 py-4">
-        <p className="text-sm text-[#F5F3E8]">
+        <p className="gold-card-title text-sm text-[#F5F3E8] transition-colors duration-300">
           {formatDate(parseDate(appointment.date))}
         </p>
-        <p className="mt-1 text-[11px] text-[#92958C]">
+        <p className="gold-card-muted mt-1 text-[11px] text-[#92958C] transition-colors duration-300">
           {formatTime(appointment.time)}
         </p>
       </td>
 
-      <td className="px-4 py-4 text-sm text-[#D8D6C8]">
+      <td className="gold-card-title px-4 py-4 text-sm text-[#D8D6C8] transition-colors duration-300">
         {appointment.staff}
       </td>
 
-      <td className="px-4 py-4 text-sm font-semibold text-[#EFE8A8]">
+      <td className="gold-card-title px-4 py-4 text-sm font-semibold text-[#EFE8A8] transition-colors duration-300">
         {formatCurrency(appointment.amount)}
       </td>
 
@@ -638,7 +625,7 @@ function AppointmentRow({
           <button
             onClick={() => onEdit(appointment)}
             title="Edit appointment"
-            className="rounded-lg p-2 text-[#EFE8A8] transition hover:bg-[#EFE8A8]/10"
+            className="gold-row-btn rounded-lg p-2 text-[#EFE8A8] transition hover:bg-black/15"
           >
             <Pencil size={15} />
           </button>
@@ -649,7 +636,7 @@ function AppointmentRow({
                 onStatusChange(appointment.id, "Confirmed")
               }
               title="Confirm appointment"
-              className="rounded-lg p-2 text-emerald-300 transition hover:bg-emerald-500/10"
+              className="gold-row-btn rounded-lg p-2 text-emerald-300 transition hover:bg-black/15"
             >
               <Check size={16} />
             </button>
@@ -661,7 +648,7 @@ function AppointmentRow({
                 onStatusChange(appointment.id, "Completed")
               }
               title="Mark completed"
-              className="rounded-lg p-2 text-sky-300 transition hover:bg-sky-500/10"
+              className="gold-row-btn rounded-lg p-2 text-sky-300 transition hover:bg-black/15"
             >
               <CheckCircle2 size={16} />
             </button>
@@ -670,7 +657,7 @@ function AppointmentRow({
           <button
             onClick={() => onDelete(appointment.id)}
             title="Delete appointment"
-            className="rounded-lg p-2 text-red-300 transition hover:bg-red-500/10"
+            className="gold-row-btn rounded-lg p-2 text-red-300 transition hover:bg-black/15"
           >
             <Trash2 size={15} />
           </button>
@@ -1012,7 +999,7 @@ export default function AppointmentsPage() {
 
     if (conflict) {
       alert(
-        `Booking conflict! ${draft.staff} already has an appointment with ${conflict.customer} at ${formatTime(conflict.time)}. Please select another time or staff member.`
+        `Booking conflict! ${draft.staff} already has an appointment with ${conflict.customer} at ${formatTime(conflict.time)}. Please select another time or assign a different staff member.`
       );
       return;
     }
@@ -1097,8 +1084,8 @@ export default function AppointmentsPage() {
 
   if (!storageLoaded) {
     return (
-      <div className="flex min-h-[60vh] items-center justify-center bg-[#121414] text-[#EFE8A8]">
-        <div className="flex items-center gap-3">
+      <div className="flex min-h-[60vh] items-center justify-center bg-[#FAF5ED] text-[#17140D]">
+        <div className="flex items-center gap-3 font-medium">
           <RefreshCw size={18} className="animate-spin" />
           Loading appointment command center...
         </div>
@@ -1111,45 +1098,40 @@ export default function AppointmentsPage() {
   // =====================================================
 
   return (
-    <div className="min-h-screen space-y-6 bg-[#121414] p-4 text-[#F5F3E8] sm:p-6 lg:p-8">
-
+    <div className="min-h-screen space-y-6 bg-[#FAF5ED] p-4 text-[#F5F3E8] sm:p-6 lg:p-8">
       {/* HEADER */}
 
-      <header className="gold-ambient-card relative overflow-hidden rounded-3xl border border-[#EFE8A8]/15 bg-gradient-to-br from-[#252923] via-[#1B1F1D] to-[#151816] p-6 sm:p-8">
-        <div className="pointer-events-none absolute -right-20 -top-32 h-80 w-80 rounded-full bg-[#EFE8A8]/[0.06] blur-3xl" />
-
-        <div className="pointer-events-none absolute bottom-0 right-1/4 h-40 w-40 rounded-full bg-[#EFE8A8]/[0.035] blur-3xl" />
-
+      <header className="gold-ambient-card relative rounded-3xl border border-[#EFE8A8]/20 bg-[#121414] p-6 sm:p-8">
         <div className="relative flex flex-col justify-between gap-6 lg:flex-row lg:items-center">
           <div>
             <div className="mb-4 flex items-center gap-2">
               <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-400" />
 
-              <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-[#EFE8A8]/70">
+              <p className="gold-card-muted text-[10px] font-semibold uppercase tracking-[0.25em] text-[#EFE8A8]/75 transition-colors duration-300">
                 KBC Salon Academy / Operations
               </p>
             </div>
 
-            <h1 className="font-serif text-3xl tracking-tight text-[#F5F3E8] sm:text-4xl lg:text-5xl">
+            <h1 className="gold-card-title font-serif text-3xl tracking-tight text-[#F5F3E8] transition-colors duration-300 sm:text-4xl lg:text-5xl">
               Appointment
-              <span className="ml-2 text-[#EFE8A8]">
+              <span className="gold-card-accent ml-2 text-[#EFE8A8] transition-colors duration-300">
                 Command Center
               </span>
             </h1>
 
-            <p className="mt-3 max-w-xl text-sm leading-6 text-[#A5A79D]">
+            <p className="gold-card-muted mt-3 max-w-xl text-sm leading-6 text-[#A5A79D] transition-colors duration-300">
               Your salon schedule, customer bookings and team
               appointments — organised in one place.
             </p>
 
             <div className="mt-5 flex flex-wrap items-center gap-3 text-xs text-[#B8BAAF]">
-              <span className="flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3 py-2">
-                <CalendarDays size={14} className="text-[#EFE8A8]" />
+              <span className="gold-card-pill flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3 py-2 transition-colors duration-300">
+                <CalendarDays size={14} className="gold-card-icon text-[#EFE8A8]" />
                 {formatDate(new Date())}
               </span>
 
-              <span className="flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3 py-2">
-                <Users size={14} className="text-[#EFE8A8]" />
+              <span className="gold-card-pill flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3 py-2 transition-colors duration-300">
+                <Users size={14} className="gold-card-icon text-[#EFE8A8]" />
                 {staffMembers.length} team members
               </span>
             </div>
@@ -1158,7 +1140,7 @@ export default function AppointmentsPage() {
           <div className="relative flex flex-col gap-3 sm:flex-row lg:flex-col lg:items-end">
             <button
               onClick={() => openCreateModal()}
-              className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#EFE8A8] px-6 py-3.5 text-sm font-bold text-[#121414] shadow-lg shadow-[#EFE8A8]/10 transition duration-300 hover:-translate-y-0.5 hover:bg-[#FFF4B5] hover:shadow-[#EFE8A8]/20"
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#EFE8A8] px-6 py-3.5 text-sm font-bold text-[#17140D] shadow-lg shadow-[#EFE8A8]/15 transition duration-300 hover:-translate-y-0.5 hover:bg-[#FFF4CE] hover:shadow-[#EFE8A8]/30"
             >
               <Plus size={18} />
               Create Appointment
@@ -1169,10 +1151,10 @@ export default function AppointmentsPage() {
                 goToToday();
                 selectCalendarView("Day");
               }}
-              className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#EFE8A8]/25 bg-white/[0.03] px-5 py-3 text-sm text-[#EFE8A8] transition hover:bg-[#EFE8A8]/10"
+              className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#EFE8A8]/25 bg-[#121414] px-5 py-3 text-sm text-[#EFE8A8] transition hover:bg-[#EFE8A8]/15"
             >
               <CalendarCheck size={16} />
-              Today's Schedule
+              Today&apos;s Schedule
             </button>
           </div>
         </div>
@@ -1216,7 +1198,7 @@ export default function AppointmentsPage() {
 
       {/* TODAY AT A GLANCE */}
 
-      <section className={`${panel} overflow-hidden`}>
+      <section className={`${panel}`}>
         <div className="flex flex-col justify-between gap-4 border-b border-[#EFE8A8]/10 p-5 sm:flex-row sm:items-center sm:p-6">
           <SectionHeading
             eyebrow="Live salon activity"
@@ -1230,7 +1212,7 @@ export default function AppointmentsPage() {
               setSelectedDate(new Date());
               selectCalendarView("Day");
             }}
-            className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#EFE8A8]/20 px-4 py-2.5 text-xs font-medium text-[#EFE8A8] transition hover:bg-[#EFE8A8]/10"
+            className="gold-card-pill inline-flex items-center justify-center gap-2 rounded-xl border border-[#EFE8A8]/25 bg-[#121414] px-4 py-2.5 text-xs font-medium text-[#EFE8A8] transition hover:bg-[#EFE8A8]/15"
           >
             Open full schedule
             <ArrowUpRight size={14} />
@@ -1240,7 +1222,7 @@ export default function AppointmentsPage() {
         <div className="grid gap-0 lg:grid-cols-[1fr_250px]">
           <div className="p-5 sm:p-6">
             {todaysAppointments.length === 0 ? (
-              <div className="rounded-2xl border border-dashed border-[#EFE8A8]/20 px-5 py-12 text-center">
+              <div className="rounded-2xl border border-dashed border-[#EFE8A8]/20 bg-[#121414] px-5 py-12 text-center">
                 <CalendarDays
                   size={32}
                   className="mx-auto text-[#EFE8A8]/50"
@@ -1256,7 +1238,7 @@ export default function AppointmentsPage() {
 
                 <button
                   onClick={() => openCreateModal(new Date())}
-                  className="mt-4 rounded-xl bg-[#EFE8A8] px-5 py-2.5 text-sm font-semibold text-[#121414] transition hover:bg-[#FFF4B5]"
+                  className="mt-4 rounded-xl bg-[#EFE8A8] px-5 py-2.5 text-sm font-semibold text-[#17140D] transition hover:bg-[#FFF4CE]"
                 >
                   <Plus size={15} className="mr-1 inline" />
                   Create appointment
@@ -1275,33 +1257,33 @@ export default function AppointmentsPage() {
                     }}
                   >
                     <div className="w-12 shrink-0 pt-4 text-right">
-                      <p className="text-[11px] font-semibold text-[#EFE8A8]">
+                      <p className="gold-card-title text-[11px] font-semibold text-[#EFE8A8] transition-colors duration-300">
                         {formatTime(item.time)}
                       </p>
                     </div>
 
-                    <div className="relative z-10 mt-5 h-3 w-3 shrink-0 rounded-full border-2 border-[#EFE8A8] bg-[#1B1F1D] shadow-[0_0_12px_rgba(239,232,168,0.25)]" />
+                    <div className="relative z-10 mt-5 h-3 w-3 shrink-0 rounded-full border-2 border-[#EFE8A8] bg-[#121414] shadow-[0_0_12px_rgba(239,232,168,0.25)]" />
 
                     <button
                       onClick={() => openEditModal(item)}
-                      className="gold-ambient-card group min-w-0 flex-1 rounded-xl border border-[#EFE8A8]/10 bg-[#121414] p-4 text-left transition duration-300 hover:bg-[#20241F]"
+                      className="gold-ambient-card group min-w-0 flex-1 rounded-xl border border-[#EFE8A8]/15 bg-[#121414] p-4 text-left transition duration-300"
                     >
                       <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
                         <div className="flex min-w-0 items-center gap-3">
-                          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#EFE8A8]/10 text-[#EFE8A8] transition group-hover:scale-105">
+                          <div className="gold-card-icon flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#EFE8A8]/10 text-[#EFE8A8] transition duration-300 group-hover:scale-105">
                             <Scissors size={18} />
                           </div>
 
                           <div className="min-w-0">
-                            <p className="truncate text-sm font-semibold text-[#F5F3E8]">
+                            <p className="gold-card-title truncate text-sm font-semibold text-[#F5F3E8] transition-colors duration-300">
                               {item.customer}
                             </p>
 
-                            <p className="mt-1 truncate text-xs text-[#EFE8A8]">
+                            <p className="gold-card-title mt-1 truncate text-xs font-medium text-[#EFE8A8] transition-colors duration-300">
                               {item.service}
                             </p>
 
-                            <div className="mt-2 flex flex-wrap gap-3 text-[10px] text-[#92958C]">
+                            <div className="gold-card-muted mt-2 flex flex-wrap gap-3 text-[10px] text-[#92958C] transition-colors duration-300">
                               <span className="flex items-center gap-1">
                                 <User size={11} />
                                 {item.staff}
@@ -1318,7 +1300,7 @@ export default function AppointmentsPage() {
                         <div className="flex items-center justify-between gap-3 sm:flex-col sm:items-end">
                           <StatusBadge status={item.status} />
 
-                          <p className="text-sm font-semibold text-[#EFE8A8]">
+                          <p className="gold-card-title text-sm font-semibold text-[#EFE8A8] transition-colors duration-300">
                             {formatCurrency(item.amount)}
                           </p>
                         </div>
@@ -1332,17 +1314,17 @@ export default function AppointmentsPage() {
 
           {/* TODAY SUMMARY */}
 
-          <div className="gold-ambient-card border-t border-[#EFE8A8]/10 bg-[#151916] p-5 sm:p-6 lg:border-l lg:border-t-0">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#EFE8A8]/65">
+          <div className="gold-ambient-card rounded-b-2xl border-t border-[#EFE8A8]/10 bg-[#121414] p-5 sm:p-6 lg:rounded-bl-none lg:rounded-r-2xl lg:border-l lg:border-t-0">
+            <p className="gold-card-muted text-[10px] font-semibold uppercase tracking-[0.2em] text-[#EFE8A8]/70 transition-colors duration-300">
               Daily summary
             </p>
 
             <div className="mt-5 space-y-5">
               <div>
-                <p className="text-xs text-[#92958C]">
+                <p className="gold-card-muted text-xs text-[#92958C] transition-colors duration-300">
                   Total appointments
                 </p>
-                <p className="mt-1 text-3xl font-semibold text-[#F5F3E8]">
+                <p className="gold-card-title mt-1 text-3xl font-semibold text-[#F5F3E8] transition-colors duration-300">
                   {todaysAppointments.length}
                 </p>
               </div>
@@ -1350,10 +1332,10 @@ export default function AppointmentsPage() {
               <div className="h-px bg-[#EFE8A8]/10" />
 
               <div>
-                <p className="text-xs text-[#92958C]">
+                <p className="gold-card-muted text-xs text-[#92958C] transition-colors duration-300">
                   Confirmed today
                 </p>
-                <p className="mt-1 text-2xl font-semibold text-emerald-300">
+                <p className="gold-card-title mt-1 text-2xl font-semibold text-emerald-300 transition-colors duration-300">
                   {
                     todaysAppointments.filter(
                       (item) => item.status === "Confirmed"
@@ -1365,10 +1347,10 @@ export default function AppointmentsPage() {
               <div className="h-px bg-[#EFE8A8]/10" />
 
               <div>
-                <p className="text-xs text-[#92958C]">
+                <p className="gold-card-muted text-xs text-[#92958C] transition-colors duration-300">
                   Pending today
                 </p>
-                <p className="mt-1 text-2xl font-semibold text-amber-200">
+                <p className="gold-card-title mt-1 text-2xl font-semibold text-amber-200 transition-colors duration-300">
                   {
                     todaysAppointments.filter(
                       (item) => item.status === "Pending"
@@ -1380,10 +1362,10 @@ export default function AppointmentsPage() {
               <div className="h-px bg-[#EFE8A8]/10" />
 
               <div>
-                <p className="text-xs text-[#92958C]">
+                <p className="gold-card-muted text-xs text-[#92958C] transition-colors duration-300">
                   Completed revenue today
                 </p>
-                <p className="mt-1 text-xl font-semibold text-[#EFE8A8]">
+                <p className="gold-card-title mt-1 text-xl font-semibold text-[#EFE8A8] transition-colors duration-300">
                   {formatCurrency(todayRevenue)}
                 </p>
               </div>
@@ -1396,7 +1378,7 @@ export default function AppointmentsPage() {
           CALENDAR + SELECTED DAY PANEL
       ================================================ */}
 
-      <section className={`${panel} overflow-hidden`}>
+      <section className={`${panel}`}>
         {/* CALENDAR HEADER */}
 
         <div className="border-b border-[#EFE8A8]/10 p-5 sm:p-6">
@@ -1411,7 +1393,7 @@ export default function AppointmentsPage() {
             <div className="flex flex-wrap items-center gap-2">
               <button
                 onClick={goToToday}
-                className="rounded-lg border border-[#EFE8A8]/20 px-4 py-2 text-xs text-[#EFE8A8] transition hover:bg-[#EFE8A8]/10"
+                className="rounded-lg border border-[#EFE8A8]/25 bg-[#121414] px-4 py-2 text-xs text-[#EFE8A8] transition hover:bg-[#EFE8A8]/15"
               >
                 Today
               </button>
@@ -1420,7 +1402,7 @@ export default function AppointmentsPage() {
                 <button
                   onClick={() => changeDate(-1)}
                   aria-label="Previous date"
-                  className="rounded-md p-2 text-[#EFE8A8] transition hover:bg-[#EFE8A8]/10"
+                  className="rounded-md p-2 text-[#EFE8A8] transition hover:bg-[#EFE8A8]/15"
                 >
                   <ChevronLeft size={17} />
                 </button>
@@ -1428,7 +1410,7 @@ export default function AppointmentsPage() {
                 <button
                   onClick={() => changeDate(1)}
                   aria-label="Next date"
-                  className="rounded-md p-2 text-[#EFE8A8] transition hover:bg-[#EFE8A8]/10"
+                  className="rounded-md p-2 text-[#EFE8A8] transition hover:bg-[#EFE8A8]/15"
                 >
                   <ChevronRight size={17} />
                 </button>
@@ -1437,14 +1419,14 @@ export default function AppointmentsPage() {
               <div className="relative">
                 <button
                   onClick={() => setDatePickerOpen((value) => !value)}
-                  className="flex items-center gap-2 rounded-lg border border-[#EFE8A8]/15 bg-[#121414] px-3 py-2 text-xs font-semibold text-[#F5F3E8] transition hover:border-[#EFE8A8]/35"
+                  className="flex items-center gap-2 rounded-lg border border-[#EFE8A8]/15 bg-[#121414] px-3 py-2 text-xs font-semibold text-[#F5F3E8] transition hover:border-[#EFE8A8]/45"
                 >
                   <CalendarDays size={15} className="text-[#EFE8A8]" />
                   {headingDate}
                 </button>
 
                 {datePickerOpen && (
-                  <div className="absolute right-0 top-12 z-40 w-64 rounded-xl border border-[#EFE8A8]/20 bg-[#222522] p-4 shadow-2xl">
+                  <div className="absolute right-0 top-12 z-40 w-64 rounded-xl border border-[#EFE8A8]/25 bg-[#121414] p-4 shadow-2xl">
                     <label className="text-xs text-[#A5A79D]">
                       Jump to date
                     </label>
@@ -1464,7 +1446,7 @@ export default function AppointmentsPage() {
 
                     <button
                       onClick={() => setDatePickerOpen(false)}
-                      className="mt-3 w-full rounded-lg bg-[#EFE8A8] py-2 text-sm font-semibold text-[#121414]"
+                      className="mt-3 w-full rounded-lg bg-[#EFE8A8] py-2 text-sm font-semibold text-[#17140D] hover:bg-[#FFF4CE]"
                     >
                       Done
                     </button>
@@ -1483,7 +1465,7 @@ export default function AppointmentsPage() {
                     onClick={() => selectCalendarView(view)}
                     className={`rounded-lg px-4 py-2 text-xs transition ${
                       calendarView === view
-                        ? "bg-[#EFE8A8] font-semibold text-[#121414] shadow"
+                        ? "bg-[#EFE8A8] font-semibold text-[#17140D] shadow"
                         : "text-[#A5A79D] hover:text-white"
                     }`}
                   >
@@ -1495,7 +1477,7 @@ export default function AppointmentsPage() {
 
             <button
               onClick={() => openCreateModal(selectedDate)}
-              className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#EFE8A8]/25 px-4 py-2.5 text-xs font-medium text-[#EFE8A8] transition hover:bg-[#EFE8A8]/10"
+              className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#EFE8A8]/25 bg-[#121414] px-4 py-2.5 text-xs font-medium text-[#EFE8A8] transition hover:bg-[#EFE8A8]/15"
             >
               <Plus size={15} />
               Add booking
@@ -1594,10 +1576,10 @@ export default function AppointmentsPage() {
                   return (
                     <div
                       key={key}
-                      className={`gold-ambient-card group min-h-[290px] rounded-xl border p-2 transition sm:p-3 ${
+                      className={`gold-ambient-card group min-h-[290px] rounded-xl border bg-[#121414] p-2 transition sm:p-3 ${
                         key === todayKey
-                          ? "border-[#EFE8A8]/50 bg-[#EFE8A8]/[0.06]"
-                          : "border-[#EFE8A8]/10 bg-[#121414]/60 hover:border-[#EFE8A8]/25"
+                          ? "border-[#EFE8A8]/55"
+                          : "border-[#EFE8A8]/15"
                       }`}
                     >
                       <button
@@ -1605,9 +1587,9 @@ export default function AppointmentsPage() {
                           setSelectedDate(date);
                           selectCalendarView("Day");
                         }}
-                        className="mb-3 w-full rounded-lg py-2 text-center transition hover:bg-white/[0.04]"
+                        className="mb-3 w-full rounded-lg py-2 text-center transition hover:bg-black/15"
                       >
-                        <p className="text-[10px] uppercase text-[#A5A79D]">
+                        <p className="gold-card-muted text-[10px] uppercase text-[#A5A79D] transition-colors duration-300">
                           {date.toLocaleDateString("en-IN", {
                             weekday: "short",
                           })}
@@ -1616,14 +1598,14 @@ export default function AppointmentsPage() {
                         <p
                           className={`mx-auto mt-1 flex h-9 w-9 items-center justify-center rounded-full text-lg font-semibold ${
                             key === todayKey
-                              ? "bg-[#EFE8A8] text-[#121414]"
-                              : "text-[#F5F3E8]"
+                              ? "bg-[#EFE8A8] text-[#17140D]"
+                              : "gold-card-title text-[#F5F3E8]"
                           }`}
                         >
                           {date.getDate()}
                         </p>
 
-                        <p className="mt-1 text-[10px] text-[#92958C]">
+                        <p className="gold-card-muted mt-1 text-[10px] text-[#92958C] transition-colors duration-300">
                           {activeCount} bookings
                         </p>
                       </button>
@@ -1633,41 +1615,41 @@ export default function AppointmentsPage() {
                           <button
                             key={item.id}
                             onClick={() => openEditModal(item)}
-                            className="gold-ambient-card w-full rounded-lg border border-[#EFE8A8]/10 bg-[#222522] p-2 text-left transition hover:border-[#EFE8A8]/40 hover:bg-[#2B302B]"
+                            className="gold-ambient-card w-full rounded-lg border border-[#EFE8A8]/15 bg-[#121414] p-2 text-left transition"
                           >
                             <div className="flex items-center gap-1.5">
                               <span
                                 className={`h-1.5 w-1.5 shrink-0 rounded-full ${statusStyles[item.status]}`}
                               />
 
-                              <p className="truncate text-[10px] text-[#EFE8A8]">
+                              <p className="gold-card-title truncate text-[10px] font-medium text-[#EFE8A8] transition-colors duration-300">
                                 {formatTime(item.time)}
                               </p>
                             </div>
 
-                            <p className="mt-1 truncate text-xs font-medium text-white">
+                            <p className="gold-card-title mt-1 truncate text-xs font-medium text-white transition-colors duration-300">
                               {item.customer}
                             </p>
 
-                            <p className="mt-1 truncate text-[10px] text-[#A5A79D]">
+                            <p className="gold-card-muted mt-1 truncate text-[10px] text-[#A5A79D] transition-colors duration-300">
                               {item.service}
                             </p>
 
-                            <p className="mt-1 truncate text-[10px] text-[#92958C]">
+                            <p className="gold-card-muted mt-1 truncate text-[10px] text-[#92958C] transition-colors duration-300">
                               {item.staff}
                             </p>
                           </button>
                         ))}
 
                         {dayAppointments.length === 0 && (
-                          <p className="py-5 text-center text-[10px] text-[#666B63]">
+                          <p className="gold-card-muted py-5 text-center text-[10px] text-[#666B63] transition-colors duration-300">
                             No bookings
                           </p>
                         )}
 
                         <button
                           onClick={() => openCreateModal(date)}
-                          className="flex w-full items-center justify-center gap-1 rounded-lg border border-dashed border-[#EFE8A8]/20 py-2 text-[10px] text-[#A5A79D] transition hover:border-[#EFE8A8]/50 hover:text-[#EFE8A8]"
+                          className="gold-card-pill flex w-full items-center justify-center gap-1 rounded-lg border border-dashed border-[#EFE8A8]/25 py-2 text-[10px] text-[#A5A79D] transition"
                         >
                           <Plus size={12} />
                           Add
@@ -1697,7 +1679,7 @@ export default function AppointmentsPage() {
 
                 <button
                   onClick={() => openCreateModal(selectedDate)}
-                  className="rounded-lg bg-[#EFE8A8]/10 px-3 py-2 text-xs text-[#EFE8A8] transition hover:bg-[#EFE8A8]/20"
+                  className="rounded-lg bg-[#EFE8A8]/12 px-3 py-2 text-xs text-[#EFE8A8] transition hover:bg-[#EFE8A8]/20"
                 >
                   <Plus size={13} className="mr-1 inline" />
                   Add appointment
@@ -1705,7 +1687,7 @@ export default function AppointmentsPage() {
               </div>
 
               {appointmentsForDate(selectedDate).length === 0 ? (
-                <div className="rounded-xl border border-dashed border-[#EFE8A8]/20 py-14 text-center">
+                <div className="rounded-xl border border-dashed border-[#EFE8A8]/20 bg-[#121414] py-14 text-center">
                   <CalendarDays
                     size={30}
                     className="mx-auto text-[#EFE8A8]/50"
@@ -1731,28 +1713,28 @@ export default function AppointmentsPage() {
                       key={item.id}
                       className="relative flex gap-3"
                     >
-                      <div className="z-10 mt-5 h-3 w-3 shrink-0 rounded-full border-2 border-[#EFE8A8] bg-[#1B1F1D]" />
+                      <div className="z-10 mt-5 h-3 w-3 shrink-0 rounded-full border-2 border-[#EFE8A8] bg-[#121414]" />
 
                       <div className="min-w-0 flex-1">
-                        <div className="gold-ambient-card flex flex-col gap-4 rounded-xl border border-[#EFE8A8]/10 bg-[#121414] p-4 transition sm:flex-row sm:items-center sm:justify-between">
+                        <div className="gold-ambient-card flex flex-col gap-4 rounded-xl border border-[#EFE8A8]/15 bg-[#121414] p-4 transition sm:flex-row sm:items-center sm:justify-between">
                           <div className="flex min-w-0 items-start gap-4">
-                            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#EFE8A8]/10 text-[#EFE8A8]">
+                            <div className="gold-card-icon flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#EFE8A8]/10 text-[#EFE8A8] transition-colors duration-300">
                               <Scissors size={19} />
                             </div>
 
                             <div className="min-w-0">
                               <div className="flex flex-wrap items-center gap-2">
-                                <h3 className="font-semibold text-[#F5F3E8]">
+                                <h3 className="gold-card-title font-semibold text-[#F5F3E8] transition-colors duration-300">
                                   {item.customer}
                                 </h3>
                                 <StatusBadge status={item.status} />
                               </div>
 
-                              <p className="mt-1 text-sm text-[#EFE8A8]">
+                              <p className="gold-card-title mt-1 text-sm font-medium text-[#EFE8A8] transition-colors duration-300">
                                 {item.service}
                               </p>
 
-                              <div className="mt-2 flex flex-wrap gap-3 text-xs text-[#92958C]">
+                              <div className="gold-card-muted mt-2 flex flex-wrap gap-3 text-xs text-[#92958C] transition-colors duration-300">
                                 <span className="flex items-center gap-1">
                                   <Clock size={12} />
                                   {formatTime(item.time)}
@@ -1777,13 +1759,13 @@ export default function AppointmentsPage() {
                           </div>
 
                           <div className="flex flex-wrap items-center justify-between gap-2 sm:justify-end">
-                            <p className="font-semibold text-[#EFE8A8]">
+                            <p className="gold-card-title font-semibold text-[#EFE8A8] transition-colors duration-300">
                               {formatCurrency(item.amount)}
                             </p>
 
                             <button
                               onClick={() => openEditModal(item)}
-                              className="rounded-lg border border-[#EFE8A8]/20 px-3 py-2 text-xs text-[#EFE8A8] transition hover:bg-[#EFE8A8]/10"
+                              className="gold-card-pill rounded-lg border border-[#EFE8A8]/25 bg-[#121414] px-3 py-2 text-xs text-[#EFE8A8] transition"
                             >
                               View details
                             </button>
@@ -1803,7 +1785,7 @@ export default function AppointmentsPage() {
           APPOINTMENT MANAGEMENT TABLE
       ================================================ */}
 
-      <section className={`${panel} overflow-hidden`}>
+      <section className={`${panel}`}>
         <div className="flex flex-col justify-between gap-4 border-b border-[#EFE8A8]/10 p-5 sm:p-6 xl:flex-row xl:items-center">
           <SectionHeading
             eyebrow="Booking management"
@@ -1854,10 +1836,10 @@ export default function AppointmentsPage() {
         <div className="overflow-x-auto">
           <table className="w-full min-w-[900px] text-left">
             <thead>
-              <tr className="border-b border-[#EFE8A8]/10 bg-[#121414]/50 text-[10px] uppercase tracking-wider text-[#92958C]">
+              <tr className="border-b border-[#EFE8A8]/12 bg-[#121414] text-[10px] uppercase tracking-wider text-[#92958C]">
                 <th className="px-4 py-4 font-medium">Customer</th>
                 <th className="px-4 py-4 font-medium">Service</th>
-                <th className="px-4 py-4 font-medium">Date & Time</th>
+                <th className="px-4 py-4 font-medium">Date &amp; Time</th>
                 <th className="px-4 py-4 font-medium">Staff</th>
                 <th className="px-4 py-4 font-medium">Amount</th>
                 <th className="px-4 py-4 font-medium">Status</th>
@@ -1877,7 +1859,7 @@ export default function AppointmentsPage() {
               ))}
 
               {visibleAppointments.length === 0 && (
-                <tr>
+                <tr className="bg-[#121414]">
                   <td colSpan={7} className="py-16 text-center">
                     <CalendarDays
                       size={30}
@@ -1933,12 +1915,10 @@ export default function AppointmentsPage() {
             }
           }}
         >
-          <div className="gold-ambient-card my-auto w-full max-w-2xl overflow-hidden rounded-2xl border border-[#EFE8A8]/20 bg-[#1B1F1D] shadow-2xl animate-modalIn">
+          <div className="gold-ambient-card my-auto w-full max-w-2xl rounded-2xl border border-[#EFE8A8]/20 bg-[#121414] shadow-2xl animate-modalIn">
             {/* MODAL HEADER */}
 
-            <div className="relative overflow-hidden border-b border-[#EFE8A8]/10 bg-gradient-to-r from-[#252923] to-[#1B1F1D] px-5 py-5 sm:px-7">
-              <div className="pointer-events-none absolute -right-8 -top-16 h-40 w-40 rounded-full bg-[#EFE8A8]/[0.06] blur-2xl" />
-
+            <div className="relative overflow-hidden rounded-t-2xl border-b border-[#EFE8A8]/10 bg-[#121414] px-5 py-5 sm:px-7">
               <div className="relative flex items-center justify-between">
                 <div>
                   <div className="flex items-center gap-2">
@@ -2240,7 +2220,7 @@ export default function AppointmentsPage() {
                 <button
                   type="submit"
                   disabled={!!staffConflict}
-                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#EFE8A8] px-6 py-3 text-sm font-semibold text-[#121414] transition hover:bg-[#FFF4B5] disabled:cursor-not-allowed disabled:opacity-40"
+                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#EFE8A8] px-6 py-3 text-sm font-semibold text-[#17140D] transition hover:bg-[#FFF4CE] disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   <Check size={17} />
 
@@ -2257,53 +2237,98 @@ export default function AppointmentsPage() {
       )}
 
       {/* ================================================
-          ANIMATIONS + GOLDEN AMBIENT CARD EFFECT
+          ANIMATIONS + CHAMPAGNE HOVER & GOLDEN GLOW
       ================================================ */}
 
       <style jsx global>{`
-        /* ---------------------------------------------
-           GOLDEN AMBIENT GLOW
-        --------------------------------------------- */
-
         .gold-ambient-card {
           position: relative;
           isolation: isolate;
+          background-color: #121414;
+          color: #f5f3e8;
           -webkit-tap-highlight-color: transparent;
+          touch-action: manipulation;
           transition:
-            transform 350ms ease,
-            border-color 350ms ease,
-            box-shadow 350ms ease,
-            background-color 350ms ease;
+            transform 320ms cubic-bezier(0.22, 1, 0.36, 1),
+            border-color 320ms ease,
+            box-shadow 320ms ease,
+            background 320ms ease,
+            color 320ms ease;
         }
 
         .gold-ambient-card::after {
           content: "";
           position: absolute;
-          inset: -18px;
+          inset: -16px;
           z-index: -1;
           border-radius: inherit;
           pointer-events: none;
           background: radial-gradient(
             ellipse at center,
-            rgba(255, 225, 130, 0.24) 0%,
-            rgba(239, 200, 85, 0.16) 35%,
-            rgba(205, 157, 55, 0.07) 65%,
+            rgba(255, 244, 206, 0.38) 0%,
+            rgba(232, 211, 154, 0.25) 40%,
+            rgba(201, 164, 92, 0.13) 70%,
             transparent 100%
           );
           filter: blur(22px);
           opacity: 0;
-          transition: opacity 350ms ease;
+          transition: opacity 320ms ease;
         }
 
         .gold-ambient-card:hover,
         .gold-ambient-card:active,
         .gold-ambient-card:focus-visible {
-          border-color: rgba(239, 210, 115, 0.42) !important;
+          background: linear-gradient(
+            135deg,
+            #fff4ce 0%,
+            #e8d39a 52%,
+            #c9a45c 100%
+          ) !important;
+          color: #17140d !important;
+          border-color: #fff2be !important;
           box-shadow:
-            0 0 15px rgba(239, 200, 85, 0.13),
-            0 0 32px rgba(239, 200, 85, 0.11),
-            0 0 55px rgba(239, 200, 85, 0.07),
-            inset 0 0 18px rgba(239, 200, 85, 0.025);
+            0 0 18px rgba(255, 244, 206, 0.45),
+            0 0 38px rgba(232, 211, 154, 0.32),
+            0 0 64px rgba(201, 164, 92, 0.22),
+            inset 0 1px 0 rgba(255, 255, 255, 0.65);
+        }
+
+        .gold-ambient-card:hover .gold-card-title,
+        .gold-ambient-card:active .gold-card-title,
+        .gold-ambient-card:focus-visible .gold-card-title,
+        .gold-ambient-card:hover .gold-card-accent,
+        .gold-ambient-card:active .gold-card-accent,
+        .gold-ambient-card:focus-visible .gold-card-accent {
+          color: #17140d !important;
+        }
+
+        .gold-ambient-card:hover .gold-card-muted,
+        .gold-ambient-card:active .gold-card-muted,
+        .gold-ambient-card:focus-visible .gold-card-muted {
+          color: rgba(23, 20, 13, 0.78) !important;
+        }
+
+        .gold-ambient-card:hover .gold-card-icon,
+        .gold-ambient-card:active .gold-card-icon,
+        .gold-ambient-card:focus-visible .gold-card-icon {
+          background-color: rgba(23, 20, 13, 0.12) !important;
+          border-color: rgba(23, 20, 13, 0.2) !important;
+          color: #17140d !important;
+        }
+
+        .gold-ambient-card:hover .gold-card-pill,
+        .gold-ambient-card:active .gold-card-pill,
+        .gold-ambient-card:focus-visible .gold-card-pill {
+          background-color: rgba(23, 20, 13, 0.12) !important;
+          border-color: rgba(23, 20, 13, 0.22) !important;
+          color: #17140d !important;
+        }
+
+        .gold-ambient-card:hover .gold-card-subitem,
+        .gold-ambient-card:active .gold-card-subitem,
+        .gold-ambient-card:focus-visible .gold-card-subitem {
+          background-color: rgba(23, 20, 13, 0.1) !important;
+          color: #17140d !important;
         }
 
         .gold-ambient-card:hover::after,
@@ -2312,10 +2337,57 @@ export default function AppointmentsPage() {
           opacity: 1;
         }
 
+        /* Table rows champagne hover & mobile touch */
+        .gold-table-row {
+          -webkit-tap-highlight-color: transparent;
+          touch-action: manipulation;
+        }
+
+        .gold-table-row:hover,
+        .gold-table-row:active {
+          background: linear-gradient(
+            135deg,
+            #fff4ce 0%,
+            #e8d39a 52%,
+            #c9a45c 100%
+          ) !important;
+          color: #17140d !important;
+          box-shadow:
+            inset 0 1px 0 #fff2be,
+            inset 0 -1px 0 #fff2be,
+            0 0 28px rgba(232, 211, 154, 0.26);
+        }
+
+        .gold-table-row:hover .gold-card-title,
+        .gold-table-row:active .gold-card-title {
+          color: #17140d !important;
+        }
+
+        .gold-table-row:hover .gold-card-muted,
+        .gold-table-row:active .gold-card-muted {
+          color: rgba(23, 20, 13, 0.78) !important;
+        }
+
+        .gold-table-row:hover .gold-card-icon,
+        .gold-table-row:active .gold-card-icon {
+          background-color: rgba(23, 20, 13, 0.12) !important;
+          border-color: rgba(23, 20, 13, 0.22) !important;
+          color: #17140d !important;
+        }
+
+        .gold-table-row:hover .gold-row-btn,
+        .gold-table-row:active .gold-row-btn {
+          color: #17140d !important;
+        }
+
         @media (hover: hover) {
           .gold-ambient-card:hover {
             transform: translateY(-3px);
           }
+        }
+
+        .gold-ambient-card:active {
+          transform: scale(0.99);
         }
 
         /* ---------------------------------------------
@@ -2368,11 +2440,13 @@ export default function AppointmentsPage() {
 
         @media (prefers-reduced-motion: reduce) {
           .gold-ambient-card,
-          .gold-ambient-card::after {
+          .gold-ambient-card::after,
+          .gold-table-row {
             transition: none;
           }
 
-          .gold-ambient-card:hover {
+          .gold-ambient-card:hover,
+          .gold-ambient-card:active {
             transform: none;
           }
 

@@ -81,16 +81,16 @@ type SettingsData = {
 const STORAGE_KEY = "kbc_admin_settings_v1";
 
 const cardClass =
-  "gold-ambient-card rounded-2xl border border-[#343832] bg-[#1B1F1D]";
+  "gold-ambient-card rounded-2xl bg-[#121414] text-[#F5F1E6]";
 
 const inputClass =
-  "w-full rounded-xl border border-[#3A403A] bg-[#151917] px-4 py-3 text-sm text-white outline-none transition placeholder:text-[#858B82] focus:border-[#D9D19A]";
+  "w-full rounded-xl border border-[#E8D39A]/30 bg-[#121414] px-4 py-3 text-sm text-[#F5F1E6] outline-none transition placeholder:text-[#858B82] focus:border-[#FFF4CE] focus:ring-2 focus:ring-[#E8D39A]/15";
 
 const primaryButtonClass =
-  "flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#EFE8A8] to-[#C8BD79] px-5 py-3 text-xs font-bold text-[#171914] shadow-lg shadow-[#C8BD79]/10 transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50";
+  "flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#FFF4CE] via-[#E8D39A] to-[#C9A45C] px-5 py-3 text-xs font-bold text-[#17140D] shadow-md shadow-[#C9A45C]/25 transition hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-50";
 
 const secondaryButtonClass =
-  "flex items-center justify-center gap-2 rounded-xl border border-[#3A403A] bg-[#1B1F1D] px-4 py-3 text-xs font-medium text-[#C9CBBF] transition hover:border-[#D9D19A]/50 hover:text-[#EFE8A8]";
+  "flex items-center justify-center gap-2 rounded-xl border border-[#E8D39A]/45 bg-[#121414] px-4 py-3 text-xs font-semibold text-[#FFF4CE] transition hover:bg-gradient-to-r hover:from-[#FFF4CE] hover:via-[#E8D39A] hover:to-[#C9A45C] hover:text-[#17140D]";
 
 const defaultSettings: SettingsData = {
   academyName: "KBC Salon Academy",
@@ -137,46 +137,14 @@ const sections: {
   description: string;
   icon: ElementType;
 }[] = [
-  {
-    name: "General",
-    description: "Academy information",
-    icon: Building2,
-  },
-  {
-    name: "Profile",
-    description: "Admin account",
-    icon: UserRound,
-  },
-  {
-    name: "Appearance",
-    description: "Theme and display",
-    icon: Palette,
-  },
-  {
-    name: "Notifications",
-    description: "Alerts and reminders",
-    icon: Bell,
-  },
-  {
-    name: "Business",
-    description: "Hours and preferences",
-    icon: Clock,
-  },
-  {
-    name: "Booking",
-    description: "Appointment rules",
-    icon: CalendarDays,
-  },
-  {
-    name: "Payments",
-    description: "Tax and invoices",
-    icon: CreditCard,
-  },
-  {
-    name: "Security",
-    description: "Password and access",
-    icon: ShieldCheck,
-  },
+  { name: "General", description: "Academy information", icon: Building2 },
+  { name: "Profile", description: "Admin account", icon: UserRound },
+  { name: "Appearance", description: "Theme and display", icon: Palette },
+  { name: "Notifications", description: "Alerts and reminders", icon: Bell },
+  { name: "Business", description: "Hours and preferences", icon: Clock },
+  { name: "Booking", description: "Appointment rules", icon: CalendarDays },
+  { name: "Payments", description: "Tax and invoices", icon: CreditCard },
+  { name: "Security", description: "Password and access", icon: ShieldCheck },
 ];
 
 const days = [
@@ -227,7 +195,7 @@ function Field({
 }) {
   return (
     <label className="block space-y-2">
-      <span className="text-xs font-medium text-[#A9ACA2]">
+      <span className="gold-card-muted text-xs font-semibold text-[#C9C4B8]">
         {label}
       </span>
 
@@ -240,7 +208,7 @@ function Field({
       />
 
       {hint && (
-        <span className="block text-[10px] text-[#858B82]">
+        <span className="gold-card-muted block text-[10px] text-[#9A958A]">
           {hint}
         </span>
       )}
@@ -265,7 +233,7 @@ function SelectField({
 }) {
   return (
     <label className="block space-y-2">
-      <span className="text-xs font-medium text-[#A9ACA2]">
+      <span className="gold-card-muted text-xs font-semibold text-[#C9C4B8]">
         {label}
       </span>
 
@@ -278,7 +246,7 @@ function SelectField({
           <option
             key={option}
             value={option}
-            className="bg-[#151917] text-white"
+            className="bg-[#121414] text-[#F5F1E6]"
           >
             {option}
           </option>
@@ -304,13 +272,13 @@ function Toggle({
   onChange: (value: boolean) => void;
 }) {
   return (
-    <div className="flex items-center justify-between gap-4 border-b border-[#343832] py-4 last:border-0">
+    <div className="gold-card-divider flex items-center justify-between gap-4 border-b border-[#E8D39A]/15 py-4 last:border-0">
       <div className="min-w-0">
-        <p className="text-sm font-medium text-[#F5F2E9]">
+        <p className="gold-card-title text-sm font-semibold text-[#F5F1E6]">
           {label}
         </p>
 
-        <p className="mt-1 text-xs leading-5 text-[#92978F]">
+        <p className="gold-card-muted mt-1 text-xs leading-5 text-[#9E988C]">
           {description}
         </p>
       </div>
@@ -322,15 +290,13 @@ function Toggle({
         onClick={() => onChange(!checked)}
         className={`relative h-6 w-11 shrink-0 rounded-full transition ${
           checked
-            ? "bg-gradient-to-r from-[#EFE8A8] to-[#C8BD79]"
-            : "bg-[#444840]"
+            ? "bg-gradient-to-r from-[#FFF4CE] via-[#E8D39A] to-[#C9A45C]"
+            : "bg-[#3A403A]"
         }`}
       >
         <span
           className={`absolute top-1 h-4 w-4 rounded-full shadow transition ${
-            checked
-              ? "left-6 bg-[#171914]"
-              : "left-1 bg-[#D4D5CC]"
+            checked ? "left-6 bg-[#17140D]" : "left-1 bg-[#B9BDB3]"
           }`}
         />
       </button>
@@ -355,18 +321,18 @@ function Panel({
 }) {
   return (
     <section className={`${cardClass} p-0`}>
-      <div className="flex items-center gap-3 border-b border-[#343832] px-5 py-5 sm:px-6">
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[#D9D19A]/20 bg-[#D9D19A]/10 text-[#EFE8A8]">
+      <div className="gold-card-divider flex items-center gap-3 border-b border-[#E8D39A]/15 px-5 py-5 sm:px-6">
+        <div className="gold-card-icon flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[#E8D39A]/30 bg-[#E8D39A]/15 text-[#FFF4CE]">
           <Icon size={19} />
         </div>
 
         <div>
-          <h3 className="text-sm font-semibold text-[#F5F2E9]">
+          <h3 className="gold-card-title text-sm font-bold text-[#FFF4CE]">
             {title}
           </h3>
 
           {description && (
-            <p className="mt-1 text-[11px] text-[#92978F]">
+            <p className="gold-card-muted mt-1 text-[11px] text-[#9E988C]">
               {description}
             </p>
           )}
@@ -459,6 +425,7 @@ export default function SettingsPage() {
     );
 
     setSaved(true);
+    setLogoPreview("");
     setToast("Settings restored to defaults.");
   }
 
@@ -518,28 +485,25 @@ export default function SettingsPage() {
   );
 
   return (
-    <div className="min-h-screen bg-[#121414] p-4 text-[#F5F2E9] sm:p-6 lg:p-8">
+    <div className="kbc-settings-page min-h-screen bg-[#FAF5ED] p-4 text-[#17140D] sm:p-6 lg:p-8">
       <div className="mx-auto max-w-[1600px] space-y-7">
+        {/* HEADER */}
 
-        {/* =====================================
-            HEADER
-        ===================================== */}
-
-        <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+        <div className="gold-ambient-card flex flex-col justify-between gap-4 rounded-2xl bg-[#121414] p-5 text-[#F5F1E6] sm:flex-row sm:items-center sm:p-6">
           <div>
-            <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.25em] text-[#C8BD79]">
-              <span className="h-px w-7 bg-[#EFE8A8]" />
+            <div className="gold-card-accent mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.25em] text-[#E8D39A]">
+              <span className="h-px w-7 bg-current" />
               Administration
             </div>
 
-            <h1 className="text-3xl font-semibold tracking-tight text-[#F5F2E9] sm:text-4xl">
+            <h1 className="gold-card-title text-3xl font-bold tracking-tight text-[#FFF4CE] sm:text-4xl">
               System{" "}
-              <span className="text-[#EFE8A8]">
+              <span className="gold-card-accent text-[#E8D39A]">
                 Settings
               </span>
             </h1>
 
-            <p className="mt-2 text-sm text-[#92978F]">
+            <p className="gold-card-muted mt-2 text-sm text-[#A6A093]">
               Configure your academy, account and business preferences.
             </p>
           </div>
@@ -564,33 +528,29 @@ export default function SettingsPage() {
           </div>
         </div>
 
-        {/* =====================================
-            STATUS BANNER
-        ===================================== */}
+        {/* STATUS BANNER */}
 
         <div className={`${cardClass} flex flex-col justify-between gap-3 p-4 sm:flex-row sm:items-center sm:px-6`}>
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[#D9D19A]/20 bg-[#D9D19A]/10 text-[#EFE8A8]">
+            <div className="gold-card-icon flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[#E8D39A]/30 bg-[#E8D39A]/15 text-[#FFF4CE]">
               <Sparkles size={19} />
             </div>
 
             <div>
-              <p className="text-sm font-semibold text-[#F5F2E9]">
+              <p className="gold-card-title text-sm font-bold text-[#FFF4CE]">
                 Academy Control Center
               </p>
 
-              <p className="mt-1 text-xs text-[#92978F]">
+              <p className="gold-card-muted mt-1 text-xs text-[#9E988C]">
                 Manage your workspace preferences in one place.
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2 text-xs text-[#A9ACA2]">
+          <div className="gold-card-title flex items-center gap-2 text-xs font-medium text-[#E8D39A]">
             <span
               className={`h-2 w-2 rounded-full ${
-                saved
-                  ? "bg-emerald-400"
-                  : "bg-[#D9D19A]"
+                saved ? "bg-emerald-400" : "bg-[#FFF4CE]"
               }`}
             />
 
@@ -600,44 +560,36 @@ export default function SettingsPage() {
           </div>
         </div>
 
-        {/* =====================================
-            SETTINGS LAYOUT
-        ===================================== */}
+        {/* SETTINGS LAYOUT */}
 
         <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-[270px_minmax(0,1fr)]">
-
-          {/* =====================================
-              NAVIGATION
-          ===================================== */}
+          {/* NAVIGATION */}
 
           <aside className={`${cardClass} p-3 lg:sticky lg:top-6`}>
-            <p className="px-3 pb-3 pt-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-[#858B82]">
+            <p className="gold-card-accent px-3 pb-3 pt-2 text-[10px] font-bold uppercase tracking-[0.2em] text-[#E8D39A]">
               Settings Menu
             </p>
 
             <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 lg:grid-cols-1">
               {sections.map((section) => {
                 const Icon = section.icon;
-                const active =
-                  activeSection === section.name;
+                const active = activeSection === section.name;
 
                 return (
                   <button
                     key={section.name}
-                    onClick={() =>
-                      setActiveSection(section.name)
-                    }
+                    onClick={() => setActiveSection(section.name)}
                     className={`group flex items-center gap-3 rounded-xl border p-3 text-left transition ${
                       active
-                        ? "border-[#D9D19A]/40 bg-[#D9D19A]/[0.08] shadow-[inset_3px_0_0_#D9D19A]"
-                        : "border-transparent hover:border-[#3A403A] hover:bg-[#222723]"
+                        ? "border-[#FFF4CE] bg-gradient-to-r from-[#FFF4CE] via-[#E8D39A] to-[#C9A45C] text-[#17140D] shadow-md shadow-[#C9A45C]/25"
+                        : "gold-card-subpanel border-transparent text-[#F5F1E6] hover:border-[#E8D39A]/40 hover:bg-black/15"
                     }`}
                   >
                     <div
                       className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg transition ${
                         active
-                          ? "bg-[#D9D19A]/15 text-[#EFE8A8]"
-                          : "bg-[#252B26] text-[#92978F] group-hover:text-[#EFE8A8]"
+                          ? "bg-[#17140D]/15 text-[#17140D]"
+                          : "gold-card-icon bg-[#E8D39A]/15 text-[#FFF4CE]"
                       }`}
                     >
                       <Icon size={17} />
@@ -645,16 +597,22 @@ export default function SettingsPage() {
 
                     <div className="min-w-0 flex-1">
                       <p
-                        className={`text-xs font-semibold ${
+                        className={`text-xs font-bold ${
                           active
-                            ? "text-[#EFE8A8]"
-                            : "text-[#D0D1C8]"
+                            ? "text-[#17140D]"
+                            : "gold-card-title text-[#F5F1E6]"
                         }`}
                       >
                         {section.name}
                       </p>
 
-                      <p className="mt-1 hidden text-[10px] text-[#858B82] lg:block">
+                      <p
+                        className={`mt-1 hidden text-[10px] lg:block ${
+                          active
+                            ? "text-[#17140D]/80"
+                            : "gold-card-muted text-[#9E988C]"
+                        }`}
+                      >
                         {section.description}
                       </p>
                     </div>
@@ -663,8 +621,8 @@ export default function SettingsPage() {
                       size={14}
                       className={`hidden lg:block ${
                         active
-                          ? "text-[#EFE8A8]"
-                          : "text-[#656D64]"
+                          ? "text-[#17140D]"
+                          : "gold-card-muted text-[#9E988C]"
                       }`}
                     />
                   </button>
@@ -673,37 +631,32 @@ export default function SettingsPage() {
             </div>
           </aside>
 
-          {/* =====================================
-              CONTENT
-          ===================================== */}
+          {/* CONTENT */}
 
           <main className="min-w-0 space-y-5">
-
             {/* SECTION HEADER */}
 
             <div className="mb-2">
-              <div className="flex items-center gap-2 text-xs text-[#858B82]">
+              <div className="flex items-center gap-2 text-xs font-medium text-[#6A604F]">
                 <Settings size={14} />
                 Settings
                 <ChevronRight size={12} />
 
-                <span className="text-[#EFE8A8]">
+                <span className="font-bold text-[#17140D]">
                   {activeSection}
                 </span>
               </div>
 
-              <h2 className="mt-3 text-2xl font-semibold text-[#F5F2E9]">
+              <h2 className="mt-3 text-2xl font-bold text-[#17140D]">
                 {activeSection} Settings
               </h2>
 
-              <p className="mt-1 text-xs text-[#92978F]">
+              <p className="mt-1 text-xs text-[#6A604F]">
                 {currentSection?.description}
               </p>
             </div>
 
-            {/* =====================================
-                GENERAL
-            ===================================== */}
+            {/* GENERAL */}
 
             {activeSection === "General" && (
               <>
@@ -712,8 +665,8 @@ export default function SettingsPage() {
                   description="Your academy's public identity and contact details."
                   icon={Building2}
                 >
-                  <div className="mb-6 flex flex-col gap-4 rounded-xl border border-[#343832] bg-[#151917] p-4 sm:flex-row sm:items-center">
-                    <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-[#D9D19A]/30 bg-[#D9D19A]/10 text-[#EFE8A8]">
+                  <div className="gold-card-subpanel mb-6 flex flex-col gap-4 rounded-xl border border-[#E8D39A]/25 bg-[#121414] p-4 sm:flex-row sm:items-center">
+                    <div className="gold-card-icon flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-[#E8D39A]/40 bg-gradient-to-br from-[#FFF4CE] to-[#C9A45C] text-[#17140D]">
                       {logoPreview ? (
                         <img
                           src={logoPreview}
@@ -721,23 +674,21 @@ export default function SettingsPage() {
                           className="h-full w-full object-cover"
                         />
                       ) : (
-                        <span className="text-xl font-bold">
-                          KBC
-                        </span>
+                        <span className="text-xl font-bold">KBC</span>
                       )}
                     </div>
 
                     <div className="flex-1">
-                      <p className="text-sm font-semibold text-[#F5F2E9]">
+                      <p className="gold-card-title text-sm font-bold text-[#FFF4CE]">
                         Academy Logo
                       </p>
 
-                      <p className="mt-1 text-xs text-[#92978F]">
+                      <p className="gold-card-muted mt-1 text-xs text-[#9E988C]">
                         Upload your academy logo.
                       </p>
                     </div>
 
-                    <label className="flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-[#D9D19A]/30 bg-[#D9D19A]/[0.08] px-4 py-3 text-xs font-semibold text-[#EFE8A8] transition hover:bg-[#D9D19A]/15">
+                    <label className="gold-card-pill flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-[#E8D39A]/45 bg-[#121414] px-4 py-3 text-xs font-bold text-[#FFF4CE] transition hover:bg-[#FFF4CE] hover:text-[#17140D]">
                       <Upload size={15} />
                       Upload Logo
 
@@ -754,50 +705,33 @@ export default function SettingsPage() {
                     <Field
                       label="Academy Name"
                       value={settings.academyName}
-                      onChange={(v) =>
-                        update("academyName", v)
-                      }
+                      onChange={(v) => update("academyName", v)}
                     />
-
                     <Field
                       label="Tagline"
                       value={settings.tagline}
-                      onChange={(v) =>
-                        update("tagline", v)
-                      }
+                      onChange={(v) => update("tagline", v)}
                     />
-
                     <Field
                       label="Email Address"
                       type="email"
                       value={settings.email}
-                      onChange={(v) =>
-                        update("email", v)
-                      }
+                      onChange={(v) => update("email", v)}
                     />
-
                     <Field
                       label="Contact Number"
                       value={settings.phone}
-                      onChange={(v) =>
-                        update("phone", v)
-                      }
+                      onChange={(v) => update("phone", v)}
                     />
-
                     <Field
                       label="Website"
                       value={settings.website}
-                      onChange={(v) =>
-                        update("website", v)
-                      }
+                      onChange={(v) => update("website", v)}
                     />
-
                     <Field
                       label="Location"
                       value={settings.address}
-                      onChange={(v) =>
-                        update("address", v)
-                      }
+                      onChange={(v) => update("address", v)}
                     />
                   </div>
                 </Panel>
@@ -811,37 +745,21 @@ export default function SettingsPage() {
                     <SelectField
                       label="Language"
                       value={settings.language}
-                      onChange={(v) =>
-                        update("language", v)
-                      }
-                      options={[
-                        "English",
-                        "Tamil",
-                        "Hindi",
-                      ]}
+                      onChange={(v) => update("language", v)}
+                      options={["English", "Tamil", "Hindi"]}
                     />
-
                     <SelectField
                       label="Currency"
                       value={settings.currency}
-                      onChange={(v) =>
-                        update("currency", v)
-                      }
-                      options={[
-                        "INR",
-                        "USD",
-                        "EUR",
-                        "GBP",
-                      ]}
+                      onChange={(v) => update("currency", v)}
+                      options={["INR", "USD", "EUR", "GBP"]}
                     />
 
                     <div className="sm:col-span-2">
                       <SelectField
                         label="Timezone"
                         value={settings.timezone}
-                        onChange={(v) =>
-                          update("timezone", v)
-                        }
+                        onChange={(v) => update("timezone", v)}
                         options={[
                           "Asia/Kolkata",
                           "Asia/Dubai",
@@ -855,9 +773,7 @@ export default function SettingsPage() {
               </>
             )}
 
-            {/* =====================================
-                PROFILE
-            ===================================== */}
+            {/* PROFILE */}
 
             {activeSection === "Profile" && (
               <>
@@ -867,7 +783,7 @@ export default function SettingsPage() {
                   icon={UserRound}
                 >
                   <div className="mb-6 flex items-center gap-4">
-                    <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl border border-[#D9D19A]/30 bg-gradient-to-br from-[#393626] to-[#22251F] text-xl font-bold text-[#EFE8A8]">
+                    <div className="gold-card-icon flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl border border-[#E8D39A]/45 bg-gradient-to-br from-[#FFF4CE] to-[#C9A45C] text-xl font-bold text-[#17140D]">
                       {settings.adminName
                         .split(" ")
                         .map((w) => w[0])
@@ -877,15 +793,15 @@ export default function SettingsPage() {
                     </div>
 
                     <div>
-                      <p className="text-sm font-semibold text-[#F5F2E9]">
+                      <p className="gold-card-title text-sm font-bold text-[#FFF4CE]">
                         {settings.adminName}
                       </p>
 
-                      <p className="mt-1 text-xs text-[#92978F]">
+                      <p className="gold-card-muted mt-1 text-xs text-[#9E988C]">
                         Academy Administrator
                       </p>
 
-                      <span className="mt-2 inline-flex rounded-full border border-emerald-400/20 bg-emerald-400/10 px-2.5 py-1 text-[10px] text-emerald-300">
+                      <span className="gold-card-pill mt-2 inline-flex rounded-full border border-emerald-400/25 bg-emerald-500/15 px-2.5 py-1 text-[10px] font-semibold text-emerald-300">
                         Active Account
                       </span>
                     </div>
@@ -895,26 +811,18 @@ export default function SettingsPage() {
                     <Field
                       label="Full Name"
                       value={settings.adminName}
-                      onChange={(v) =>
-                        update("adminName", v)
-                      }
+                      onChange={(v) => update("adminName", v)}
                     />
-
                     <Field
                       label="Email Address"
                       type="email"
                       value={settings.adminEmail}
-                      onChange={(v) =>
-                        update("adminEmail", v)
-                      }
+                      onChange={(v) => update("adminEmail", v)}
                     />
-
                     <Field
                       label="Phone Number"
                       value={settings.adminPhone}
-                      onChange={(v) =>
-                        update("adminPhone", v)
-                      }
+                      onChange={(v) => update("adminPhone", v)}
                     />
                   </div>
                 </Panel>
@@ -925,22 +833,20 @@ export default function SettingsPage() {
                   icon={ShieldCheck}
                 >
                   <div className="grid gap-3 sm:grid-cols-2">
-                    <div className="rounded-xl border border-[#343832] bg-[#151917] p-4">
-                      <p className="text-[10px] uppercase tracking-wider text-[#858B82]">
+                    <div className="gold-card-subpanel rounded-xl border border-[#E8D39A]/20 bg-[#121414] p-4">
+                      <p className="gold-card-muted text-[10px] font-semibold uppercase tracking-wider text-[#9E988C]">
                         Account Role
                       </p>
-
-                      <p className="mt-2 text-sm font-semibold text-[#EFE8A8]">
+                      <p className="gold-card-accent mt-2 text-sm font-bold text-[#FFF4CE]">
                         Super Administrator
                       </p>
                     </div>
 
-                    <div className="rounded-xl border border-[#343832] bg-[#151917] p-4">
-                      <p className="text-[10px] uppercase tracking-wider text-[#858B82]">
+                    <div className="gold-card-subpanel rounded-xl border border-[#E8D39A]/20 bg-[#121414] p-4">
+                      <p className="gold-card-muted text-[10px] font-semibold uppercase tracking-wider text-[#9E988C]">
                         Access Level
                       </p>
-
-                      <p className="mt-2 text-sm font-semibold text-[#F5F2E9]">
+                      <p className="gold-card-title mt-2 text-sm font-bold text-[#F5F1E6]">
                         Full Access
                       </p>
                     </div>
@@ -949,9 +855,7 @@ export default function SettingsPage() {
               </>
             )}
 
-            {/* =====================================
-                APPEARANCE
-            ===================================== */}
+            {/* APPEARANCE */}
 
             {activeSection === "Appearance" && (
               <>
@@ -964,18 +868,14 @@ export default function SettingsPage() {
                     label="Dark Theme"
                     description="Use the dark appearance throughout the admin dashboard."
                     checked={settings.darkMode}
-                    onChange={(v) =>
-                      update("darkMode", v)
-                    }
+                    onChange={(v) => update("darkMode", v)}
                   />
 
                   <Toggle
                     label="Compact Layout"
                     description="Reduce spacing between dashboard elements."
                     checked={settings.compactMode}
-                    onChange={(v) =>
-                      update("compactMode", v)
-                    }
+                    onChange={(v) => update("compactMode", v)}
                   />
                 </Panel>
 
@@ -985,55 +885,46 @@ export default function SettingsPage() {
                   icon={Sparkles}
                 >
                   <div className="grid gap-3 sm:grid-cols-3">
-                    <div className="rounded-xl border border-[#D9D19A]/30 bg-[#121414] p-4">
-                      <div className="h-8 rounded-lg bg-[#EFE8A8]" />
-
-                      <p className="mt-3 text-xs font-semibold text-[#F5F2E9]">
+                    <div className="gold-card-subpanel rounded-xl border border-[#E8D39A]/30 bg-[#121414] p-4">
+                      <div className="h-8 rounded-lg bg-gradient-to-r from-[#FFF4CE] via-[#E8D39A] to-[#C9A45C]" />
+                      <p className="gold-card-title mt-3 text-xs font-bold text-[#FFF4CE]">
                         Champagne Gold
                       </p>
-
-                      <p className="mt-1 text-[10px] text-[#92978F]">
-                        #EFE8A8
+                      <p className="gold-card-muted mt-1 text-[10px] text-[#9E988C]">
+                        #FFF4CE → #C9A45C
                       </p>
                     </div>
 
-                    <div className="rounded-xl border border-[#3A403A] bg-[#1B1F1D] p-4">
-                      <div className="h-8 rounded-lg bg-[#1B1F1D] ring-1 ring-[#3A403A]" />
-
-                      <p className="mt-3 text-xs font-semibold text-[#F5F2E9]">
-                        Card Surface
+                    <div className="gold-card-subpanel rounded-xl border border-[#E8D39A]/30 bg-[#121414] p-4">
+                      <div className="h-8 rounded-lg bg-[#FAF5ED] ring-1 ring-[#C9A45C]/40" />
+                      <p className="gold-card-title mt-3 text-xs font-bold text-[#F5F1E6]">
+                        Warm Ivory
                       </p>
-
-                      <p className="mt-1 text-[10px] text-[#92978F]">
-                        #1B1F1D
+                      <p className="gold-card-muted mt-1 text-[10px] text-[#9E988C]">
+                        #FAF5ED
                       </p>
                     </div>
 
-                    <div className="rounded-xl border border-[#3A403A] bg-[#121414] p-4">
-                      <div className="h-8 rounded-lg bg-[#121414] ring-1 ring-[#3A403A]" />
-
-                      <p className="mt-3 text-xs font-semibold text-[#F5F2E9]">
-                        Background
+                    <div className="gold-card-subpanel rounded-xl border border-[#E8D39A]/30 bg-[#121414] p-4">
+                      <div className="h-8 rounded-lg bg-[#121414] ring-1 ring-[#E8D39A]/40" />
+                      <p className="gold-card-title mt-3 text-xs font-bold text-[#F5F1E6]">
+                        Deep Charcoal
                       </p>
-
-                      <p className="mt-1 text-[10px] text-[#92978F]">
+                      <p className="gold-card-muted mt-1 text-[10px] text-[#9E988C]">
                         #121414
                       </p>
                     </div>
                   </div>
 
-                  <p className="mt-4 text-[11px] leading-5 text-[#858B82]">
-                    These are preference settings and preview samples.
-                    Applying a theme globally requires connecting them
-                    to your shared layout.
+                  <p className="gold-card-muted mt-4 text-[11px] leading-5 text-[#9E988C]">
+                    These are preference settings and preview samples. Applying a
+                    theme globally requires connecting them to your shared layout.
                   </p>
                 </Panel>
               </>
             )}
 
-            {/* =====================================
-                NOTIFICATIONS
-            ===================================== */}
+            {/* NOTIFICATIONS */}
 
             {activeSection === "Notifications" && (
               <>
@@ -1046,27 +937,19 @@ export default function SettingsPage() {
                     label="Email Notifications"
                     description="Receive important updates through email."
                     checked={settings.emailNotifications}
-                    onChange={(v) =>
-                      update("emailNotifications", v)
-                    }
+                    onChange={(v) => update("emailNotifications", v)}
                   />
-
                   <Toggle
                     label="SMS Notifications"
                     description="Send alerts through SMS messages."
                     checked={settings.smsNotifications}
-                    onChange={(v) =>
-                      update("smsNotifications", v)
-                    }
+                    onChange={(v) => update("smsNotifications", v)}
                   />
-
                   <Toggle
                     label="WhatsApp Notifications"
                     description="Send customer updates through WhatsApp."
                     checked={settings.whatsappNotifications}
-                    onChange={(v) =>
-                      update("whatsappNotifications", v)
-                    }
+                    onChange={(v) => update("whatsappNotifications", v)}
                   />
                 </Panel>
 
@@ -1079,44 +962,31 @@ export default function SettingsPage() {
                     label="Appointment Alerts"
                     description="New bookings, cancellations and changes."
                     checked={settings.appointmentAlerts}
-                    onChange={(v) =>
-                      update("appointmentAlerts", v)
-                    }
+                    onChange={(v) => update("appointmentAlerts", v)}
                   />
-
                   <Toggle
                     label="Payment Alerts"
                     description="Successful payments and pending transactions."
                     checked={settings.paymentAlerts}
-                    onChange={(v) =>
-                      update("paymentAlerts", v)
-                    }
+                    onChange={(v) => update("paymentAlerts", v)}
                   />
-
                   <Toggle
                     label="Low Stock Alerts"
                     description="Notify when products reach minimum stock."
                     checked={settings.lowStockAlerts}
-                    onChange={(v) =>
-                      update("lowStockAlerts", v)
-                    }
+                    onChange={(v) => update("lowStockAlerts", v)}
                   />
-
                   <Toggle
                     label="Reminder Alerts"
                     description="Upcoming appointments and follow-ups."
                     checked={settings.reminderAlerts}
-                    onChange={(v) =>
-                      update("reminderAlerts", v)
-                    }
+                    onChange={(v) => update("reminderAlerts", v)}
                   />
                 </Panel>
               </>
             )}
 
-            {/* =====================================
-                BUSINESS
-            ===================================== */}
+            {/* BUSINESS */}
 
             {activeSection === "Business" && (
               <>
@@ -1130,48 +1000,36 @@ export default function SettingsPage() {
                       label="Opening Time"
                       type="time"
                       value={settings.openingTime}
-                      onChange={(v) =>
-                        update("openingTime", v)
-                      }
+                      onChange={(v) => update("openingTime", v)}
                     />
-
                     <Field
                       label="Closing Time"
                       type="time"
                       value={settings.closingTime}
-                      onChange={(v) =>
-                        update("closingTime", v)
-                      }
+                      onChange={(v) => update("closingTime", v)}
                     />
                   </div>
 
                   <div className="mt-6">
-                    <p className="mb-3 text-xs font-medium text-[#A9ACA2]">
+                    <p className="gold-card-muted mb-3 text-xs font-semibold text-[#C9C4B8]">
                       Working Days
                     </p>
 
                     <div className="flex flex-wrap gap-2">
                       {days.map((day) => {
-                        const active =
-                          settings.workingDays.includes(day);
+                        const active = settings.workingDays.includes(day);
 
                         return (
                           <button
                             key={day}
                             onClick={() => toggleDay(day)}
-                            className={`rounded-xl border px-3 py-2 text-xs transition ${
+                            className={`rounded-xl border px-3 py-2 text-xs font-semibold transition ${
                               active
-                                ? "border-[#D9D19A]/40 bg-[#D9D19A]/10 text-[#EFE8A8]"
-                                : "border-[#3A403A] bg-[#151917] text-[#92978F] hover:border-[#D9D19A]/40 hover:text-[#EFE8A8]"
+                                ? "border-[#FFF4CE] bg-gradient-to-r from-[#FFF4CE] via-[#E8D39A] to-[#C9A45C] text-[#17140D]"
+                                : "gold-card-pill border-[#E8D39A]/25 bg-[#121414] text-[#A6A093] hover:border-[#E8D39A]"
                             }`}
                           >
-                            {active && (
-                              <Check
-                                size={11}
-                                className="mr-1 inline"
-                              />
-                            )}
-
+                            {active && <Check size={11} className="mr-1 inline" />}
                             {day.slice(0, 3)}
                           </button>
                         );
@@ -1189,37 +1047,21 @@ export default function SettingsPage() {
                     <SelectField
                       label="Currency"
                       value={settings.currency}
-                      onChange={(v) =>
-                        update("currency", v)
-                      }
-                      options={[
-                        "INR",
-                        "USD",
-                        "EUR",
-                        "GBP",
-                      ]}
+                      onChange={(v) => update("currency", v)}
+                      options={["INR", "USD", "EUR", "GBP"]}
                     />
-
                     <SelectField
                       label="Timezone"
                       value={settings.timezone}
-                      onChange={(v) =>
-                        update("timezone", v)
-                      }
-                      options={[
-                        "Asia/Kolkata",
-                        "Asia/Dubai",
-                        "Europe/London",
-                      ]}
+                      onChange={(v) => update("timezone", v)}
+                      options={["Asia/Kolkata", "Asia/Dubai", "Europe/London"]}
                     />
                   </div>
                 </Panel>
               </>
             )}
 
-            {/* =====================================
-                BOOKING
-            ===================================== */}
+            {/* BOOKING */}
 
             {activeSection === "Booking" && (
               <>
@@ -1232,48 +1074,20 @@ export default function SettingsPage() {
                     <SelectField
                       label="Default Appointment Duration"
                       value={settings.appointmentDuration}
-                      onChange={(v) =>
-                        update("appointmentDuration", v)
-                      }
-                      options={[
-                        "15",
-                        "30",
-                        "45",
-                        "60",
-                        "90",
-                        "120",
-                      ]}
+                      onChange={(v) => update("appointmentDuration", v)}
+                      options={["15", "30", "45", "60", "90", "120"]}
                     />
-
                     <SelectField
                       label="Cancellation Notice (Hours)"
                       value={settings.cancellationHours}
-                      onChange={(v) =>
-                        update("cancellationHours", v)
-                      }
-                      options={[
-                        "2",
-                        "6",
-                        "12",
-                        "24",
-                        "48",
-                        "72",
-                      ]}
+                      onChange={(v) => update("cancellationHours", v)}
+                      options={["2", "6", "12", "24", "48", "72"]}
                     />
-
                     <SelectField
                       label="Advance Booking Window (Days)"
                       value={settings.advanceBookingDays}
-                      onChange={(v) =>
-                        update("advanceBookingDays", v)
-                      }
-                      options={[
-                        "7",
-                        "14",
-                        "30",
-                        "60",
-                        "90",
-                      ]}
+                      onChange={(v) => update("advanceBookingDays", v)}
+                      options={["7", "14", "30", "60", "90"]}
                     />
                   </div>
                 </Panel>
@@ -1284,47 +1098,35 @@ export default function SettingsPage() {
                   icon={CalendarCheck}
                 >
                   <div className="grid gap-3 sm:grid-cols-3">
-                    <div className="rounded-xl border border-[#343832] bg-[#151917] p-4">
-                      <Clock
-                        size={18}
-                        className="text-[#EFE8A8]"
-                      />
-
-                      <p className="mt-3 text-lg font-semibold text-[#F5F2E9]">
+                    <div className="gold-card-subpanel rounded-xl border border-[#E8D39A]/20 bg-[#121414] p-4">
+                      <Clock size={18} className="gold-card-accent text-[#FFF4CE]" />
+                      <p className="gold-card-title mt-3 text-lg font-bold text-[#F5F1E6]">
                         {settings.appointmentDuration} min
                       </p>
-
-                      <p className="mt-1 text-[10px] text-[#92978F]">
+                      <p className="gold-card-muted mt-1 text-[10px] text-[#9E988C]">
                         Default duration
                       </p>
                     </div>
 
-                    <div className="rounded-xl border border-[#343832] bg-[#151917] p-4">
+                    <div className="gold-card-subpanel rounded-xl border border-[#E8D39A]/20 bg-[#121414] p-4">
                       <CalendarDays
                         size={18}
-                        className="text-[#EFE8A8]"
+                        className="gold-card-accent text-[#FFF4CE]"
                       />
-
-                      <p className="mt-3 text-lg font-semibold text-[#F5F2E9]">
+                      <p className="gold-card-title mt-3 text-lg font-bold text-[#F5F1E6]">
                         {settings.advanceBookingDays} days
                       </p>
-
-                      <p className="mt-1 text-[10px] text-[#92978F]">
+                      <p className="gold-card-muted mt-1 text-[10px] text-[#9E988C]">
                         Advance booking
                       </p>
                     </div>
 
-                    <div className="rounded-xl border border-[#343832] bg-[#151917] p-4">
-                      <X
-                        size={18}
-                        className="text-[#EFE8A8]"
-                      />
-
-                      <p className="mt-3 text-lg font-semibold text-[#F5F2E9]">
+                    <div className="gold-card-subpanel rounded-xl border border-[#E8D39A]/20 bg-[#121414] p-4">
+                      <X size={18} className="gold-card-accent text-[#FFF4CE]" />
+                      <p className="gold-card-title mt-3 text-lg font-bold text-[#F5F1E6]">
                         {settings.cancellationHours} hrs
                       </p>
-
-                      <p className="mt-1 text-[10px] text-[#92978F]">
+                      <p className="gold-card-muted mt-1 text-[10px] text-[#9E988C]">
                         Cancellation notice
                       </p>
                     </div>
@@ -1333,9 +1135,7 @@ export default function SettingsPage() {
               </>
             )}
 
-            {/* =====================================
-                PAYMENTS
-            ===================================== */}
+            {/* PAYMENTS */}
 
             {activeSection === "Payments" && (
               <>
@@ -1349,24 +1149,15 @@ export default function SettingsPage() {
                       label="Tax Rate (%)"
                       type="number"
                       value={settings.taxRate}
-                      onChange={(v) =>
-                        update("taxRate", v)
-                      }
+                      onChange={(v) => update("taxRate", v)}
                       hint="Confirm the applicable tax rate with your accountant."
                     />
 
                     <SelectField
                       label="Billing Currency"
                       value={settings.currency}
-                      onChange={(v) =>
-                        update("currency", v)
-                      }
-                      options={[
-                        "INR",
-                        "USD",
-                        "EUR",
-                        "GBP",
-                      ]}
+                      onChange={(v) => update("currency", v)}
+                      options={["INR", "USD", "EUR", "GBP"]}
                     />
                   </div>
                 </Panel>
@@ -1380,35 +1171,31 @@ export default function SettingsPage() {
                     <Field
                       label="Invoice Prefix"
                       value={settings.invoicePrefix}
-                      onChange={(v) =>
-                        update("invoicePrefix", v)
-                      }
+                      onChange={(v) => update("invoicePrefix", v)}
                       hint="Example: KBC-0001"
                     />
 
-                    <div className="rounded-xl border border-[#D9D19A]/20 bg-[#151917] p-4">
-                      <p className="text-[10px] uppercase tracking-wider text-[#92978F]">
+                    <div className="gold-card-subpanel rounded-xl border border-[#E8D39A]/20 bg-[#121414] p-4">
+                      <p className="gold-card-muted text-[10px] font-semibold uppercase tracking-wider text-[#9E988C]">
                         Invoice Preview
                       </p>
-
-                      <p className="mt-2 text-lg font-semibold text-[#EFE8A8]">
+                      <p className="gold-card-accent mt-2 text-lg font-bold text-[#FFF4CE]">
                         {settings.invoicePrefix || "KBC"}-0001
                       </p>
                     </div>
                   </div>
                 </Panel>
 
-                <div className="rounded-xl border border-amber-300/15 bg-amber-300/[0.05] p-4 text-xs leading-5 text-amber-100/70">
-                  Payment gateway credentials and live payment
-                  processing are not configured in this frontend
-                  settings page.
+                <div className="gold-ambient-card rounded-xl bg-[#121414] p-4 text-xs leading-5 text-[#E8D39A]">
+                  <span className="gold-card-title">
+                    Payment gateway credentials and live payment processing are not
+                    configured in this frontend settings page.
+                  </span>
                 </div>
               </>
             )}
 
-            {/* =====================================
-                SECURITY
-            ===================================== */}
+            {/* SECURITY */}
 
             {activeSection === "Security" && (
               <>
@@ -1419,55 +1206,39 @@ export default function SettingsPage() {
                 >
                   <div className="space-y-4">
                     <label className="block space-y-2">
-                      <span className="text-xs font-medium text-[#A9ACA2]">
+                      <span className="gold-card-muted text-xs font-semibold text-[#C9C4B8]">
                         New Password
                       </span>
 
                       <div className="relative">
                         <input
-                          type={
-                            showPassword ? "text" : "password"
-                          }
+                          type={showPassword ? "text" : "password"}
                           value={password}
-                          onChange={(e) =>
-                            setPassword(e.target.value)
-                          }
+                          onChange={(e) => setPassword(e.target.value)}
                           placeholder="Enter new password"
                           className={`${inputClass} pr-12`}
                         />
 
                         <button
                           type="button"
-                          onClick={() =>
-                            setShowPassword(!showPassword)
-                          }
-                          className="absolute right-4 top-1/2 -translate-y-1/2 text-[#858B82] transition hover:text-[#EFE8A8]"
+                          onClick={() => setShowPassword(!showPassword)}
+                          className="absolute right-4 top-1/2 -translate-y-1/2 text-[#9E988C] transition hover:text-[#FFF4CE]"
                         >
-                          {showPassword ? (
-                            <EyeOff size={17} />
-                          ) : (
-                            <Eye size={17} />
-                          )}
+                          {showPassword ? <EyeOff size={17} /> : <Eye size={17} />}
                         </button>
                       </div>
                     </label>
 
                     <label className="block space-y-2">
-                      <span className="text-xs font-medium text-[#A9ACA2]">
+                      <span className="gold-card-muted text-xs font-semibold text-[#C9C4B8]">
                         Confirm Password
                       </span>
 
                       <div className="relative">
                         <input
-                          type={
-                            showConfirmPassword
-                              ? "text"
-                              : "password"
-                          }
+                          type={showConfirmPassword ? "text" : "password"}
                           value={confirmPassword}
-                          onChange={(e) =>
-                            setConfirmPassword(e.target.value)
-                          }
+                          onChange={(e) => setConfirmPassword(e.target.value)}
                           placeholder="Confirm new password"
                           className={`${inputClass} pr-12`}
                         />
@@ -1475,11 +1246,9 @@ export default function SettingsPage() {
                         <button
                           type="button"
                           onClick={() =>
-                            setShowConfirmPassword(
-                              !showConfirmPassword
-                            )
+                            setShowConfirmPassword(!showConfirmPassword)
                           }
-                          className="absolute right-4 top-1/2 -translate-y-1/2 text-[#858B82] transition hover:text-[#EFE8A8]"
+                          className="absolute right-4 top-1/2 -translate-y-1/2 text-[#9E988C] transition hover:text-[#FFF4CE]"
                         >
                           {showConfirmPassword ? (
                             <EyeOff size={17} />
@@ -1496,6 +1265,12 @@ export default function SettingsPage() {
                     >
                       Validate Password Change
                     </button>
+
+                    <p className="gold-card-muted text-[11px] leading-5 text-[#9E988C]">
+                      This form currently validates the new password only. Connect
+                      your authentication API to securely update the actual
+                      account password.
+                    </p>
                   </div>
                 </Panel>
 
@@ -1508,9 +1283,7 @@ export default function SettingsPage() {
                     label="Enable Two-Factor Authentication"
                     description="Require a second verification step when signing in. A working authentication service is needed to enforce this."
                     checked={settings.twoFactor}
-                    onChange={(v) =>
-                      update("twoFactor", v)
-                    }
+                    onChange={(v) => update("twoFactor", v)}
                   />
                 </Panel>
 
@@ -1519,22 +1292,21 @@ export default function SettingsPage() {
                   description="Device information for your current browser session."
                   icon={Monitor}
                 >
-                  <div className="flex items-center gap-4 rounded-xl border border-[#343832] bg-[#151917] p-4">
-                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-[#D9D19A]/20 bg-[#D9D19A]/10 text-[#EFE8A8]">
+                  <div className="gold-card-subpanel flex items-center gap-4 rounded-xl border border-[#E8D39A]/20 bg-[#121414] p-4">
+                    <div className="gold-card-icon flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-[#E8D39A]/30 bg-[#E8D39A]/15 text-[#FFF4CE]">
                       <Monitor size={20} />
                     </div>
 
                     <div className="flex-1">
-                      <p className="text-sm font-semibold text-[#F5F2E9]">
+                      <p className="gold-card-title text-sm font-bold text-[#F5F1E6]">
                         Current Browser
                       </p>
-
-                      <p className="mt-1 text-xs text-[#92978F]">
+                      <p className="gold-card-muted mt-1 text-xs text-[#9E988C]">
                         This device · Current session
                       </p>
                     </div>
 
-                    <span className="rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1 text-[10px] text-emerald-300">
+                    <span className="gold-card-pill rounded-full border border-emerald-400/25 bg-emerald-500/15 px-3 py-1 text-[10px] font-semibold text-emerald-300">
                       Active
                     </span>
                   </div>
@@ -1542,12 +1314,10 @@ export default function SettingsPage() {
               </>
             )}
 
-            {/* =====================================
-                BOTTOM ACTIONS
-            ===================================== */}
+            {/* BOTTOM ACTIONS */}
 
             <div className={`${cardClass} flex flex-col justify-between gap-3 p-4 sm:flex-row sm:items-center sm:px-5`}>
-              <p className="text-xs text-[#92978F]">
+              <p className="gold-card-muted text-xs text-[#9E988C]">
                 Remember to save your changes before leaving this page.
               </p>
 
@@ -1563,22 +1333,17 @@ export default function SettingsPage() {
           </main>
         </div>
 
-        {/* =====================================
-            TOAST
-        ===================================== */}
+        {/* TOAST */}
 
         {toast && (
-          <div className="gold-ambient-card fixed bottom-6 right-6 z-[80] flex max-w-sm items-center gap-3 rounded-xl border border-[#D9D19A]/40 bg-[#1B1F1D] px-5 py-4 text-sm text-[#F5F2E9] shadow-2xl">
-            <Check
-              size={18}
-              className="shrink-0 text-[#EFE8A8]"
-            />
+          <div className="gold-ambient-card fixed bottom-6 right-6 z-[80] flex max-w-sm items-center gap-3 rounded-xl bg-[#121414] px-5 py-4 text-sm font-medium text-[#FFF4CE] shadow-2xl">
+            <Check size={18} className="gold-card-accent shrink-0 text-[#FFF4CE]" />
 
-            <span>{toast}</span>
+            <span className="gold-card-title">{toast}</span>
 
             <button
               onClick={() => setToast("")}
-              className="ml-2 text-[#858B82] transition hover:text-[#EFE8A8]"
+              className="gold-card-muted ml-2 text-[#9E988C] transition hover:text-[#17140D]"
             >
               <X size={15} />
             </button>
@@ -1587,81 +1352,137 @@ export default function SettingsPage() {
       </div>
 
       {/* =========================================
-          SOFT GOLD AMBIENT HOVER GLOW
+          CHAMPAGNE HOVER, OUTER GLOW & TOUCH EFFECT
       ========================================= */}
 
       <style jsx global>{`
-        .gold-ambient-card {
+        .kbc-settings-page .gold-ambient-card {
           position: relative;
           isolation: isolate;
+          background-color: #121414;
+          color: #f5f1e6;
+          border: 1px solid rgba(232, 211, 154, 0.55);
+          box-shadow:
+            0 0 14px rgba(232, 211, 154, 0.18),
+            0 0 30px rgba(201, 164, 92, 0.12),
+            0 10px 24px rgba(18, 20, 20, 0.14);
           -webkit-tap-highlight-color: transparent;
-
+          touch-action: manipulation;
           transition:
-            transform 0.35s ease,
-            border-color 0.35s ease,
-            box-shadow 0.35s ease;
+            transform 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+            border-color 0.32s ease,
+            box-shadow 0.32s ease,
+            background 0.32s ease,
+            color 0.32s ease;
         }
 
-        .gold-ambient-card::before {
+        .kbc-settings-page .gold-ambient-card::before {
           content: "";
           position: absolute;
-          inset: -3px;
+          inset: -6px;
           border-radius: inherit;
           pointer-events: none;
           z-index: -1;
-
+          opacity: 0;
           background: radial-gradient(
             ellipse at center,
-            rgba(255, 226, 130, 0.25) 0%,
-            rgba(239, 200, 85, 0.16) 35%,
-            rgba(205, 157, 55, 0.08) 65%,
+            rgba(255, 244, 206, 0.38) 0%,
+            rgba(232, 211, 154, 0.24) 40%,
+            rgba(201, 164, 92, 0.12) 70%,
             transparent 100%
           );
-
-          filter: blur(24px);
-          opacity: 0;
-
-          transition: opacity 0.35s ease;
+          filter: blur(22px);
+          transition: opacity 0.32s ease;
         }
 
-        .gold-ambient-card:hover,
-        .gold-ambient-card:active,
-        .gold-ambient-card:focus-visible {
-          border-color: rgba(239, 210, 130, 0.45);
-
+        .kbc-settings-page .gold-ambient-card:hover,
+        .kbc-settings-page .gold-ambient-card:active,
+        .kbc-settings-page .gold-ambient-card:focus-visible {
+          border-color: #fff4ce !important;
+          background: linear-gradient(
+            135deg,
+            #fff4ce 0%,
+            #e8d39a 52%,
+            #c9a45c 100%
+          ) !important;
+          color: #17140d !important;
           box-shadow:
-            0 0 12px rgba(239, 200, 85, 0.13),
-            0 0 28px rgba(239, 200, 85, 0.12),
-            0 0 50px rgba(239, 200, 85, 0.08),
-            inset 0 0 18px rgba(239, 200, 85, 0.025);
+            0 0 18px rgba(255, 244, 206, 0.68),
+            0 0 38px rgba(232, 211, 154, 0.48),
+            0 0 64px rgba(201, 164, 92, 0.32),
+            inset 0 1px 0 rgba(255, 255, 255, 0.72) !important;
         }
 
-        .gold-ambient-card:hover::before,
-        .gold-ambient-card:active::before,
-        .gold-ambient-card:focus-visible::before {
+        .kbc-settings-page .gold-ambient-card:hover .gold-card-title,
+        .kbc-settings-page .gold-ambient-card:active .gold-card-title,
+        .kbc-settings-page .gold-ambient-card:focus-visible .gold-card-title,
+        .kbc-settings-page .gold-ambient-card:hover .gold-card-accent,
+        .kbc-settings-page .gold-ambient-card:active .gold-card-accent,
+        .kbc-settings-page .gold-ambient-card:focus-visible .gold-card-accent {
+          color: #17140d !important;
+        }
+
+        .kbc-settings-page .gold-ambient-card:hover .gold-card-muted,
+        .kbc-settings-page .gold-ambient-card:active .gold-card-muted,
+        .kbc-settings-page .gold-ambient-card:focus-visible .gold-card-muted {
+          color: rgba(23, 20, 13, 0.8) !important;
+        }
+
+        .kbc-settings-page .gold-ambient-card:hover .gold-card-icon,
+        .kbc-settings-page .gold-ambient-card:active .gold-card-icon,
+        .kbc-settings-page .gold-ambient-card:focus-visible .gold-card-icon {
+          background-color: rgba(23, 20, 13, 0.14) !important;
+          border-color: rgba(23, 20, 13, 0.24) !important;
+          color: #17140d !important;
+        }
+
+        .kbc-settings-page .gold-ambient-card:hover .gold-card-pill,
+        .kbc-settings-page .gold-ambient-card:active .gold-card-pill,
+        .kbc-settings-page .gold-ambient-card:focus-visible .gold-card-pill {
+          background-color: rgba(23, 20, 13, 0.14) !important;
+          border-color: rgba(23, 20, 13, 0.25) !important;
+          color: #17140d !important;
+        }
+
+        .kbc-settings-page .gold-ambient-card:hover .gold-card-subpanel,
+        .kbc-settings-page .gold-ambient-card:active .gold-card-subpanel,
+        .kbc-settings-page .gold-ambient-card:focus-visible .gold-card-subpanel {
+          background-color: rgba(23, 20, 13, 0.12) !important;
+          border-color: rgba(23, 20, 13, 0.22) !important;
+          color: #17140d !important;
+        }
+
+        .kbc-settings-page .gold-ambient-card:hover .gold-card-divider,
+        .kbc-settings-page .gold-ambient-card:active .gold-card-divider {
+          border-color: rgba(23, 20, 13, 0.2) !important;
+        }
+
+        .kbc-settings-page .gold-ambient-card:hover::before,
+        .kbc-settings-page .gold-ambient-card:active::before,
+        .kbc-settings-page .gold-ambient-card:focus-visible::before {
           opacity: 1;
         }
 
         @media (hover: hover) and (pointer: fine) {
-          .gold-ambient-card:hover {
+          .kbc-settings-page .gold-ambient-card:hover {
             transform: translateY(-3px);
           }
         }
 
         @media (hover: none) {
-          .gold-ambient-card:active {
+          .kbc-settings-page .gold-ambient-card:active {
             transform: scale(0.99);
           }
         }
 
         @media (prefers-reduced-motion: reduce) {
-          .gold-ambient-card,
-          .gold-ambient-card::before {
+          .kbc-settings-page .gold-ambient-card,
+          .kbc-settings-page .gold-ambient-card::before {
             transition: none;
           }
 
-          .gold-ambient-card:hover,
-          .gold-ambient-card:active {
+          .kbc-settings-page .gold-ambient-card:hover,
+          .kbc-settings-page .gold-ambient-card:active {
             transform: none;
           }
         }

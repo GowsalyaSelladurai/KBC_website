@@ -214,21 +214,25 @@ const getMemberInitials = (member: Member): string => {
 };
 
 /* =========================================================
-   FLOATING CARD STYLES
+   FLOATING CARD + CHAMPAGNE HOVER STYLES
 ========================================================= */
 
 const FLOATING_CARD_STYLES = `
   .kbc-floating-card {
     position: relative;
     border-radius: 20px;
-    background: linear-gradient(155deg, rgba(31, 35, 33, 0.96) 0%, rgba(20, 23, 22, 0.99) 100%);
+    background: #121414;
+    border: 1px solid rgba(232, 211, 154, 0.55);
     box-shadow:
-      inset 0 1px 0 0 rgba(226, 232, 240, 0.22),
-      inset 0 -1px 0 0 rgba(10, 12, 11, 0.9),
-      0 14px 32px -12px rgba(0, 0, 0, 0.72);
+      0 0 14px rgba(232, 211, 154, 0.18),
+      0 0 30px rgba(201, 164, 92, 0.12),
+      0 14px 32px -12px rgba(18, 20, 20, 0.22);
     transition:
       transform 260ms cubic-bezier(0.22, 1, 0.36, 1),
-      box-shadow 260ms cubic-bezier(0.22, 1, 0.36, 1);
+      box-shadow 260ms cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 260ms ease,
+      background 260ms ease,
+      color 260ms ease;
     transform-style: preserve-3d;
     will-change: transform;
   }
@@ -241,10 +245,9 @@ const FLOATING_CARD_STYLES = `
     padding: 1px;
     background: linear-gradient(
       135deg,
-      rgba(226, 232, 240, 0.34) 0%,
-      rgba(148, 163, 184, 0.14) 40%,
-      rgba(71, 85, 105, 0.20) 70%,
-      rgba(203, 213, 225, 0.28) 100%
+      rgba(255, 244, 206, 0.55) 0%,
+      rgba(232, 211, 154, 0.25) 45%,
+      rgba(201, 164, 92, 0.45) 100%
     );
     -webkit-mask:
       linear-gradient(#fff 0 0) content-box,
@@ -254,70 +257,177 @@ const FLOATING_CARD_STYLES = `
     pointer-events: none;
   }
 
-  @media (hover: hover) and (pointer: fine) {
-    .kbc-floating-card-tilt:hover {
-      box-shadow:
-        inset 0 1px 0 0 rgba(241, 245, 249, 0.36),
-        inset 0 -1px 0 0 rgba(10, 12, 11, 0.95),
-        0 24px 44px -14px rgba(0, 0, 0, 0.86);
-    }
-  }
-
-  .kbc-card-instructor::after {
-    background: linear-gradient(
-      135deg,
-      rgba(239, 232, 168, 0.48) 0%,
-      rgba(203, 213, 225, 0.22) 45%,
-      rgba(217, 179, 92, 0.34) 100%
-    );
-  }
-
-  .kbc-card-salon::after {
-    background: linear-gradient(
-      135deg,
-      rgba(226, 232, 240, 0.40) 0%,
-      rgba(184, 169, 122, 0.24) 50%,
-      rgba(203, 213, 225, 0.32) 100%
-    );
-  }
-
-  .kbc-card-receptionist::after {
-    background: linear-gradient(
-      135deg,
-      rgba(148, 163, 184, 0.38) 0%,
-      rgba(100, 116, 139, 0.18) 55%,
-      rgba(203, 213, 225, 0.26) 100%
-    );
-  }
-
   .kbc-identity-block-instructor {
     background:
-      radial-gradient(circle at 24% 18%, rgba(239, 232, 168, 0.30), transparent 62%),
+      radial-gradient(circle at 24% 18%, rgba(255, 244, 206, 0.32), transparent 62%),
       linear-gradient(145deg, #564d2b 0%, #2d2919 58%, #181711 100%);
     box-shadow:
-      inset 0 1px 1px rgba(250, 244, 198, 0.40),
+      inset 0 1px 1px rgba(255, 244, 206, 0.45),
       inset 0 -2px 5px rgba(0, 0, 0, 0.68),
-      0 10px 20px -4px rgba(0, 0, 0, 0.55);
+      0 10px 20px -4px rgba(0, 0, 0, 0.45);
   }
 
   .kbc-identity-block-salon {
     background:
-      radial-gradient(circle at 24% 18%, rgba(226, 232, 240, 0.24), transparent 62%),
+      radial-gradient(circle at 24% 18%, rgba(232, 211, 154, 0.26), transparent 62%),
       linear-gradient(145deg, #3c403a 0%, #232723 58%, #141715 100%);
     box-shadow:
-      inset 0 1px 1px rgba(241, 245, 249, 0.34),
+      inset 0 1px 1px rgba(255, 244, 206, 0.34),
       inset 0 -2px 5px rgba(0, 0, 0, 0.68),
-      0 10px 20px -4px rgba(0, 0, 0, 0.55);
+      0 10px 20px -4px rgba(0, 0, 0, 0.45);
   }
 
   .kbc-identity-block-receptionist {
     background:
-      radial-gradient(circle at 24% 18%, rgba(186, 200, 218, 0.24), transparent 62%),
+      radial-gradient(circle at 24% 18%, rgba(201, 164, 92, 0.26), transparent 62%),
       linear-gradient(145deg, #323942 0%, #1e2329 58%, #121518 100%);
     box-shadow:
-      inset 0 1px 1px rgba(226, 232, 240, 0.32),
+      inset 0 1px 1px rgba(255, 244, 206, 0.32),
       inset 0 -2px 5px rgba(0, 0, 0, 0.68),
-      0 10px 20px -4px rgba(0, 0, 0, 0.55);
+      0 10px 20px -4px rgba(0, 0, 0, 0.45);
+  }
+
+  .gold-ambient-card {
+    position: relative;
+    isolation: isolate;
+    background-color: #121414;
+    color: #f5f1e6;
+    border: 1px solid rgba(232, 211, 154, 0.55);
+    box-shadow:
+      0 0 14px rgba(232, 211, 154, 0.18),
+      0 0 30px rgba(201, 164, 92, 0.12),
+      0 10px 24px rgba(18, 20, 20, 0.14);
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    transition:
+      transform 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 0.32s ease,
+      box-shadow 0.32s ease,
+      background 0.32s ease,
+      color 0.32s ease;
+  }
+
+  .gold-ambient-card::before {
+    content: "";
+    position: absolute;
+    inset: -6px;
+    border-radius: inherit;
+    pointer-events: none;
+    z-index: -1;
+    background: radial-gradient(
+      ellipse at center,
+      rgba(255, 244, 206, 0.38) 0%,
+      rgba(232, 211, 154, 0.24) 40%,
+      rgba(201, 164, 92, 0.12) 70%,
+      transparent 100%
+    );
+    filter: blur(22px);
+    opacity: 0;
+    transition: opacity 0.32s ease;
+  }
+
+  .gold-ambient-card:hover,
+  .gold-ambient-card:active,
+  .gold-ambient-card:focus-visible {
+    background: linear-gradient(
+      135deg,
+      #fff4ce 0%,
+      #e8d39a 52%,
+      #c9a45c 100%
+    ) !important;
+    color: #17140d !important;
+    border-color: #fff4ce !important;
+    box-shadow:
+      0 0 18px rgba(255, 244, 206, 0.68),
+      0 0 38px rgba(232, 211, 154, 0.48),
+      0 0 64px rgba(201, 164, 92, 0.32),
+      inset 0 1px 0 rgba(255, 255, 255, 0.72) !important;
+  }
+
+  .gold-ambient-card:hover .gold-card-title,
+  .gold-ambient-card:active .gold-card-title,
+  .gold-ambient-card:focus-visible .gold-card-title,
+  .gold-ambient-card:hover .gold-card-accent,
+  .gold-ambient-card:active .gold-card-accent,
+  .gold-ambient-card:focus-visible .gold-card-accent {
+    color: #17140d !important;
+  }
+
+  .gold-ambient-card:hover .gold-card-muted,
+  .gold-ambient-card:active .gold-card-muted,
+  .gold-ambient-card:focus-visible .gold-card-muted {
+    color: rgba(23, 20, 13, 0.8) !important;
+  }
+
+  .gold-ambient-card:hover .gold-card-icon,
+  .gold-ambient-card:active .gold-card-icon,
+  .gold-ambient-card:focus-visible .gold-card-icon {
+    background-color: rgba(23, 20, 13, 0.14) !important;
+    border-color: rgba(23, 20, 13, 0.24) !important;
+    color: #17140d !important;
+  }
+
+  .gold-ambient-card:hover .gold-card-pill,
+  .gold-ambient-card:active .gold-card-pill,
+  .gold-ambient-card:focus-visible .gold-card-pill {
+    background-color: rgba(23, 20, 13, 0.14) !important;
+    border-color: rgba(23, 20, 13, 0.25) !important;
+    color: #17140d !important;
+  }
+
+  .gold-ambient-card:hover .gold-card-subpanel,
+  .gold-ambient-card:active .gold-card-subpanel,
+  .gold-ambient-card:focus-visible .gold-card-subpanel {
+    background-color: rgba(23, 20, 13, 0.12) !important;
+    border-color: rgba(23, 20, 13, 0.22) !important;
+    color: #17140d !important;
+  }
+
+  .gold-ambient-card:hover .gold-card-divider,
+  .gold-ambient-card:active .gold-card-divider {
+    border-color: rgba(23, 20, 13, 0.2) !important;
+  }
+
+  .gold-ambient-card:hover .gold-card-select,
+  .gold-ambient-card:active .gold-card-select {
+    background-color: #17140d !important;
+    color: #fff4ce !important;
+    border-color: #17140d !important;
+  }
+
+  .gold-ambient-card:hover .gold-card-action,
+  .gold-ambient-card:active .gold-card-action {
+    color: #17140d !important;
+  }
+
+  .gold-ambient-card:hover::before,
+  .gold-ambient-card:active::before,
+  .gold-ambient-card:focus-visible::before {
+    opacity: 1;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .gold-ambient-card:hover {
+      transform: translateY(-3px);
+    }
+  }
+
+  @media (hover: none) {
+    .gold-ambient-card:active {
+      transform: scale(0.99);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .gold-ambient-card,
+    .gold-ambient-card::before {
+      transition: none;
+    }
+
+    .gold-ambient-card:hover,
+    .gold-ambient-card:active {
+      transform: none;
+    }
   }
 `;
 
@@ -450,7 +560,6 @@ const emptyMember: Member = {
 
 /* =========================================================
    DATA NORMALIZATION
-   Handles older localStorage records without newer fields.
 ========================================================= */
 
 function normalizeMember(raw: Partial<Member>, index: number): Member {
@@ -564,10 +673,10 @@ function FloatingStaffProfileCard({
     category === "Instructor"
       ? {
           cardModifier: "kbc-card-instructor",
-          identityModifier: "kbc-identity-block-instructor text-[#EFE8A8]",
+          identityModifier: "kbc-identity-block-instructor text-[#FFF4CE]",
           pillClass:
-            "border-[#EFE8A8]/35 bg-[#EFE8A8]/10 text-[#EFE8A8]",
-          accentText: "text-[#EFE8A8]",
+            "border-[#E8D39A]/40 bg-[#E8D39A]/15 text-[#FFF4CE]",
+          accentText: "text-[#FFF4CE]",
           icon: <GraduationCap size={12} />,
           label: "Instructor",
         }
@@ -576,17 +685,17 @@ function FloatingStaffProfileCard({
           cardModifier: "kbc-card-receptionist",
           identityModifier: "kbc-identity-block-receptionist text-slate-100",
           pillClass:
-            "border-slate-300/25 bg-slate-400/10 text-slate-200",
+            "border-slate-300/30 bg-slate-400/15 text-slate-200",
           accentText: "text-slate-200",
           icon: <UserCheck size={12} />,
           label: "Receptionist",
         }
       : {
           cardModifier: "kbc-card-salon",
-          identityModifier: "kbc-identity-block-salon text-[#F1E9B1]",
+          identityModifier: "kbc-identity-block-salon text-[#FFF4CE]",
           pillClass:
-            "border-[#A9A58A]/35 bg-[#A9A58A]/10 text-[#E6DFB5]",
-          accentText: "text-[#E6DFB5]",
+            "border-[#E8D39A]/35 bg-[#E8D39A]/12 text-[#E8D39A]",
+          accentText: "text-[#E8D39A]",
           icon: <Sparkles size={12} />,
           label: "Salon Staff",
         };
@@ -616,14 +725,14 @@ function FloatingStaffProfileCard({
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <span
-                className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-[11px] font-medium ${roleTheme.pillClass}`}
+                className={`gold-card-pill inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-[11px] font-medium ${roleTheme.pillClass}`}
               >
                 {roleTheme.icon}
                 {roleTheme.label}
               </span>
 
               <div className="flex items-center gap-1.5">
-                <span className="rounded-md border border-white/10 bg-[#141716] px-2 py-0.5 font-mono text-[10px] text-[#969B90]">
+                <span className="gold-card-pill rounded-md border border-white/15 bg-[#121414] px-2 py-0.5 font-mono text-[10px] text-[#969B90]">
                   {member.id}
                 </span>
                 {statusBadge(member.status)}
@@ -633,12 +742,12 @@ function FloatingStaffProfileCard({
             <button
               type="button"
               onClick={() => onViewProfile(member)}
-              className="mt-2 block w-full truncate text-left text-base font-semibold text-[#F5F1E6] transition hover:text-[#EFE8A8]"
+              className="gold-card-title mt-2 block w-full truncate text-left text-base font-semibold text-[#F5F1E6] transition"
             >
               {member.name}
             </button>
 
-            <p className="truncate text-xs text-[#A6AA9D]">
+            <p className="gold-card-muted truncate text-xs text-[#A6AA9D]">
               {member.role} · {member.department}
             </p>
           </div>
@@ -646,13 +755,13 @@ function FloatingStaffProfileCard({
 
         {/* Role-Specific Highlight Section */}
         {category === "Instructor" && (
-          <div className="mt-4 rounded-xl border border-[#EFE8A8]/15 bg-[#151816]/90 p-3">
+          <div className="gold-card-subpanel mt-4 rounded-xl border border-[#E8D39A]/20 bg-[#121414] p-3">
             <div className="flex items-center justify-between text-[11px]">
-              <span className="flex items-center gap-1.5 font-medium text-[#EFE8A8]">
+              <span className="gold-card-accent flex items-center gap-1.5 font-medium text-[#FFF4CE]">
                 <BookOpen size={13} />
-                Expertise & Training Focus
+                Expertise &amp; Training Focus
               </span>
-              <span className="text-[#A9A58A]">
+              <span className="gold-card-muted text-[#A9A58A]">
                 {member.experience} yrs exp
               </span>
             </div>
@@ -661,13 +770,13 @@ function FloatingStaffProfileCard({
                 skills.slice(0, 4).map((skill) => (
                   <span
                     key={`${member.id}-${skill}`}
-                    className="rounded-md border border-[#EFE8A8]/20 bg-[#EFE8A8]/[0.07] px-2 py-0.5 text-[10px] text-[#F1EBD0]"
+                    className="gold-card-pill rounded-md border border-[#E8D39A]/25 bg-[#E8D39A]/10 px-2 py-0.5 text-[10px] text-[#FFF4CE]"
                   >
                     {skill}
                   </span>
                 ))
               ) : (
-                <span className="text-[11px] text-[#858B7F]">
+                <span className="gold-card-muted text-[11px] text-[#858B7F]">
                   No specializations listed
                 </span>
               )}
@@ -676,13 +785,13 @@ function FloatingStaffProfileCard({
         )}
 
         {category === "Salon Staff" && (
-          <div className="mt-4 rounded-xl border border-white/10 bg-[#151816]/90 p-3">
+          <div className="gold-card-subpanel mt-4 rounded-xl border border-[#E8D39A]/20 bg-[#121414] p-3">
             <div className="flex items-center justify-between text-[11px]">
-              <span className="flex items-center gap-1.5 font-medium text-[#E6DFB5]">
+              <span className="gold-card-accent flex items-center gap-1.5 font-medium text-[#E8D39A]">
                 <Sparkles size={13} />
                 Service Specialties
               </span>
-              <span className="text-[#969B90]">
+              <span className="gold-card-muted text-[#969B90]">
                 {member.experience} yrs exp
               </span>
             </div>
@@ -691,13 +800,13 @@ function FloatingStaffProfileCard({
                 skills.slice(0, 4).map((skill) => (
                   <span
                     key={`${member.id}-${skill}`}
-                    className="rounded-md border border-white/10 bg-white/[0.04] px-2 py-0.5 text-[10px] text-[#D7D6C8]"
+                    className="gold-card-pill rounded-md border border-white/15 bg-white/[0.06] px-2 py-0.5 text-[10px] text-[#E6E2CF]"
                   >
                     {skill}
                   </span>
                 ))
               ) : (
-                <span className="text-[11px] text-[#858B7F]">
+                <span className="gold-card-muted text-[11px] text-[#858B7F]">
                   No services listed
                 </span>
               )}
@@ -706,13 +815,13 @@ function FloatingStaffProfileCard({
         )}
 
         {category === "Receptionist" && (
-          <div className="mt-4 rounded-xl border border-slate-300/15 bg-[#15181B]/90 p-3">
+          <div className="gold-card-subpanel mt-4 rounded-xl border border-[#E8D39A]/20 bg-[#121414] p-3">
             <div className="flex items-center justify-between text-[11px]">
-              <span className="flex items-center gap-1.5 font-medium text-slate-200">
+              <span className="gold-card-accent flex items-center gap-1.5 font-medium text-slate-200">
                 <MessageSquare size={13} />
                 Front-Desk Operations
               </span>
-              <span className="text-slate-400">
+              <span className="gold-card-muted text-slate-400">
                 {member.experience} yrs exp
               </span>
             </div>
@@ -721,14 +830,14 @@ function FloatingStaffProfileCard({
                 skills.slice(0, 4).map((skill) => (
                   <span
                     key={`${member.id}-${skill}`}
-                    className="rounded-md border border-slate-300/15 bg-slate-400/[0.08] px-2 py-0.5 text-[10px] text-slate-200"
+                    className="gold-card-pill rounded-md border border-slate-300/20 bg-slate-400/[0.1] px-2 py-0.5 text-[10px] text-slate-200"
                   >
                     {skill}
                   </span>
                 ))
               ) : (
-                <span className="text-[11px] text-slate-400">
-                  Administration & Client Desk
+                <span className="gold-card-muted text-[11px] text-slate-400">
+                  Administration &amp; Client Desk
                 </span>
               )}
             </div>
@@ -737,62 +846,62 @@ function FloatingStaffProfileCard({
 
         {/* Integrated Compact Performance Metrics */}
         <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3">
-          <div className="rounded-xl border border-white/[0.07] bg-[#141716] px-2.5 py-2">
-            <div className="flex items-center justify-between text-[10px] text-[#8D9387]">
+          <div className="gold-card-subpanel rounded-xl border border-white/[0.1] bg-[#121414] px-2.5 py-2">
+            <div className="gold-card-muted flex items-center justify-between text-[10px] text-[#8D9387]">
               <span>Total Appts</span>
-              <CalendarCheck size={12} className={roleTheme.accentText} />
+              <CalendarCheck size={12} className={`gold-card-accent ${roleTheme.accentText}`} />
             </div>
-            <p className="mt-1 text-sm font-semibold tabular-nums text-[#F5F1E6]">
+            <p className="gold-card-title mt-1 text-sm font-semibold tabular-nums text-[#F5F1E6]">
               {metrics.totalAppointments}
             </p>
           </div>
 
-          <div className="rounded-xl border border-white/[0.07] bg-[#141716] px-2.5 py-2">
-            <div className="flex items-center justify-between text-[10px] text-[#8D9387]">
+          <div className="gold-card-subpanel rounded-xl border border-white/[0.1] bg-[#121414] px-2.5 py-2">
+            <div className="gold-card-muted flex items-center justify-between text-[10px] text-[#8D9387]">
               <span>Completed</span>
-              <CheckCircle2 size={12} className="text-emerald-300" />
+              <CheckCircle2 size={12} className="gold-card-accent text-emerald-300" />
             </div>
-            <p className="mt-1 text-sm font-semibold tabular-nums text-[#F5F1E6]">
+            <p className="gold-card-title mt-1 text-sm font-semibold tabular-nums text-[#F5F1E6]">
               {metrics.completedAppointments}
             </p>
           </div>
 
-          <div className="rounded-xl border border-white/[0.07] bg-[#141716] px-2.5 py-2">
-            <div className="flex items-center justify-between text-[10px] text-[#8D9387]">
+          <div className="gold-card-subpanel rounded-xl border border-white/[0.1] bg-[#121414] px-2.5 py-2">
+            <div className="gold-card-muted flex items-center justify-between text-[10px] text-[#8D9387]">
               <span>Rating</span>
-              <Star size={12} className={roleTheme.accentText} />
+              <Star size={12} className={`gold-card-accent ${roleTheme.accentText}`} />
             </div>
-            <p className="mt-1 text-sm font-semibold tabular-nums text-[#F5F1E6]">
+            <p className="gold-card-title mt-1 text-sm font-semibold tabular-nums text-[#F5F1E6]">
               {metrics.ratingSummary}
             </p>
           </div>
 
-          <div className="rounded-xl border border-white/[0.07] bg-[#141716] px-2.5 py-2">
-            <div className="flex items-center justify-between text-[10px] text-[#8D9387]">
+          <div className="gold-card-subpanel rounded-xl border border-white/[0.1] bg-[#121414] px-2.5 py-2">
+            <div className="gold-card-muted flex items-center justify-between text-[10px] text-[#8D9387]">
               <span>Revenue</span>
-              <IndianRupee size={12} className={roleTheme.accentText} />
+              <IndianRupee size={12} className={`gold-card-accent ${roleTheme.accentText}`} />
             </div>
-            <p className="mt-1 truncate text-sm font-semibold tabular-nums text-[#F5F1E6]">
+            <p className="gold-card-title mt-1 truncate text-sm font-semibold tabular-nums text-[#F5F1E6]">
               {money(metrics.revenueGenerated)}
             </p>
           </div>
 
-          <div className="rounded-xl border border-white/[0.07] bg-[#141716] px-2.5 py-2">
-            <div className="flex items-center justify-between text-[10px] text-[#8D9387]">
+          <div className="gold-card-subpanel rounded-xl border border-white/[0.1] bg-[#121414] px-2.5 py-2">
+            <div className="gold-card-muted flex items-center justify-between text-[10px] text-[#8D9387]">
               <span>Attendance</span>
-              <Activity size={12} className="text-emerald-300" />
+              <Activity size={12} className="gold-card-accent text-emerald-300" />
             </div>
-            <p className="mt-1 truncate text-sm font-semibold text-[#F5F1E6]">
+            <p className="gold-card-title mt-1 truncate text-sm font-semibold text-[#F5F1E6]">
               {metrics.attendanceSummary}
             </p>
           </div>
 
-          <div className="rounded-xl border border-white/[0.07] bg-[#141716] px-2.5 py-2">
-            <div className="flex items-center justify-between text-[10px] text-[#8D9387]">
+          <div className="gold-card-subpanel rounded-xl border border-white/[0.1] bg-[#121414] px-2.5 py-2">
+            <div className="gold-card-muted flex items-center justify-between text-[10px] text-[#8D9387]">
               <span>Salary</span>
-              <BriefcaseBusiness size={12} className="text-[#A9A58A]" />
+              <BriefcaseBusiness size={12} className="gold-card-accent text-[#E8D39A]" />
             </div>
-            <p className="mt-1 truncate text-sm font-semibold tabular-nums text-[#E5E1D2]">
+            <p className="gold-card-title mt-1 truncate text-sm font-semibold tabular-nums text-[#E5E1D2]">
               {money(member.salary)}
             </p>
           </div>
@@ -800,7 +909,7 @@ function FloatingStaffProfileCard({
       </div>
 
       {/* Card Footer: Inline Attendance Control & Actions */}
-      <div className="mt-4 flex items-center justify-between gap-2 border-t border-white/[0.08] pt-3.5">
+      <div className="gold-card-divider mt-4 flex items-center justify-between gap-2 border-t border-white/[0.1] pt-3.5">
         <select
           aria-label={`Attendance status for ${member.name}`}
           value={member.attendance}
@@ -810,12 +919,20 @@ function FloatingStaffProfileCard({
               event.target.value as AttendanceStatus
             )
           }
-          className="rounded-lg border border-[#3B4039] bg-[#151916] px-2.5 py-1.5 text-xs text-[#E8E5D8] outline-none transition focus:border-[#A9A58A]"
+          className="gold-card-select rounded-lg border border-[#E8D39A]/35 bg-[#121414] px-2.5 py-1.5 text-xs text-[#E8E5D8] outline-none transition"
         >
-          <option value="Present">Present</option>
-          <option value="Absent">Absent</option>
-          <option value="Late">Late</option>
-          <option value="Leave">Leave</option>
+          <option value="Present" className="bg-[#121414] text-[#F5F1E6]">
+            Present
+          </option>
+          <option value="Absent" className="bg-[#121414] text-[#F5F1E6]">
+            Absent
+          </option>
+          <option value="Late" className="bg-[#121414] text-[#F5F1E6]">
+            Late
+          </option>
+          <option value="Leave" className="bg-[#121414] text-[#F5F1E6]">
+            Leave
+          </option>
         </select>
 
         <div className="flex items-center gap-1">
@@ -823,7 +940,7 @@ function FloatingStaffProfileCard({
             type="button"
             title="View profile"
             onClick={() => onViewProfile(member)}
-            className="rounded-lg p-2 text-[#A9A58A] transition hover:bg-[#363A2F] hover:text-[#EFE8A8]"
+            className="gold-card-action rounded-lg p-2 text-[#E8D39A] transition hover:bg-black/15"
           >
             <User size={16} />
           </button>
@@ -832,7 +949,7 @@ function FloatingStaffProfileCard({
             type="button"
             title="Edit member"
             onClick={() => onEditMember(member)}
-            className="rounded-lg p-2 text-[#A9A58A] transition hover:bg-[#363A2F] hover:text-[#EFE8A8]"
+            className="gold-card-action rounded-lg p-2 text-[#E8D39A] transition hover:bg-black/15"
           >
             <Edit3 size={16} />
           </button>
@@ -841,7 +958,7 @@ function FloatingStaffProfileCard({
             type="button"
             title="Delete member"
             onClick={() => onDeleteMember(member)}
-            className="rounded-lg p-2 text-rose-300 transition hover:bg-rose-500/10"
+            className="gold-card-action rounded-lg p-2 text-rose-300 transition hover:bg-black/15"
           >
             <Trash2 size={16} />
           </button>
@@ -1485,7 +1602,6 @@ export default function StaffPage() {
       return { available: false, reason: "Inactive staff member" };
     }
 
-    // Monday through Sunday: every day is a working day.
     const start = timeToMinutes(startTime);
     const end = start + duration;
 
@@ -1565,7 +1681,6 @@ export default function StaffPage() {
 
   /* =======================================================
      SERVICE / SKILL MATCHING
-     Safely supports old members without skills.
   ======================================================= */
 
   const isServiceMatch = (member: Member, service: string) => {
@@ -1779,18 +1894,18 @@ export default function StaffPage() {
   ======================================================= */
 
   const card =
-    "gold-ambient-card rounded-2xl border border-[#343832] bg-[#1B1F1D] shadow-[0_8px_30px_rgba(0,0,0,0.12)]";
+    "gold-ambient-card rounded-2xl bg-[#121414] text-[#F5F1E6]";
 
   const input =
-    "w-full rounded-xl border border-[#3A403A] bg-[#141816] px-4 py-3 text-sm text-[#F5F1E6] outline-none transition placeholder:text-[#777B70] focus:border-[#A9A58A]";
+    "w-full rounded-xl border border-[#E8D39A]/30 bg-[#121414] px-4 py-3 text-sm text-[#F5F1E6] outline-none transition placeholder:text-[#777B70] focus:border-[#FFF4CE]";
 
   const label = "mb-2 block text-xs font-medium text-[#B8B7A8]";
 
   const primaryButton =
-    "inline-flex items-center justify-center gap-2 rounded-xl bg-[#EFE8A8] px-4 py-2.5 text-sm font-semibold text-[#171915] transition hover:bg-[#F8F0B9] disabled:cursor-not-allowed disabled:opacity-50";
+    "inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#FFF4CE] via-[#E8D39A] to-[#C9A45C] px-4 py-2.5 text-sm font-semibold text-[#17140D] shadow-md shadow-[#C9A45C]/25 transition hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-50";
 
   const secondaryButton =
-    "inline-flex items-center justify-center gap-2 rounded-xl border border-[#454A40] bg-[#222722] px-4 py-2.5 text-sm font-medium text-[#E9E5D6] transition hover:border-[#A9A58A] hover:bg-[#2A302A]";
+    "inline-flex items-center justify-center gap-2 rounded-xl border border-[#E8D39A]/40 bg-[#121414] px-4 py-2.5 text-sm font-medium text-[#FFF4CE] transition hover:bg-gradient-to-r hover:from-[#FFF4CE] hover:via-[#E8D39A] hover:to-[#C9A45C] hover:text-[#17140D]";
 
   const statusClass = (value: string) => {
     const normalized = value.toLowerCase();
@@ -1800,13 +1915,13 @@ export default function StaffPage() {
         normalized
       )
     ) {
-      return "border border-emerald-500/20 bg-emerald-500/10 text-emerald-300";
+      return "border border-emerald-400/25 bg-emerald-500/15 text-emerald-300";
     }
 
     if (
       ["pending", "late", "leave", "on break"].includes(normalized)
     ) {
-      return "border border-amber-500/20 bg-amber-500/10 text-amber-300";
+      return "border border-amber-400/25 bg-amber-500/15 text-amber-200";
     }
 
     if (
@@ -1814,15 +1929,15 @@ export default function StaffPage() {
         normalized
       )
     ) {
-      return "border border-rose-500/20 bg-rose-500/10 text-rose-300";
+      return "border border-rose-400/25 bg-rose-500/15 text-rose-300";
     }
 
-    return "border border-[#555A50] bg-[#33382F] text-[#D7D6C8]";
+    return "border border-[#E8D39A]/25 bg-white/10 text-[#D7D6C8]";
   };
 
   const badge = (value: string) => (
     <span
-      className={`inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-medium ${statusClass(
+      className={`gold-card-pill inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-medium ${statusClass(
         value
       )}`}
     >
@@ -1832,7 +1947,7 @@ export default function StaffPage() {
 
   const avatar = (member: Member, size = "h-10 w-10") => (
     <div
-      className={`${size} flex shrink-0 items-center justify-center rounded-xl border border-[#77724D]/40 bg-gradient-to-br from-[#55513B] to-[#292D27] text-sm font-semibold text-[#F1E9B1]`}
+      className={`${size} gold-card-icon flex shrink-0 items-center justify-center rounded-xl border border-[#E8D39A]/35 bg-gradient-to-br from-[#3f3822] to-[#191a16] text-sm font-semibold text-[#FFF4CE]`}
     >
       {member.avatar ||
         member.name
@@ -1848,18 +1963,18 @@ export default function StaffPage() {
     value: string | number,
     description: string,
     icon: React.ReactNode,
-    accent = "text-[#EFE8A8]"
+    accent = "text-[#FFF4CE]"
   ) => (
     <div tabIndex={0} className={`${card} p-5`}>
       <div className="flex items-start justify-between">
         <div>
-          <p className="text-sm text-[#A6AA9D]">{title}</p>
-          <h3 className="mt-3 text-3xl font-semibold tracking-tight text-[#F5F1E6]">
+          <p className="gold-card-muted text-sm text-[#A6AA9D]">{title}</p>
+          <h3 className="gold-card-title mt-3 text-3xl font-semibold tracking-tight text-[#F5F1E6]">
             {value}
           </h3>
-          <p className="mt-2 text-xs text-[#858B7F]">{description}</p>
+          <p className="gold-card-muted mt-2 text-xs text-[#858B7F]">{description}</p>
         </div>
-        <div className={`rounded-xl bg-[#34372B] p-3 ${accent}`}>
+        <div className={`gold-card-icon rounded-xl bg-[#E8D39A]/15 p-3 ${accent}`}>
           {icon}
         </div>
       </div>
@@ -1868,8 +1983,8 @@ export default function StaffPage() {
 
   const sectionTitle = (title: string, description: string) => (
     <div className="mb-5">
-      <h2 className="text-lg font-semibold text-[#F3F0E5]">{title}</h2>
-      <p className="mt-1 text-sm text-[#92978B]">{description}</p>
+      <h2 className="gold-card-title text-lg font-semibold text-[#FFF4CE]">{title}</h2>
+      <p className="gold-card-muted mt-1 text-sm text-[#92978B]">{description}</p>
     </div>
   );
 
@@ -1885,9 +2000,9 @@ export default function StaffPage() {
 
   if (!loaded) {
     return (
-      <div className="flex min-h-[60vh] items-center justify-center bg-[#121414] text-[#EFE8A8]">
-        <div className="flex items-center gap-3">
-          <div className="h-5 w-5 animate-spin rounded-full border-2 border-[#EFE8A8] border-t-transparent" />
+      <div className="flex min-h-[60vh] items-center justify-center bg-[#FAF5ED] text-[#17140D]">
+        <div className="flex items-center gap-3 font-medium">
+          <div className="h-5 w-5 animate-spin rounded-full border-2 border-[#17140D] border-t-transparent" />
           Loading staff workspace...
         </div>
       </div>
@@ -1899,102 +2014,26 @@ export default function StaffPage() {
   ======================================================= */
 
   return (
-    <div className="min-h-screen bg-[#121414] px-4 py-6 text-[#F5F1E6] sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#FAF5ED] px-4 py-6 text-[#F5F1E6] sm:px-6 lg:px-8">
       <style jsx global>{`
         ${FLOATING_CARD_STYLES}
-
-        .gold-ambient-card {
-          position: relative;
-          isolation: isolate;
-          -webkit-tap-highlight-color: transparent;
-
-          transition:
-            transform 0.35s ease,
-            border-color 0.35s ease,
-            box-shadow 0.35s ease;
-        }
-
-        .gold-ambient-card::before {
-          content: "";
-          position: absolute;
-          inset: -3px;
-          border-radius: inherit;
-          pointer-events: none;
-          z-index: -1;
-
-          background: radial-gradient(
-            ellipse at center,
-            rgba(255, 226, 130, 0.25) 0%,
-            rgba(239, 200, 85, 0.16) 35%,
-            rgba(205, 157, 55, 0.08) 65%,
-            transparent 100%
-          );
-
-          filter: blur(24px);
-          opacity: 0;
-
-          transition: opacity 0.35s ease;
-        }
-
-        .gold-ambient-card:hover,
-        .gold-ambient-card:active,
-        .gold-ambient-card:focus-visible {
-          border-color: rgba(239, 210, 130, 0.45);
-
-          box-shadow:
-            0 0 12px rgba(239, 200, 85, 0.13),
-            0 0 28px rgba(239, 200, 85, 0.12),
-            0 0 50px rgba(239, 200, 85, 0.08),
-            inset 0 0 18px rgba(239, 200, 85, 0.025);
-        }
-
-        .gold-ambient-card:hover::before,
-        .gold-ambient-card:active::before,
-        .gold-ambient-card:focus-visible::before {
-          opacity: 1;
-        }
-
-        @media (hover: hover) and (pointer: fine) {
-          .gold-ambient-card:hover {
-            transform: translateY(-3px);
-          }
-        }
-
-        @media (hover: none) {
-          .gold-ambient-card:active {
-            transform: scale(0.99);
-          }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-          .gold-ambient-card,
-          .gold-ambient-card::before {
-            transition: none;
-          }
-
-          .gold-ambient-card:hover,
-          .gold-ambient-card:active {
-            transform: none;
-          }
-        }
       `}</style>
 
       <div className="mx-auto max-w-[1600px] space-y-7">
-
         {/* HEADER */}
 
-        <div className="flex flex-col justify-between gap-5 xl:flex-row xl:items-center">
+        <div className="gold-ambient-card flex flex-col justify-between gap-5 rounded-2xl bg-[#121414] p-5 sm:p-6 xl:flex-row xl:items-center">
           <div>
-            <div className="mb-2 flex items-center gap-2 text-xs font-medium uppercase tracking-[0.22em] text-[#A9A58A]">
-              <span className="h-px w-7 bg-[#A9A58A]" />
+            <div className="gold-card-accent mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.22em] text-[#E8D39A]">
+              <span className="h-px w-7 bg-current" />
               KBC Salon Academy
             </div>
 
-            <h1 className="text-3xl font-semibold tracking-tight text-[#F5F1E6] sm:text-4xl">
-              Staff & Instructors
+            <h1 className="gold-card-title text-3xl font-semibold tracking-tight text-[#FFF4CE] sm:text-4xl">
+              Staff &amp; Instructors
             </h1>
 
-            <p className="mt-2 max-w-2xl text-sm text-[#969B90]">
+            <p className="gold-card-muted mt-2 max-w-2xl text-sm text-[#969B90]">
               Manage your team, attendance, schedules, performance and staff
               assignments in one workspace.
             </p>
@@ -2051,23 +2090,23 @@ export default function StaffPage() {
         <div className="grid gap-3 md:grid-cols-3">
           <div
             tabIndex={0}
-            className="gold-ambient-card flex items-center gap-3 rounded-xl border border-[#756E42]/40 bg-[#29291F] p-4"
+            className="gold-ambient-card flex items-center gap-3 rounded-xl bg-[#121414] p-4"
           >
-            <div className="rounded-lg bg-[#EFE8A8]/10 p-2 text-[#EFE8A8]">
+            <div className="gold-card-icon rounded-lg bg-[#E8D39A]/15 p-2 text-[#FFF4CE]">
               <Bell size={18} />
             </div>
 
             <div className="min-w-0 flex-1">
-              <p className="text-sm font-medium text-[#F1EBD0]">
+              <p className="gold-card-title text-sm font-medium text-[#F1EBD0]">
                 Leave requests
               </p>
-              <p className="text-xs text-[#A8A58D]">
+              <p className="gold-card-muted text-xs text-[#A8A58D]">
                 {pendingLeaves.length} awaiting your decision
               </p>
             </div>
 
             {pendingLeaves.length > 0 && (
-              <span className="rounded-full bg-[#EFE8A8] px-2 py-1 text-xs font-bold text-[#1A1C16]">
+              <span className="gold-card-pill rounded-full bg-[#FFF4CE] px-2.5 py-1 text-xs font-bold text-[#17140D]">
                 {pendingLeaves.length}
               </span>
             )}
@@ -2075,17 +2114,17 @@ export default function StaffPage() {
 
           <div
             tabIndex={0}
-            className="gold-ambient-card flex items-center gap-3 rounded-xl border border-[#343832] bg-[#1B1F1D] p-4"
+            className="gold-ambient-card flex items-center gap-3 rounded-xl bg-[#121414] p-4"
           >
-            <div className="rounded-lg bg-[#A9A58A]/10 p-2 text-[#C5C0A0]">
+            <div className="gold-card-icon rounded-lg bg-[#E8D39A]/15 p-2 text-[#FFF4CE]">
               <Gift size={18} />
             </div>
 
             <div>
-              <p className="text-sm font-medium text-[#F1EBD0]">
+              <p className="gold-card-title text-sm font-medium text-[#F1EBD0]">
                 Upcoming celebrations
               </p>
-              <p className="text-xs text-[#A8A58D]">
+              <p className="gold-card-muted text-xs text-[#A8A58D]">
                 {upcomingReminders.length} in the next 30 days
               </p>
             </div>
@@ -2093,17 +2132,17 @@ export default function StaffPage() {
 
           <div
             tabIndex={0}
-            className="gold-ambient-card flex items-center gap-3 rounded-xl border border-[#343832] bg-[#1B1F1D] p-4"
+            className="gold-ambient-card flex items-center gap-3 rounded-xl bg-[#121414] p-4"
           >
-            <div className="rounded-lg bg-emerald-400/10 p-2 text-emerald-300">
+            <div className="gold-card-icon rounded-lg bg-emerald-400/15 p-2 text-emerald-300">
               <Clock size={18} />
             </div>
 
             <div>
-              <p className="text-sm font-medium text-[#F1EBD0]">
+              <p className="gold-card-title text-sm font-medium text-[#F1EBD0]">
                 Working schedule
               </p>
-              <p className="text-xs text-[#A8A58D]">
+              <p className="gold-card-muted text-xs text-[#A8A58D]">
                 Monday–Sunday · 09:00–18:00
               </p>
             </div>
@@ -2112,23 +2151,23 @@ export default function StaffPage() {
 
         {/* NAVIGATION TABS */}
 
-        <div className="overflow-x-auto border-b border-[#343832]">
-          <div className="flex min-w-max gap-1">
+        <div className="overflow-x-auto border-b border-[#C9A45C]/35">
+          <div className="flex min-w-max gap-1.5">
             {tabs.map((tab) => (
               <button
                 key={tab.name}
                 onClick={() => setActiveTab(tab.name)}
-                className={`flex items-center gap-2 border-b-2 px-4 py-3 text-sm transition ${
+                className={`flex items-center gap-2 rounded-t-xl border-b-2 px-4 py-3 text-sm transition ${
                   activeTab === tab.name
-                    ? "border-[#EFE8A8] text-[#EFE8A8]"
-                    : "border-transparent text-[#92978B] hover:text-[#F5F1E6]"
+                    ? "border-[#FFF4CE] bg-[#121414] font-semibold text-[#FFF4CE] shadow-[0_0_16px_rgba(232,211,154,0.25)]"
+                    : "border-transparent text-[#5C5549] hover:bg-[#121414]/10 hover:text-[#17140D]"
                 }`}
               >
                 {tab.icon}
                 {tab.name}
 
                 {tab.name === "Leave" && pendingLeaves.length > 0 && (
-                  <span className="rounded-full bg-[#EFE8A8] px-1.5 py-0.5 text-[10px] font-bold text-[#171915]">
+                  <span className="rounded-full bg-[#FFF4CE] px-1.5 py-0.5 text-[10px] font-bold text-[#17140D]">
                     {pendingLeaves.length}
                   </span>
                 )}
@@ -2145,8 +2184,10 @@ export default function StaffPage() {
           <div className={`${card} p-5`}>
             <div className="mb-5 flex flex-col justify-between gap-4 lg:flex-row lg:items-center">
               <div>
-                <h2 className="text-lg font-semibold">Team Directory</h2>
-                <p className="mt-1 text-sm text-[#92978B]">
+                <h2 className="gold-card-title text-lg font-semibold text-[#FFF4CE]">
+                  Team Directory
+                </h2>
+                <p className="gold-card-muted mt-1 text-sm text-[#92978B]">
                   Manage staff profiles, roles, salaries and skills.
                 </p>
               </div>
@@ -2184,9 +2225,15 @@ export default function StaffPage() {
                 value={typeFilter}
                 onChange={(event) => setTypeFilter(event.target.value)}
               >
-                <option value="All">All team types</option>
-                <option value="Staff">Staff</option>
-                <option value="Instructor">Instructor</option>
+                <option value="All" className="bg-[#121414] text-[#F5F1E6]">
+                  All team types
+                </option>
+                <option value="Staff" className="bg-[#121414] text-[#F5F1E6]">
+                  Staff
+                </option>
+                <option value="Instructor" className="bg-[#121414] text-[#F5F1E6]">
+                  Instructor
+                </option>
               </select>
 
               <select
@@ -2194,9 +2241,15 @@ export default function StaffPage() {
                 value={statusFilter}
                 onChange={(event) => setStatusFilter(event.target.value)}
               >
-                <option value="All">All statuses</option>
-                <option value="Active">Active</option>
-                <option value="Inactive">Inactive</option>
+                <option value="All" className="bg-[#121414] text-[#F5F1E6]">
+                  All statuses
+                </option>
+                <option value="Active" className="bg-[#121414] text-[#F5F1E6]">
+                  Active
+                </option>
+                <option value="Inactive" className="bg-[#121414] text-[#F5F1E6]">
+                  Inactive
+                </option>
               </select>
 
               <select
@@ -2206,10 +2259,16 @@ export default function StaffPage() {
                   setDepartmentFilter(event.target.value)
                 }
               >
-                <option value="All">All departments</option>
+                <option value="All" className="bg-[#121414] text-[#F5F1E6]">
+                  All departments
+                </option>
 
                 {departments.map((department) => (
-                  <option key={department} value={department}>
+                  <option
+                    key={department}
+                    value={department}
+                    className="bg-[#121414] text-[#F5F1E6]"
+                  >
                     {department}
                   </option>
                 ))}
@@ -2247,21 +2306,21 @@ export default function StaffPage() {
               <div className="py-14 text-center">
                 <Users
                   size={30}
-                  className="mx-auto mb-3 text-[#777D70]"
+                  className="gold-card-accent mx-auto mb-3 text-[#E8D39A]"
                 />
 
-                <p className="text-sm text-[#D0D0C4]">
+                <p className="gold-card-title text-sm text-[#D0D0C4]">
                   No team members found
                 </p>
 
-                <p className="mt-1 text-xs text-[#858B7F]">
+                <p className="gold-card-muted mt-1 text-xs text-[#858B7F]">
                   Try changing your filters or add a new member.
                 </p>
               </div>
             )}
 
-            <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-[#343832] pt-4 text-xs text-[#858B7F]">
-              <span>
+            <div className="gold-card-divider mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-[#E8D39A]/15 pt-4 text-xs text-[#858B7F]">
+              <span className="gold-card-muted">
                 Showing {paginatedOverviewMembers.length} of{" "}
                 {filteredMembers.length} filtered ({members.length} total) ·
                 Data saved in this browser
@@ -2275,13 +2334,13 @@ export default function StaffPage() {
                     onClick={() =>
                       setOverviewPage((prev) => Math.max(1, prev - 1))
                     }
-                    className="inline-flex items-center gap-1 rounded-lg border border-[#454A40] bg-[#151916] px-2.5 py-1.5 text-xs text-[#E9E5D6] transition hover:border-[#A9A58A] disabled:cursor-not-allowed disabled:opacity-40"
+                    className="gold-card-pill inline-flex items-center gap-1 rounded-lg border border-[#E8D39A]/35 bg-[#121414] px-2.5 py-1.5 text-xs text-[#FFF4CE] transition disabled:cursor-not-allowed disabled:opacity-40"
                   >
                     <ChevronLeft size={14} />
                     Prev
                   </button>
 
-                  <span className="px-1.5 text-[#D0D0C4]">
+                  <span className="gold-card-title px-1.5 text-[#D0D0C4]">
                     Page {currentOverviewPage} of {totalOverviewPages}
                   </span>
 
@@ -2293,7 +2352,7 @@ export default function StaffPage() {
                         Math.min(totalOverviewPages, prev + 1)
                       )
                     }
-                    className="inline-flex items-center gap-1 rounded-lg border border-[#454A40] bg-[#151916] px-2.5 py-1.5 text-xs text-[#E9E5D6] transition hover:border-[#A9A58A] disabled:cursor-not-allowed disabled:opacity-40"
+                    className="gold-card-pill inline-flex items-center gap-1 rounded-lg border border-[#E8D39A]/35 bg-[#121414] px-2.5 py-1.5 text-xs text-[#FFF4CE] transition disabled:cursor-not-allowed disabled:opacity-40"
                   >
                     Next
                     <ChevronRight size={14} />
@@ -2346,11 +2405,13 @@ export default function StaffPage() {
                 "Use clock-in, break and clock-out to track today's staff activity."
               )}
 
-              <div className="mb-4 flex flex-wrap items-center gap-2 rounded-xl border border-[#343832] bg-[#151916] p-3 text-xs text-[#A9A58A]">
-                <Activity size={16} />
-                Browser-based attendance tracker · {formatDate(today())}
+              <div className="gold-card-subpanel mb-4 flex flex-wrap items-center gap-2 rounded-xl border border-[#E8D39A]/15 bg-[#121414] p-3 text-xs text-[#E8D39A]">
+                <Activity size={16} className="gold-card-accent" />
+                <span className="gold-card-title">
+                  Browser-based attendance tracker · {formatDate(today())}
+                </span>
 
-                <span className="ml-auto text-[#777D70]">
+                <span className="gold-card-muted ml-auto text-[#858B7F]">
                   {clockRecords.filter((record) => record.date === today()).length}{" "}
                   clock records
                 </span>
@@ -2366,18 +2427,18 @@ export default function StaffPage() {
                     <div
                       key={member.id}
                       tabIndex={0}
-                      className="gold-ambient-card rounded-xl border border-[#343832] bg-[#151916] p-4"
+                      className="gold-ambient-card gold-card-subpanel rounded-xl bg-[#121414] p-4"
                     >
                       <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
                         <div className="flex items-center gap-3">
                           {avatar(member)}
 
                           <div>
-                            <p className="text-sm font-semibold text-[#F1F0E7]">
+                            <p className="gold-card-title text-sm font-semibold text-[#F1F0E7]">
                               {member.name}
                             </p>
 
-                            <p className="mt-1 text-xs text-[#858B7F]">
+                            <p className="gold-card-muted mt-1 text-xs text-[#858B7F]">
                               {member.role}
                             </p>
 
@@ -2429,7 +2490,7 @@ export default function StaffPage() {
                           {isWorking && (
                             <button
                               onClick={() => updateClock(member, "out")}
-                              className="inline-flex items-center gap-2 rounded-xl border border-rose-500/30 bg-rose-500/10 px-3 py-2 text-sm text-rose-300 hover:bg-rose-500/20"
+                              className="inline-flex items-center gap-2 rounded-xl border border-rose-400/35 bg-rose-500/15 px-3 py-2 text-sm text-rose-300 hover:bg-rose-500/25"
                             >
                               <LogOut size={15} />
                               Clock Out
@@ -2438,21 +2499,21 @@ export default function StaffPage() {
                         </div>
                       </div>
 
-                      <div className="mt-4 grid grid-cols-2 gap-3 border-t border-[#30362F] pt-3">
+                      <div className="gold-card-divider mt-4 grid grid-cols-2 gap-3 border-t border-white/10 pt-3">
                         <div>
-                          <p className="text-[11px] text-[#858B7F]">
+                          <p className="gold-card-muted text-[11px] text-[#858B7F]">
                             Check-in
                           </p>
-                          <p className="mt-1 text-sm text-[#E4E0D3]">
+                          <p className="gold-card-title mt-1 text-sm text-[#E4E0D3]">
                             {formatTime(clock?.checkIn || null)}
                           </p>
                         </div>
 
                         <div>
-                          <p className="text-[11px] text-[#858B7F]">
+                          <p className="gold-card-muted text-[11px] text-[#858B7F]">
                             Check-out
                           </p>
-                          <p className="mt-1 text-sm text-[#E4E0D3]">
+                          <p className="gold-card-title mt-1 text-sm text-[#E4E0D3]">
                             {formatTime(clock?.checkOut || null)}
                           </p>
                         </div>
@@ -2463,7 +2524,7 @@ export default function StaffPage() {
               </div>
 
               {activeMembers.length === 0 && (
-                <p className="py-8 text-center text-sm text-[#858B7F]">
+                <p className="gold-card-muted py-8 text-center text-sm text-[#858B7F]">
                   No active team members.
                 </p>
               )}
@@ -2491,7 +2552,7 @@ export default function StaffPage() {
                   <ChevronLeft size={16} />
                 </button>
 
-                <h3 className="font-semibold text-[#EFE8A8]">
+                <h3 className="gold-card-accent font-semibold text-[#FFF4CE]">
                   {new Date(
                     calendarYear,
                     calendarMonth
@@ -2514,7 +2575,7 @@ export default function StaffPage() {
                   (day) => (
                     <div
                       key={day}
-                      className="py-2 text-[11px] font-medium text-[#858B7F]"
+                      className="gold-card-muted py-2 text-[11px] font-medium text-[#858B7F]"
                     >
                       {day}
                     </div>
@@ -2544,8 +2605,8 @@ export default function StaffPage() {
                       onClick={() => setSelectedDate(date)}
                       className={`relative flex min-h-[66px] flex-col items-center justify-center rounded-xl border text-sm transition ${
                         selected
-                          ? "border-[#EFE8A8] bg-[#EFE8A8] font-semibold text-[#1A1C16]"
-                          : "border-transparent bg-[#151916] text-[#D8D8CC] hover:border-[#716D50]"
+                          ? "border-[#FFF4CE] bg-gradient-to-br from-[#FFF4CE] via-[#E8D39A] to-[#C9A45C] font-semibold text-[#17140D]"
+                          : "gold-card-subpanel border-white/10 bg-[#121414] text-[#D8D8CC]"
                       }`}
                     >
                       <span>{day}</span>
@@ -2562,7 +2623,7 @@ export default function StaffPage() {
                         {hasAppointments && (
                           <span
                             className={`h-1.5 w-1.5 rounded-full ${
-                              selected ? "bg-[#41442E]" : "bg-[#EFE8A8]"
+                              selected ? "bg-[#17140D]" : "bg-[#FFF4CE]"
                             }`}
                           />
                         )}
@@ -2571,7 +2632,7 @@ export default function StaffPage() {
                       {isToday && (
                         <span
                           className={`absolute right-1 top-1 h-1.5 w-1.5 rounded-full ${
-                            selected ? "bg-[#25271D]" : "bg-emerald-400"
+                            selected ? "bg-[#17140D]" : "bg-emerald-400"
                           }`}
                         />
                       )}
@@ -2580,14 +2641,14 @@ export default function StaffPage() {
                 })}
               </div>
 
-              <div className="mt-5 flex flex-wrap gap-4 text-xs text-[#A6AA9D]">
+              <div className="gold-card-muted mt-5 flex flex-wrap gap-4 text-xs text-[#A6AA9D]">
                 <span className="flex items-center gap-2">
                   <span className="h-2 w-2 rounded-full bg-rose-400" />
                   Approved leave
                 </span>
 
                 <span className="flex items-center gap-2">
-                  <span className="h-2 w-2 rounded-full bg-[#EFE8A8]" />
+                  <span className="h-2 w-2 rounded-full bg-[#FFF4CE]" />
                   Appointments
                 </span>
 
@@ -2600,24 +2661,24 @@ export default function StaffPage() {
 
             <div className={`${card} p-5`}>
               <div className="mb-5">
-                <p className="text-xs uppercase tracking-wider text-[#A9A58A]">
+                <p className="gold-card-muted text-xs uppercase tracking-wider text-[#E8D39A]">
                   Selected date
                 </p>
 
-                <h3 className="mt-2 text-xl font-semibold text-[#EFE8A8]">
+                <h3 className="gold-card-accent mt-2 text-xl font-semibold text-[#FFF4CE]">
                   {formatDate(selectedDate)}
                 </h3>
 
-                <p className="mt-1 text-xs text-[#858B7F]">
+                <p className="gold-card-muted mt-1 text-xs text-[#858B7F]">
                   Working hours: 09:00–18:00 · All days
                 </p>
               </div>
 
               <div className="mb-5 grid grid-cols-2 gap-3">
-                <div className="rounded-xl bg-[#151916] p-3">
-                  <p className="text-xs text-[#858B7F]">Available</p>
+                <div className="gold-card-subpanel rounded-xl border border-white/10 bg-[#121414] p-3">
+                  <p className="gold-card-muted text-xs text-[#858B7F]">Available</p>
 
-                  <p className="mt-1 text-2xl font-semibold text-emerald-300">
+                  <p className="gold-card-title mt-1 text-2xl font-semibold text-emerald-300">
                     {
                       members.filter(
                         (member) =>
@@ -2632,10 +2693,10 @@ export default function StaffPage() {
                   </p>
                 </div>
 
-                <div className="rounded-xl bg-[#151916] p-3">
-                  <p className="text-xs text-[#858B7F]">On leave</p>
+                <div className="gold-card-subpanel rounded-xl border border-white/10 bg-[#121414] p-3">
+                  <p className="gold-card-muted text-xs text-[#858B7F]">On leave</p>
 
-                  <p className="mt-1 text-2xl font-semibold text-rose-300">
+                  <p className="gold-card-title mt-1 text-2xl font-semibold text-rose-300">
                     {staffOnLeave(selectedDate).length}
                   </p>
                 </div>
@@ -2653,24 +2714,24 @@ export default function StaffPage() {
                   return (
                     <div
                       key={member.id}
-                      className="flex items-center justify-between gap-3 border-b border-[#30362F] pb-3 last:border-0"
+                      className="gold-card-divider flex items-center justify-between gap-3 border-b border-white/10 pb-3 last:border-0"
                     >
                       <div className="flex min-w-0 items-center gap-3">
                         {avatar(member, "h-9 w-9")}
 
                         <div className="min-w-0">
-                          <p className="truncate text-sm text-[#E8E5D8]">
+                          <p className="gold-card-title truncate text-sm text-[#E8E5D8]">
                             {member.name}
                           </p>
 
-                          <p className="truncate text-xs text-[#858B7F]">
+                          <p className="gold-card-muted truncate text-xs text-[#858B7F]">
                             {member.role}
                           </p>
                         </div>
                       </div>
 
                       <span
-                        className={`shrink-0 text-xs ${
+                        className={`gold-card-title shrink-0 text-xs font-medium ${
                           result.available
                             ? "text-emerald-300"
                             : "text-rose-300"
@@ -2683,12 +2744,12 @@ export default function StaffPage() {
                 })}
               </div>
 
-              <div className="mt-5 rounded-xl border border-[#343832] bg-[#151916] p-3">
-                <p className="text-xs font-medium text-[#EFE8A8]">
+              <div className="gold-card-subpanel mt-5 rounded-xl border border-white/10 bg-[#121414] p-3">
+                <p className="gold-card-accent text-xs font-medium text-[#FFF4CE]">
                   Appointments on this date
                 </p>
 
-                <p className="mt-1 text-sm text-[#A6AA9D]">
+                <p className="gold-card-muted mt-1 text-sm text-[#A6AA9D]">
                   {appointmentsOnDate.length} appointment(s) scheduled
                 </p>
               </div>
@@ -2737,12 +2798,16 @@ export default function StaffPage() {
                 "Ranked by completed appointments, then recorded appointment revenue."
               )}
 
-              <div className="mb-4 rounded-xl border border-[#756E42]/30 bg-[#29291F] p-3 text-xs text-[#B8B39A]">
-                Performance figures are calculated from{" "}
-                <span className="font-semibold text-[#EFE8A8]">
+              <div className="gold-card-subpanel mb-4 rounded-xl border border-[#E8D39A]/25 bg-[#121414] p-3 text-xs text-[#B8B39A]">
+                <span className="gold-card-muted">
+                  Performance figures are calculated from{" "}
+                </span>
+                <span className="gold-card-accent font-semibold text-[#FFF4CE]">
                   kbc_appointments_v1
                 </span>
-                . No artificial ratings or performance figures are added.
+                <span className="gold-card-muted">
+                  . No artificial ratings or performance figures are added.
+                </span>
               </div>
 
               <div className="space-y-3">
@@ -2750,14 +2815,14 @@ export default function StaffPage() {
                   <div
                     key={member.id}
                     tabIndex={0}
-                    className="gold-ambient-card flex flex-col justify-between gap-4 rounded-xl border border-[#343832] bg-[#151916] p-4 sm:flex-row sm:items-center"
+                    className="gold-ambient-card gold-card-subpanel flex flex-col justify-between gap-4 rounded-xl bg-[#121414] p-4 sm:flex-row sm:items-center"
                   >
                     <div className="flex items-center gap-3">
                       <div
-                        className={`flex h-9 w-9 items-center justify-center rounded-xl text-sm font-bold ${
+                        className={`gold-card-pill flex h-9 w-9 items-center justify-center rounded-xl text-sm font-bold ${
                           index === 0
-                            ? "bg-[#EFE8A8] text-[#1A1C16]"
-                            : "bg-[#30362F] text-[#C7C5B6]"
+                            ? "bg-[#FFF4CE] text-[#17140D]"
+                            : "bg-white/10 text-[#C7C5B6]"
                         }`}
                       >
                         {index + 1}
@@ -2766,11 +2831,11 @@ export default function StaffPage() {
                       {avatar(member)}
 
                       <div>
-                        <p className="text-sm font-semibold text-[#F1F0E7]">
+                        <p className="gold-card-title text-sm font-semibold text-[#F1F0E7]">
                           {member.name}
                         </p>
 
-                        <p className="mt-1 text-xs text-[#858B7F]">
+                        <p className="gold-card-muted mt-1 text-xs text-[#858B7F]">
                           {member.role} · {member.type}
                         </p>
                       </div>
@@ -2778,31 +2843,31 @@ export default function StaffPage() {
 
                     <div className="grid grid-cols-2 gap-6 sm:grid-cols-3">
                       <div>
-                        <p className="text-[11px] text-[#858B7F]">
+                        <p className="gold-card-muted text-[11px] text-[#858B7F]">
                           Completed
                         </p>
 
-                        <p className="mt-1 text-lg font-semibold text-[#EFE8A8]">
+                        <p className="gold-card-accent mt-1 text-lg font-semibold text-[#FFF4CE]">
                           {member.completedCount}
                         </p>
                       </div>
 
                       <div>
-                        <p className="text-[11px] text-[#858B7F]">
+                        <p className="gold-card-muted text-[11px] text-[#858B7F]">
                           Revenue
                         </p>
 
-                        <p className="mt-1 text-sm font-semibold text-[#E7E2D2]">
+                        <p className="gold-card-title mt-1 text-sm font-semibold text-[#E7E2D2]">
                           {money(member.revenue)}
                         </p>
                       </div>
 
                       <div className="col-span-2 sm:col-span-1">
-                        <p className="text-[11px] text-[#858B7F]">
+                        <p className="gold-card-muted text-[11px] text-[#858B7F]">
                           Experience
                         </p>
 
-                        <p className="mt-1 text-sm text-[#D4D2C5]">
+                        <p className="gold-card-title mt-1 text-sm text-[#D4D2C5]">
                           {member.experience} years
                         </p>
                       </div>
@@ -2812,17 +2877,17 @@ export default function StaffPage() {
               </div>
 
               {completedAppointments.length === 0 && (
-                <div className="mt-5 rounded-xl border border-dashed border-[#454A40] p-6 text-center">
+                <div className="gold-card-subpanel mt-5 rounded-xl border border-dashed border-[#E8D39A]/25 p-6 text-center">
                   <Award
                     size={28}
-                    className="mx-auto mb-2 text-[#A9A58A]"
+                    className="gold-card-accent mx-auto mb-2 text-[#E8D39A]"
                   />
 
-                  <p className="text-sm font-medium text-[#D9D7CB]">
+                  <p className="gold-card-title text-sm font-medium text-[#D9D7CB]">
                     Waiting for completed appointment data
                   </p>
 
-                  <p className="mt-1 text-xs text-[#858B7F]">
+                  <p className="gold-card-muted mt-1 text-xs text-[#858B7F]">
                     Complete appointments and assign them to staff members
                     to populate this leaderboard.
                   </p>
@@ -2870,30 +2935,30 @@ export default function StaffPage() {
                     <div
                       key={`${item.member.id}-${item.type}-${index}`}
                       tabIndex={0}
-                      className="gold-ambient-card flex items-center gap-4 rounded-xl border border-[#343832] bg-[#151916] p-4"
+                      className="gold-ambient-card gold-card-subpanel flex items-center gap-4 rounded-xl bg-[#121414] p-4"
                     >
                       {avatar(item.member)}
 
                       <div className="min-w-0 flex-1">
-                        <p className="text-sm font-semibold text-[#F1F0E7]">
+                        <p className="gold-card-title text-sm font-semibold text-[#F1F0E7]">
                           {item.member.name}
                         </p>
 
-                        <p className="mt-1 text-xs text-[#A9A58A]">
+                        <p className="gold-card-accent mt-1 text-xs text-[#E8D39A]">
                           {item.type}
                         </p>
 
-                        <p className="mt-1 text-xs text-[#858B7F]">
+                        <p className="gold-card-muted mt-1 text-xs text-[#858B7F]">
                           {formatDate(item.date)}
                         </p>
                       </div>
 
                       <div className="text-right">
-                        <p className="text-lg font-semibold text-[#EFE8A8]">
+                        <p className="gold-card-accent text-lg font-semibold text-[#FFF4CE]">
                           {item.days === 0 ? "Today" : item.days}
                         </p>
 
-                        <p className="text-[10px] text-[#858B7F]">
+                        <p className="gold-card-muted text-[10px] text-[#858B7F]">
                           {item.days === 0 ? "" : "days left"}
                         </p>
                       </div>
@@ -2901,17 +2966,17 @@ export default function StaffPage() {
                   ))}
                 </div>
               ) : (
-                <div className="rounded-xl border border-dashed border-[#454A40] p-10 text-center">
+                <div className="gold-card-subpanel rounded-xl border border-dashed border-[#E8D39A]/25 p-10 text-center">
                   <Gift
                     size={30}
-                    className="mx-auto mb-3 text-[#A9A58A]"
+                    className="gold-card-accent mx-auto mb-3 text-[#E8D39A]"
                   />
 
-                  <p className="text-sm text-[#D9D7CB]">
+                  <p className="gold-card-title text-sm text-[#D9D7CB]">
                     No upcoming celebrations in the next 30 days
                   </p>
 
-                  <p className="mt-1 text-xs text-[#858B7F]">
+                  <p className="gold-card-muted mt-1 text-xs text-[#858B7F]">
                     Add dates of birth and joining dates to staff profiles.
                   </p>
                 </div>
@@ -2959,11 +3024,11 @@ export default function StaffPage() {
             <div className={`${card} p-5`}>
               <div className="mb-5 flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
                 <div>
-                  <h2 className="text-lg font-semibold">
+                  <h2 className="gold-card-title text-lg font-semibold text-[#FFF4CE]">
                     Leave Management
                   </h2>
 
-                  <p className="mt-1 text-sm text-[#92978B]">
+                  <p className="gold-card-muted mt-1 text-sm text-[#92978B]">
                     Review leave requests and update staff availability.
                   </p>
                 </div>
@@ -2988,33 +3053,33 @@ export default function StaffPage() {
                       <div
                         key={request.id}
                         tabIndex={0}
-                        className="gold-ambient-card flex flex-col justify-between gap-4 rounded-xl border border-[#343832] bg-[#151916] p-4 xl:flex-row xl:items-center"
+                        className="gold-ambient-card gold-card-subpanel flex flex-col justify-between gap-4 rounded-xl bg-[#121414] p-4 xl:flex-row xl:items-center"
                       >
                         <div className="flex items-center gap-3">
                           {member ? (
                             avatar(member)
                           ) : (
-                            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#343832]">
+                            <div className="gold-card-icon flex h-10 w-10 items-center justify-center rounded-xl bg-white/10">
                               <User size={18} />
                             </div>
                           )}
 
                           <div>
-                            <p className="text-sm font-semibold text-[#F1F0E7]">
+                            <p className="gold-card-title text-sm font-semibold text-[#F1F0E7]">
                               {member?.name || "Unknown member"}
                             </p>
 
-                            <p className="mt-1 text-xs text-[#A9A58A]">
+                            <p className="gold-card-accent mt-1 text-xs text-[#E8D39A]">
                               {request.leaveType}
                             </p>
 
-                            <p className="mt-1 text-xs text-[#858B7F]">
+                            <p className="gold-card-muted mt-1 text-xs text-[#858B7F]">
                               {formatDate(request.fromDate)} –{" "}
                               {formatDate(request.toDate)}
                             </p>
 
                             {request.reason && (
-                              <p className="mt-2 text-xs text-[#A6AA9D]">
+                              <p className="gold-card-muted mt-2 text-xs text-[#A6AA9D]">
                                 Reason: {request.reason}
                               </p>
                             )}
@@ -3033,7 +3098,7 @@ export default function StaffPage() {
                                     "Approved"
                                   )
                                 }
-                                className="inline-flex items-center gap-1 rounded-lg bg-emerald-500/10 px-3 py-2 text-xs text-emerald-300 hover:bg-emerald-500/20"
+                                className="inline-flex items-center gap-1 rounded-lg bg-emerald-500/15 px-3 py-2 text-xs font-medium text-emerald-300 hover:bg-emerald-500/25"
                               >
                                 <Check size={14} />
                                 Approve
@@ -3046,7 +3111,7 @@ export default function StaffPage() {
                                     "Rejected"
                                   )
                                 }
-                                className="inline-flex items-center gap-1 rounded-lg bg-rose-500/10 px-3 py-2 text-xs text-rose-300 hover:bg-rose-500/20"
+                                className="inline-flex items-center gap-1 rounded-lg bg-rose-500/15 px-3 py-2 text-xs font-medium text-rose-300 hover:bg-rose-500/25"
                               >
                                 <X size={14} />
                                 Reject
@@ -3059,17 +3124,17 @@ export default function StaffPage() {
                   })}
                 </div>
               ) : (
-                <div className="rounded-xl border border-dashed border-[#454A40] p-10 text-center">
+                <div className="gold-card-subpanel rounded-xl border border-dashed border-[#E8D39A]/25 p-10 text-center">
                   <CalendarDays
                     size={30}
-                    className="mx-auto mb-3 text-[#A9A58A]"
+                    className="gold-card-accent mx-auto mb-3 text-[#E8D39A]"
                   />
 
-                  <p className="text-sm text-[#D9D7CB]">
+                  <p className="gold-card-title text-sm text-[#D9D7CB]">
                     No leave requests yet
                   </p>
 
-                  <p className="mt-1 text-xs text-[#858B7F]">
+                  <p className="gold-card-muted mt-1 text-xs text-[#858B7F]">
                     New requests will appear here for approval.
                   </p>
                 </div>
@@ -3092,7 +3157,9 @@ export default function StaffPage() {
 
               <div className="space-y-4">
                 <div>
-                  <label className={label}>Service</label>
+                  <label className="gold-card-muted mb-2 block text-xs font-medium text-[#B8B7A8]">
+                    Service
+                  </label>
 
                   <select
                     className={input}
@@ -3105,22 +3172,24 @@ export default function StaffPage() {
                       setAssignmentResult(null);
                     }}
                   >
-                    <option>Hair Styling</option>
-                    <option>Hair Cut</option>
-                    <option>Hair Colour</option>
-                    <option>Hair Spa</option>
-                    <option>Makeup</option>
-                    <option>Bridal Makeup</option>
-                    <option>Party Makeup</option>
-                    <option>Facial</option>
-                    <option>Skincare</option>
-                    <option>Beauty</option>
+                    <option className="bg-[#121414] text-[#F5F1E6]">Hair Styling</option>
+                    <option className="bg-[#121414] text-[#F5F1E6]">Hair Cut</option>
+                    <option className="bg-[#121414] text-[#F5F1E6]">Hair Colour</option>
+                    <option className="bg-[#121414] text-[#F5F1E6]">Hair Spa</option>
+                    <option className="bg-[#121414] text-[#F5F1E6]">Makeup</option>
+                    <option className="bg-[#121414] text-[#F5F1E6]">Bridal Makeup</option>
+                    <option className="bg-[#121414] text-[#F5F1E6]">Party Makeup</option>
+                    <option className="bg-[#121414] text-[#F5F1E6]">Facial</option>
+                    <option className="bg-[#121414] text-[#F5F1E6]">Skincare</option>
+                    <option className="bg-[#121414] text-[#F5F1E6]">Beauty</option>
                   </select>
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className={label}>Appointment Date</label>
+                    <label className="gold-card-muted mb-2 block text-xs font-medium text-[#B8B7A8]">
+                      Appointment Date
+                    </label>
 
                     <input
                       type="date"
@@ -3137,7 +3206,9 @@ export default function StaffPage() {
                   </div>
 
                   <div>
-                    <label className={label}>Start Time</label>
+                    <label className="gold-card-muted mb-2 block text-xs font-medium text-[#B8B7A8]">
+                      Start Time
+                    </label>
 
                     <input
                       type="time"
@@ -3156,7 +3227,9 @@ export default function StaffPage() {
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className={label}>Duration</label>
+                    <label className="gold-card-muted mb-2 block text-xs font-medium text-[#B8B7A8]">
+                      Duration
+                    </label>
 
                     <select
                       className={input}
@@ -3169,17 +3242,31 @@ export default function StaffPage() {
                         setAssignmentResult(null);
                       }}
                     >
-                      <option value={30}>30 minutes</option>
-                      <option value={45}>45 minutes</option>
-                      <option value={60}>60 minutes</option>
-                      <option value={90}>90 minutes</option>
-                      <option value={120}>120 minutes</option>
-                      <option value={150}>150 minutes</option>
+                      <option value={30} className="bg-[#121414] text-[#F5F1E6]">
+                        30 minutes
+                      </option>
+                      <option value={45} className="bg-[#121414] text-[#F5F1E6]">
+                        45 minutes
+                      </option>
+                      <option value={60} className="bg-[#121414] text-[#F5F1E6]">
+                        60 minutes
+                      </option>
+                      <option value={90} className="bg-[#121414] text-[#F5F1E6]">
+                        90 minutes
+                      </option>
+                      <option value={120} className="bg-[#121414] text-[#F5F1E6]">
+                        120 minutes
+                      </option>
+                      <option value={150} className="bg-[#121414] text-[#F5F1E6]">
+                        150 minutes
+                      </option>
                     </select>
                   </div>
 
                   <div>
-                    <label className={label}>Amount (₹)</label>
+                    <label className="gold-card-muted mb-2 block text-xs font-medium text-[#B8B7A8]">
+                      Amount (₹)
+                    </label>
 
                     <input
                       type="number"
@@ -3197,7 +3284,9 @@ export default function StaffPage() {
                 </div>
 
                 <div>
-                  <label className={label}>Customer Name</label>
+                  <label className="gold-card-muted mb-2 block text-xs font-medium text-[#B8B7A8]">
+                    Customer Name
+                  </label>
 
                   <input
                     className={input}
@@ -3213,7 +3302,9 @@ export default function StaffPage() {
                 </div>
 
                 <div>
-                  <label className={label}>Customer Phone</label>
+                  <label className="gold-card-muted mb-2 block text-xs font-medium text-[#B8B7A8]">
+                    Customer Phone
+                  </label>
 
                   <input
                     className={input}
@@ -3228,15 +3319,15 @@ export default function StaffPage() {
                   />
                 </div>
 
-                <div className="rounded-xl border border-[#756E42]/30 bg-[#29291F] p-3">
-                  <p className="flex items-center gap-2 text-xs font-semibold text-[#EFE8A8]">
+                <div className="gold-card-subpanel rounded-xl border border-[#E8D39A]/20 bg-[#121414] p-3">
+                  <p className="gold-card-accent flex items-center gap-2 text-xs font-semibold text-[#FFF4CE]">
                     <Clock size={15} />
                     Schedule rules
                   </p>
 
-                  <p className="mt-2 text-xs leading-5 text-[#B8B39A]">
+                  <p className="gold-card-muted mt-2 text-xs leading-5 text-[#B8B39A]">
                     Monday–Sunday · 09:00–18:00. The system checks approved
-                    leave, today's attendance, existing appointment overlaps
+                    leave, today&apos;s attendance, existing appointment overlaps
                     and matching staff skills.
                   </p>
                 </div>
@@ -3250,7 +3341,7 @@ export default function StaffPage() {
                 </button>
 
                 {assignmentResult && (
-                  <div className="rounded-xl border border-[#756E42]/30 bg-[#29291F] p-3 text-sm text-[#EFE8A8]">
+                  <div className="gold-card-subpanel rounded-xl border border-[#E8D39A]/30 bg-[#121414] p-3 text-sm font-medium text-[#FFF4CE]">
                     {assignmentResult}
                   </div>
                 )}
@@ -3260,16 +3351,16 @@ export default function StaffPage() {
             <div className={`${card} p-5`}>
               <div className="mb-5 flex items-center justify-between gap-3">
                 <div>
-                  <h2 className="text-lg font-semibold">
+                  <h2 className="gold-card-title text-lg font-semibold text-[#FFF4CE]">
                     Recommended Team Members
                   </h2>
 
-                  <p className="mt-1 text-sm text-[#92978B]">
+                  <p className="gold-card-muted mt-1 text-sm text-[#92978B]">
                     Available staff with matching skills.
                   </p>
                 </div>
 
-                <span className="rounded-full border border-[#716D50] bg-[#34372B] px-3 py-1 text-xs text-[#EFE8A8]">
+                <span className="gold-card-pill rounded-full border border-[#E8D39A]/35 bg-[#E8D39A]/15 px-3 py-1 text-xs font-medium text-[#FFF4CE]">
                   {recommendedStaff.length} matches
                 </span>
               </div>
@@ -3280,7 +3371,7 @@ export default function StaffPage() {
                     <div
                       key={item.member.id}
                       tabIndex={0}
-                      className="gold-ambient-card rounded-xl border border-[#343832] bg-[#151916] p-4"
+                      className="gold-ambient-card gold-card-subpanel rounded-xl bg-[#121414] p-4"
                     >
                       <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
                         <div className="flex items-center gap-3">
@@ -3288,18 +3379,18 @@ export default function StaffPage() {
 
                           <div>
                             <div className="flex flex-wrap items-center gap-2">
-                              <p className="text-sm font-semibold text-[#F1F0E7]">
+                              <p className="gold-card-title text-sm font-semibold text-[#F1F0E7]">
                                 {item.member.name}
                               </p>
 
                               {index === 0 && (
-                                <span className="rounded-full bg-[#EFE8A8]/10 px-2 py-0.5 text-[10px] text-[#EFE8A8]">
+                                <span className="gold-card-pill rounded-full bg-[#FFF4CE]/15 px-2 py-0.5 text-[10px] font-medium text-[#FFF4CE]">
                                   Best match
                                 </span>
                               )}
                             </div>
 
-                            <p className="mt-1 text-xs text-[#858B7F]">
+                            <p className="gold-card-muted mt-1 text-xs text-[#858B7F]">
                               {item.member.role}
                             </p>
                           </div>
@@ -3321,18 +3412,18 @@ export default function StaffPage() {
                         ).map((skill) => (
                           <span
                             key={skill}
-                            className="rounded-full border border-[#454A40] bg-[#252A24] px-2.5 py-1 text-[10px] text-[#C3C3B5]"
+                            className="gold-card-pill rounded-full border border-white/15 bg-white/[0.06] px-2.5 py-1 text-[10px] text-[#C3C3B5]"
                           >
                             {skill}
                           </span>
                         ))}
                       </div>
 
-                      <div className="mt-3 flex flex-wrap gap-4 border-t border-[#30362F] pt-3 text-xs text-[#92978B]">
+                      <div className="gold-card-divider gold-card-muted mt-3 flex flex-wrap gap-4 border-t border-white/10 pt-3 text-xs text-[#92978B]">
                         <span>
                           <CheckCircle2
                             size={13}
-                            className="mr-1 inline text-emerald-300"
+                            className="gold-card-accent mr-1 inline text-emerald-300"
                           />
                           Available
                         </span>
@@ -3340,7 +3431,7 @@ export default function StaffPage() {
                         <span>
                           <Award
                             size={13}
-                            className="mr-1 inline text-[#EFE8A8]"
+                            className="gold-card-accent mr-1 inline text-[#FFF4CE]"
                           />
                           {item.completedCount} completed appointments
                         </span>
@@ -3348,7 +3439,7 @@ export default function StaffPage() {
                         <span>
                           <Clock
                             size={13}
-                            className="mr-1 inline text-[#A9A58A]"
+                            className="gold-card-accent mr-1 inline text-[#E8D39A]"
                           />
                           {formatTime(assignForm.time)} –{" "}
                           {formatTime(
@@ -3363,17 +3454,17 @@ export default function StaffPage() {
                   ))}
                 </div>
               ) : (
-                <div className="rounded-xl border border-dashed border-[#454A40] p-10 text-center">
+                <div className="gold-card-subpanel rounded-xl border border-dashed border-[#E8D39A]/25 p-10 text-center">
                   <Sparkles
                     size={30}
-                    className="mx-auto mb-3 text-[#A9A58A]"
+                    className="gold-card-accent mx-auto mb-3 text-[#E8D39A]"
                   />
 
-                  <p className="text-sm font-medium text-[#D9D7CB]">
+                  <p className="gold-card-title text-sm font-medium text-[#D9D7CB]">
                     No matching staff available
                   </p>
 
-                  <p className="mt-2 text-xs leading-5 text-[#858B7F]">
+                  <p className="gold-card-muted mt-2 text-xs leading-5 text-[#858B7F]">
                     Try another time, date or service. Check staff skills,
                     attendance and approved leave.
                   </p>
@@ -3389,21 +3480,21 @@ export default function StaffPage() {
 
         {memberModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-3 backdrop-blur-sm">
-            <div className="gold-ambient-card max-h-[92vh] w-full max-w-3xl overflow-y-auto rounded-2xl border border-[#454A40] bg-[#1B1F1D] shadow-2xl">
-              <div className="sticky top-0 z-10 flex items-center justify-between border-b border-[#343832] bg-[#1B1F1D] px-5 py-4">
+            <div className="max-h-[92vh] w-full max-w-3xl overflow-y-auto rounded-2xl border border-[#E8D39A]/50 bg-[#121414] text-[#F5F1E6] shadow-[0_0_40px_rgba(232,211,154,0.22)]">
+              <div className="sticky top-0 z-10 flex items-center justify-between border-b border-[#E8D39A]/20 bg-[#121414] px-5 py-4">
                 <div>
-                  <h2 className="text-lg font-semibold text-[#F5F1E6]">
+                  <h2 className="text-lg font-semibold text-[#FFF4CE]">
                     {editingMember ? "Edit Team Member" : "Add Team Member"}
                   </h2>
 
                   <p className="mt-1 text-xs text-[#92978B]">
-                    Enter the team member's profile and work details.
+                    Enter the team member&apos;s profile and work details.
                   </p>
                 </div>
 
                 <button
                   onClick={() => setMemberModal(false)}
-                  className="rounded-lg p-2 text-[#A6AA9D] hover:bg-[#343832]"
+                  className="rounded-lg p-2 text-[#A6AA9D] transition hover:bg-[#FFF4CE] hover:text-[#17140D]"
                 >
                   <X size={19} />
                 </button>
@@ -3501,13 +3592,27 @@ export default function StaffPage() {
                         }))
                       }
                     >
-                      <option>Hair Styling</option>
-                      <option>Makeup</option>
-                      <option>Beauty</option>
-                      <option>Skincare</option>
-                      <option>Administration</option>
-                      <option>Nail Art</option>
-                      <option>Other</option>
+                      <option className="bg-[#121414] text-[#F5F1E6]">
+                        Hair Styling
+                      </option>
+                      <option className="bg-[#121414] text-[#F5F1E6]">
+                        Makeup
+                      </option>
+                      <option className="bg-[#121414] text-[#F5F1E6]">
+                        Beauty
+                      </option>
+                      <option className="bg-[#121414] text-[#F5F1E6]">
+                        Skincare
+                      </option>
+                      <option className="bg-[#121414] text-[#F5F1E6]">
+                        Administration
+                      </option>
+                      <option className="bg-[#121414] text-[#F5F1E6]">
+                        Nail Art
+                      </option>
+                      <option className="bg-[#121414] text-[#F5F1E6]">
+                        Other
+                      </option>
                     </select>
                   </div>
 
@@ -3524,8 +3629,12 @@ export default function StaffPage() {
                         }))
                       }
                     >
-                      <option>Staff</option>
-                      <option>Instructor</option>
+                      <option className="bg-[#121414] text-[#F5F1E6]">
+                        Staff
+                      </option>
+                      <option className="bg-[#121414] text-[#F5F1E6]">
+                        Instructor
+                      </option>
                     </select>
                   </div>
 
@@ -3608,14 +3717,18 @@ export default function StaffPage() {
                         }))
                       }
                     >
-                      <option>Active</option>
-                      <option>Inactive</option>
+                      <option className="bg-[#121414] text-[#F5F1E6]">
+                        Active
+                      </option>
+                      <option className="bg-[#121414] text-[#F5F1E6]">
+                        Inactive
+                      </option>
                     </select>
                   </div>
                 </div>
 
-                <div className="border-t border-[#343832] pt-5">
-                  <label className={label}>Skills & Services</label>
+                <div className="border-t border-[#E8D39A]/15 pt-5">
+                  <label className={label}>Skills &amp; Services</label>
 
                   <p className="mb-3 text-xs text-[#858B7F]">
                     Skills are used by Smart Assignment to find a suitable
@@ -3655,14 +3768,14 @@ export default function StaffPage() {
                     ).map((skill) => (
                       <span
                         key={skill}
-                        className="inline-flex items-center gap-2 rounded-full border border-[#716D50] bg-[#34372B] px-3 py-1.5 text-xs text-[#EFE8A8]"
+                        className="inline-flex items-center gap-2 rounded-full border border-[#E8D39A]/35 bg-[#E8D39A]/15 px-3 py-1.5 text-xs text-[#FFF4CE]"
                       >
                         {skill}
 
                         <button
                           type="button"
                           onClick={() => removeSkill(skill)}
-                          className="text-[#C7C2A4] hover:text-white"
+                          className="text-[#E8D39A] hover:text-white"
                         >
                           <X size={12} />
                         </button>
@@ -3678,7 +3791,7 @@ export default function StaffPage() {
                   </div>
                 </div>
 
-                <div className="flex flex-col-reverse justify-end gap-3 border-t border-[#343832] pt-5 sm:flex-row">
+                <div className="flex flex-col-reverse justify-end gap-3 border-t border-[#E8D39A]/15 pt-5 sm:flex-row">
                   <button
                     type="button"
                     onClick={() => setMemberModal(false)}
@@ -3703,13 +3816,15 @@ export default function StaffPage() {
 
         {profileMember && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-3 backdrop-blur-sm">
-            <div className="gold-ambient-card w-full max-w-xl overflow-hidden rounded-2xl border border-[#454A40] bg-[#1B1F1D] shadow-2xl">
-              <div className="flex items-center justify-between border-b border-[#343832] p-5">
-                <h2 className="font-semibold">Team Member Profile</h2>
+            <div className="w-full max-w-xl overflow-hidden rounded-2xl border border-[#E8D39A]/50 bg-[#121414] text-[#F5F1E6] shadow-[0_0_40px_rgba(232,211,154,0.22)]">
+              <div className="flex items-center justify-between border-b border-[#E8D39A]/20 p-5">
+                <h2 className="font-semibold text-[#FFF4CE]">
+                  Team Member Profile
+                </h2>
 
                 <button
                   onClick={() => setProfileMember(null)}
-                  className="rounded-lg p-2 text-[#A6AA9D] hover:bg-[#343832]"
+                  className="rounded-lg p-2 text-[#A6AA9D] transition hover:bg-[#FFF4CE] hover:text-[#17140D]"
                 >
                   <X size={18} />
                 </button>
@@ -3724,7 +3839,7 @@ export default function StaffPage() {
                       {profileMember.name}
                     </h3>
 
-                    <p className="mt-1 text-sm text-[#A9A58A]">
+                    <p className="mt-1 text-sm text-[#E8D39A]">
                       {profileMember.role}
                     </p>
 
@@ -3749,7 +3864,7 @@ export default function StaffPage() {
                   ].map(([key, value]) => (
                     <div
                       key={key}
-                      className="rounded-xl bg-[#151916] p-3"
+                      className="rounded-xl border border-white/10 bg-[#191C1B] p-3"
                     >
                       <p className="text-[11px] text-[#858B7F]">{key}</p>
 
@@ -3761,7 +3876,7 @@ export default function StaffPage() {
                 </div>
 
                 <div className="mt-4">
-                  <p className="mb-2 text-xs text-[#A9A58A]">Skills</p>
+                  <p className="mb-2 text-xs text-[#E8D39A]">Skills</p>
 
                   <div className="flex flex-wrap gap-2">
                     {(Array.isArray(profileMember.skills)
@@ -3770,7 +3885,7 @@ export default function StaffPage() {
                     ).map((skill) => (
                       <span
                         key={skill}
-                        className="rounded-full border border-[#454A40] bg-[#252A24] px-3 py-1.5 text-xs text-[#D4D2C5]"
+                        className="rounded-full border border-[#E8D39A]/25 bg-[#E8D39A]/10 px-3 py-1.5 text-xs text-[#FFF4CE]"
                       >
                         {skill}
                       </span>
@@ -3778,7 +3893,7 @@ export default function StaffPage() {
                   </div>
                 </div>
 
-                <div className="mt-6 flex flex-wrap justify-end gap-2 border-t border-[#343832] pt-4">
+                <div className="mt-6 flex flex-wrap justify-end gap-2 border-t border-[#E8D39A]/15 pt-4">
                   <button
                     onClick={() => toggleMemberStatus(profileMember)}
                     className={secondaryButton}
@@ -3807,10 +3922,12 @@ export default function StaffPage() {
 
         {leaveModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-3 backdrop-blur-sm">
-            <div className="gold-ambient-card w-full max-w-lg rounded-2xl border border-[#454A40] bg-[#1B1F1D] shadow-2xl">
-              <div className="flex items-center justify-between border-b border-[#343832] p-5">
+            <div className="w-full max-w-lg rounded-2xl border border-[#E8D39A]/50 bg-[#121414] text-[#F5F1E6] shadow-[0_0_40px_rgba(232,211,154,0.22)]">
+              <div className="flex items-center justify-between border-b border-[#E8D39A]/20 p-5">
                 <div>
-                  <h2 className="font-semibold">New Leave Request</h2>
+                  <h2 className="font-semibold text-[#FFF4CE]">
+                    New Leave Request
+                  </h2>
 
                   <p className="mt-1 text-xs text-[#858B7F]">
                     Add a request for a team member.
@@ -3819,7 +3936,7 @@ export default function StaffPage() {
 
                 <button
                   onClick={() => setLeaveModal(false)}
-                  className="rounded-lg p-2 text-[#A6AA9D] hover:bg-[#343832]"
+                  className="rounded-lg p-2 text-[#A6AA9D] transition hover:bg-[#FFF4CE] hover:text-[#17140D]"
                 >
                   <X size={18} />
                 </button>
@@ -3840,10 +3957,16 @@ export default function StaffPage() {
                       }))
                     }
                   >
-                    <option value="">Select team member</option>
+                    <option value="" className="bg-[#121414] text-[#F5F1E6]">
+                      Select team member
+                    </option>
 
                     {members.map((member) => (
-                      <option key={member.id} value={member.id}>
+                      <option
+                        key={member.id}
+                        value={member.id}
+                        className="bg-[#121414] text-[#F5F1E6]"
+                      >
                         {member.name}
                       </option>
                     ))}
@@ -3863,11 +3986,21 @@ export default function StaffPage() {
                       }))
                     }
                   >
-                    <option>Casual Leave</option>
-                    <option>Sick Leave</option>
-                    <option>Annual Leave</option>
-                    <option>Personal Leave</option>
-                    <option>Other</option>
+                    <option className="bg-[#121414] text-[#F5F1E6]">
+                      Casual Leave
+                    </option>
+                    <option className="bg-[#121414] text-[#F5F1E6]">
+                      Sick Leave
+                    </option>
+                    <option className="bg-[#121414] text-[#F5F1E6]">
+                      Annual Leave
+                    </option>
+                    <option className="bg-[#121414] text-[#F5F1E6]">
+                      Personal Leave
+                    </option>
+                    <option className="bg-[#121414] text-[#F5F1E6]">
+                      Other
+                    </option>
                   </select>
                 </div>
 
@@ -3929,7 +4062,7 @@ export default function StaffPage() {
                   />
                 </div>
 
-                <div className="flex justify-end gap-2 border-t border-[#343832] pt-4">
+                <div className="flex justify-end gap-2 border-t border-[#E8D39A]/15 pt-4">
                   <button
                     type="button"
                     onClick={() => setLeaveModal(false)}

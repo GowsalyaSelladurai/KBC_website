@@ -1,20 +1,68 @@
 
+/* =========================================================
+   KBC SALON ACADEMY — LUXURY IVORY & GOLD DASHBOARD
+   Central palette
+========================================================= */
+
 .dashboard {
-  color: #f5f3e8;
+  --kbc-ivory: #FAF5ED;
+  --kbc-champagne: #EFE8A8;
+  --kbc-gold: #C9A45C;
+  --kbc-charcoal: #121414;
+  --kbc-white: #FFFFFF;
+  --kbc-beige: #E8D8C5;
+  --kbc-antique-gold: #5D4218;
+
+  --kbc-card-dark:
+    linear-gradient(145deg, #242116 0%, #15140F 50%, #090908 100%);
+
+  --kbc-card-gold:
+    linear-gradient(135deg, #FFF4CE 0%, #E8D39A 48%, #C9A45C 100%);
+
+  --kbc-card-text: #FAF5ED;
+  --kbc-card-heading: #EFE8A8;
+  --kbc-card-muted: #C9B98F;
+  --kbc-card-hover-text: #17140D;
+
+  --kbc-card-border: rgba(201, 164, 92, 0.65);
+  --kbc-card-hover-border: #EFE8A8;
+
+  --kbc-card-shadow:
+    0 12px 35px rgba(0, 0, 0, 0.20),
+    0 0 15px rgba(201, 164, 92, 0.10),
+    inset 0 1px 0 rgba(239, 232, 168, 0.08);
+
+  --kbc-card-hover-shadow:
+    0 18px 40px rgba(76, 57, 28, 0.18),
+    0 0 12px rgba(239, 232, 168, 0.85),
+    0 0 25px rgba(201, 164, 92, 0.70),
+    0 0 45px rgba(201, 164, 92, 0.40),
+    0 0 65px rgba(239, 232, 168, 0.20);
+}
+
+/* =========================================================
+   DASHBOARD BACKGROUND
+========================================================= */
+
+.dashboard {
+  color: var(--kbc-charcoal);
   width: 100%;
   max-width: 1600px;
   margin: 0 auto;
   position: relative;
-  padding-bottom: 25px;
+  padding: 20px 0 30px;
+  background: var(--kbc-ivory);
+  min-height: 100vh;
 }
 
 .dashboard * {
   box-sizing: border-box;
 }
 
-/* =========================================
-   WELCOME BANNER TO ANIMATIONS SPACING
-========================================= */
+/* =========================================================
+   WELCOME SECTION
+   Existing welcome appearance preserved.
+========================================================= */
 
 .animationSection {
   display: block;
@@ -24,7 +72,6 @@
   padding: 0;
 }
 
-/* WELCOME SECTION */
 .welcome {
   display: flex;
   justify-content: space-between;
@@ -60,153 +107,460 @@
   white-space: nowrap;
 }
 
-/* GRID */
+/* =========================================================
+   GRID LAYOUT
+========================================================= */
+
 .grid {
   display: grid;
-  gap: 15px;
+  gap: 18px;
 }
 
-/* STATISTICS CARDS */
 .stats {
   grid-template-columns: repeat(4, minmax(0, 1fr));
   margin-top: 0;
-  margin-bottom: 16px;
-  gap: 15px;
+  margin-bottom: 20px;
+  gap: 18px;
 }
+
+.twoColumns {
+  grid-template-columns: minmax(0, 1.55fr) minmax(300px, 1fr);
+  margin-bottom: 20px;
+  gap: 18px;
+}
+
+.lowerGrid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+/* =========================================================
+   LUXURY DASHBOARD CARDS
+========================================================= */
 
 .card {
-  background: #222522;
-  border: 1px solid #2d312c;
-  border-radius: 15px;
-  padding: 18px;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   min-width: 0;
+  padding: 22px;
+  border-radius: 22px;
+
+  background: var(--kbc-card-dark);
+  color: var(--kbc-card-text);
+
+  border: 1px solid var(--kbc-card-border);
+
+  box-shadow: var(--kbc-card-shadow);
+
+  transform-style: preserve-3d;
+
+  transition:
+    transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1),
+    border-color 0.4s ease,
+    box-shadow 0.4s ease,
+    background 0.4s ease,
+    color 0.4s ease;
+
+  animation: kbcCardEntrance 0.75s
+    cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 
-/* STATISTICS CONTENT */
+/* Keep card content above decorative effects */
+
+.card > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Champagne corner lighting */
+
+.card::after {
+  content: "";
+  position: absolute;
+  top: -65px;
+  right: -65px;
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+
+  background: radial-gradient(
+    circle,
+    rgba(239, 232, 168, 0.22),
+    rgba(201, 164, 92, 0.12) 40%,
+    transparent 72%
+  );
+
+  opacity: 0.8;
+
+  transition:
+    opacity 0.4s ease,
+    transform 0.5s ease;
+}
+
+/* Animated metallic gold border */
+
+.card::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1.5px;
+  pointer-events: none;
+  z-index: 2;
+
+  background: linear-gradient(
+    135deg,
+    #C9A45C,
+    #EFE8A8,
+    #FFFFFF,
+    #B88B42,
+    #E8D8C5,
+    #C9A45C
+  );
+
+  background-size: 300% 300%;
+  opacity: 0;
+
+  transition: opacity 0.4s ease;
+
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+/* =========================================================
+   COMPLETE GOLDEN HOVER EFFECT
+========================================================= */
+
+@media (hover: hover) and (pointer: fine) {
+
+  .dashboard .card:hover {
+    transform:
+      perspective(1000px)
+      translateY(-8px)
+      rotateX(1deg)
+      rotateY(-0.5deg);
+
+    background: var(--kbc-card-gold);
+    color: var(--kbc-card-hover-text);
+
+    border-color: var(--kbc-card-hover-border);
+
+    box-shadow: var(--kbc-card-hover-shadow);
+  }
+
+  .dashboard .card:hover::before {
+    opacity: 1;
+    animation: kbcGoldBorder 3s linear infinite;
+  }
+
+  .dashboard .card:hover::after {
+    opacity: 1;
+    transform: scale(1.3);
+  }
+
+  /* All text changes to charcoal */
+
+  .dashboard .card:hover,
+  .dashboard .card:hover h1,
+  .dashboard .card:hover h2,
+  .dashboard .card:hover h3,
+  .dashboard .card:hover h4,
+  .dashboard .card:hover p,
+  .dashboard .card:hover span,
+  .dashboard .card:hover strong,
+  .dashboard .card:hover b,
+  .dashboard .card:hover label,
+  .dashboard .card:hover small,
+  .dashboard .card:hover div {
+    color: var(--kbc-card-hover-text);
+  }
+
+  /* Statistics icon */
+
+  .dashboard .card:hover .statHead span {
+    color: var(--kbc-antique-gold);
+    background: rgba(255, 255, 255, 0.55);
+    border-color: #8C692C;
+
+    transform: scale(1.12) rotate(7deg);
+
+    box-shadow: 0 0 18px rgba(100, 70, 20, 0.20);
+  }
+
+  /* Other SVG icons */
+
+  .dashboard .card:hover svg {
+    color: var(--kbc-antique-gold);
+    stroke: var(--kbc-antique-gold);
+    transition: all 0.35s ease;
+  }
+
+  /* Status indicators */
+
+  .dashboard .card:hover .status {
+    color: #17140D;
+    background: rgba(255, 255, 255, 0.65);
+    border: 1px solid rgba(118, 85, 29, 0.25);
+  }
+
+  .dashboard .card:hover .green {
+    color: #205B32;
+    background: #E2F1E4;
+  }
+
+  .dashboard .card:hover .amber {
+    color: #76500F;
+    background: #FFF0C9;
+  }
+
+  /* Revenue chart */
+
+  .dashboard .card:hover .chartLine {
+    stroke: #76551D;
+  }
+
+  .dashboard .card:hover .chartDot {
+    fill: #76551D;
+    stroke: #FFFFFF;
+  }
+
+  .dashboard .card:hover .chartGrid path {
+    stroke: rgba(80, 58, 20, 0.25);
+  }
+
+  .dashboard .card:hover .legend i {
+    background: #76551D;
+  }
+
+  /* Progress bar */
+
+  .dashboard .card:hover .progressTrack {
+    background: rgba(93, 66, 24, 0.15);
+  }
+
+  .dashboard .card:hover .progressTrack i {
+    background: linear-gradient(
+      90deg,
+      #76551D,
+      #A77B35,
+      #C9A45C
+    );
+  }
+
+  /* Inputs remain readable */
+
+  .dashboard .card:hover input,
+  .dashboard .card:hover select,
+  .dashboard .card:hover textarea {
+    color: #17140D;
+    background: rgba(255, 255, 255, 0.75);
+    border-color: #9A762F;
+  }
+
+  /* Buttons remain readable */
+
+  .dashboard .card:hover button {
+    color: #17140D;
+    border-color: #9A762F;
+  }
+}
+
+/* Animated gold border */
+
+@keyframes kbcGoldBorder {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* =========================================================
+   STATISTICS CARDS
+========================================================= */
+
 .statHead {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  color: #aaa995;
+  gap: 10px;
+
+  color: #D6C9A8;
   font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
 }
 
 .statHead span {
-  color: #efe8a8;
-  font-size: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #EFE8A8;
+  font-size: 19px;
+
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+
+  background: linear-gradient(
+    145deg,
+    rgba(239, 232, 168, 0.16),
+    rgba(201, 164, 92, 0.10)
+  );
+
+  border: 1px solid rgba(201, 164, 92, 0.50);
+
+  transition: all 0.35s ease;
 }
 
 .statValue {
-  font: 500 27px Georgia, serif;
-  color: #efe8a8;
-  margin: 13px 0 4px;
+  font: 600 29px Georgia, serif;
+  color: #EFE8A8;
+  margin: 17px 0 5px;
+  letter-spacing: -0.7px;
 }
 
 .trend {
   font-size: 11px;
-  color: #b9d69b;
+  color: #83C99A;
+  font-weight: 600;
 }
 
 .trend small {
-  color: #aaa995;
+  color: #C9B98F;
   font-size: 11px;
+  font-weight: 400;
 }
 
 .sub {
   font-size: 11px;
-  color: #aaa995;
+  color: #C9B98F;
 }
 
-/* REVENUE AND APPOINTMENTS */
-.twoColumns {
-  grid-template-columns: minmax(0, 1.55fr) minmax(300px, 1fr);
-  margin-bottom: 16px;
-}
+/* =========================================================
+   CARD HEADINGS
+========================================================= */
 
 .cardTitle {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 10px;
-  margin-bottom: 16px;
+  margin-bottom: 18px;
 }
 
 .cardTitle h2 {
-  font: 500 18px Georgia, serif;
-  color: #efe8a8;
+  font: 600 19px Georgia, serif;
+  color: #EFE8A8;
   margin: 0;
 }
 
+/* =========================================================
+   SELECT INPUT
+========================================================= */
+
 .select {
-  background: #292d29;
-  color: #dddccf;
-  border: 1px solid #393d36;
-  border-radius: 8px;
-  padding: 7px 10px;
+  background: #FAF5ED;
+  color: #393328;
+  border: 1px solid rgba(201, 164, 92, 0.50);
+  border-radius: 10px;
+  padding: 8px 11px;
   font-size: 11px;
   outline: none;
+  cursor: pointer;
+  transition: all 0.25s ease;
 }
 
+.select:hover,
+.select:focus {
+  border-color: #C9A45C;
+  box-shadow: 0 0 0 3px rgba(201, 164, 92, 0.13);
+}
+
+/* =========================================================
+   REVENUE CHART
+========================================================= */
+
 .chartTotal {
-  font: 500 25px Georgia, serif;
-  color: #efe8a8;
+  font: 600 27px Georgia, serif;
+  color: #EFE8A8;
+  margin-bottom: 5px;
 }
 
 .chartTotal span {
-  color: #b9d69b;
-  font: 11px system-ui, sans-serif;
+  color: #83C99A;
+  font: 600 11px system-ui, sans-serif;
 }
 
 .chart {
   height: 205px;
   width: 100%;
   display: block;
-  margin-top: 8px;
+  margin-top: 12px;
   overflow: visible;
 }
 
 .chartGrid path {
-  stroke: #41443c;
+  stroke: rgba(201, 164, 92, 0.25);
   stroke-width: 1;
   fill: none;
 }
 
 .chartLine {
   fill: none;
-  stroke: #efe8a8;
+  stroke: #C9A45C;
   stroke-width: 3;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
 
 .chartDot {
-  fill: #efe8a8;
+  fill: #B88B42;
+  stroke: #FFFFFF;
+  stroke-width: 2;
 }
 
 .chartLabels {
   display: flex;
   justify-content: space-between;
-  color: #969789;
+  color: #C9B98F;
   font-size: 10px;
   padding: 0 7px;
 }
 
 .legend {
-  color: #aaa995;
+  color: #D6C9A8;
   font-size: 11px;
   margin-top: 13px;
 }
 
 .legend i {
   display: inline-block;
-  width: 7px;
-  height: 7px;
-  background: #efe8a8;
+  width: 8px;
+  height: 8px;
+  background: #C9A45C;
   border-radius: 50%;
   margin-right: 6px;
 }
 
-/* APPOINTMENTS */
+/* =========================================================
+   APPOINTMENT SCHEDULE
+========================================================= */
+
 .schedule {
   display: grid;
   gap: 0;
@@ -217,8 +571,9 @@
   grid-template-columns: 70px minmax(0, 1fr) auto;
   gap: 10px;
   align-items: center;
-  padding: 12px 0;
-  border-bottom: 1px solid #393d36;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(201, 164, 92, 0.25);
+  transition: background 0.25s ease;
 }
 
 .event:last-child {
@@ -226,47 +581,49 @@
 }
 
 .time {
-  color: #efe8a8;
+  color: #EFE8A8;
   font-size: 11px;
+  font-weight: 700;
 }
 
 .event strong {
   display: block;
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 650;
+  color: #FAF5ED;
 }
 
 .event small {
-  color: #aaa995;
+  color: #C9B98F;
   font-size: 10px;
 }
 
 .status {
   font-size: 9px;
+  font-weight: 650;
   border-radius: 20px;
-  padding: 5px 8px;
-  background: #34372d;
-  color: #d6d0a0;
+  padding: 6px 9px;
+  background: #F1E9D6;
+  color: #84652F;
   white-space: nowrap;
 }
 
 .green {
-  background: #2c3a2b;
-  color: #b9d69b;
+  background: #E5F1E7;
+  color: #39764A;
 }
 
 .amber {
-  background: #403a25;
-  color: #e5d48a;
+  background: #F8EED8;
+  color: #986D24;
 }
 
-/* LOWER GRID */
-.lowerGrid {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
+/* =========================================================
+   COURSE PERFORMANCE
+========================================================= */
 
 .course {
-  margin: 14px 0;
+  margin: 16px 0;
 }
 
 .courseHead {
@@ -274,39 +631,51 @@
   justify-content: space-between;
   gap: 8px;
   font-size: 11px;
-  margin-bottom: 7px;
+  margin-bottom: 8px;
 }
 
 .courseHead b {
-  color: #f5f3e8;
-  font-weight: 600;
+  color: #FAF5ED;
+  font-weight: 650;
 }
 
 .courseHead span {
-  color: #aaa995;
+  color: #C9B98F;
   white-space: nowrap;
 }
 
 .progressTrack {
-  height: 6px;
-  background: #41453c;
+  height: 8px;
+  background: rgba(239, 232, 168, 0.13);
   border-radius: 20px;
   overflow: hidden;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.20);
 }
 
 .progressTrack i {
   display: block;
   height: 100%;
-  background: #efe8a8;
+  background: linear-gradient(
+    90deg,
+    #A77B35,
+    #C9A45C,
+    #EFE8A8
+  );
   border-radius: 20px;
+  box-shadow: 0 0 8px rgba(201, 164, 92, 0.45);
 }
+
+/* =========================================================
+   ACADEMY SNAPSHOT
+========================================================= */
 
 .snapshotRow {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   gap: 10px;
-  padding: 10px 0;
-  border-bottom: 1px solid #393d36;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(201, 164, 92, 0.25);
   font-size: 11px;
 }
 
@@ -315,54 +684,82 @@
 }
 
 .snapshotRow span {
-  color: #aaa995;
+  color: #D6C9A8;
 }
 
 .snapshotRow b {
-  color: #efe8a8;
+  color: #EFE8A8;
+  font-weight: 700;
 }
 
-/* QUICK ACTIONS */
+/* =========================================================
+   QUICK ACTIONS
+========================================================= */
+
 .quickActions {
   display: flex;
-  gap: 8px;
+  gap: 9px;
   flex-wrap: wrap;
 }
 
 .quickActions button,
 .primaryButton {
-  border: 0;
-  background: #efe8a8;
-  color: #171916;
-  padding: 10px 13px;
-  border-radius: 9px;
-  font-weight: 650;
+  border: 1px solid #C9A45C;
+
+  background: linear-gradient(
+    135deg,
+    #C9A45C,
+    #EFE8A8
+  );
+
+  color: #121414;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-weight: 700;
   font-size: 11px;
   cursor: pointer;
-  transition: background 0.2s ease;
+
+  box-shadow: 0 3px 10px rgba(201, 164, 92, 0.18);
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.25s ease;
 }
 
 .quickActions button:hover,
 .primaryButton:hover {
-  background: #fff4a9;
+  background: linear-gradient(
+    135deg,
+    #EFE8A8,
+    #FFFFFF
+  );
+
+  transform: translateY(-2px);
+
+  box-shadow: 0 6px 16px rgba(201, 164, 92, 0.30);
 }
 
 .secondaryButton {
-  border: 1px solid #393d36;
-  background: #292d29;
-  color: #efe8a8;
+  border: 1px solid rgba(201, 164, 92, 0.55);
+  background: #FFFFFF;
+  color: #765A2A;
   padding: 9px 12px;
   border-radius: 9px;
   font-size: 11px;
+  font-weight: 600;
   cursor: pointer;
+  transition: all 0.25s ease;
 }
 
 .secondaryButton:hover {
-  background: #343a32;
+  background: #FAF5ED;
+  border-color: #C9A45C;
+  box-shadow: 0 0 12px rgba(201, 164, 92, 0.20);
 }
 
 .notice {
-  color: #aaa995;
+  color: #C9B98F;
   font-size: 10px;
   line-height: 1.6;
   margin-top: 14px;
@@ -370,18 +767,21 @@
 
 .bottomNote {
   text-align: center;
-  color: #77796e;
+  color: #9A8D78;
   font-size: 10px;
   letter-spacing: 1px;
   margin-top: 25px;
 }
 
 .bottomNote span {
-  color: #efe8a8;
+  color: #B88B42;
   padding: 0 5px;
 }
 
-/* NOTIFICATIONS */
+/* =========================================================
+   NOTIFICATIONS
+========================================================= */
+
 .notificationButton {
   display: none;
 }
@@ -391,85 +791,103 @@
   right: 25px;
   top: 80px;
   z-index: 20;
-  width: 260px;
-  padding: 18px;
-  border: 1px solid #393d36;
-  border-radius: 12px;
-  background: #1b1e1c;
-  box-shadow: 0 12px 35px #0008;
+  width: 280px;
+  padding: 20px;
+
+  border: 1px solid rgba(201, 164, 92, 0.55);
+  border-radius: 16px;
+
+  background: rgba(255, 255, 255, 0.97);
+
+  box-shadow:
+    0 15px 45px rgba(76, 57, 28, 0.15),
+    0 0 15px rgba(201, 164, 92, 0.12);
+
+  backdrop-filter: blur(16px);
 }
 
 .notificationPanel strong {
-  color: #efe8a8;
+  color: #8C641F;
 }
 
 .notificationPanel p {
-  color: #aaa995;
+  color: #777064;
   font-size: 12px;
+  line-height: 1.5;
 }
 
 .notificationPanel button {
-  background: transparent;
-  border: 1px solid #393d36;
-  color: #efe8a8;
+  background: #FAF5ED;
+  border: 1px solid rgba(201, 164, 92, 0.55);
+  color: #765A2A;
   padding: 7px 12px;
-  border-radius: 7px;
+  border-radius: 8px;
   cursor: pointer;
 }
 
-/* MODAL */
+/* =========================================================
+   MODAL
+========================================================= */
+
 .modalBackdrop {
   position: fixed;
   inset: 0;
-  background: #0009;
+  background: rgba(18, 20, 20, 0.62);
   z-index: 100;
   display: grid;
   place-items: center;
   padding: 20px;
+  backdrop-filter: blur(5px);
 }
 
 .modal {
   width: min(440px, 100%);
-  background: #1d211e;
-  border: 1px solid #4a4b39;
-  border-radius: 16px;
-  padding: 22px;
-  box-shadow: 0 20px 60px #0008;
+  background: #FFFFFF;
+  border: 1px solid #C9A45C;
+  border-radius: 20px;
+  padding: 25px;
+
+  box-shadow:
+    0 20px 60px rgba(18, 20, 20, 0.25),
+    0 0 22px rgba(201, 164, 92, 0.18);
 }
 
 .modal h2 {
-  color: #efe8a8;
-  font: 500 21px Georgia, serif;
-  margin: 0 0 16px;
+  color: #242018;
+  font: 600 22px Georgia, serif;
+  margin: 0 0 18px;
 }
 
 .field {
   display: grid;
-  gap: 6px;
-  margin: 12px 0;
+  gap: 7px;
+  margin: 13px 0;
 }
 
 .field span {
   font-size: 11px;
-  color: #aaa995;
+  color: #777064;
+  font-weight: 600;
 }
 
 .field input {
   width: 100%;
-  background: #292d29;
-  border: 1px solid #393d36;
-  border-radius: 8px;
-  padding: 10px;
-  color: #f5f3e8;
+  background: #FAF5ED;
+  border: 1px solid rgba(201, 164, 92, 0.45);
+  border-radius: 9px;
+  padding: 11px;
+  color: #121414;
   outline: none;
+  transition: all 0.25s ease;
 }
 
 .field input:focus {
-  border-color: #efe8a8;
+  border-color: #C9A45C;
+  box-shadow: 0 0 0 3px rgba(201, 164, 92, 0.15);
 }
 
 .formMessage {
-  color: #b9d69b;
+  color: #43835B;
   font-size: 11px;
 }
 
@@ -477,95 +895,13 @@
   display: flex;
   justify-content: flex-end;
   gap: 8px;
-  margin-top: 18px;
+  margin-top: 20px;
 }
 
-/* ==========================================
-   KBC LUXE MOTION - DASHBOARD CARD ANIMATIONS
-========================================== */
+/* =========================================================
+   CARD ENTRANCE ANIMATION
+========================================================= */
 
-.dashboard .card {
-  position: relative;
-  isolation: isolate;
-  transform-style: preserve-3d;
-
-  transition:
-    transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1),
-    border-color 0.4s ease,
-    box-shadow 0.4s ease,
-    outline-color 0.4s ease;
-
-  animation: kbcCardEntrance 0.75s
-    cubic-bezier(0.2, 0.8, 0.2, 1) both;
-}
-
-/* ==========================================
-   FLOATING 3D HOVER + PREMIUM GOLDEN GLOW
-========================================== */
-
-.dashboard .card:hover {
-  transform:
-    perspective(1000px)
-    translateY(-7px)
-    rotateX(1deg)
-    rotateY(-1deg);
-
-  border-color: #efe8a8;
-
-  outline: 1px solid rgba(239, 232, 168, 0.35);
-  outline-offset: 1px;
-
-  box-shadow:
-    0 15px 35px rgba(0, 0, 0, 0.28),
-    0 0 8px rgba(239, 232, 168, 0.75),
-    0 0 18px rgba(239, 232, 168, 0.55),
-    0 0 35px rgba(239, 232, 168, 0.35),
-    0 0 55px rgba(239, 232, 168, 0.18),
-    inset 0 0 15px rgba(239, 232, 168, 0.12);
-}
-
-/* MOVING CHAMPAGNE LIGHT */
-.dashboard .card::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  border-radius: inherit;
-
-  background: linear-gradient(
-    115deg,
-    transparent 20%,
-    rgba(239, 232, 168, 0.10) 45%,
-    rgba(255, 248, 201, 0.18) 50%,
-    rgba(239, 232, 168, 0.08) 55%,
-    transparent 80%
-  );
-
-  transform: translateX(-130%);
-  opacity: 0;
-}
-
-/* SHINE ON HOVER */
-.dashboard .card:hover::after {
-  opacity: 1;
-  transform: translateX(130%);
-
-  transition:
-    transform 0.9s ease,
-    opacity 0.3s ease;
-}
-
-/* ICON INTERACTION */
-.dashboard .card:hover .statHead span {
-  display: inline-block;
-  color: #fff8c9;
-  transform: scale(1.2) rotate(8deg);
-  text-shadow: 0 0 12px rgba(239, 232, 168, 0.5);
-  transition: all 0.35s ease;
-}
-
-/* CARD ENTRANCE */
 @keyframes kbcCardEntrance {
   from {
     opacity: 0;
@@ -578,7 +914,8 @@
   }
 }
 
-/* STAGGERED STATISTICS */
+/* Staggered statistics cards */
+
 .dashboard .stats .card:nth-child(1) {
   animation-delay: 0.05s;
 }
@@ -595,7 +932,8 @@
   animation-delay: 0.35s;
 }
 
-/* REVENUE AND APPOINTMENTS */
+/* Revenue and appointments */
+
 .dashboard .twoColumns .card:nth-child(1) {
   animation-delay: 0.40s;
 }
@@ -604,7 +942,8 @@
   animation-delay: 0.50s;
 }
 
-/* LOWER DASHBOARD CARDS */
+/* Lower dashboard cards */
+
 .dashboard .lowerGrid .card:nth-child(1) {
   animation-delay: 0.55s;
 }
@@ -617,8 +956,86 @@
   animation-delay: 0.75s;
 }
 
-/* RESPONSIVE */
+/* =========================================================
+   MOBILE TOUCH EFFECT
+========================================================= */
+
+@media (hover: none) {
+
+  .dashboard .card:active {
+    background: var(--kbc-card-gold);
+    color: var(--kbc-card-hover-text);
+    border-color: var(--kbc-card-hover-border);
+
+    box-shadow: var(--kbc-card-hover-shadow);
+  }
+
+  .dashboard .card:active::before {
+    opacity: 1;
+  }
+
+  .dashboard .card:active::after {
+    opacity: 1;
+    transform: scale(1.3);
+  }
+
+  .dashboard .card:active,
+  .dashboard .card:active h1,
+  .dashboard .card:active h2,
+  .dashboard .card:active h3,
+  .dashboard .card:active h4,
+  .dashboard .card:active p,
+  .dashboard .card:active span,
+  .dashboard .card:active strong,
+  .dashboard .card:active b,
+  .dashboard .card:active label,
+  .dashboard .card:active small,
+  .dashboard .card:active div {
+    color: var(--kbc-card-hover-text);
+  }
+
+  .dashboard .card:active .statHead span {
+    color: var(--kbc-antique-gold);
+    background: rgba(255, 255, 255, 0.55);
+    border-color: #8C692C;
+  }
+
+  .dashboard .card:active svg {
+    color: var(--kbc-antique-gold);
+    stroke: var(--kbc-antique-gold);
+  }
+
+  .dashboard .card:active .green {
+    color: #205B32;
+    background: #E2F1E4;
+  }
+
+  .dashboard .card:active .amber {
+    color: #76500F;
+    background: #FFF0C9;
+  }
+
+  .dashboard .card:active .chartLine {
+    stroke: #76551D;
+  }
+
+  .dashboard .card:active .chartDot {
+    fill: #76551D;
+    stroke: #FFFFFF;
+  }
+
+  .dashboard .card:active .status {
+    color: #17140D;
+    background: rgba(255, 255, 255, 0.65);
+  }
+}
+
+/* =========================================================
+   RESPONSIVE TABLET
+========================================================= */
+
 @media (max-width: 1100px) {
+
   .stats {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -632,7 +1049,16 @@
   }
 }
 
+/* =========================================================
+   RESPONSIVE MOBILE
+========================================================= */
+
 @media (max-width: 720px) {
+
+  .dashboard {
+    padding-top: 14px;
+  }
+
   .welcome {
     align-items: flex-start;
     flex-direction: column;
@@ -647,11 +1073,12 @@
   }
 
   .stats {
-    gap: 9px;
+    gap: 10px;
   }
 
   .card {
-    padding: 14px;
+    padding: 16px;
+    border-radius: 16px;
   }
 
   .statValue {
@@ -674,9 +1101,21 @@
   .chart {
     height: 170px;
   }
+
+  .notificationPanel {
+    right: 12px;
+    left: 12px;
+    top: 70px;
+    width: auto;
+  }
 }
 
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
 @media (max-width: 380px) {
+
   .stats {
     grid-template-columns: 1fr;
   }
@@ -685,10 +1124,22 @@
     align-items: flex-start;
     flex-direction: column;
   }
+
+  .statValue {
+    font-size: 25px;
+  }
+
+  .quickActions button {
+    width: 100%;
+  }
 }
 
-/* REDUCED MOTION */
+/* =========================================================
+   ACCESSIBILITY — REDUCED MOTION
+========================================================= */
+
 @media (prefers-reduced-motion: reduce) {
+
   .dashboard .card {
     animation: none;
     transition: none;
@@ -698,87 +1149,267 @@
     transform: none;
   }
 
+  .dashboard .card::before,
   .dashboard .card::after {
     display: none;
   }
 }
-/* ==========================================
-   KBC GRADIENT GOLD GLOW
-========================================== */
 
-.dashboard .card {
+/* =========================================================
+   KBC DASHBOARD — DARK TO CHAMPAGNE CARD HOVER
+   Default: Deep Charcoal
+   Hover / Touch: Warm Champagne
+========================================================= */
+
+/* GOLDEN FIRE CARD WRAPPER */
+.dashboard :global(.kbc-glow-card) {
   position: relative;
-  isolation: isolate;
+  border-radius: 18px;
   transition:
-    transform 0.4s ease,
+    background 0.4s ease,
+    color 0.4s ease,
     border-color 0.4s ease,
-    box-shadow 0.4s ease;
+    box-shadow 0.4s ease,
+    transform 0.4s ease;
 }
 
-/* GRADIENT GOLD HOVER */
-.dashboard .card:hover {
-  transform: translateY(-7px);
-
-  border-color: #d4af37;
-
-  box-shadow:
-    0 0 8px rgba(184, 134, 11, 0.35),
-    0 0 18px rgba(218, 165, 32, 0.35),
-    0 0 35px rgba(239, 232, 168, 0.25),
-    0 0 55px rgba(184, 134, 11, 0.18),
-    inset 0 0 18px rgba(239, 232, 168, 0.08);
-}
-
-/* ANIMATED GRADIENT GOLD BORDER */
-.dashboard .card::before {
-  content: "";
-  position: absolute;
-  inset: -1px;
-  border-radius: inherit;
-  padding: 1px;
-
-  background: linear-gradient(
-    135deg,
-    #8b6914,
-    #d4af37,
-    #fff1a8,
-    #b8860b,
-    #f5d76e,
-    #8b6914
-  );
-
-  background-size: 300% 300%;
-
-  opacity: 0;
-  transition: opacity 0.4s ease;
-
-  pointer-events: none;
-
-  -webkit-mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-
+/* KEEP THE INNER CONTENT ABOVE THE DECORATIVE LAYERS */
+.dashboard :global(.kbc-glow-content) {
+  position: relative;
   z-index: 2;
 }
 
-.dashboard .card:hover::before {
-  opacity: 1;
-  animation: kbcGoldBorder 3s linear infinite;
+/* DASHBOARD ANIMATION CARDS — DEFAULT DARK */
+.dashboard :global(.kbc-gradient-gold-card) {
+  background: linear-gradient(
+    145deg,
+    #242116 0%,
+    #15140F 52%,
+    #090908 100%
+  ) !important;
+
+  color: #FAF5ED !important;
+  border: 1px solid #C9A45C !important;
+  border-radius: 18px;
+
+  box-shadow:
+    inset 0 1px 0 rgba(239, 232, 168, 0.08),
+    0 8px 22px rgba(0, 0, 0, 0.2);
+
+  transition:
+    background 0.4s ease,
+    color 0.4s ease,
+    border-color 0.4s ease,
+    box-shadow 0.4s ease,
+    transform 0.4s ease;
 }
 
-@keyframes kbcGoldBorder {
-  0% {
-    background-position: 0% 50%;
+/* DASHBOARD ANIMATION CARD HEADINGS */
+.dashboard :global(.kbc-gradient-gold-card h2) {
+  color: #EFE8A8 !important;
+  transition: color 0.4s ease;
+}
+
+/* DARK CARD SECONDARY TEXT */
+.dashboard :global(.kbc-gradient-gold-card > div p) {
+  transition: color 0.4s ease;
+}
+
+/* DESKTOP HOVER — CHAMPAGNE CARD */
+@media (hover: hover) and (pointer: fine) {
+  .dashboard .card:hover,
+  .dashboard :global(.kbc-glow-card:hover),
+  .dashboard :global(.kbc-gradient-gold-card:hover) {
+    background: linear-gradient(
+      135deg,
+      #FFF4CE 0%,
+      #E8D39A 48%,
+      #C9A45C 100%
+    ) !important;
+
+    color: #121414 !important;
+    border-color: #EFE8A8 !important;
+
+    transform: translateY(-5px);
+
+    box-shadow:
+      0 12px 28px rgba(75, 52, 13, 0.22),
+      0 0 0 1px rgba(239, 232, 168, 0.95),
+      0 0 18px rgba(201, 164, 92, 0.65),
+      0 0 35px rgba(201, 164, 92, 0.35);
   }
 
-  50% {
-    background-position: 100% 50%;
+  /* ALL CARD TEXT BECOMES DARK */
+  .dashboard .card:hover h1,
+  .dashboard .card:hover h2,
+  .dashboard .card:hover h3,
+  .dashboard .card:hover p,
+  .dashboard .card:hover span,
+  .dashboard .card:hover label,
+  .dashboard .card:hover strong,
+  .dashboard :global(.kbc-glow-card:hover) h1,
+  .dashboard :global(.kbc-glow-card:hover) h2,
+  .dashboard :global(.kbc-glow-card:hover) h3,
+  .dashboard :global(.kbc-glow-card:hover) p,
+  .dashboard :global(.kbc-glow-card:hover) span,
+  .dashboard :global(.kbc-glow-card:hover) label,
+  .dashboard :global(.kbc-glow-card:hover) strong,
+  .dashboard :global(.kbc-gradient-gold-card:hover) h1,
+  .dashboard :global(.kbc-gradient-gold-card:hover) h2,
+  .dashboard :global(.kbc-gradient-gold-card:hover) h3,
+  .dashboard :global(.kbc-gradient-gold-card:hover) p,
+  .dashboard :global(.kbc-gradient-gold-card:hover) span,
+  .dashboard :global(.kbc-gradient-gold-card:hover) label,
+  .dashboard :global(.kbc-gradient-gold-card:hover) strong {
+    color: #17140D !important;
+    text-shadow: none !important;
   }
 
-  100% {
-    background-position: 0% 50%;
+  /* ICON CONTAINERS */
+  .dashboard :global(.kbc-gradient-gold-card:hover) svg {
+    color: #5D4218;
+  }
+
+  /* KEEP CHART LINE VISIBLE */
+  .dashboard :global(.kbc-gradient-gold-card:hover) .kbc-chart-line {
+    stroke: #8A641F;
+  }
+
+  .dashboard :global(.kbc-gradient-gold-card:hover) .kbc-chart-point {
+    fill: #8A641F;
+  }
+
+  /* PROGRESS TRACK */
+  .dashboard :global(.kbc-gradient-gold-card:hover) .kbc-progress-fill {
+    background: #8A641F;
+  }
+}
+
+/* MOBILE TOUCH EFFECT */
+@media (hover: none) {
+  .dashboard .card:active,
+  .dashboard :global(.kbc-glow-card:active),
+  .dashboard :global(.kbc-gradient-gold-card:active) {
+    background: linear-gradient(
+      135deg,
+      #FFF4CE 0%,
+      #E8D39A 48%,
+      #C9A45C 100%
+    ) !important;
+
+    color: #17140D !important;
+    border-color: #EFE8A8 !important;
+
+    box-shadow:
+      0 8px 22px rgba(75, 52, 13, 0.25),
+      0 0 0 1px #EFE8A8,
+      0 0 22px rgba(201, 164, 92, 0.65);
+  }
+
+  .dashboard :global(.kbc-gradient-gold-card:active) h2,
+  .dashboard :global(.kbc-gradient-gold-card:active) p,
+  .dashboard :global(.kbc-gradient-gold-card:active) span {
+    color: #17140D !important;
+    text-shadow: none !important;
+  }
+}
+
+/* ACCESSIBILITY */
+@media (prefers-reduced-motion: reduce) {
+  .dashboard .card,
+  .dashboard :global(.kbc-glow-card),
+  .dashboard :global(.kbc-gradient-gold-card) {
+    transition: none !important;
+    transform: none !important;
+  }
+}
+
+/* =========================================
+   APPOINTMENT TIMELINE + NOTIFICATIONS
+   TEXT CONTRAST ON CARD HOVER
+========================================= */
+
+@media (hover: hover) and (pointer: fine) {
+  /* Main card text */
+  .dashboard :global(.kbc-gradient-gold-card:hover) h2,
+  .dashboard :global(.kbc-gradient-gold-card:hover) p,
+  .dashboard :global(.kbc-gradient-gold-card:hover) span {
+    color: #17140D !important;
+    text-shadow: none !important;
+  }
+
+  /* Appointment names */
+  .dashboard :global(.kbc-gradient-gold-card:hover) .font-medium {
+    color: #121414 !important;
+  }
+
+  /* Appointment service and time */
+  .dashboard :global(.kbc-gradient-gold-card:hover) .text-xs,
+  .dashboard :global(.kbc-gradient-gold-card:hover) .text-sm {
+    color: #51401F !important;
+  }
+
+  /* Appointment inner boxes */
+  .dashboard :global(.kbc-gradient-gold-card:hover) .bg-\[\#1b1e1c\] {
+    background: rgba(255, 255, 255, 0.35) !important;
+    border-color: #B8954C !important;
+  }
+
+  /* Notification details */
+  .dashboard :global(.kbc-gradient-gold-card:hover) .leading-5 {
+    color: #51401F !important;
+  }
+
+  /* Notification timestamps */
+  .dashboard :global(.kbc-gradient-gold-card:hover) .text-\[\#AFA995\] {
+    color: #6B552B !important;
+  }
+}
+
+/* =========================================
+   FIX: APPOINTMENT + NOTIFICATION HOVER
+   FORCE VISIBLE DARK TEXT
+========================================= */
+
+@media (hover: hover) and (pointer: fine) {
+
+  /* Appointment Timeline and Notifications */
+  .dashboard :global(.kbc-gradient-gold-card:hover) {
+    background: linear-gradient(
+      135deg,
+      #FFF4CE,
+      #E8D39A,
+      #C9A45C
+    ) !important;
+  }
+
+  /* Force all text to dark contrast */
+  .dashboard :global(.kbc-gradient-gold-card:hover) * {
+    color: #17140D !important;
+    text-shadow: none !important;
+  }
+
+  /* Inner appointment and notification boxes */
+  .dashboard :global(.kbc-gradient-gold-card:hover .bg-\[\#1b1e1c\]) {
+    background: rgba(255, 255, 255, 0.48) !important;
+    border-color: #A9853F !important;
+  }
+
+  /* Status badges */
+  .dashboard :global(.kbc-gradient-gold-card:hover .rounded-full) {
+    border-color: #A9853F !important;
+  }
+
+  /* Preserve chart visibility */
+  .dashboard :global(.kbc-gradient-gold-card:hover svg) {
+    color: #5D4218;
+  }
+
+  .dashboard :global(.kbc-gradient-gold-card:hover .kbc-chart-line) {
+    stroke: #76531D !important;
+  }
+
+  .dashboard :global(.kbc-gradient-gold-card:hover .kbc-chart-point) {
+    fill: #76531D !important;
   }
 }

@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
@@ -73,8 +74,6 @@ type DateRange = "7" | "30" | "90" | "365" | "all" | "custom";
 const APPOINTMENTS_KEY = "kbc_appointments_v1";
 const STAFF_KEY = "kbc_staff_members_v1";
 const INVENTORY_KEY = "kbc_inventory_products_v1";
-
-const GOLD = "#EFE8A8";
 
 function readStorage<T>(key: string, fallback: T): T {
   try {
@@ -174,7 +173,7 @@ function Card({
 }) {
   return (
     <section
-      className={`report-card gold-ambient-card rounded-2xl border border-[#34372F] bg-[#1B1F1D] ${className}`}
+      className={`report-card gold-ambient-card rounded-2xl border border-[#C9A45C]/30 bg-[#121414] text-[#F5F1E6] ${className}`}
     >
       {children}
     </section>
@@ -197,43 +196,40 @@ function StatCard({
   const colors = {
     gold: {
       icon: "bg-[#EFE8A8]/10 text-[#EFE8A8]",
-      glow: "from-[#EFE8A8]/15",
-      line: "group-hover:border-[#EFE8A8]/50",
+      glow: "from-[#EFE8A8]/10",
     },
     green: {
       icon: "bg-emerald-500/10 text-emerald-400",
       glow: "from-emerald-400/10",
-      line: "group-hover:border-emerald-400/40",
     },
     blue: {
       icon: "bg-blue-500/10 text-blue-400",
       glow: "from-blue-400/10",
-      line: "group-hover:border-blue-400/40",
     },
     red: {
       icon: "bg-red-500/10 text-red-400",
       glow: "from-red-400/10",
-      line: "group-hover:border-red-400/40",
     },
   };
 
   const theme = colors[color];
 
   return (
-    <div
-      className={`report-kpi gold-ambient-card group relative isolate overflow-hidden rounded-2xl border border-[#45483A] bg-gradient-to-br ${theme.glow} via-[#20241F] to-[#151916] p-5 transition-all duration-300 ${theme.line}`}
-    >
+    <div className="report-kpi gold-ambient-card group relative isolate overflow-hidden rounded-2xl border border-[#C9A45C]/30 bg-[#121414] p-5 text-[#F5F1E6] transition-all duration-300">
       <div className="pointer-events-none absolute -right-8 -top-10 h-32 w-32 rounded-full bg-white/[0.025] blur-2xl transition group-hover:bg-[#EFE8A8]/[0.08]" />
-      <div className="pointer-events-none absolute inset-x-5 top-0 h-px bg-gradient-to-r from-transparent via-[#EFE8A8]/40 to-transparent" />
+
+      <div className="pointer-events-none absolute inset-x-5 top-0 h-px bg-gradient-to-r from-transparent via-[#C9A45C]/70 to-transparent" />
 
       <div className="relative flex items-start justify-between gap-3">
         <div className="min-w-0">
           <p className="text-xs font-medium tracking-wide text-[#A9A58A]">
             {title}
           </p>
+
           <h3 className="mt-3 break-words text-2xl font-semibold tracking-tight text-[#F4F0D5] sm:text-[27px]">
             {value}
           </h3>
+
           <p className="mt-2 text-[11px] leading-5 text-[#85877C]">
             {subtitle}
           </p>
@@ -264,9 +260,10 @@ function SectionHeading({
 }) {
   return (
     <div className="mb-5 flex items-center gap-3">
-      <div className="rounded-xl border border-[#EFE8A8]/10 bg-[#EFE8A8]/10 p-2.5 text-[#EFE8A8]">
+      <div className="rounded-xl border border-[#C9A45C]/25 bg-[#C9A45C]/10 p-2.5 text-[#C9A45C]">
         <Icon size={19} />
       </div>
+
       <div>
         <h2 className="font-semibold text-[#EFE8A8]">{title}</h2>
         <p className="mt-1 text-xs text-[#929487]">{description}</p>
@@ -284,10 +281,12 @@ function EmptyState({
 }) {
   return (
     <div className="flex flex-col items-center justify-center py-12 text-center">
-      <div className="mb-3 rounded-2xl border border-[#34372F] bg-[#151916] p-4">
-        <BarChart3 size={30} className="text-[#A9A58A]" />
+      <div className="mb-3 rounded-2xl border border-[#C9A45C]/20 bg-[#151916] p-4">
+        <BarChart3 size={30} className="text-[#C9A45C]" />
       </div>
+
       <p className="text-sm font-medium text-[#D5D2BD]">{title}</p>
+
       <p className="mt-1 max-w-sm text-xs leading-5 text-[#77796E]">
         {description}
       </p>
@@ -307,7 +306,7 @@ function StatusBadge({ status }: { status: string }) {
 
   return (
     <span
-      className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[11px] font-medium ${style}`}
+      className={`report-status-badge inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[11px] font-medium ${style}`}
     >
       <span className="h-1.5 w-1.5 rounded-full bg-current" />
       {status}
@@ -331,7 +330,7 @@ function RevenueChart({
       <div className="pointer-events-none absolute inset-0 flex flex-col justify-between pb-9">
         {[100, 75, 50, 25, 0].map((line) => (
           <div key={line} className="flex items-center gap-3">
-            <span className="w-7 text-[9px] text-[#66695D]">{line}%</span>
+            <span className="w-7 text-[9px] text-[#A9A58A]">{line}%</span>
             <div className="h-px flex-1 border-t border-dashed border-[#414438]/70" />
           </div>
         ))}
@@ -349,13 +348,15 @@ function RevenueChart({
               key={item.key}
               className="group relative flex h-full min-w-0 flex-1 flex-col items-center justify-end"
             >
-              <div className="pointer-events-none absolute bottom-[calc(100%-1px)] z-20 mb-2 hidden min-w-[125px] rounded-xl border border-[#EFE8A8]/20 bg-[#252920] px-3 py-2 text-center shadow-xl group-hover:block">
-                <p className="text-[10px] text-[#A9A58A]">
+              <div className="pointer-events-none absolute bottom-[calc(100%-1px)] z-20 mb-2 hidden min-w-[125px] rounded-xl border border-[#C9A45C]/30 bg-[#252920] px-3 py-2 text-center shadow-xl group-hover:block">
+                <p className="text-[10px] text-[#D5D2BD]">
                   {item.label} {item.key.slice(0, 4)}
                 </p>
+
                 <p className="mt-1 text-sm font-semibold text-[#EFE8A8]">
                   {money(item.revenue)}
                 </p>
+
                 <p className="mt-1 text-[10px] text-[#929487]">
                   {item.bookings} completed bookings
                 </p>
@@ -363,7 +364,7 @@ function RevenueChart({
 
               <div className="flex h-full w-full items-end justify-center">
                 <div
-                  className="relative w-full max-w-12 overflow-hidden rounded-t-lg border border-[#EFE8A8]/20 bg-gradient-to-t from-[#77734E] via-[#B8B184] to-[#F6F0BB] shadow-[0_0_18px_rgba(239,232,168,0.08)] transition-all duration-500 group-hover:brightness-125 group-hover:shadow-[0_0_22px_rgba(239,232,168,0.22)]"
+                  className="relative w-full max-w-12 overflow-hidden rounded-t-lg border border-[#C9A45C]/40 bg-gradient-to-t from-[#77734E] via-[#B8B184] to-[#F6F0BB] shadow-[0_0_18px_rgba(201,164,92,0.12)] transition-all duration-500 group-hover:brightness-125 group-hover:shadow-[0_0_22px_rgba(201,164,92,0.3)]"
                   style={{ height: `${height}%` }}
                 >
                   <div className="absolute inset-x-0 top-0 h-px bg-white/70" />
@@ -371,7 +372,7 @@ function RevenueChart({
                 </div>
               </div>
 
-              <span className="mt-3 text-[10px] font-medium text-[#929487] sm:text-xs">
+              <span className="mt-3 text-[10px] font-medium text-[#C9A45C] sm:text-xs">
                 {item.label}
               </span>
             </div>
@@ -420,22 +421,25 @@ function AppointmentStatusRing({
           }}
         />
 
-        <div className="absolute inset-[10px] rounded-full border border-white/[0.06] bg-[#1B1F1D] shadow-[inset_0_0_25px_rgba(0,0,0,0.35)]" />
+        <div className="absolute inset-[10px] rounded-full border border-white/[0.06] bg-[#121414] shadow-[inset_0_0_25px_rgba(0,0,0,0.35)]" />
 
         <div className="relative z-10 flex flex-col items-center">
           <span className="text-4xl font-semibold tracking-tight text-[#EFE8A8]">
             {total}
           </span>
+
           <span className="mt-1 text-[10px] uppercase tracking-[0.18em] text-[#929487]">
             Total bookings
           </span>
-          <div className="mt-3 h-px w-12 bg-gradient-to-r from-transparent via-[#EFE8A8]/50 to-transparent" />
+
+          <div className="mt-3 h-px w-12 bg-gradient-to-r from-transparent via-[#C9A45C]/70 to-transparent" />
+
           <span className="mt-2 text-xs font-medium text-emerald-300">
             {completedPercent.toFixed(1)}% completed
           </span>
         </div>
 
-        <div className="pointer-events-none absolute inset-0 rounded-full shadow-[0_0_25px_rgba(239,232,168,0.08)]" />
+        <div className="pointer-events-none absolute inset-0 rounded-full shadow-[0_0_25px_rgba(201,164,92,0.12)]" />
       </div>
     </div>
   );
@@ -465,7 +469,7 @@ function RankingCard({
   const isThird = rank === 3;
 
   const rankStyle = isFirst
-    ? "border-[#EFE8A8]/40 bg-gradient-to-br from-[#EFE8A8]/20 to-[#9E9564]/10 text-[#EFE8A8]"
+    ? "border-[#C9A45C]/40 bg-[#EFE8A8]/10 text-[#EFE8A8]"
     : isSecond
       ? "border-slate-300/20 bg-slate-300/10 text-slate-300"
       : isThird
@@ -473,7 +477,7 @@ function RankingCard({
         : "border-[#34372F] bg-[#151916] text-[#A9A58A]";
 
   return (
-    <div className="gold-ambient-card group rounded-xl border border-[#34372F] bg-[#151916] p-4 transition duration-300">
+    <div className="gold-ambient-card group rounded-xl border border-[#C9A45C]/25 bg-[#121414] p-4 text-[#F5F1E6] transition duration-300">
       <div className="flex items-center justify-between gap-3">
         <div className="flex min-w-0 items-center gap-3">
           <div
@@ -486,14 +490,15 @@ function RankingCard({
             <p className="truncate text-sm font-semibold text-[#E6E2CF]">
               {name}
             </p>
-            <p className="mt-1 text-[11px] text-[#77796E]">{detail}</p>
+            <p className="mt-1 text-[11px] text-[#A9A58A]">{detail}</p>
           </div>
         </div>
 
         <div className="shrink-0 text-right">
           <p className="text-sm font-semibold text-[#EFE8A8]">{value}</p>
+
           {type === "staff" && isFirst && (
-            <span className="mt-1 inline-flex items-center gap-1 text-[9px] uppercase tracking-wider text-[#EFE8A8]">
+            <span className="mt-1 inline-flex items-center gap-1 text-[9px] uppercase tracking-wider text-[#C9A45C]">
               <Award size={10} /> Top performer
             </span>
           )}
@@ -673,11 +678,6 @@ export default function ReportsPage() {
       };
     });
   }, [appointments]);
-
-  const maxRevenue = Math.max(
-    ...monthlyData.map((item) => item.revenue),
-    1
-  );
 
   // ------------------------------------------------------
   // SERVICE PERFORMANCE
@@ -937,7 +937,7 @@ export default function ReportsPage() {
   ];
 
   return (
-    <main className="min-h-screen bg-[#121414] px-4 py-6 text-[#F4F0D5] sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-[#FAF5ED] px-4 py-6 text-[#17140D] sm:px-6 lg:px-8">
       <style jsx global>{`
         @keyframes reportFade {
           from {
@@ -957,7 +957,7 @@ export default function ReportsPage() {
         .report-card {
           position: relative;
           overflow: hidden;
-          box-shadow: 0 8px 26px rgba(0, 0, 0, 0.12);
+          box-shadow: 0 8px 26px rgba(65, 45, 15, 0.10);
         }
 
         .report-kpi {
@@ -966,53 +966,105 @@ export default function ReportsPage() {
         }
 
         /* ==========================================
-           SOFT GOLDEN AMBIENT HOVER GLOW
+           CHARCOAL CARD + CHAMPAGNE GOLD GLOW
         ========================================== */
 
         .gold-ambient-card {
           position: relative;
           isolation: isolate;
           -webkit-tap-highlight-color: transparent;
+          background-color: #121414;
+          color: #F5F1E6;
+          border: 1px solid rgba(201, 164, 92, 0.30);
           transition:
             transform 0.35s ease,
+            background 0.35s ease,
+            color 0.35s ease,
             border-color 0.35s ease,
             box-shadow 0.35s ease;
         }
 
-        .gold-ambient-card::before {
+        .gold-ambient-card::after {
           content: "";
           position: absolute;
-          inset: -3px;
+          inset: 0;
           border-radius: inherit;
           pointer-events: none;
-          z-index: -1;
-          background: radial-gradient(
-            ellipse at center,
-            rgba(255, 226, 130, 0.25) 0%,
-            rgba(239, 200, 85, 0.16) 35%,
-            rgba(205, 157, 55, 0.08) 65%,
-            transparent 100%
-          );
-          filter: blur(24px);
           opacity: 0;
+          z-index: 0;
+          background: linear-gradient(
+            135deg,
+            rgba(255, 244, 206, 0.20) 0%,
+            rgba(232, 211, 154, 0.12) 50%,
+            rgba(201, 164, 92, 0.20) 100%
+          );
           transition: opacity 0.35s ease;
         }
 
         .gold-ambient-card:hover,
         .gold-ambient-card:active,
         .gold-ambient-card:focus-visible {
-          border-color: rgba(239, 210, 130, 0.45);
+          background: linear-gradient(
+            135deg,
+            #FFF4CE 0%,
+            #E8D39A 52%,
+            #C9A45C 100%
+          ) !important;
+          color: #17140D !important;
+          border-color: #C9A45C !important;
           box-shadow:
-            0 0 12px rgba(239, 200, 85, 0.13),
-            0 0 28px rgba(239, 200, 85, 0.12),
-            0 0 50px rgba(239, 200, 85, 0.08),
-            inset 0 0 18px rgba(239, 200, 85, 0.025);
+            0 0 8px rgba(201, 164, 92, 0.90),
+            0 0 18px rgba(201, 164, 92, 0.72),
+            0 0 35px rgba(201, 164, 92, 0.48),
+            0 0 55px rgba(201, 164, 92, 0.25),
+            0 14px 32px rgba(90, 62, 20, 0.20);
         }
 
-        .gold-ambient-card:hover::before,
-        .gold-ambient-card:active::before,
-        .gold-ambient-card:focus-visible::before {
+        .gold-ambient-card:hover::after,
+        .gold-ambient-card:active::after,
+        .gold-ambient-card:focus-visible::after {
           opacity: 1;
+        }
+
+        /* Keep card content above the decorative gradient layer. */
+        .gold-ambient-card > * {
+          position: relative;
+          z-index: 1;
+        }
+
+        /* Readable dark text on champagne hover. */
+        .gold-ambient-card:hover p,
+        .gold-ambient-card:hover h1,
+        .gold-ambient-card:hover h2,
+        .gold-ambient-card:hover h3,
+        .gold-ambient-card:hover label,
+        .gold-ambient-card:hover td,
+        .gold-ambient-card:hover th,
+        .gold-ambient-card:hover > span,
+        .gold-ambient-card:active p,
+        .gold-ambient-card:active h1,
+        .gold-ambient-card:active h2,
+        .gold-ambient-card:active h3,
+        .gold-ambient-card:active label,
+        .gold-ambient-card:active td,
+        .gold-ambient-card:active th,
+        .gold-ambient-card:active > span {
+          color: #17140D !important;
+        }
+
+        /* Preserve meaningful appointment status colors. */
+        .gold-ambient-card:hover .report-status-badge,
+        .gold-ambient-card:active .report-status-badge {
+          color: inherit !important;
+        }
+
+        .gold-ambient-card:hover .report-status-badge .text-emerald-400 {
+          color: #059669 !important;
+        }
+
+        .gold-ambient-card:hover svg,
+        .gold-ambient-card:active svg {
+          color: #6F501D;
         }
 
         @media (hover: hover) and (pointer: fine) {
@@ -1033,7 +1085,7 @@ export default function ReportsPage() {
         }
 
         .report-scroll::-webkit-scrollbar-thumb {
-          background: #555744;
+          background: #C9A45C;
           border-radius: 20px;
         }
 
@@ -1048,13 +1100,13 @@ export default function ReportsPage() {
         }
 
         .report-table tbody tr:hover {
-          background: rgba(239, 232, 168, 0.045);
-          box-shadow: inset 2px 0 0 #c9c18a;
+          background: rgba(201, 164, 92, 0.10);
+          box-shadow: inset 2px 0 0 #C9A45C;
         }
 
         @media (prefers-reduced-motion: reduce) {
           .gold-ambient-card,
-          .gold-ambient-card::before {
+          .gold-ambient-card::after {
             transition: none;
           }
 
@@ -1070,16 +1122,16 @@ export default function ReportsPage() {
 
         <header className="flex flex-col justify-between gap-5 xl:flex-row xl:items-center">
           <div>
-            <div className="mb-2 flex items-center gap-2 text-xs font-medium uppercase tracking-[0.2em] text-[#A9A58A]">
+            <div className="mb-2 flex items-center gap-2 text-xs font-medium uppercase tracking-[0.2em] text-[#92733D]">
               <Activity size={14} />
               KBC Salon Academy
             </div>
 
-            <h1 className="text-2xl font-semibold tracking-tight text-[#EFE8A8] sm:text-3xl">
+            <h1 className="text-2xl font-semibold tracking-tight text-[#17140D] sm:text-3xl">
               Reports & Analytics
             </h1>
 
-            <p className="mt-2 text-sm text-[#929487]">
+            <p className="mt-2 text-sm text-[#716858]">
               Understand your salon performance with business insights and reports.
             </p>
           </div>
@@ -1090,7 +1142,7 @@ export default function ReportsPage() {
                 refreshData();
                 setToast("Reports refreshed from saved browser data.");
               }}
-              className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#45483A] bg-[#1B1F1D] px-4 py-3 text-sm text-[#D5D2BD] transition hover:border-[#EFE8A8]/30 hover:bg-[#252920]"
+              className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#C9A45C]/50 bg-white px-4 py-3 text-sm text-[#29251D] transition hover:border-[#C9A45C] hover:bg-[#FFF4CE]"
             >
               <RefreshCw size={16} />
               Refresh
@@ -1098,7 +1150,7 @@ export default function ReportsPage() {
 
             <button
               onClick={exportAppointments}
-              className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#EFE8A8] to-[#C9C18A] px-5 py-3 text-sm font-semibold text-[#171916] shadow-[0_5px_20px_rgba(239,232,168,0.12)] transition hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(239,232,168,0.2)]"
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#EFE8A8] to-[#C9A45C] px-5 py-3 text-sm font-semibold text-[#17140D] shadow-[0_5px_20px_rgba(201,164,92,0.22)] transition hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(201,164,92,0.35)]"
             >
               <Download size={17} />
               Export Report
@@ -1106,33 +1158,34 @@ export default function ReportsPage() {
           </div>
         </header>
 
-        {/* COMPACT FILTER BAR */}
+        {/* FILTER BAR */}
 
         <Card className="p-4">
           <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
             <div className="flex items-center gap-3">
-              <div className="rounded-xl border border-[#EFE8A8]/15 bg-[#EFE8A8]/10 p-2.5 text-[#EFE8A8]">
+              <div className="rounded-xl border border-[#C9A45C]/30 bg-[#C9A45C]/10 p-2.5 text-[#EFE8A8]">
                 <Filter size={17} />
               </div>
+
               <div>
                 <p className="text-sm font-semibold text-[#E6E2CF]">
                   Reporting period
                 </p>
-                <p className="mt-0.5 text-[11px] text-[#77796E]">
+                <p className="mt-0.5 text-[11px] text-[#A9A58A]">
                   Choose the date range for your reports
                 </p>
               </div>
             </div>
 
-            <div className="flex flex-wrap items-center gap-1.5 rounded-xl border border-[#34372F] bg-[#121614] p-1.5">
+            <div className="flex flex-wrap items-center gap-1.5 rounded-xl border border-[#45483A] bg-[#0D100F] p-1.5">
               {dateOptions.map((item) => (
                 <button
                   key={item.value}
                   onClick={() => setDateRange(item.value as DateRange)}
                   className={`rounded-lg px-4 py-2 text-xs font-semibold transition ${
                     dateRange === item.value
-                      ? "bg-gradient-to-r from-[#EFE8A8] to-[#C9C18A] text-[#171916] shadow-md"
-                      : "text-[#929487] hover:bg-white/[0.04] hover:text-[#EFE8A8]"
+                      ? "bg-gradient-to-r from-[#FFF4CE] to-[#C9A45C] text-[#17140D] shadow-md"
+                      : "text-[#D5D2BD] hover:bg-white/[0.06] hover:text-[#EFE8A8]"
                   }`}
                 >
                   {item.label}
@@ -1143,24 +1196,24 @@ export default function ReportsPage() {
 
           {dateRange === "custom" && (
             <div className="mt-4 grid gap-3 border-t border-[#34372F] pt-4 sm:grid-cols-2">
-              <label className="space-y-2 text-xs text-[#A9A58A]">
+              <label className="space-y-2 text-xs text-[#D5D2BD]">
                 Start date
                 <input
                   type="date"
                   value={customStart}
                   onChange={(e) => setCustomStart(e.target.value)}
-                  className="report-date-input w-full rounded-xl border border-[#3A3D34] bg-[#121614] px-3 py-3 text-sm text-[#F4F0D5] outline-none transition focus:border-[#EFE8A8]/60"
+                  className="report-date-input w-full rounded-xl border border-[#3A3D34] bg-[#0D100F] px-3 py-3 text-sm text-[#F4F0D5] outline-none transition focus:border-[#C9A45C]"
                 />
               </label>
 
-              <label className="space-y-2 text-xs text-[#A9A58A]">
+              <label className="space-y-2 text-xs text-[#D5D2BD]">
                 End date
                 <input
                   type="date"
                   value={customEnd}
                   min={customStart || undefined}
                   onChange={(e) => setCustomEnd(e.target.value)}
-                  className="report-date-input w-full rounded-xl border border-[#3A3D34] bg-[#121614] px-3 py-3 text-sm text-[#F4F0D5] outline-none transition focus:border-[#EFE8A8]/60"
+                  className="report-date-input w-full rounded-xl border border-[#3A3D34] bg-[#0D100F] px-3 py-3 text-sm text-[#F4F0D5] outline-none transition focus:border-[#C9A45C]"
                 />
               </label>
             </div>
@@ -1169,7 +1222,7 @@ export default function ReportsPage() {
 
         {/* SECTION NAVIGATION */}
 
-        <div className="report-scroll overflow-x-auto border-b border-[#34372F]">
+        <div className="report-scroll overflow-x-auto border-b border-[#D9C9A9]">
           <div className="flex min-w-max gap-2">
             {sections.map((section) => (
               <button
@@ -1177,23 +1230,21 @@ export default function ReportsPage() {
                 onClick={() => setActiveSection(section)}
                 className={`relative px-4 py-3 text-sm transition ${
                   activeSection === section
-                    ? "font-semibold text-[#EFE8A8]"
-                    : "text-[#929487] hover:text-[#E5E0C5]"
+                    ? "font-semibold text-[#8D682B]"
+                    : "text-[#716858] hover:text-[#17140D]"
                 }`}
               >
                 {section}
 
                 {activeSection === section && (
-                  <span className="absolute bottom-0 left-3 right-3 h-0.5 rounded-full bg-[#EFE8A8] shadow-[0_0_10px_rgba(239,232,168,0.45)]" />
+                  <span className="absolute bottom-0 left-3 right-3 h-0.5 rounded-full bg-[#C9A45C] shadow-[0_0_10px_rgba(201,164,92,0.45)]" />
                 )}
               </button>
             ))}
           </div>
         </div>
 
-        {/* ============================================= */}
         {/* OVERVIEW */}
-        {/* ============================================= */}
 
         {activeSection === "Overview" && (
           <div className="report-fade space-y-6">
@@ -1247,7 +1298,7 @@ export default function ReportsPage() {
 
                   <button
                     onClick={exportRevenue}
-                    className="inline-flex items-center gap-2 self-start rounded-lg border border-[#45483A] px-3 py-2 text-xs text-[#D5D2BD] transition hover:border-[#EFE8A8]/30 hover:bg-white/5"
+                    className="inline-flex items-center gap-2 self-start rounded-lg border border-[#C9A45C]/40 px-3 py-2 text-xs text-[#EFE8A8] transition hover:border-[#C9A45C] hover:bg-white/5"
                   >
                     <Download size={14} />
                     Export
@@ -1266,7 +1317,7 @@ export default function ReportsPage() {
                     <div className="mt-5 flex items-center justify-between border-t border-[#34372F] pt-4 text-xs text-[#929487]">
                       <span>Last 6 months</span>
                       <span className="flex items-center gap-2">
-                        <span className="h-2 w-2 rounded-full bg-[#EFE8A8]" />
+                        <span className="h-2 w-2 rounded-full bg-[#C9A45C]" />
                         Completed revenue
                       </span>
                     </div>
@@ -1281,6 +1332,7 @@ export default function ReportsPage() {
                     Appointment Status
                   </h2>
                 </div>
+
                 <p className="mt-1 text-xs text-[#929487]">
                   Booking status breakdown
                 </p>
@@ -1304,6 +1356,7 @@ export default function ReportsPage() {
                           {item.name}
                         </span>
                       </div>
+
                       <span className={`text-sm font-semibold ${item.text}`}>
                         {item.count}
                       </span>
@@ -1321,12 +1374,14 @@ export default function ReportsPage() {
                 icon={Users}
                 color="blue"
               />
+
               <StatCard
                 title="Inventory Products"
                 value={String(totalProducts)}
                 subtitle={`${totalStockUnits} total units`}
                 icon={Package}
               />
+
               <StatCard
                 title="Low Stock Products"
                 value={String(lowStockCount)}
@@ -1334,6 +1389,7 @@ export default function ReportsPage() {
                 icon={ShoppingBag}
                 color="red"
               />
+
               <StatCard
                 title="Inventory Purchase Value"
                 value={money(inventoryPurchaseValue)}
@@ -1373,9 +1429,7 @@ export default function ReportsPage() {
           </div>
         )}
 
-        {/* ============================================= */}
         {/* REVENUE SECTION */}
-        {/* ============================================= */}
 
         {activeSection === "Revenue" && (
           <div className="report-fade space-y-5">
@@ -1387,6 +1441,7 @@ export default function ReportsPage() {
                 icon={IndianRupee}
                 color="green"
               />
+
               <StatCard
                 title="Average Booking"
                 value={money(averageBooking)}
@@ -1394,6 +1449,7 @@ export default function ReportsPage() {
                 icon={Target}
                 color="blue"
               />
+
               <StatCard
                 title="Completed Bookings"
                 value={String(completedCount)}
@@ -1413,7 +1469,7 @@ export default function ReportsPage() {
 
                 <button
                   onClick={exportRevenue}
-                  className="inline-flex items-center gap-2 self-start rounded-lg border border-[#45483A] px-3 py-2 text-xs text-[#EFE8A8] transition hover:bg-white/5"
+                  className="inline-flex items-center gap-2 self-start rounded-lg border border-[#C9A45C]/40 px-3 py-2 text-xs text-[#EFE8A8] transition hover:bg-white/5"
                 >
                   <Download size={14} />
                   Export CSV
@@ -1423,7 +1479,7 @@ export default function ReportsPage() {
               <RevenueChart data={monthlyData} />
 
               <div className="mt-5 grid gap-3 border-t border-[#34372F] pt-4 sm:grid-cols-3">
-                <div className="gold-ambient-card rounded-xl bg-[#151916] p-3">
+                <div className="gold-ambient-card rounded-xl p-3">
                   <p className="text-[10px] uppercase tracking-wider text-[#77796E]">
                     Total revenue
                   </p>
@@ -1431,7 +1487,8 @@ export default function ReportsPage() {
                     {money(monthlyData.reduce((sum, item) => sum + item.revenue, 0))}
                   </p>
                 </div>
-                <div className="gold-ambient-card rounded-xl bg-[#151916] p-3">
+
+                <div className="gold-ambient-card rounded-xl p-3">
                   <p className="text-[10px] uppercase tracking-wider text-[#77796E]">
                     Completed bookings
                   </p>
@@ -1439,7 +1496,8 @@ export default function ReportsPage() {
                     {monthlyData.reduce((sum, item) => sum + item.bookings, 0)}
                   </p>
                 </div>
-                <div className="gold-ambient-card rounded-xl bg-[#151916] p-3">
+
+                <div className="gold-ambient-card rounded-xl p-3">
                   <p className="text-[10px] uppercase tracking-wider text-[#77796E]">
                     Monthly average
                   </p>
@@ -1475,6 +1533,7 @@ export default function ReportsPage() {
                         <th className="px-4 pb-4 text-right font-medium">Revenue</th>
                       </tr>
                     </thead>
+
                     <tbody>
                       {serviceData.map((service, index) => (
                         <tr
@@ -1491,9 +1550,11 @@ export default function ReportsPage() {
                               </span>
                             </div>
                           </td>
+
                           <td className="px-4 py-4 text-[#A9A58A]">
                             {service.bookings}
                           </td>
+
                           <td className="px-4 py-4 text-right font-semibold text-[#EFE8A8]">
                             {money(service.revenue)}
                           </td>
@@ -1507,9 +1568,7 @@ export default function ReportsPage() {
           </div>
         )}
 
-        {/* ============================================= */}
         {/* APPOINTMENTS SECTION */}
-        {/* ============================================= */}
 
         {activeSection === "Appointments" && (
           <div className="report-fade space-y-5">
@@ -1521,6 +1580,7 @@ export default function ReportsPage() {
                 icon={CalendarDays}
                 color="blue"
               />
+
               <StatCard
                 title="Completed"
                 value={String(completedCount)}
@@ -1528,12 +1588,14 @@ export default function ReportsPage() {
                 icon={CheckCircle2}
                 color="green"
               />
+
               <StatCard
                 title="Pending / Other"
                 value={String(pendingCount)}
                 subtitle="Not completed or cancelled"
                 icon={Clock}
               />
+
               <StatCard
                 title="Cancelled"
                 value={String(cancelledCount)}
@@ -1560,17 +1622,18 @@ export default function ReportsPage() {
                       className="absolute left-3 top-1/2 -translate-y-1/2 text-[#77796E]"
                       size={16}
                     />
+
                     <input
                       value={search}
                       onChange={(e) => setSearch(e.target.value)}
                       placeholder="Search appointments..."
-                      className="w-full rounded-xl border border-[#3A3D34] bg-[#121614] py-2.5 pl-9 pr-3 text-sm text-[#F4F0D5] outline-none transition focus:border-[#EFE8A8]/50"
+                      className="w-full rounded-xl border border-[#3A3D34] bg-[#0D100F] py-2.5 pl-9 pr-3 text-sm text-[#F4F0D5] outline-none transition focus:border-[#C9A45C]"
                     />
                   </div>
 
                   <button
                     onClick={exportAppointments}
-                    className="inline-flex items-center gap-2 rounded-xl border border-[#45483A] px-3 py-2.5 text-xs text-[#EFE8A8] transition hover:bg-white/5"
+                    className="inline-flex items-center gap-2 rounded-xl border border-[#C9A45C]/40 px-3 py-2.5 text-xs text-[#EFE8A8] transition hover:bg-white/5"
                   >
                     <Download size={14} />
                     Export
@@ -1596,6 +1659,7 @@ export default function ReportsPage() {
                         <th className="px-5 py-4 text-right font-medium">Amount</th>
                       </tr>
                     </thead>
+
                     <tbody>
                       {recentAppointments.map((appointment, index) => {
                         const status = appointment.status ?? "Unknown";
@@ -1610,21 +1674,26 @@ export default function ReportsPage() {
                                 {appointment.customer || "Unnamed customer"}
                               </p>
                             </td>
+
                             <td className="px-4 py-4 text-[#C9C6B7]">
                               {appointment.service || "—"}
                             </td>
+
                             <td className="px-4 py-4 text-[#A9A58A]">
                               {appointment.staff || "Unassigned"}
                             </td>
+
                             <td className="px-4 py-4 text-xs text-[#A9A58A]">
                               {formatDate(appointment.date ?? "")}
                               {appointment.time && (
                                 <span className="ml-1">{appointment.time}</span>
                               )}
                             </td>
+
                             <td className="px-4 py-4">
                               <StatusBadge status={status} />
                             </td>
+
                             <td className="px-5 py-4 text-right font-semibold text-[#EFE8A8]">
                               {money(amount(appointment.amount))}
                             </td>
@@ -1639,9 +1708,7 @@ export default function ReportsPage() {
           </div>
         )}
 
-        {/* ============================================= */}
         {/* STAFF SECTION */}
-        {/* ============================================= */}
 
         {activeSection === "Staff" && (
           <div className="report-fade space-y-5">
@@ -1653,6 +1720,7 @@ export default function ReportsPage() {
                 icon={Users}
                 color="blue"
               />
+
               <StatCard
                 title="Active Staff"
                 value={String(staff.filter((member) => member.status !== "Inactive").length)}
@@ -1660,6 +1728,7 @@ export default function ReportsPage() {
                 icon={CheckCircle2}
                 color="green"
               />
+
               <StatCard
                 title="Staff With Completed Bookings"
                 value={String(staffPerformance.length)}
@@ -1678,7 +1747,7 @@ export default function ReportsPage() {
 
                 <button
                   onClick={exportStaff}
-                  className="inline-flex items-center gap-2 self-start rounded-lg border border-[#45483A] px-3 py-2 text-xs text-[#EFE8A8] transition hover:bg-white/5"
+                  className="inline-flex items-center gap-2 self-start rounded-lg border border-[#C9A45C]/40 px-3 py-2 text-xs text-[#EFE8A8] transition hover:bg-white/5"
                 >
                   <Download size={14} />
                   Export
@@ -1695,10 +1764,11 @@ export default function ReportsPage() {
                   <div className="mb-5 grid gap-3 md:grid-cols-3">
                     {staffPerformance.slice(0, 3).map((member, index) => {
                       const rank = index + 1;
+
                       const topStyles = [
-                        "border-[#EFE8A8]/35 bg-gradient-to-br from-[#EFE8A8]/15 to-[#1B1F1D]",
-                        "border-slate-300/20 bg-gradient-to-br from-slate-300/[0.08] to-[#1B1F1D]",
-                        "border-amber-700/25 bg-gradient-to-br from-amber-700/[0.08] to-[#1B1F1D]",
+                        "border-[#C9A45C]/40 bg-[#121414]",
+                        "border-slate-300/20 bg-[#121414]",
+                        "border-amber-700/25 bg-[#121414]",
                       ];
 
                       return (
@@ -1706,12 +1776,13 @@ export default function ReportsPage() {
                           key={member.name}
                           className={`gold-ambient-card relative overflow-hidden rounded-2xl border p-5 transition duration-300 ${topStyles[index]}`}
                         >
-                          <div className="absolute -right-5 -top-5 h-24 w-24 rounded-full bg-[#EFE8A8]/[0.05] blur-2xl" />
+                          <div className="absolute -right-5 -top-5 h-24 w-24 rounded-full bg-[#C9A45C]/[0.08] blur-2xl" />
 
                           <div className="relative flex items-center justify-between">
                             <span className="text-[10px] uppercase tracking-[0.18em] text-[#929487]">
                               Rank 0{rank}
                             </span>
+
                             {rank === 1 ? (
                               <Crown size={20} className="text-[#EFE8A8]" />
                             ) : (
@@ -1723,13 +1794,15 @@ export default function ReportsPage() {
                           </div>
 
                           <div className="relative mt-5 flex items-center gap-3">
-                            <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-[#EFE8A8]/20 bg-[#EFE8A8]/10 text-lg font-semibold text-[#EFE8A8]">
+                            <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-[#C9A45C]/30 bg-[#C9A45C]/10 text-lg font-semibold text-[#EFE8A8]">
                               {member.name.charAt(0).toUpperCase()}
                             </div>
+
                             <div className="min-w-0">
                               <p className="truncate font-semibold text-[#F4F0D5]">
                                 {member.name}
                               </p>
+
                               <p className="mt-1 text-[11px] text-[#929487]">
                                 {member.appointments} completed appointments
                               </p>
@@ -1740,6 +1813,7 @@ export default function ReportsPage() {
                             <p className="text-[10px] uppercase tracking-wider text-[#929487]">
                               Generated revenue
                             </p>
+
                             <p className="mt-1 text-xl font-semibold text-[#EFE8A8]">
                               {money(member.revenue)}
                             </p>
@@ -1793,6 +1867,7 @@ export default function ReportsPage() {
                         <th className="px-4 pb-4 font-medium">Status</th>
                       </tr>
                     </thead>
+
                     <tbody>
                       {staff.map((member, index) => (
                         <tr
@@ -1802,12 +1877,15 @@ export default function ReportsPage() {
                           <td className="px-4 py-4 font-medium text-[#E6E2CF]">
                             {member.name || "Unnamed member"}
                           </td>
+
                           <td className="px-4 py-4 text-[#A9A58A]">
                             {member.role || "—"}
                           </td>
+
                           <td className="px-4 py-4 text-[#A9A58A]">
                             {member.type || "Staff"}
                           </td>
+
                           <td className="px-4 py-4">
                             <StatusBadge
                               status={
@@ -1825,9 +1903,7 @@ export default function ReportsPage() {
           </div>
         )}
 
-        {/* ============================================= */}
         {/* INVENTORY SECTION */}
-        {/* ============================================= */}
 
         {activeSection === "Inventory" && (
           <div className="report-fade space-y-5">
@@ -1838,6 +1914,7 @@ export default function ReportsPage() {
                 subtitle="Products in inventory"
                 icon={Package}
               />
+
               <StatCard
                 title="Total Stock Units"
                 value={String(totalStockUnits)}
@@ -1845,6 +1922,7 @@ export default function ReportsPage() {
                 icon={ShoppingBag}
                 color="blue"
               />
+
               <StatCard
                 title="Low Stock"
                 value={String(lowStockCount)}
@@ -1852,6 +1930,7 @@ export default function ReportsPage() {
                 icon={ArrowDownRight}
                 color="red"
               />
+
               <StatCard
                 title="Purchase Value"
                 value={money(inventoryPurchaseValue)}
@@ -1894,12 +1973,14 @@ export default function ReportsPage() {
                 ].map((item) => (
                   <div
                     key={item.title}
-                    className="gold-ambient-card rounded-xl border border-[#34372F] bg-[#151916] p-4 transition"
+                    className="gold-ambient-card rounded-xl p-4 transition"
                   >
                     <p className="text-xs text-[#929487]">{item.title}</p>
+
                     <p className={`mt-2 text-2xl font-semibold ${item.color}`}>
                       {item.count}
                     </p>
+
                     <div className="mt-4 h-1 overflow-hidden rounded-full bg-[#34372F]">
                       <div
                         className={`h-full rounded-full ${item.bar}`}
@@ -1927,7 +2008,7 @@ export default function ReportsPage() {
 
                 <button
                   onClick={exportInventory}
-                  className="inline-flex items-center gap-2 self-start rounded-lg border border-[#45483A] px-3 py-2 text-xs text-[#EFE8A8] transition hover:bg-white/5"
+                  className="inline-flex items-center gap-2 self-start rounded-lg border border-[#C9A45C]/40 px-3 py-2 text-xs text-[#EFE8A8] transition hover:bg-white/5"
                 >
                   <Download size={14} />
                   Export CSV
@@ -1951,6 +2032,7 @@ export default function ReportsPage() {
                         <th className="px-4 pb-4 font-medium">Expiry</th>
                       </tr>
                     </thead>
+
                     <tbody>
                       {products.map((product, index) => {
                         const expired = product.expiryDate
@@ -1972,9 +2054,11 @@ export default function ReportsPage() {
                             <td className="px-4 py-4 font-medium text-[#E6E2CF]">
                               {product.name || "Unnamed product"}
                             </td>
+
                             <td className="px-4 py-4 text-[#A9A58A]">
                               {product.category || "—"}
                             </td>
+
                             <td className="px-4 py-4">
                               <span
                                 className={`rounded-full border px-3 py-1 text-[11px] ${
@@ -1988,11 +2072,13 @@ export default function ReportsPage() {
                                 {quantity}
                               </span>
                             </td>
+
                             <td className="px-4 py-4 font-medium text-[#EFE8A8]">
                               {money(
                                 quantity * amount(product.purchasePrice)
                               )}
                             </td>
+
                             <td className="px-4 py-4">
                               {expired ? (
                                 <span className="text-xs font-medium text-red-400">
@@ -2017,8 +2103,9 @@ export default function ReportsPage() {
 
         {/* FOOTER */}
 
-        <div className="flex flex-col justify-between gap-2 border-t border-[#34372F] pt-4 text-xs text-[#77796E] sm:flex-row">
+        <div className="flex flex-col justify-between gap-2 border-t border-[#D9C9A9] pt-4 text-xs text-[#716858] sm:flex-row">
           <span>KBC Salon Academy · Reports & Analytics</span>
+
           <span>
             Reports are calculated from saved browser records. Revenue includes completed appointments only.
           </span>
@@ -2028,9 +2115,11 @@ export default function ReportsPage() {
       {/* TOAST */}
 
       {toast && (
-        <div className="fixed bottom-5 right-5 z-[100] flex max-w-[calc(100vw-40px)] items-center gap-3 rounded-xl border border-[#EFE8A8]/30 bg-[#242822] px-5 py-4 text-sm text-[#EFE8A8] shadow-2xl">
+        <div className="fixed bottom-5 right-5 z-[100] flex max-w-[calc(100vw-40px)] items-center gap-3 rounded-xl border border-[#C9A45C]/50 bg-[#121414] px-5 py-4 text-sm text-[#EFE8A8] shadow-2xl">
           <CheckCircle2 size={18} />
+
           {toast}
+
           <button
             onClick={() => setToast("")}
             aria-label="Close notification"
